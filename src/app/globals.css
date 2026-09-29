@@ -1,26 +1,208 @@
 @import "tailwindcss";
 
+/*
+  Print-shop system: cream grid paper, warm ink, orange and Naija-green fields,
+  2px ink outlines with hard offset shadows, typewriter mono for reading, Archivo for display.
+  Light only: it's a printed-paper world.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #f6efe2;
+  --card: #fffdf8;
+  --sunk: #efe5d3;
+  --wash: #e9dcc5;
+  --ink: #1b1714;
+  --muted: #5c5249; /* 7:1 on paper */
+  --faint: #b9aa92;
+  --line: #d8caaf;
+  --edge: #1b1714; /* strong outlines */
+  --brand: #ff6719;
+  --brand-hover: #f25a0c;
+  --brand-ink: #1b1714; /* ink on orange: 6.6:1 */
+  --brand-text: #b8430a;
+  --brand-wash: #ffe3d2;
+  --accent: #0f4d3a; /* Naija green */
+  --accent-ink: #f6efe2;
+  --danger: #b3261e;
+  --success: #1f7a4d;
+  --night: #1b1714;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-card: var(--card);
+  --color-sunk: var(--sunk);
+  --color-wash: var(--wash);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-text: var(--brand-text);
+  --color-brand-wash: var(--brand-wash);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-edge: var(--edge);
+  --color-night: var(--night);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --font-sans: var(--font-geist), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-archivo), "Arial Narrow", sans-serif;
+  --font-serif: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* Faint printer's grid on paper and on coloured fields */
+.paper-grid {
+  background-image:
+    linear-gradient(rgba(27, 23, 20, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(27, 23, 20, 0.045) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+.field-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Outlined block with a hard offset shadow; presses in on hover. */
+.ink-block {
+  border: 2px solid var(--edge);
+  box-shadow: 5px 5px 0 var(--edge);
+}
+.block-press {
+  transition: transform 120ms ease-out, box-shadow 120ms ease-out;
+}
+.block-press:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 3px 3px 0 var(--edge);
+}
+.block-press:active {
+  transform: translate(5px, 5px);
+  box-shadow: 0 0 0 var(--edge);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--brand) 28%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+a {
+  text-underline-offset: 3px;
+}
+
+input,
+textarea {
+  caret-color: var(--brand);
+}
+
+* {
+  scrollbar-color: var(--faint) transparent;
+}
+
+/* Condensed heavy uppercase display voice */
+.display {
+  font-family: var(--font-display);
+  font-stretch: 108%;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+}
+
+/* Typewriter label: mono, caps, tracked */
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+/* Hand-drawn underline under a word */
+.scribble {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8c30-5 60-6 98-4s70 3 98-1' fill='none' stroke='%230f4d3a' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 0.32em;
+  padding-bottom: 0.12em;
+}
+
+/* Sliding rows: each track holds its items twice and moves by half its width. */
+@keyframes slide-left {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes slide-right {
+  from { transform: translate3d(-50%, 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+.slide-left { animation: slide-left var(--dur, 60s) linear infinite; }
+.slide-right { animation: slide-right var(--dur, 60s) linear infinite; }
+.pause-on-hover:hover .slide-left,
+.pause-on-hover:hover .slide-right { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .slide-left,
+  .slide-right { animation: none; }
+}
+
+/* Rotating highlight border: a conic sweep behind a 2px gap. */
+@property --spin {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes spin-border {
+  to { --spin: 360deg; }
+}
+.spin-border {
+  position: relative;
+  isolation: isolate;
+}
+.spin-border::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  border-radius: inherit;
+  background: conic-gradient(from var(--spin), transparent 0deg, var(--brand) 60deg, #ffd2b8 110deg, transparent 170deg, transparent 360deg);
+  animation: spin-border 4s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .spin-border::before { animation: none; background: var(--brand); }
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Invoice generator: print only the invoice */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #invoice-print,
+  #invoice-print * {
+    visibility: visible;
+  }
+  #invoice-print {
+    position: absolute;
+    inset: 0 0 auto 0;
+  }
 }

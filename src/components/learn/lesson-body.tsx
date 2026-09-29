@@ -1,0 +1,166 @@
+import { AlertTriangle, ArrowUpRight, Lightbulb, Wrench } from "lucide-react";
+import Link from "next/link";
+import { Fragment, type ReactNode } from "react";
+import { LessonDiagram } from "@/components/art/lesson-diagram";
+import { ProductThumb } from "@/components/art/product-thumb";
+import { ToolThumb } from "@/components/art/tool-thumb";
+import type { Tone } from "@/components/cover";
+import { CopyButton } from "@/components/tool-ui";
+import type { Figure, Lesson, LessonBlock } from "@/content/types";
+import { getTool } from "@/lib/tools";
+
+const figureTones: Tone[] = ["sand", "peach", "forest", "indigo", "orange"];
+
+/** Inline formatting used in lesson text: **bold** and `code`. */
+export function Rich({ text }: { text: string }) {
+  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
+  return (
+    <>
+      {parts.map((p, i) =>
+        p.startsWith("**") && p.endsWith("**") ? (
+          <strong key={i} className="font-bold text-ink">{p.slice(2, -2)}</strong>
+        ) : p.startsWith("`") && p.endsWith("`") && p.length > 1 ? (
+          <code key={i} className="border border-line bg-wash px-1 py-px font-mono text-[0.92em] text-ink">{p.slice(1, -1)}</code>
+        ) : (
+          <Fragment key={i}>{p}</Fragment>
+        ),
+      )}
+    </>
+  );
+}
+
+function FigureView({ f, i }: { f: Figure; i: number }) {
+  let art: ReactNode = null;
+  if ("diagram" in f) art = <LessonDiagram kind={f.diagram} />;
+  else if ("product" in f) art = <ProductThumb kind={f.product} tone={figureTones[i % figureTones.length]} />;
+  else art = <ToolThumb slug={f.tool} tone={getTool(f.tool)?.tone ?? "sand"} />;
+  return (
+    <figure className="my-6">
+      <div className="ink-block overflow-hidden bg-card">{art}</div>
+      <figcaption className="mt-2.5 font-mono text-[12.5px] leading-relaxed text-muted">
+        <span className="label mr-2 text-brand-text">Fig.</span>
+        {f.caption}
+      </figcaption>
+    </figure>
+  );
+}
+
+function Callout({ tone, icon, title, children }: { tone: "tip" | "warn"; icon: ReactNode; title: string; children: ReactNode }) {
+  return (
+    <div className={"my-5 flex gap-3 border-2 border-edge p-4 " + (tone === "tip" ? "bg-[#fff4d6]" : "bg-[#ffe3dc]")}>
+      <span className="mt-0.5 shrink-0">{icon}</span>
+      <div>
+        <p className="label text-ink">{title}</p>
+        <p className="mt-1 text-[15px] leading-relaxed text-ink">{children}</p>
+      </div>
+    </div>
+  );
+}
+
+function Block({ b, i }: { b: LessonBlock; i: number }) {
+  switch (b.t) {
+    case "p":
+      return <p className="my-4 text-[16px] leading-[1.75] text-ink/90"><Rich text={b.text} /></p>;
+    case "list":
+      return (
+        <ul className="my-4 space-y-2">
+          {b.items.map((x) => (
+            <li key={x} className="flex gap-3 text-[16px] leading-relaxed text-ink/90">
+              <span className="mt-2.5 size-1.5 shrink-0 bg-brand" aria-hidden />
+              <span><Rich text={x} /></span>
+            </li>
+          ))}
+        </ul>
+      );
+    case "steps":
+      return (
+        <ol className="my-5 space-y-3">
+          {b.items.map((s, n) => (
+            <li key={s.title} className="flex gap-3.5">
+              <span className="display grid size-8 shrink-0 place-items-center border-2 border-edge bg-brand text-[15px] text-ink">{n + 1}</span>
+              <div className="pt-0.5">
+                <p className="font-bold text-ink"><Rich text={s.title} /></p>
+                <p className="mt-0.5 text-[15px] leading-relaxed text-muted"><Rich text={s.detail} /></p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      );
+    case "prompt":
+      return (
+        <div className="my-6 border-2 border-edge bg-night text-paper shadow-[4px_4px_0_var(--brand)]">
+          <div className="flex items-center justify-between gap-3 border-b-2 border-paper/20 px-4 py-2.5">
+            <p className="label text-brand">Prompt · {b.title}</p>
+            <CopyButton text={b.text} label="Copy prompt" />
+          </div>
+          <p className="whitespace-pre-wrap px-4 py-4 font-mono text-[13.5px] leading-relaxed text-paper/90">{b.text}</p>
+        </div>
+      );
+    case "code":
+      return (
+        <div className="my-5 border-2 border-edge bg-sunk">
+          <div className="flex items-center justify-between border-b-2 border-edge px-3 py-1.5">
+            <span className="label text-muted">{b.lang}</span>
+            <CopyButton text={b.text} />
+          </div>
+          <pre className="overflow-x-auto px-4 py-3 font-mono text-[13px] leading-relaxed text-ink">{b.text}</pre>
+        </div>
+      );
+    case "tip":
+      return <Callout tone="tip" icon={<Lightbulb className="size-5 text-ink" />} title="Tip"><Rich text={b.text} /></Callout>;
+    case "warn":
+      return <Callout tone="warn" icon={<AlertTriangle className="size-5 text-danger" />} title="Watch out"><Rich text={b.text} /></Callout>;
+    case "figure":
+      return <FigureView f={b.figure} i={i} />;
+    case "table":
+      return (
+        <div className="my-5 overflow-x-auto border-2 border-edge">
+          <table className="w-full min-w-[480px] border-collapse text-left text-[14px]">
+            <thead className="bg-ink text-paper">
+              <tr>{b.columns.map((c, n) => <th key={n} className="px-3 py-2 font-mono text-[12px] font-bold uppercase tracking-wider">{c}</th>)}</tr>
+            </thead>
+            <tbody>
+              {b.rows.map((r, n) => (
+                <tr key={n} className={n % 2 ? "bg-wash/60" : "bg-card"}>
+                  {r.map((c, k) => <td key={k} className={"border-t border-line px-3 py-2 align-top leading-snug " + (k === 0 ? "font-bold text-ink" : "text-ink/85")}><Rich text={c} /></td>)}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    case "tool": {
+      const tool = getTool(b.slug);
+      if (!tool) return null;
+      return (
+        <Link href={`/tools/${tool.slug}`} target="_blank" className="ink-block block-press my-5 flex items-center gap-4 bg-card p-3">
+          <div className="w-28 shrink-0 border-2 border-edge sm:w-36">
+            <ToolThumb slug={tool.slug} tone={tool.tone} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="label flex items-center gap-1.5 text-brand-text"><Wrench className="size-3.5" aria-hidden /> Free tool</p>
+            <p className="display mt-1 text-[17px] text-ink">{tool.title}</p>
+            <p className="mt-1 font-mono text-[12.5px] leading-snug text-muted">{b.why}</p>
+          </div>
+          <ArrowUpRight className="size-5 shrink-0 text-ink" aria-hidden />
+        </Link>
+      );
+    }
+  }
+}
+
+export function LessonBody({ lesson }: { lesson: Lesson }) {
+  let figure = 0;
+  return (
+    <>
+      {lesson.sections.map((s, n) => (
+        <section key={s.heading} id={`s${n + 1}`} className="scroll-mt-24 border-t-2 border-dashed border-line pt-8 first:border-0 first:pt-0 [&+section]:mt-10">
+          <h2 className="display text-[26px] text-ink sm:text-[30px]">{s.heading}</h2>
+          {s.blocks.map((b, i) => (
+            <Block key={i} b={b} i={b.t === "figure" ? figure++ : i} />
+          ))}
+        </section>
+      ))}
+    </>
+  );
+}
