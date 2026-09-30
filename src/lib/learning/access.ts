@@ -9,7 +9,7 @@ import { previewMode } from "./store";
 export const trackSlugs: Record<string, Track> = { "fast-track": fastTrack, "main-track": mainTrack };
 export const slugOf = (t: Track) => (t.id === "main_track" ? "main-track" : "fast-track");
 
-export type Learner = { id: string; name: string; preview: boolean; tracks: Track["id"][] };
+export type Learner = { id: string; name: string; email: string; preview: boolean; tracks: Track["id"][] };
 
 /**
  * The signed-in member and the tracks they can open. The Main Track includes the Fast Track.
@@ -18,7 +18,7 @@ export type Learner = { id: string; name: string; preview: boolean; tracks: Trac
  */
 export async function requireLearner(next: string): Promise<Learner> {
   await connection();
-  if (previewMode) return { id: "preview", name: "Preview learner", preview: true, tracks: ["fast_track", "main_track"] };
+  if (previewMode) return { id: "preview", name: "Preview learner", email: "", preview: true, tracks: ["fast_track", "main_track"] };
 
   const user = await getCurrentUser();
   if (!user) redirect(`/login?next=${encodeURIComponent(next)}`);
@@ -27,6 +27,7 @@ export async function requireLearner(next: string): Promise<Learner> {
   return {
     id: user.id,
     name: user.name,
+    email: user.email,
     preview: false,
     tracks: sub!.plan === "main_track" ? ["fast_track", "main_track"] : ["fast_track"],
   };

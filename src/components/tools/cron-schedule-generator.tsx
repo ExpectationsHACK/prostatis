@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { CopyButton, Field, Select, TextInput, ToolLayout } from "../tool-ui";
+import { useMemo } from "react";
+import { AppToolLayout, useToolState } from "./kit/app-tool";
+import { CopyButton, Field, Select, TextInput } from "../tool-ui";
 
 // Lagos is UTC+1 all year (no daylight saving).
 const LAGOS_OFFSET = 1;
@@ -24,13 +25,24 @@ function range(a: number, b: number, step = 1) {
   return r;
 }
 
+const initial = { freq: "weekdays", every: "15", time: "08:00", dow: "1", dom: "1", tz: "utc" };
+const examples = [
+  { label: "8am weekday report", values: initial },
+  { label: "Check every 15 min", values: { ...initial, freq: "minutes", every: "15" } },
+  { label: "Monthly payment reminder", values: { ...initial, freq: "monthly", time: "09:00", dom: "25" } },
+  { label: "Friday 5pm summary", values: { ...initial, freq: "weekly", time: "17:00", dow: "5" } },
+];
+
 export default function CronScheduleGenerator() {
-  const [freq, setFreq] = useState("daily");
-  const [every, setEvery] = useState("15");
-  const [time, setTime] = useState("08:00");
-  const [dow, setDow] = useState("1");
-  const [dom, setDom] = useState("1");
-  const [tz, setTz] = useState<"lagos" | "utc">("utc");
+  const { f, patch, load, source, shareUrl } = useToolState("cron-schedule-generator", initial);
+  const { freq, every, time, dow, dom } = f;
+  const tz = f.tz === "lagos" ? "lagos" : "utc";
+  const setFreq = (v: string) => patch({ freq: v });
+  const setEvery = (v: string) => patch({ every: v });
+  const setTime = (v: string) => patch({ time: v });
+  const setDow = (v: string) => patch({ dow: v });
+  const setDom = (v: string) => patch({ dom: v });
+  const setTz = (v: "lagos" | "utc") => patch({ tz: v });
 
   const [hh, mm] = time.split(":").map((x) => Number(x) || 0);
   // Convert the Lagos time the user typed into the server's UTC if needed.
@@ -108,8 +120,20 @@ export default function CronScheduleGenerator() {
     "Linux crontab": `${expr} /usr/bin/node /home/you/agent/run.js >> /home/you/agent/cron.log 2>&1`,
   };
 
+  const frequent = freq === "minutes" || freq === "hourly";
+  const text = `CRON: ${expr}\n${human}\n\nNext runs (Lagos time):\n${next.map((d) => "- " + fmt(d)).join("\n")}\n\n${Object.entries(snippets)
+    .map(([k, v]) => `${k.toUpperCase()}\n${v}`)
+    .join("\n\n")}${frequent ? "\n\nNOTE: Vercel's free Hobby plan runs cron jobs at most once a day, use Pro or another scheduler for this." : ""}`;
+
   return (
-    <ToolLayout
+    <AppToolLayout
+      slug="cron-schedule-generator"
+      source={source}
+      examples={examples}
+      onExample={(i) => load(examples[i].values)}
+      onReset={() => load(initial)}
+      shareUrl={shareUrl}
+      text={text}
       form={
         <>
           <Field label="How often?">
@@ -135,7 +159,7 @@ export default function CronScheduleGenerator() {
               <TextInput inputMode="numeric" value={dom} onChange={(e) => setDom(e.target.value)} />
             </Field>
           )}
-          <Field label="Where will it run?" hint="Vercel, GitHub Actions and most servers run cron in UTC — one hour behind Lagos.">
+          <Field label="Where will it run?" hint="Vercel, GitHub Actions and most servers run cron in UTC, one hour behind Lagos.">
             <Select
               value={tz}
               onChange={(e) => setTz(e.target.value as "lagos" | "utc")}
@@ -170,6 +194,11 @@ export default function CronScheduleGenerator() {
               ))}
             </ul>
           </div>
+          {frequent && (
+            <p className="border-2 border-edge bg-danger/10 px-3 py-2.5 text-[14px] text-ink">
+              <strong>Heads-up:</strong> Vercel's free Hobby plan only runs cron jobs once a day (and not at an exact minute). For every-few-minutes or hourly jobs, use Vercel Pro, GitHub Actions, or your automation tool's own scheduler.
+            </p>
+          )}
           {Object.entries(snippets).map(([k, v]) => (
             <div key={k} className="overflow-hidden border-2 border-edge bg-card">
               <div className="flex items-center justify-between border-b border-line bg-sunk px-4 py-2">
@@ -179,6 +208,9 @@ export default function CronScheduleGenerator() {
               <pre className="overflow-x-auto p-4 font-mono text-[13px] text-ink">{v}</pre>
             </div>
           ))}
+          <p className="text-sm text-muted">
+            GitHub Actions schedules can run a few minutes late when GitHub is busy, don't use them for anything that must happen at an exact minute. Automation tools (Make, Zapier, n8n) have their own schedule settings: set their time zone to Africa/Lagos.
+          </p>
         </>
       }
     />

@@ -16,7 +16,7 @@ export default function ToolsPage() {
       <header className="field-grid border-b-2 border-edge bg-brand px-4 py-14 text-center sm:py-20">
         <h1 className="display mx-auto max-w-3xl text-balance text-[44px] text-ink sm:text-[68px]">{coreTools.length} free tools</h1>
         <p className="mx-auto mt-4 max-w-xl font-mono text-[14px] leading-relaxed text-ink">
-          Everything you need to design, build, rank, automate and sell websites — no signup, runs on your phone, output you can copy.
+          Everything you need to design, build, rank, automate and sell websites, no signup, runs on your phone, output you can copy.
         </p>
         <nav className="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-2" aria-label="Pillars">
           {pillars.map((p) => (

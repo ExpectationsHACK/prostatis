@@ -48,15 +48,15 @@ export function auditFromFacts(f: PageFacts, keyword: string) {
   const main = kw.split(" ")[0] ?? "";
   const inText = kw ? f.text.toLowerCase().split(kw).length - 1 : 0;
   const items = [
-    { ok: f.title.length >= 30 && f.title.length <= 60, text: `Title length: ${f.title.length} chars${f.title ? ` — “${f.title}”` : " (missing)"}`, fix: "Aim for 30–60 characters, keyword near the start." },
+    { ok: f.title.length >= 30 && f.title.length <= 60, text: `Title length: ${f.title.length} chars${f.title ? ` - “${f.title}”` : " (missing)"}`, fix: "Aim for 30–60 characters, keyword near the start." },
     { ok: !!kw && f.title.toLowerCase().includes(main), text: "Keyword appears in the title", fix: `Put “${kw || "your keyword"}” (or its main word) in the <title>.` },
     { ok: f.description.length >= 110 && f.description.length <= 160, text: `Meta description: ${f.description.length} chars${f.description ? "" : " (missing)"}`, fix: "Write 110–160 characters with the keyword and a call to action." },
-    { ok: f.h1s.length === 1, text: `H1 headings: ${f.h1s.length}${f.h1s[0] ? ` — “${f.h1s[0].slice(0, 80)}”` : ""}`, fix: "Use exactly one H1 per page." },
+    { ok: f.h1s.length === 1, text: `H1 headings: ${f.h1s.length}${f.h1s[0] ? ` - “${f.h1s[0].slice(0, 80)}”` : ""}`, fix: "Use exactly one H1 per page." },
     { ok: !!kw && f.h1s.join(" ").toLowerCase().includes(main), text: "Keyword appears in the H1", fix: "Work the keyword naturally into the H1." },
     { ok: f.h2Count >= 2, text: `H2 subheadings: ${f.h2Count}`, fix: "Break content into sections with 2+ H2s." },
     { ok: f.images.noAlt === 0, text: `Images missing alt text: ${f.images.noAlt} of ${f.images.count}`, fix: "Describe every meaningful image in its alt attribute." },
     { ok: f.wordCount >= 300, text: `Word count: ~${f.wordCount}`, fix: "Service pages rank better with 300+ words of useful content." },
-    { ok: inText >= 1 && inText <= Math.max(3, Math.round(f.wordCount / 100)), text: `Keyword mentions in content: ${inText}`, fix: inText === 0 ? "Mention the keyword in the first paragraph." : "Don't over-repeat the keyword — write naturally." },
+    { ok: inText >= 1 && inText <= Math.max(3, Math.round(f.wordCount / 100)), text: `Keyword mentions in content: ${inText}`, fix: inText === 0 ? "Mention the keyword in the first paragraph." : "Don't over-repeat the keyword: write naturally." },
     { ok: f.canonical, text: "Canonical tag present", fix: 'Add <link rel="canonical" href="https://yourdomain/page">.' },
     { ok: f.viewport, text: "Mobile viewport tag present", fix: 'Add <meta name="viewport" content="width=device-width, initial-scale=1">.' },
     { ok: f.lang, text: "HTML lang attribute set", fix: 'Use <html lang="en">.' },
@@ -84,12 +84,12 @@ export function renderMetaCheck(d: PageData): LiveResult {
   const t = f.title.length, ds = f.description.length;
   return {
     blocks: [
-      { type: "serp", title: "How this page looks in Google now", pageTitle: f.title || "(no title — Google will make one up)", url: shortUrl(d.url).replace(/\//g, " › "), description: f.description || "(no meta description — Google will pull random text from the page)" },
+      { type: "serp", title: "How this page looks in Google now", pageTitle: f.title || "(no title: Google will make one up)", url: shortUrl(d.url).replace(/\//g, " › "), description: f.description || "(no meta description: Google will pull random text from the page)" },
       {
         type: "checks",
         title: "Current tags",
         items: [
-          { ok: t >= 30 && t <= 60, text: `Title: ${t} characters`, fix: t > 60 ? "Shorten it — Google cuts titles off around 60 characters." : "Make it more descriptive (30–60 characters)." },
+          { ok: t >= 30 && t <= 60, text: `Title: ${t} characters`, fix: t > 60 ? "Shorten it: Google cuts titles off around 60 characters." : "Make it more descriptive (30–60 characters)." },
           { ok: ds >= 110 && ds <= 158, text: `Description: ${ds} characters`, fix: ds > 158 ? "Trim to under 158 characters." : "Write 110–158 characters that sell the click." },
           { ok: f.og.title && f.og.image, text: "Social share tags (og:title + og:image)", fix: "Add them so WhatsApp and X show a proper preview card." },
           { ok: f.canonical, text: "Canonical tag", fix: "Add a canonical link to avoid duplicate-page issues." },
@@ -109,7 +109,7 @@ export function renderLocalCheck(d: PageData): LiveResult {
     blocks: [
       {
         type: "checks",
-        title: `Website checks — ${shortUrl(d.url)}`,
+        title: `Website checks: ${shortUrl(d.url)}`,
         items: [
           { ok: localTypes.length > 0, text: `LocalBusiness schema: ${localTypes.join(", ") || "not found"}`, fix: "Add LocalBusiness JSON-LD with name, address, phone, hours and geo." },
           { ok: f.mapEmbed, text: "Google Map embedded", fix: "Embed the map from the Google Business Profile on the contact page." },
@@ -118,7 +118,7 @@ export function renderLocalCheck(d: PageData): LiveResult {
           { ok: f.testimonials, text: "Reviews or testimonials on the page", fix: "Show Google reviews on the site and link to the review page." },
         ],
       },
-      { type: "notice", tone: "info", text: "Google Business Profile items (verification, category, photos, reviews) can only be checked in your GBP dashboard — tick those below by hand." },
+      { type: "notice", tone: "info", text: "Google Business Profile items (verification, category, photos, reviews) can only be checked in your GBP dashboard, tick those below by hand." },
     ],
     checks: { schema: localTypes.length > 0, map: f.mapEmbed },
   };
@@ -132,7 +132,7 @@ export function renderLandingCheck(d: PageData): LiveResult {
       { type: "stats", items: [{ label: "Buttons found", value: String(f.buttons.length), sub: f.buttons.slice(0, 3).join(" · ").slice(0, 60) || "none" }, { label: "Forms", value: String(f.forms), sub: `${f.images.count} images` }] },
       {
         type: "checks",
-        title: `Auto-detected — ${shortUrl(d.url)}`,
+        title: `Auto-detected: ${shortUrl(d.url)}`,
         items: [
           { ok: d.https, text: "Served over HTTPS", fix: "Put the page on your own domain with HTTPS." },
           { ok: f.prices, text: "A price is shown", fix: "Show a price or “from ₦…”." },
@@ -144,7 +144,7 @@ export function renderLandingCheck(d: PageData): LiveResult {
           { ok: f.analytics.length > 0, text: `Analytics: ${f.analytics.join(", ") || "none"}`, fix: "Install analytics and track the main button." },
         ],
       },
-      { type: "notice", tone: "info", text: "Copy quality (headline, benefits, urgency) can't be judged by a scan — tick those yourself below." },
+      { type: "notice", tone: "info", text: "Copy quality (headline, benefits, urgency) can't be judged by a scan, tick those yourself below." },
     ],
     checks: { https: d.https, price: f.prices, objections: f.faq, testimonials: f.testimonials, contact, wa: f.whatsappLinks > 0, payment: f.paymentBrands.length > 0, analytics: f.analytics.length > 0 },
   };
@@ -170,7 +170,7 @@ export function renderSpeed(d: SpeedData, mode: "speed" | "responsive" = "speed"
   if (lh) {
     blocks.push({ type: "stats", items: [{ label: "Google mobile score", value: String(lh.scores.performance), sub: "Lighthouse performance" }, { label: "LCP", value: lh.metrics.lcp || "–", sub: "main content visible" }, { label: "CLS", value: lh.metrics.cls || "–", sub: "layout shift" }, { label: "TBT", value: lh.metrics.tbt || "–", sub: "blocking time" }] });
     if (lh.screenshot) blocks.push({ type: "image", title: "How it loads on a phone (Google test)", src: lh.screenshot, alt: "Mobile screenshot of the page" });
-    if (lh.opportunities.length) blocks.push({ type: "list", title: "Google's top fixes", items: lh.opportunities.map((o) => `${o.title}${o.saving ? ` — ${o.saving}` : ""}`) });
+    if (lh.opportunities.length) blocks.push({ type: "list", title: "Google's top fixes", items: lh.opportunities.map((o) => `${o.title}${o.saving ? ` - ${o.saving}` : ""}`) });
   } else if (d.lighthouse && "error" in d.lighthouse) {
     blocks.push({ type: "notice", tone: "warn", text: `${d.lighthouse.error}. The quick scan above still ran.` });
   } else if (!d.lighthouseEnabled) {
@@ -187,12 +187,12 @@ export function renderSpeed(d: SpeedData, mode: "speed" | "responsive" = "speed"
     { ok: d.viewport, text: "Mobile viewport tag", fix: 'Add <meta name="viewport" content="width=device-width, initial-scale=1">.' },
   ];
   if (mode === "speed") {
-    blocks.push({ type: "checks", title: `Quick scan — ${shortUrl(d.url)}`, items: findings });
+    blocks.push({ type: "checks", title: `Quick scan: ${shortUrl(d.url)}`, items: findings });
     if (d.largest.length) blocks.push({ type: "table", title: "Heaviest files", columns: ["File", "Type", "Size"], rows: d.largest.filter((a) => a.bytes > 0).map((a) => [a.url.split("/").pop()?.split("?")[0]?.slice(0, 50) || a.url, a.type, kb(a.bytes)]) });
   } else {
     blocks.push({
       type: "checks",
-      title: `Mobile checks — ${shortUrl(d.url)}`,
+      title: `Mobile checks: ${shortUrl(d.url)}`,
       items: [
         { ok: d.viewport, text: "Mobile viewport tag", fix: "Without it, phones show a zoomed-out desktop page." },
         ...(lh
@@ -201,7 +201,7 @@ export function renderSpeed(d: SpeedData, mode: "speed" | "responsive" = "speed"
               { ok: lh.mobile.tapTargets, text: "Buttons and links are big enough to tap", fix: "Make tap targets at least 44×44px with space between." },
             ]
           : []),
-        { ok: bigImages.length === 0, text: `Heavy images: ${bigImages.length}`, fix: "Big images make phones slow — compress them." },
+        { ok: bigImages.length === 0, text: `Heavy images: ${bigImages.length}`, fix: "Big images make phones slow, compress them." },
       ],
     });
   }
@@ -227,9 +227,9 @@ export function renderDomains(d: DomainData): LiveResult {
   const free = d.results.filter((r) => r.status === "available");
   return {
     blocks: [
-      { type: "stats", items: [{ label: "Available", value: String(free.length), sub: `of ${d.results.length} checked` }, { label: "Best pick", value: free[0]?.domain ?? "—", sub: free[0] ? "register it before someone else does" : "try another keyword" }] },
+      { type: "stats", items: [{ label: "Available", value: String(free.length), sub: `of ${d.results.length} checked` }, { label: "Best pick", value: free[0]?.domain ?? "-", sub: free[0] ? "register it before someone else does" : "try another keyword" }] },
       { type: "table", title: "Live availability (registry lookup)", columns: ["Domain", "Status"], rows: d.results.map((r) => [r.domain, label[r.status]]) },
-      { type: "notice", tone: "info", text: "Checked live against the domain registries (RDAP). Availability can change within minutes — confirm at your registrar before paying." },
+      { type: "notice", tone: "info", text: "Checked live against the domain registries (RDAP). Availability can change within minutes, confirm at your registrar before paying." },
     ],
   };
 }
@@ -241,7 +241,7 @@ export function renderUptime(d: UptimeData): LiveResult {
   const up = okRuns.length === d.runs.length;
   return {
     blocks: [
-      { type: "stats", items: [{ label: "Status", value: up ? "Up" : okRuns.length ? "Unstable" : "Down", sub: d.runs.map((r) => r.status || "fail").join(" · ") }, { label: "Avg response", value: avg ? `${avg}ms` : "—", sub: avg && avg < 800 ? "healthy" : avg ? "slow — users will notice" : "" }] },
+      { type: "stats", items: [{ label: "Status", value: up ? "Up" : okRuns.length ? "Unstable" : "Down", sub: d.runs.map((r) => r.status || "fail").join(" · ") }, { label: "Avg response", value: avg ? `${avg}ms` : "-", sub: avg && avg < 800 ? "healthy" : avg ? "slow: users will notice" : "" }] },
       { type: "notice", tone: up ? "good" : "warn", text: up ? `${shortUrl(d.url)} answered all 3 checks. Now put it on a 5-minute uptime monitor so you hear about outages first.` : `${shortUrl(d.url)} didn't answer reliably. Check the host, the webhook URL and your error logs.` },
     ],
     checks: up ? {} : { uptime: false },
@@ -254,12 +254,12 @@ export function renderScrape(d: ScrapeData): LiveResult {
   const blocks: Block[] = [
     { type: "stats", items: [{ label: "Items matched", value: String(d.matched), sub: "on the first page" }, { label: "Rows with data", value: `${filled.length}/${d.rows.length}`, sub: "first 10 shown" }] },
   ];
-  if (d.rows.length) blocks.push({ type: "table", title: "Test run — first rows", columns: d.columns, rows: d.rows.map((r) => r.map((c) => c || "—")) });
+  if (d.rows.length) blocks.push({ type: "table", title: "Test run: first rows", columns: d.columns, rows: d.rows.map((r) => r.map((c) => c || "-")) });
   blocks.push(
     d.matched === 0
       ? { type: "notice", tone: "warn", text: "The item selector matched nothing. Right-click a listing on the page → Inspect, and copy a class that wraps one listing." }
       : filled.length < d.rows.length
-        ? { type: "notice", tone: "warn", text: "Some rows are empty — adjust the field selectors (they're searched inside each item)." }
+        ? { type: "notice", tone: "warn", text: "Some rows are empty: adjust the field selectors (they're searched inside each item)." }
         : { type: "notice", tone: "good", text: "Selectors work. Copy the script and run it for all pages." },
   );
   return { blocks };

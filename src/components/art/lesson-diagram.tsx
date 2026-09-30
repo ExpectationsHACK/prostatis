@@ -15,7 +15,22 @@ export type DiagramKind =
   | "delivery-timeline"
   | "payment-flow"
   | "keyword-intent"
-  | "booking-flow";
+  | "booking-flow"
+  | "claude-loop"
+  | "contrast"
+  | "brand-kit"
+  | "breakpoints"
+  | "form-flow"
+  | "rls"
+  | "search-journey"
+  | "review-loop"
+  | "webhook"
+  | "crm-pipeline"
+  | "pricing-tiers"
+  | "outreach-sequence"
+  | "folder-map"
+  | "phone-number"
+  | "handover";
 
 const E = "border-2 border-edge";
 const S = "shadow-[3px_3px_0_var(--edge)]";
@@ -79,7 +94,7 @@ const D: Record<DiagramKind, { tone: Tone; draw: () => ReactNode }> = {
           <p className="font-sans text-[9px] text-[#1f6f3f]">glowbeauty.ng › lashes <span className="ml-1 bg-[#ffe1cf] px-1 font-mono text-[7px] text-ink">URL</span></p>
           <p className="font-sans text-[13px] leading-tight text-[#1a0dab]">Lash Extensions in Lekki | Glow <span className="bg-[#ffe1cf] px-1 font-mono text-[7px] text-ink">TITLE ≤60</span></p>
           <p className="mt-0.5 font-sans text-[9px] leading-snug text-[#4d5156]">Natural lashes that last 4 weeks. Book online today. <span className="bg-[#ffe1cf] px-1 font-mono text-[7px] text-ink">DESCRIPTION ≤158</span></p>
-          <p className="mt-1.5 font-sans text-[9px] text-[#e0a82e]">★★★★★ 4.9 · 212 reviews <span className="bg-[#ffe1cf] px-1 font-mono text-[7px] text-ink">SCHEMA</span></p>
+          <p className="mt-1.5 font-sans text-[9px] text-[#1a0dab]">Prices · Book online · Our work <span className="bg-[#ffe1cf] px-1 font-mono text-[7px] text-ink">SITELINKS</span></p>
         </div>
       </div>
     ),
@@ -198,6 +213,232 @@ const D: Record<DiagramKind, { tone: Tone; draw: () => ReactNode }> = {
           </div>
         ))}
       </Row>
+    ),
+  },
+  "claude-loop": {
+    tone: "indigo",
+    draw: () => (
+      <div className="flex h-full items-center justify-center p-3">
+        <div className="grid grid-cols-5 items-center gap-1">
+          {[["1", "You describe", "plain English"], ["2", "AI plans", "lists the changes"], ["3", "You approve", "yes / no / edit"], ["4", "You check", "open the browser"], ["5", "Commit", "save a snapshot"]].map(([n, a, b], i) => (
+            <div key={n} className="flex items-center gap-1">
+              <Node className={i === 2 ? "bg-brand" : ""}>
+                <p className="display text-[14px] leading-none">{n}</p>
+                <p className={m10}>{a}</p>
+                <p className={m9}>{b}</p>
+              </Node>
+              {i < 4 && <ArrowRight className="size-3 shrink-0 text-paper" strokeWidth={3} />}
+            </div>
+          ))}
+        </div>
+      </div>
+    ),
+  },
+  contrast: {
+    tone: "sand",
+    draw: () => (
+      <div className="grid h-full grid-cols-2 gap-2 p-4">
+        {[["#9a9a9a", "#e9e9e9", "2.3 : 1", "FAIL", "bg-danger"], ["#595959", "#ffffff", "7.0 : 1", "PASS", "bg-success"], ["#ffffff", "#ff6719", "2.9 : 1", "FAIL", "bg-danger"], ["#1b1714", "#ff6719", "6.1 : 1", "PASS", "bg-success"]].map(([fg, bg, r, v, c]) => (
+          <div key={fg + bg} className={`${E} flex items-center justify-between px-2`} style={{ background: bg }}>
+            <span className="font-sans text-[13px] font-bold" style={{ color: fg }}>Book now</span>
+            <span className="text-right">
+              <span className={`${m9} block text-ink`}>{r}</span>
+              <span className={`${c} px-1 font-mono text-[8px] font-bold text-paper`}>{v}</span>
+            </span>
+          </div>
+        ))}
+      </div>
+    ),
+  },
+  "brand-kit": {
+    tone: "peach",
+    draw: () => (
+      <div className="flex h-full items-center justify-center p-4">
+        <div className={`${E} ${S} w-[270px] bg-card p-2.5`}>
+          <p className={`${m10} border-b border-edge pb-1`}>GLOW BEAUTY · BRAND KIT</p>
+          <div className="mt-1.5 flex gap-1">{["#ff6719", "#0f4d3a", "#1b1714", "#f6efe2"].map((c) => <span key={c} className="h-6 flex-1 border border-edge" style={{ background: c }} />)}</div>
+          <p className="mt-1.5 font-display text-[15px] font-bold leading-none">Aa Headline: Archivo</p>
+          <p className="font-sans text-[10px]">Aa Body text: Inter, 16px+</p>
+          <div className="mt-1.5 flex gap-1">{["Warm", "Reliable", "Premium"].map((w) => <span key={w} className={`${m9} border border-edge bg-brand px-1`}>{w}</span>)}</div>
+        </div>
+      </div>
+    ),
+  },
+  breakpoints: {
+    tone: "forest",
+    draw: () => (
+      <div className="flex h-full items-end justify-center gap-3 p-4">
+        {[["Phone", "360px", "w-[46px] h-[86px]"], ["Tablet", "768px", "w-[78px] h-[104px]"], ["Laptop", "1280px", "w-[130px] h-[88px]"]].map(([n, w, sz]) => (
+          <div key={n} className="flex flex-col items-center gap-1">
+            <div className={`${E} ${S} ${sz} space-y-1 bg-card p-1`}>
+              <span className="block h-1.5 bg-edge/70" />
+              <span className="block h-4 bg-brand" />
+              <span className="block h-1 bg-wash" />
+              <span className="block h-1 w-2/3 bg-wash" />
+            </div>
+            <p className={`${m10} text-paper`}>{n}</p>
+            <p className={`${m9} text-paper/80`}>{w}</p>
+          </div>
+        ))}
+      </div>
+    ),
+  },
+  "form-flow": {
+    tone: "sand",
+    draw: () => (
+      <Row>
+        <Node><p className={m10}>Visitor</p><p className={m9}>fills the form</p></Node>
+        <Arrow />
+        <Node className="bg-wash"><p className={m10}>Form service</p><p className={m9}>e.g. Formspree</p></Node>
+        <Arrow />
+        <Node><Mail className="mx-auto size-4" /><p className={m10}>Owner&apos;s inbox</p><p className={m9}>email arrives</p></Node>
+        <Arrow />
+        <Node className="bg-brand"><p className={m10}>Owner replies</p><p className={m9}>same day</p></Node>
+      </Row>
+    ),
+  },
+  rls: {
+    tone: "indigo",
+    draw: () => (
+      <div className="flex h-full items-center justify-center gap-3 p-3">
+        <div className={`${E} ${S} w-[150px] bg-card`}>
+          <p className={`${m10} border-b-2 border-edge bg-wash px-1.5 py-0.5`}>results table</p>
+          {[["Ada's child", "A", "bg-[#ffe1cf]"], ["Bola's child", "B", "bg-[#dfe9d8]"], ["Ada's child", "A", "bg-[#ffe1cf]"], ["Chidi's child", "C", ""]].map(([r, o, c], i) => (
+            <p key={i} className={`${m9} flex justify-between border-b border-line px-1.5 py-0.5 ${c}`}><span>{r}</span><span className="font-bold">{o}</span></p>
+          ))}
+        </div>
+        <div className="space-y-1.5">
+          <Node className="bg-[#ffe1cf]"><p className={m9}><User className="inline size-3" /> Ada sees only rows A</p></Node>
+          <Node className="bg-[#dfe9d8]"><p className={m9}><User className="inline size-3" /> Bola sees only rows B</p></Node>
+          <p className={`${m9} text-paper`}>The rule lives in the database</p>
+        </div>
+      </div>
+    ),
+  },
+  "search-journey": {
+    tone: "sand",
+    draw: () => (
+      <Row>
+        {[["Crawl", "Google visits your page"], ["Index", "stores what it's about"], ["Rank", "orders the results"], ["Click", "a customer arrives"]].map(([a, b], i, arr) => (
+          <div key={a} className="flex items-center gap-1.5">
+            <Node className={i === 3 ? "bg-brand" : ""}><p className={m10}>{a}</p><p className={m9}>{b}</p></Node>
+            {i < arr.length - 1 && <Arrow />}
+          </div>
+        ))}
+      </Row>
+    ),
+  },
+  "review-loop": {
+    tone: "forest",
+    draw: () => (
+      <div className="grid h-full grid-cols-2 place-items-center gap-2 p-4">
+        {[["1 · Happy customer", "right after the service"], ["2 · Ask with the link", "WhatsApp or QR code"], ["4 · More calls", "stronger map ranking"], ["3 · Review + your reply", "thank them by name"]].map(([a, b]) => (
+          <Node key={a} className="w-[130px]"><p className={m10}>{a}</p><p className={m9}>{b}</p></Node>
+        ))}
+      </div>
+    ),
+  },
+  webhook: {
+    tone: "orange",
+    draw: () => (
+      <Row>
+        <Node className="bg-[#0fa958] text-white"><p className={m10}>Paystack</p><p className={m9}>&quot;charge.success&quot;</p></Node>
+        <Arrow />
+        <Node><p className={m10}>Your webhook URL</p><p className={m9}>checks the signature</p></Node>
+        <Arrow />
+        <Node><p className={m10}>Verify</p><p className={m9}>amount + reference</p></Node>
+        <Arrow />
+        <Node className="bg-wash"><p className={m10}>Record once</p><p className={m9}>order → paid</p></Node>
+      </Row>
+    ),
+  },
+  "crm-pipeline": {
+    tone: "indigo",
+    draw: () => (
+      <div className="grid h-full grid-cols-4 gap-1.5 p-3">
+        {([["New", ["Ada · braids", "Tunde · site"]], ["Contacted", ["Kemi · lashes"]], ["Booked", ["Bisi · Sat 11am"]], ["Paid", ["Uche · ₦30k"]]] as const).map(([col, cards]) => (
+          <div key={col} className={`${E} bg-wash p-1`}>
+            <p className={`${m10} border-b border-edge pb-0.5`}>{col}</p>
+            <div className="mt-1 space-y-1">{cards.map((c) => <p key={c} className={`${m9} border border-edge bg-card px-1 py-0.5`}>{c}</p>)}</div>
+          </div>
+        ))}
+      </div>
+    ),
+  },
+  "pricing-tiers": {
+    tone: "peach",
+    draw: () => (
+      <div className="flex h-full items-end justify-center gap-2 p-4">
+        {[["Starter", "Landing page", "h-[92px]", "bg-card"], ["Growth", "5-page site + booking", "h-[122px]", "bg-brand"], ["Complete", "Site + store + care plan", "h-[106px]", "bg-card"]].map(([n, d, h, c]) => (
+          <div key={n} className={`${E} ${S} ${h} ${c} flex w-[84px] flex-col justify-between p-1.5`}>
+            <p className={m10}>{n}</p>
+            <p className={m9}>{d}</p>
+            {n === "Growth" && <p className={`${m9} bg-ink px-1 text-paper`}>most pick this</p>}
+          </div>
+        ))}
+      </div>
+    ),
+  },
+  "outreach-sequence": {
+    tone: "sand",
+    draw: () => (
+      <div className="flex h-full items-center justify-center p-4">
+        <div className="flex w-full items-start">
+          {[["Day 0", "personal message"], ["Day 3", "a free tip"], ["Day 7", "an example"], ["Day 14", "polite last note"]].map(([a, b], i, arr) => (
+            <div key={a} className="flex flex-1 flex-col items-center">
+              <div className="flex w-full items-center">
+                <span className={`h-0.5 flex-1 ${i ? "bg-edge" : ""}`} />
+                <span className={`grid size-6 shrink-0 place-items-center rounded-full border-2 border-edge ${i === 0 ? "bg-brand" : "bg-card"}`}><MessageCircle className="size-3" /></span>
+                <span className={`h-0.5 flex-1 ${i < arr.length - 1 ? "bg-edge" : ""}`} />
+              </div>
+              <p className={`${m10} mt-1`}>{a}</p>
+              <p className={`${m9} text-center`}>{b}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    ),
+  },
+  "folder-map": {
+    tone: "ink",
+    draw: () => (
+      <div className="flex h-full items-center justify-center p-3">
+        <div className={`${E} bg-night px-3 py-2 font-mono text-[9.5px] leading-[1.45] text-paper`}>
+          <p>my-first-site/</p>
+          <p>├─ <span className="text-brand">app/</span> <span className="text-paper/60">- your pages</span></p>
+          <p>│  ├─ page.tsx <span className="text-paper/60">- the home page</span></p>
+          <p>│  └─ contact/page.tsx</p>
+          <p>├─ <span className="text-brand">components/</span> <span className="text-paper/60">- reusable parts</span></p>
+          <p>├─ <span className="text-brand">public/</span> <span className="text-paper/60">- images, logo</span></p>
+          <p>├─ CLAUDE.md <span className="text-paper/60">- rules for the AI</span></p>
+          <p>├─ .env.local <span className="text-paper/60">- secrets (never share)</span></p>
+          <p>└─ package.json <span className="text-paper/60">- the project&apos;s recipe</span></p>
+        </div>
+      </div>
+    ),
+  },
+  "phone-number": {
+    tone: "forest",
+    draw: () => (
+      <Row>
+        <Node><p className={m10}>Written</p><p className="font-mono text-[12px]">0803 123 4567</p></Node>
+        <Arrow />
+        <Node className="bg-wash"><p className={m9}>remove spaces · drop the first 0 · put 234 in front</p></Node>
+        <Arrow />
+        <Node className="bg-brand"><p className={m10}>WhatsApp link</p><p className="font-mono text-[11px]">wa.me/2348031234567</p></Node>
+      </Row>
+    ),
+  },
+  handover: {
+    tone: "peach",
+    draw: () => (
+      <div className="flex h-full items-center justify-center gap-3 p-3">
+        <Node className="bg-brand"><User className="mx-auto size-5" /><p className={m10}>Client owns</p><p className={m9}>every account</p></Node>
+        <div className="grid grid-cols-2 gap-1">
+          {["Domain", "Hosting", "Paystack", "WhatsApp", "Google profile", "Automations"].map((a) => <p key={a} className={`${m9} border-2 border-edge bg-card px-1.5 py-0.5`}>{a}</p>)}
+        </div>
+        <Node><p className={m10}>You</p><p className={m9}>added as a team member</p></Node>
+      </div>
     ),
   },
 };

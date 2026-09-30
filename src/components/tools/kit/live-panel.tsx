@@ -70,7 +70,7 @@ export function LivePanel({ spec, values, onChecks }: { spec: LiveSpec; values: 
         </button>
       </form>
       {spec.url?.hint && <p className="mt-2 font-mono text-[12px] text-muted">{spec.url.hint}</p>}
-      {state === "running" && spec.kind === "speed" && <p className="mt-3 font-mono text-[12px] text-muted">Loading the page and weighing every image, script and stylesheet — this can take up to a minute.</p>}
+      {state === "running" && spec.kind === "speed" && <p className="mt-3 font-mono text-[12px] text-muted">Loading the page and weighing every image, script and stylesheet, this can take up to a minute.</p>}
       {state === "error" && (
         <p className="mt-3 border-2 border-edge bg-danger/10 px-3 py-2 text-[14px] text-danger" role="alert">
           {error}

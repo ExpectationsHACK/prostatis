@@ -1,13 +1,19 @@
 "use server";
 
+import { after } from "next/server";
 import { getLesson } from "@/content/lessons";
+import { emailCertificate } from "@/lib/certificate-delivery";
+import { issueCertificate } from "@/lib/certificates";
 import { learnerTrack, requireLearner } from "@/lib/learning/access";
+import type { Track } from "@/lib/curriculum";
 import {
+  badges,
   certificateId,
   FINAL_PASS_MARK,
   finalQuestions,
   grade,
   lagosDay,
+  levelFor,
   statusOf,
   streaks,
   trackProgress,
@@ -20,7 +26,18 @@ import { getStore, type Store } from "@/lib/learning/store";
 
 export type ActionResult =
   | { ok: false; error: string }
-  | { ok: true; graded?: Graded; xpGained: number; completed: boolean; xp: number; streak: number };
+  | {
+      ok: true;
+      graded?: Graded;
+      xpGained: number;
+      completed: boolean;
+      xp: number;
+      streak: number;
+      /** Set when this action pushed the learner into a new level. */
+      levelUp?: { level: number; name: string };
+      /** Badges earned by this action. */
+      newBadges: { name: string; desc: string }[];
+    };
 
 async function open(slug: unknown, day: unknown) {
   if (typeof slug !== "string" || !Number.isInteger(day)) return null;
@@ -49,9 +66,23 @@ async function finish(store: Store, userId: string, row: LessonRow) {
   return gained;
 }
 
-async function summary(store: Store, userId: string, xpGained: number, completed: boolean, graded?: Graded): Promise<ActionResult> {
+async function summary(store: Store, userId: string, track: Track, before: LearnerState, xpGained: number, completed: boolean, graded?: Graded): Promise<ActionResult> {
   const s: LearnerState = await store.load(userId);
-  return { ok: true, graded, xpGained, completed, xp: s.xp, streak: streaks(s.days).current };
+  const was = levelFor(before.xp);
+  const now = levelFor(s.xp);
+  const had = new Set(badges(track, before).filter((b) => b.earned).map((b) => b.id));
+  return {
+    ok: true,
+    graded,
+    xpGained,
+    completed,
+    xp: s.xp,
+    streak: streaks(s.days).current,
+    levelUp: now.level > was.level ? { level: now.level, name: now.name } : undefined,
+    newBadges: badges(track, s)
+      .filter((b) => b.earned && !had.has(b.id))
+      .map(({ name, desc }) => ({ name, desc })),
+  };
 }
 
 export async function submitQuiz(slug: string, day: number, answers: number[]): Promise<ActionResult> {
@@ -71,7 +102,7 @@ export async function submitQuiz(slug: string, day: number, answers: number[]): 
   }
   const wasDone = Boolean(row.completed_at);
   gained += await finish(store, learner.id, row);
-  return summary(store, learner.id, gained, !wasDone && Boolean(row.completed_at), g);
+  return summary(store, learner.id, ctx.track, state, gained, !wasDone && Boolean(row.completed_at), g);
 }
 
 export async function completeTask(slug: string, day: number): Promise<ActionResult> {
@@ -84,7 +115,7 @@ export async function completeTask(slug: string, day: number): Promise<ActionRes
   let gained = (await store.award(learner.id, "task", lesson.id, XP.task)) ? XP.task : 0;
   const wasDone = Boolean(row.completed_at);
   gained += await finish(store, learner.id, row);
-  return summary(store, learner.id, gained, !wasDone && Boolean(row.completed_at));
+  return summary(store, learner.id, ctx.track, state, gained, !wasDone && Boolean(row.completed_at));
 }
 
 export async function submitFinal(slug: string, answers: number[]): Promise<ActionResult> {
@@ -109,6 +140,20 @@ export async function submitFinal(slug: string, answers: number[]): Promise<Acti
   };
   await store.saveFinal(learner.id, row);
   await store.touchDay(learner.id, lagosDay());
+  if (row.passed_at && row.certificate_id) {
+    // Record the certificate once, then email it after the response so the result shows instantly.
+    const cert = await issueCertificate({
+      id: row.certificate_id,
+      user_id: learner.id,
+      track: track.id,
+      name: learner.name,
+      email: learner.email || null,
+      score: row.best,
+      total: row.total,
+      issued_at: row.passed_at,
+    });
+    if (!cert.emailed_at) after(() => emailCertificate(cert).catch((e) => console.error("certificate email", e)));
+  }
   const gained = g.passed && (await store.award(learner.id, "final", track.id, XP.final)) ? XP.final : 0;
-  return summary(store, learner.id, gained, g.passed, g);
+  return summary(store, learner.id, track, state, gained, g.passed, g);
 }

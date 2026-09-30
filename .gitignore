@@ -46,3 +46,6 @@ next-env.d.ts
 
 # design review captures
 .impeccable/review/
+
+# local blog uploads (development preview)
+/public/uploads

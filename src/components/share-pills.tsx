@@ -7,11 +7,11 @@ const pill =
   "inline-flex h-9 items-center gap-1.5 rounded-full border border-line px-3.5 text-[13px] font-semibold text-ink transition-colors hover:bg-wash";
 
 // Substack's post action pills, with WhatsApp in place of restack/comment.
-export function SharePills({ title }: { title: string }) {
+export function SharePills({ title, kind = "free tool" }: { title: string; kind?: string }) {
   const [copied, setCopied] = useState(false);
   const share = () => {
     const url = window.location.href;
-    window.open(`https://wa.me/?text=${encodeURIComponent(`${title} — free tool: ${url}`)}`, "_blank", "noopener");
+    window.open(`https://wa.me/?text=${encodeURIComponent(`${title}: ${kind}: ${url}`)}`, "_blank", "noopener");
   };
   const copy = async () => {
     try {

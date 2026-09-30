@@ -76,9 +76,9 @@ export function SiteNav() {
   return (
     <header className="sticky top-0 z-50 px-3 pt-3" ref={ref}>
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 rounded-full border-2 border-edge bg-paper pl-3 pr-2 shadow-[5px_5px_0_var(--edge)]">
-        <Link href="/" className="flex items-center gap-2.5" aria-label="BuildWithAIClub home">
+        <Link href="/" className="flex items-center gap-2.5" aria-label="STEINARK home">
           <LogoTile size={38} />
-          <span className="display text-[17px] text-ink sm:text-[20px]">BuildWithAIClub</span>
+          <span className="display text-[17px] text-ink sm:text-[20px]">STEINARK</span>
         </Link>
 
         <nav className="hidden items-center lg:flex" aria-label="Main">
@@ -90,6 +90,9 @@ export function SiteNav() {
           <Dropdown label="Who it's for" items={navMenus.who} open={open === "who"} onToggle={() => toggle("who")} />
           <Link href="/pricing" className="px-2.5 py-2 font-mono text-[12px] font-bold uppercase tracking-[0.12em] text-ink hover:text-brand-text">
             Pricing
+          </Link>
+          <Link href="/blog" className="px-2.5 py-2 font-mono text-[12px] font-bold uppercase tracking-[0.12em] text-ink hover:text-brand-text">
+            Blog
           </Link>
         </nav>
 
@@ -113,10 +116,11 @@ export function SiteNav() {
           <nav className="flex flex-col" aria-label="Menu">
             {[
               { href: "/#inside", label: "What's inside" },
-              { href: "/tracks/main-track", label: "Main Track · 1 month" },
               { href: "/tracks/fast-track", label: "Fast Track · 14 days" },
+              { href: "/tracks/main-track", label: "Main Track · 1 month" },
               { href: "/tools", label: "50 free tools" },
               { href: "/pricing", label: "Pricing" },
+              { href: "/blog", label: "Blog" },
             ].map((l) => (
               <Link key={l.href} href={l.href} className="border-b border-line py-3 font-mono text-[14px] font-bold uppercase tracking-[0.1em] text-ink">
                 {l.label}

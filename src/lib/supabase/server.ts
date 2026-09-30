@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { connection } from "next/server";
 import { supabaseConfigured, supabasePublishableKey, supabaseUrl } from "./env";
 
-// Create a new client per request — never share one across requests.
+// Create a new client per request, never share one across requests.
 export async function createClient() {
   const cookieStore = await cookies();
   return createServerClient(supabaseUrl, supabasePublishableKey, {

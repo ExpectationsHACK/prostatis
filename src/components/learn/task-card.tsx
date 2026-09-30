@@ -4,13 +4,16 @@ import { Check, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { completeTask } from "@/app/learn/actions";
+import type { ActionResult } from "@/app/learn/actions";
 import { btn, size } from "@/components/ui";
+import { Celebrate } from "./celebrate";
 
 /** The practical task's done-checklist. Every box must be ticked before it can be confirmed. */
 export function TaskCheck({ slug, day, done: items, confirmed }: { slug: string; day: number; done: string[]; confirmed: boolean }) {
   const router = useRouter();
   const [ticked, setTicked] = useState<boolean[]>(() => items.map(() => confirmed));
   const [gained, setGained] = useState<number | null>(null);
+  const [result, setResult] = useState<Extract<ActionResult, { ok: true }> | null>(null);
   const [error, setError] = useState("");
   const [pending, start] = useTransition();
   const all = ticked.every(Boolean);
@@ -50,6 +53,7 @@ export function TaskCheck({ slug, day, done: items, confirmed }: { slug: string;
               const r = await completeTask(slug, day);
               if (!r.ok) return setError(r.error);
               setGained(r.xpGained);
+              setResult(r);
               router.refresh();
             })
           }
@@ -58,6 +62,9 @@ export function TaskCheck({ slug, day, done: items, confirmed }: { slug: string;
         </button>
       )}
       {error && <p className="mt-3 font-mono text-[13px] text-danger" role="alert">{error}</p>}
+      {result && (result.completed || result.levelUp || result.newBadges.length > 0) && (
+        <Celebrate title={result.completed ? "Lesson complete!" : "Mission done!"} xp={result.xpGained} levelUp={result.levelUp} badges={result.newBadges} />
+      )}
     </div>
   );
 }

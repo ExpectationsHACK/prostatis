@@ -43,6 +43,47 @@ describe("course content", () => {
       }
   });
 
+  it.each(all.map((l) => [l.id, l] as const))("%s teaches for complete beginners", (_, l) => {
+    const blocks = l.sections.flatMap((s) => s.blocks);
+    const count = (t: string) => blocks.filter((b) => b.t === t).length;
+    expect(count("define"), "plain-English definitions").toBeGreaterThanOrEqual(2);
+    expect(count("scenario"), "real-life scenario").toBeGreaterThanOrEqual(1);
+    expect(count("try"), "try-it-now practice").toBeGreaterThanOrEqual(1);
+    expect(count("check"), "self-check").toBeGreaterThanOrEqual(1);
+    expect(l.youNeed.length).toBeGreaterThanOrEqual(3);
+    expect(l.recap.length).toBeGreaterThanOrEqual(5);
+    for (const b of blocks) {
+      if (b.t === "check") {
+        expect(b.answer).toBeLessThan(b.options.length);
+        // Practice checks must not simply leak the graded questions.
+        expect(l.quiz.map((q) => q.q)).not.toContain(b.q);
+      }
+      if (b.t === "try") expect(b.steps.length).toBeGreaterThanOrEqual(2);
+    }
+  });
+
+  // Every assessed idea must be taught, each question points at a takeaway, and that
+  // takeaway contains the key words of the correct answer.
+  const stop = new Set("about after again always because before being could every their there these thing things those through under until what when where which while would your yours with from that this they them then than only just into also have more most other some such very will should must".split(" "));
+  const clean = (x: string) => x.toLowerCase().replace(/\*\*/g, "").replace(/(\d),(\d)/g, "$1$2");
+  const tokens = (x: string) =>
+    clean(x)
+      .replace(/[^a-z0-9₦. ]/g, " ")
+      .split(/\s+/)
+      .map((w) => w.replace(/^\.+|\.+$/g, ""))
+      .filter((w) => (/\d/.test(w) ? w.length > 0 : w.length >= 4 && !stop.has(w)));
+  // A word counts as taught if the takeaway contains it (numbers exactly, words by their stem).
+  const taught = (take: string, w: string) => clean(take).includes(/\d/.test(w) ? w : w.slice(0, 5));
+  it.each(all.map((l) => [l.id, l] as const))("%s: every quiz answer is taught in the key takeaways", (_, l) => {
+    for (const q of l.quiz) {
+      expect(q.from, q.q).toBeTypeOf("number");
+      const take = l.recap[q.from!];
+      expect(take, q.q).toBeDefined();
+      const shared = tokens(q.options[q.answer]).filter((w) => taught(take, w));
+      expect(shared.length, `"${q.options[q.answer]}" not found in takeaway "${take}"`).toBeGreaterThan(0);
+    }
+  });
+
   it.each(all.map((l) => [l.id, l] as const))("%s has a sound 5-question quiz", (_, l) => {
     expect(l.quiz).toHaveLength(5);
     for (const q of l.quiz) {

@@ -91,7 +91,7 @@ const thumbs = {
         </div>
         <div className="grid size-10 shrink-0 place-items-center rounded-full border-2 border-edge bg-[#ffd0b0]"><User className="size-5 text-ink/70" /></div>
       </div>
-      <p className={`${t6} mt-1 border-l-2 border-brand pl-1 italic text-muted`}>“Down 9kg in 3 months!” — Bisi</p>
+      <p className={`${t6} mt-1 border-l-2 border-brand pl-1 italic text-muted`}>“Down 9kg in 3 months!” - Bisi</p>
     </Browser>
   ),
   store: () => (
@@ -448,7 +448,7 @@ const thumbs = {
   ),
   leadgen: () => (
     <div className={`${edge} ${shadow} w-full overflow-hidden bg-card`}>
-      <p className={`bg-[#0f4d3a] px-1 py-0.5 ${t6} font-bold text-paper`}>Prospects — Dental clinics, Lagos</p>
+      <p className={`bg-[#0f4d3a] px-1 py-0.5 ${t6} font-bold text-paper`}>Prospects: Dental clinics, Lagos</p>
       <div className={`grid grid-cols-[1.3fr_1fr_0.8fr_0.5fr] bg-wash ${t6} font-bold`}>{["Business", "Area", "Website", "Score"].map((h) => <span key={h} className="border-r border-line px-0.5">{h}</span>)}</div>
       {[["SmileCare", "Lekki", "none", "5"], ["DentPro", "Ikeja", "old", "4"], ["BrightTeeth", "Yaba", "none", "5"], ["OralPlus", "VI", "good", "2"]].map((r) => (
         <div key={r[0]} className={`grid grid-cols-[1.3fr_1fr_0.8fr_0.5fr] border-t border-line ${t6}`}>{r.map((c, j) => <span key={j} className={`border-r border-line px-0.5 ${j === 3 && Number(c) >= 4 ? "font-bold text-success" : ""}`}>{c}</span>)}</div>

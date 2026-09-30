@@ -11,7 +11,7 @@ export function OgCard({ kicker, title: rawTitle, sub: rawSub }: { kicker: strin
         <div style={{ display: "flex", width: 64, height: 64, alignItems: "center", justifyContent: "center", background: og.paper, border: `4px solid ${og.ink}` }}>
           <Mark size={44} />
         </div>
-        <div style={{ display: "flex", fontSize: 34, fontWeight: 700 }}>BuildWithAIClub</div>
+        <div style={{ display: "flex", fontSize: 34, fontWeight: 700 }}>STEINARK</div>
       </div>
       <div
         style={{

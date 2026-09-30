@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { DEFAULT_NGN_PER_USD } from "@/lib/models";
 import { formatNgn, formatUsd } from "@/lib/site";
-import { Field, Output, TextInput, ToolLayout } from "../tool-ui";
+import { AppToolLayout, useToolState } from "./kit/app-tool";
+import { Field, Output, TextInput } from "../tool-ui";
 
 const num = (s: string) => Math.max(0, Number(s.replace(/,/g, "")) || 0);
 
@@ -16,15 +16,24 @@ const projects = [
   { name: "Monthly retainer (content + maintenance)", hours: 20 },
 ];
 
+const initial = { goal: "1,500,000", hours: "30", billable: "60", toolsUsd: "40", otherNgn: "80,000", fee: "0", fxLoss: "3", rate: String(DEFAULT_NGN_PER_USD) };
+const examples = [
+  { label: "Starting out (part-time)", values: { ...initial, goal: "400,000", hours: "20", billable: "50", toolsUsd: "20", otherNgn: "40,000" } },
+  { label: "Full-time, direct clients", values: initial },
+  { label: "Via a freelance platform", values: { ...initial, goal: "2,000,000", hours: "35", fee: "10", fxLoss: "4" } },
+];
+
 export default function ClientPricingCalculator() {
-  const [goal, setGoal] = useState("1,500,000");
-  const [hours, setHours] = useState("30");
-  const [billable, setBillable] = useState("60");
-  const [toolsUsd, setToolsUsd] = useState("60");
-  const [otherNgn, setOtherNgn] = useState("80,000");
-  const [fee, setFee] = useState("10");
-  const [fxLoss, setFxLoss] = useState("3");
-  const [rate, setRate] = useState(String(DEFAULT_NGN_PER_USD));
+  const { f, patch, load, source, shareUrl } = useToolState("client-pricing-calculator", initial);
+  const { goal, hours, billable, toolsUsd, otherNgn, fee, fxLoss, rate } = f;
+  const setGoal = (v: string) => patch({ goal: v });
+  const setHours = (v: string) => patch({ hours: v });
+  const setBillable = (v: string) => patch({ billable: v });
+  const setToolsUsd = (v: string) => patch({ toolsUsd: v });
+  const setOtherNgn = (v: string) => patch({ otherNgn: v });
+  const setFee = (v: string) => patch({ fee: v });
+  const setFxLoss = (v: string) => patch({ fxLoss: v });
+  const setRate = (v: string) => patch({ rate: v });
 
   const fx = num(rate) || 1;
   const monthlyNeedNgn = num(goal) + num(otherNgn) + num(toolsUsd) * fx;
@@ -38,13 +47,20 @@ export default function ClientPricingCalculator() {
 Hourly: ${formatUsd(hourly, 0)}
 Day (6 billable hours): ${formatUsd(hourly * 6, 0)}
 
-Project prices:
-${projects.map((p) => `- ${p.name}: ${formatUsd(roundUp(p.hours * hourly, 25), 0)}`).join("\n")}
+Project floors (never quote below these):
+${projects.map((p) => `- ${p.name}: ${formatUsd(roundUp(p.hours * hourly, 25), 0)} ≈ ${formatNgn(roundUp(p.hours * hourly, 25) * fx)}`).join("\n")}
 
 Based on: ${formatNgn(num(goal))}/month take-home goal, ${Math.round(billableHours)} billable hours/month, ${num(fee)}% platform fee, ${num(fxLoss)}% FX/payout loss at ₦${fx.toLocaleString()}/$.`;
 
   return (
-    <ToolLayout
+    <AppToolLayout
+      slug="client-pricing-calculator"
+      source={source}
+      examples={examples}
+      onExample={(i) => load(examples[i].values)}
+      onReset={() => load(initial)}
+      shareUrl={shareUrl}
+      text={summary}
       form={
         <>
           <Field label="Monthly take-home goal (₦)" hint="What you want to keep after costs.">
@@ -95,7 +111,7 @@ Based on: ${formatNgn(num(goal))}/month take-home goal, ${Math.round(billableHou
                 <tr>
                   <th className="px-4 py-2">Project</th>
                   <th className="px-4 py-2 text-right">Est. hours</th>
-                  <th className="px-4 py-2 text-right">Charge</th>
+                  <th className="px-4 py-2 text-right">Floor ($ · ₦)</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-line">
@@ -103,14 +119,17 @@ Based on: ${formatNgn(num(goal))}/month take-home goal, ${Math.round(billableHou
                   <tr key={p.name}>
                     <td className="px-4 py-2.5 text-ink">{p.name}</td>
                     <td className="px-4 py-2.5 text-right text-muted">{p.hours}</td>
-                    <td className="px-4 py-2.5 text-right font-semibold text-ink">{formatUsd(roundUp(p.hours * hourly, 25), 0)}</td>
+                    <td className="px-4 py-2.5 text-right font-semibold text-ink">
+                      {formatUsd(roundUp(p.hours * hourly, 25), 0)}
+                      <span className="block text-xs font-normal text-muted">{formatNgn(roundUp(p.hours * hourly, 25) * fx)}</span>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <p className="text-sm text-muted">
-            This is your <strong>floor</strong>, not your price. With AI you finish faster — so quote per project, based on the
+            This is your <strong>floor</strong>, not your price. With AI you finish faster, so quote per project, based on the
             value to the client, and never below these numbers.
           </p>
           <Output title="Rate card" text={summary} />

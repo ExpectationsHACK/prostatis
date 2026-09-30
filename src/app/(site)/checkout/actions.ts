@@ -46,20 +46,26 @@ export async function completeDemoPayment(form: FormData) {
   const plan = getPlan(String(form.get("plan")));
   const reference = String(form.get("reference") ?? "");
   const outcome = String(form.get("outcome"));
-  if (!plan || !reference.startsWith("bwac_")) redirect("/pricing");
+  if (!plan || !/^(stk|bwac)_/.test(reference)) redirect("/pricing");
 
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
   if (outcome !== "success") redirect(`/checkout/${plan.id}?error=declined`);
 
-  await recordSuccessfulPayment({
-    userId: user.id,
-    plan: plan.id as PlanId,
-    reference: "demo_" + reference,
-    amountKobo: plan.priceNgn * 100,
-    currency: "NGN",
-    provider: "demo",
-  });
+  try {
+    await recordSuccessfulPayment({
+      userId: user.id,
+      plan: plan.id as PlanId,
+      reference: "demo_" + reference,
+      amountKobo: plan.priceNgn * 100,
+      currency: "NGN",
+      provider: "demo",
+    });
+  } catch (e) {
+    // Most often the database migrations haven't been run yet.
+    console.error("demo payment", e);
+    redirect(`/checkout/${plan.id}?error=record`);
+  }
   redirect("/welcome");
 }

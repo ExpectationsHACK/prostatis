@@ -111,7 +111,8 @@ const fileStore: Store = {
   touchDay: (userId, day) => mutate(userId, (s) => void (s.days.includes(day) || s.days.push(day))),
 };
 
-export const previewMode = !supabaseConfigured && process.env.NODE_ENV === "development";
+// Local development only: no Supabase yet, or COURSE_PREVIEW=true to read the course without signing in.
+export const previewMode = process.env.NODE_ENV === "development" && (!supabaseConfigured || process.env.COURSE_PREVIEW === "true");
 
 export function getStore(): Store {
   return previewMode ? fileStore : supabaseStore;

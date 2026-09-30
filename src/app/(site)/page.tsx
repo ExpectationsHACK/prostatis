@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, Bot, Check, Globe, ImagePlus, MessageCircle, Plus, Rocket, UserRound, Wallet, X } from "lucide-react";
+import { ArrowRight, Award, BookOpen, Check, Globe, ImagePlus, MessageCircle, Plus, Rocket, UserRound, Wallet, X } from "lucide-react";
 import Link from "next/link";
 import { ProductThumb } from "@/components/art/product-thumb";
 import { WebsiteKindThumb } from "@/components/art/website-kind-thumb";
@@ -10,7 +10,7 @@ import { TrackLessons } from "@/components/track-lessons";
 import { btn, size } from "@/components/ui";
 import { fastTrack, mainTrack, pillars, type Track } from "@/lib/curriculum";
 import { products, team, wins } from "@/lib/showcase";
-import { formatNgn, plans, site } from "@/lib/site";
+import { formatNgn, plans } from "@/lib/site";
 import { coreTools } from "@/lib/tools";
 
 const ledger: [string, string][] = [
@@ -22,10 +22,10 @@ const ledger: [string, string][] = [
 ];
 
 const websiteKinds = [
-  { kind: "landing" as const, title: "Landing pages", body: "One page that sells one offer — hero, proof, price, button.", lines: ["hero · offer · proof", "one clear button", "fast on 4G"], tone: "sand" as const },
+  { kind: "landing" as const, title: "Landing pages", body: "One page that sells one offer: hero, proof, price, button.", lines: ["hero · offer · proof", "one clear button", "fast on 4G"], tone: "sand" as const },
   { kind: "business" as const, title: "Business websites", body: "Five-page sites for real businesses, with WhatsApp and Google Maps built in.", lines: ["home · services · about", "WhatsApp order button", "Google Maps + reviews"], tone: "forest" as const },
   { kind: "store" as const, title: "Online stores", body: "Product pages, carts and checkout with Paystack or Stripe.", lines: ["12 products", "cart → checkout", "Paystack + Stripe"], tone: "orange" as const },
-  { kind: "webapp" as const, title: "Web apps", body: "Logins, dashboards and databases — the builds clients pay most for.", lines: ["sign in · dashboard", "Supabase database", "admin panel"], tone: "indigo" as const },
+  { kind: "webapp" as const, title: "Web apps", body: "Logins, dashboards and databases: the builds clients pay most for.", lines: ["sign in · dashboard", "Supabase database", "admin panel"], tone: "indigo" as const },
   { kind: "booking" as const, title: "Booking sites", body: "Calendars, deposits and reminders for clinics, salons and coaches.", lines: ["pick a time", "pay deposit", "reminder sent"], tone: "peach" as const },
   { kind: "portfolio" as const, title: "Your portfolio", body: "A one-page portfolio that wins you the next client.", lines: ["3 best builds", "results + prices", "hire-me button"], tone: "ink" as const },
 ];
@@ -33,27 +33,28 @@ const websiteKinds = [
 const webPath = ["Plan", "Design", "Build with AI", "Deploy", "Hand over", "Get paid"];
 
 const inside = [
-  { icon: Globe, title: "Website builds", body: "Landing pages, business sites, stores and web apps — from first page to live on your domain." },
-  { icon: Rocket, title: "Fast Track · 14 days", body: "Websites, landing pages, stores, booking systems and web apps — built, live and paid for in two weeks." },
+  { icon: Globe, title: "Website builds", body: "Landing pages, business sites, stores and web apps, from first page to live on your domain." },
+  { icon: Rocket, title: "Fast Track · 14 days", body: "Websites, landing pages, stores, booking systems and web apps: built, live and paid for in two weeks." },
   { icon: BookOpen, title: "Main Track · 1 month", body: "Everything in the Fast Track plus full SEO, automation, AI agents and lead generation." },
-  { icon: Bot, title: "AI agents for business", body: "Chatbots, WhatsApp bots and customer-service agents you can sell (Main Track)." },
+  { icon: Award, title: "Verified certificate", body: "Pass the final assessment and get a certificate you can download, receive by email and prove with a public link." },
   { icon: MessageCircle, title: "WhatsApp community", body: "Share builds, get unstuck, hear about client leads." },
-  { icon: Wallet, title: "Naira pricing", body: "Pay once with Paystack — card, transfer or USSD. No dollar card needed." },
+  { icon: Wallet, title: "Naira pricing", body: "Pay once with Paystack: card, transfer or USSD. No dollar card needed." },
 ];
 
 const steps = [
   { title: "Pick a track", body: "Fast Track to build and ship websites, stores and web apps in 14 days, or the Main Track to learn the whole offer in a month." },
-  { title: "Build every day", body: "Each lesson ends with something real — a page, a profile, an automation, an agent." },
+  { title: "Build every day", body: "Each lesson ends with something real: a page, a profile, an automation, an agent." },
   { title: "Sell it", body: "Price it, pitch it, send the proposal, get paid." },
 ];
 
 const faqs = [
-  { q: "What's the difference between the Fast Track and the Main Track?", a: "The Fast Track (14 days, ₦15,000) covers web design and development: business websites, landing pages, online stores, booking systems and web apps with logins and databases — plus SEO basics, a portfolio, pitching and getting paid. The Main Track (1 month, ₦30,000) teaches all of that plus full and local SEO, business automation, AI agents and lead generation." },
-  { q: "What kind of websites will I build?", a: "Landing pages, business websites, online stores, booking sites, portfolios and web apps with logins and databases — built with AI tools like Claude Code and deployed on your own domain." },
+  { q: "What's the difference between the Fast Track and the Main Track?", a: "The Fast Track (14 days, ₦15,000) covers web design and development: business websites, landing pages, online stores, booking systems and web apps with logins and databases, plus SEO basics, a portfolio, pitching and getting paid. The Main Track (1 month, ₦30,000) teaches all of that plus full and local SEO, business automation, AI agents and lead generation." },
+  { q: "What kind of websites will I build?", a: "Landing pages, business websites, online stores, booking sites, portfolios and web apps with logins and databases, built with AI tools like Claude Code and deployed on your own domain." },
   { q: "Do I need to know how to code?", a: "No. You build by describing what you want to AI tools like Claude Code, then learn to read and adjust what they make." },
   { q: "What do I need to start?", a: "A laptop (a phone is fine for lessons), an internet connection, and a few hours a day. We show you how to start free and keep AI costs low." },
   { q: "Is it a subscription?", a: "No. You pay once per track. The Fast Track stays unlocked for 30 days and the Main Track for 60, so you have time to catch up." },
-  { q: "Can I start with the Fast Track and upgrade later?", a: "Yes — everything in the Fast Track is also in the Main Track, so nothing you learn is wasted." },
+  { q: "Do I get a certificate?", a: "Yes. Pass every lesson and the final assessment and you get a certificate of completion: download it, receive a copy by email, and share its public proof page so clients and employers can check it's real. It shows your name, track, score and a unique ID." },
+  { q: "Can I start with the Fast Track and upgrade later?", a: "Yes: everything in the Fast Track is also in the Main Track, so nothing you learn is wasted." },
 ];
 
 function Heading({ children, sub, light = false }: { children: React.ReactNode; sub?: string; light?: boolean }) {
@@ -98,7 +99,7 @@ function TrackSummary({ track, slug, dark = false }: { track: Track; slug: strin
             See all {track.modules.length} lessons <ArrowRight className="size-4" aria-hidden />
           </Link>
           <Link href={`/checkout/${track.id}`} className={`${btn.primary} ${size.lg}`}>
-            Join for {formatNgn(plan.priceNgn)}
+            Enroll Now · {formatNgn(plan.priceNgn)}
           </Link>
         </div>
       </div>
@@ -128,7 +129,7 @@ function PlanCard({ plan }: { plan: (typeof plans)[number] }) {
         ))}
       </ul>
       <Link href={`/checkout/${plan.id}`} className={`${hi ? `${btn.secondary} bg-paper` : btn.primary} ${size.lg} mt-8 w-full`}>
-        Join the {plan.name} <ArrowRight className="size-4" aria-hidden />
+        Enroll Now <ArrowRight className="size-4" aria-hidden />
       </Link>
     </div>
   );
@@ -137,8 +138,6 @@ function PlanCard({ plan }: { plan: (typeof plans)[number] }) {
 const featuredTools = ["website-speed-checklist", "on-page-seo-audit", "domain-name-generator", "color-palette-generator", "whatsapp-bot-flow-builder", "automation-roi-calculator"];
 
 export default function Home() {
-  const fast = plans.find((p) => p.id === "fast_track")!;
-  const main = plans.find((p) => p.id === "main_track")!;
   const featured = featuredTools.map((slug) => coreTools.find((t) => t.slug === slug)).filter((t) => t !== undefined);
 
   return (
@@ -147,7 +146,7 @@ export default function Home() {
 
       {/* Websites first */}
       <section className="px-4 py-20 sm:py-24">
-        <Heading sub="Web development is the heart of the club. These are the websites you'll learn to build — and sell.">
+        <Heading sub="Web development is the heart of STEINARK. These are the websites you'll learn to build, and sell.">
           Websites <span className="scribble">first</span>
         </Heading>
         <div className="mx-auto mt-12 grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -200,7 +199,7 @@ export default function Home() {
 
       {/* What you get */}
       <section id="inside" className="scroll-mt-24 field-grid border-y-2 border-edge bg-accent px-4 py-20 sm:py-24">
-        <Heading light sub="Built for Nigerians — naira pricing, Paystack, WhatsApp, Lagos time.">
+        <Heading light sub="Built for Nigerians: naira pricing, Paystack, WhatsApp, Lagos time.">
           What you get
         </Heading>
         <div className="mx-auto mt-12 grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -215,6 +214,8 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <TrackSummary track={fastTrack} slug="fast-track" />
 
       <TrackSummary track={mainTrack} slug="main-track" />
 
@@ -236,11 +237,10 @@ export default function Home() {
         </ol>
       </section>
 
-      <TrackSummary track={fastTrack} slug="fast-track" />
 
       {/* Free tools */}
       <section className="border-y-2 border-edge bg-sunk px-4 py-20 sm:py-24">
-        <Heading sub="Every one works — no signup, runs on your phone. Several analyse a real website from its link.">
+        <Heading sub="Every one works: no signup, runs on your phone. Several analyse a real website from its link.">
           {coreTools.length} free tools, <span className="text-brand-text">no signup</span>
         </Heading>
         <div className="mx-auto mt-12 grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -265,7 +265,7 @@ export default function Home() {
       {/* Products gallery */}
       <section className="field-grid overflow-hidden border-b-2 border-edge bg-brand py-20 sm:py-24">
         <div className="px-4">
-        <Heading sub={`${products.length} products you'll be able to build and sell. Examples of what the course walks you through — real member builds will replace them.`}>
+        <Heading sub={`${products.length} products you'll be able to build and sell. Examples of what the course walks you through. Real member builds will replace them.`}>
           What you&apos;ll build
         </Heading>
       </div>
@@ -301,7 +301,7 @@ export default function Home() {
 
       {/* Who it's for */}
       <section id="who" className="scroll-mt-24 px-4 py-20 sm:py-24">
-        <Heading sub="If you can type, you can build. Here's who the club is built for.">Who it&apos;s for</Heading>
+        <Heading sub="If you can type, you can build. Here's who STEINARK is built for.">Who it&apos;s for</Heading>
         <div className="mx-auto mt-12 grid max-w-5xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {personas.map((p, i) => (
             <div key={p.id} id={p.id} className="ink-block scroll-mt-28 bg-card p-6">
@@ -313,7 +313,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Wins — placeholders */}
+      {/* Wins: placeholders */}
       <section className="px-4 py-20 sm:py-24">
         <Heading sub="Real results from members will be printed here.">Member wins</Heading>
         <div className="mx-auto mt-12 grid max-w-5xl gap-6 md:grid-cols-3">
@@ -335,7 +335,7 @@ export default function Home() {
 
       {/* How it works */}
       <section className="border-y-2 border-edge bg-sunk px-4 py-20 sm:py-24">
-        <Heading>How the club works</Heading>
+        <Heading>How STEINARK works</Heading>
         <ol className="mx-auto mt-12 grid max-w-5xl gap-6 md:grid-cols-3">
           {steps.map((s, i) => (
             <li key={s.title} className="ink-block bg-card p-6">
@@ -349,7 +349,7 @@ export default function Home() {
 
       {/* Plans */}
       <section id="plans" className="scroll-mt-16 bg-night px-4 py-20 text-paper sm:py-24">
-        <Heading light sub="Pay once in naira with Paystack — card, transfer or USSD. No subscription.">
+        <Heading light sub="Pay once in naira with Paystack, card, transfer or USSD. No subscription.">
           Pick your track
         </Heading>
         <div className="mx-auto mt-12 grid max-w-5xl gap-6 md:grid-cols-2">
@@ -359,7 +359,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Team — placeholders */}
+      {/* Team: placeholders */}
       <section className="px-4 py-20 sm:py-24">
         <Heading>Who&apos;s teaching</Heading>
         <div className="mx-auto mt-12 grid max-w-5xl gap-6 md:grid-cols-3">
@@ -393,19 +393,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Close */}
-      <section className="field-grid border-t-2 border-edge bg-accent px-4 py-20 text-center sm:py-24">
-        <h2 className="display mx-auto max-w-3xl text-balance text-[44px] text-paper sm:text-[72px]">
-          Build it. Ship it. <span className="text-brand">Get paid.</span>
-        </h2>
-        <p className="mx-auto mt-5 max-w-lg font-mono text-[14px] leading-relaxed text-paper/80">
-          Fast Track {formatNgn(fast.priceNgn)} · Main Track {formatNgn(main.priceNgn)}. Pay once. Your first paid build starts this week.
-        </p>
-        <Link href="/pricing" className={`${btn.primary} ${size.lg} mt-8`}>
-          Choose your track <ArrowRight className="size-4" aria-hidden />
-        </Link>
-        <p className="label mt-6 text-paper/70">{site.name} · Made in Nigeria</p>
-      </section>
     </div>
   );
 }

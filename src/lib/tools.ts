@@ -22,11 +22,11 @@ export const tools: ToolMeta[] = [
   // Web Design
   t("web_design", "color-palette-generator", "Color Palette Generator", "Turn one brand colour into a full palette with contrast checks and ready CSS.", "Starting a new site or brand kit and need colours that work together.", "sand"),
   t("web_design", "wireframe-generator", "Layout / Wireframe Generator", "Get a section-by-section wireframe for any page type, plus a build prompt.", "Planning a page before you build, or showing a client the structure.", "peach"),
-  t("web_design", "hero-copy-generator", "Hero Section Copy Generator", "Headline, subhead and button combinations for the top of the page.", "Writing the first thing visitors read — the part that decides if they stay.", "orange"),
+  t("web_design", "hero-copy-generator", "Hero Section Copy Generator", "Headline, subhead and button combinations for the top of the page.", "Writing the first thing visitors read, the part that decides if they stay.", "orange"),
   t("web_design", "font-pairing-picker", "Font Pairing Picker", "Three tested Google Font pairings per mood, with live previews and CSS.", "Choosing fonts that match the brand without guessing.", "ink"),
   t("web_design", "logo-concept-prompts", "Logo Concept Prompt Generator", "Image-model prompts for logos in five directions.", "A client needs a logo and you want strong concepts fast.", "forest"),
   t("web_design", "brand-style-guide", "Brand Style Guide Generator", "A one-page style guide: voice, colours, fonts, do's and don'ts.", "Handing a brand over to a client, or keeping AI output on-brand.", "indigo"),
-  t("web_design", "design-brief-generator", "Website Design Brief Generator", "A client brief covering goals, pages, audience, look and sign-off.", "The first client call — so nothing gets missed.", "sand"),
+  t("web_design", "design-brief-generator", "Website Design Brief Generator", "A client brief covering goals, pages, audience, look and sign-off.", "The first client call, so nothing gets missed.", "sand"),
   // Web Development
   t("web_dev", "tech-stack-picker", "Tech Stack Picker", "Answer five questions, get the right stack, hosting cost and kick-off prompt.", "Deciding what to build a project with before you start.", "indigo"),
   t("web_dev", "claude-md-generator", "CLAUDE.md Generator", "A CLAUDE.md file that gives your AI permanent memory of the project.", "Starting any build with Claude Code so it follows your rules.", "ink"),
@@ -37,25 +37,25 @@ export const tools: ToolMeta[] = [
   t("web_dev", "domain-name-generator", "Domain Name Idea Generator", "Short, brandable domain ideas with one-click availability searches.", "Naming a new business or project site.", "sand"),
   // Web Solutions
   t("web_solutions", "website-requirements-questionnaire", "Business Website Requirements Questionnaire", "A requirements doc, content checklist and build estimate from one call.", "Scoping and pricing a client website accurately.", "forest"),
-  t("web_solutions", "booking-feature-picker", "Booking System Feature Picker", "The booking features a business type needs — and what to skip.", "Building bookings for salons, clinics, gyms, hotels and more.", "peach"),
+  t("web_solutions", "booking-feature-picker", "Booking System Feature Picker", "The booking features a business type needs, and what to skip.", "Building bookings for salons, clinics, gyms, hotels and more.", "peach"),
   t("web_solutions", "whatsapp-catalog-guide", "WhatsApp Catalog Setup Guide Generator", "Catalog-ready product text, setup steps and share messages.", "Getting a small business selling on WhatsApp today.", "forest"),
   t("web_solutions", "landing-page-copy-generator", "Landing Page Copy Generator", "Full landing page copy, section by section, from a short brief.", "Launching an offer, campaign or ad landing page.", "orange"),
   t("web_solutions", "pricing-layout-picker", "Pricing Page Layout Picker", "The pricing layout that converts best for your offer, with a build prompt.", "Designing a pricing page or section.", "indigo"),
-  t("web_solutions", "faq-generator", "FAQ Section Generator", "Objection-busting FAQ answers plus FAQPage schema for Google.", "Adding a FAQ that sells and helps SEO.", "sand"),
-  t("web_solutions", "testimonial-formatter", "Testimonial Formatter", "Clean up raw WhatsApp praise into testimonials and review schema.", "Turning happy-customer messages into social proof.", "peach"),
+  t("web_solutions", "faq-generator", "FAQ Section Generator", "FAQ answers built from the business's real facts, for the website, the chatbot and quick replies.", "Answering the doubts that stop customers from buying.", "sand"),
+  t("web_solutions", "testimonial-formatter", "Testimonial Formatter", "Turn raw WhatsApp praise into clean testimonials, with a permission request and website code.", "Turning happy-customer messages into social proof.", "peach"),
   // SEO
   t("seo", "keyword-research-prompts", "Keyword Research Prompt Generator", "Keyword ideas grouped by search intent, plus a research prompt.", "Deciding which searches a business should rank for.", "indigo"),
-  t("seo", "meta-tag-generator", "Meta Title / Description Generator", "Title and description options with length checks and a Google preview.", "Every page you publish — it's the ad for your page in Google.", "sand"),
+  t("seo", "meta-tag-generator", "Meta Title / Description Generator", "Title and description options with length checks and a Google preview.", "Every page you publish: it's the ad for your page in Google.", "sand"),
   t("seo", "local-seo-checklist", "Local SEO Checklist (GBP)", "Score a business's local SEO and Google Business Profile.", "Getting a local business into the map pack.", "forest"),
-  t("seo", "on-page-seo-audit", "On-Page SEO Audit", "Paste a page's HTML and get a 16-point SEO audit with fixes.", "Checking a client's page, or your own before launch.", "ink"),
+  t("seo", "on-page-seo-audit", "On-Page SEO Audit", "Audit any page by its link (or pasted HTML), a 16-point SEO check with a fix for each issue.", "Checking a client's page, or your own before launch.", "ink"),
   t("seo", "blog-topic-generator", "Blog Topic Idea Generator", "Blog topics that match what customers search before they buy.", "Planning content that brings in buyers, not just readers.", "peach"),
   t("seo", "backlink-outreach-scripts", "Backlink Outreach Script Generator", "Short outreach emails for guest posts, resource pages and broken links.", "Earning links that lift a site's rankings.", "orange"),
-  t("seo", "seo-content-brief", "SEO Content Brief Generator", "A complete brief — outline, keywords, links — for a page that ranks.", "Briefing a writer or your AI to write SEO content.", "indigo"),
+  t("seo", "seo-content-brief", "SEO Content Brief Generator", "A complete brief: outline, keywords, links, for a page that ranks.", "Briefing a writer or your AI to write SEO content.", "indigo"),
   t("seo", "gbp-post-generator", "Google Business Profile Post Generator", "Offer, update and event posts for Google Business Profile.", "Keeping a business's Google profile active every week.", "forest"),
   // AI Business Automation
   t("automation", "automation-idea-generator", "Automation Workflow Idea Generator", "Automation ideas by business type, with trigger → action and time saved.", "Finding the first automation to sell a client.", "orange"),
   t("automation", "zapier-make-scenario-planner", "Zapier / Make Scenario Planner", "A step-by-step scenario plan with field mapping and error handling.", "Planning an automation before building it in Make or Zapier.", "indigo"),
-  t("automation", "business-process-audit", "Business Process Audit", "Rank a business's tasks by how much automating them would save.", "The discovery call — show the client where their hours go.", "sand"),
+  t("automation", "business-process-audit", "Business Process Audit", "Rank a business's tasks by how much automating them would save.", "The discovery call: show the client where their hours go.", "sand"),
   t("automation", "email-autoresponder-generator", "Email Autoresponder Script Generator", "Auto-replies plus follow-up sequences for common situations.", "Never leaving an enquiry unanswered.", "peach"),
   t("automation", "automation-roi-calculator", "Automation ROI Calculator", "Payback time and yearly savings of an automation, in Naira.", "Pricing and pitching an automation project.", "forest"),
   t("automation", "token-cost-calculator", "Token Cost Calculator (₦)", "Estimate a Claude API bill in dollars and naira, model by model.", "Pricing AI features and chatbots for clients.", "ink"),
@@ -74,12 +74,12 @@ export const tools: ToolMeta[] = [
   t("agents", "whatsapp-bot-flow-builder", "WhatsApp Business Bot Flow Builder", "A visual menu flow, message texts and build spec for a WhatsApp bot.", "Building an order or enquiry bot on WhatsApp.", "forest"),
   t("agents", "agent-task-decomposer", "Agent Task Decomposer", "Break a job into agent steps with tools, checks and approval points.", "Designing an agent that runs a real business task.", "sand"),
   t("agents", "faq-to-knowledge-base", "FAQ-to-Agent Knowledge Base Converter", "Turn messy FAQs into a clean knowledge base in Markdown and JSON.", "Feeding a chatbot the facts it's allowed to use.", "peach"),
-  t("agents", "agent-monitoring-checklist", "Agent Uptime / Monitoring Checklist", "Make sure you know when an agent breaks — before customers do.", "Handing an agent over to a client.", "ink"),
+  t("agents", "agent-monitoring-checklist", "Agent Uptime / Monitoring Checklist", "Make sure you know when an agent breaks, before customers do.", "Handing an agent over to a client.", "ink"),
   t("agents", "handoff-script-generator", "Agent Handoff-to-Human Script Generator", "Rules and messages for passing a chat from AI to a person.", "Keeping customers happy when the bot can't help.", "orange"),
   // Bonus: getting paid
   t("lead_gen", "proposal-generator", "Proposal Template Generator", "A client-ready proposal with scope, timeline, pricing and terms.", "Sending a proposal right after a good call.", "ink", true),
   t("lead_gen", "client-pricing-calculator", "Client Pricing Calculator (₦→$)", "Work out what to charge foreign clients in dollars from your naira goal.", "Setting your rates for dollar clients.", "forest", true),
-  t("lead_gen", "invoice-generator", "Get Paid Generator", "A clean USD or NGN payment request with your payment details — print or save as PDF.", "Getting paid once the project is delivered.", "sand", true),
+  t("lead_gen", "invoice-generator", "Get Paid Generator", "A clean USD or NGN payment request with your payment details, print or save as PDF.", "Getting paid once the project is delivered.", "sand", true),
   t("web_solutions", "whatsapp-business-bio", "WhatsApp Business Bio Generator", "A WhatsApp Business bio inside the 139-character limit.", "Setting up a client's WhatsApp Business profile.", "peach", true),
   t("automation", "cron-schedule-generator", "Cron Schedule Generator", "Cron expressions in plain English, with Lagos-time conversion.", "Scheduling agents and automations to run on time.", "ink", true),
   t("lead_gen", "hook-line-generator", "Hook Line Generator", "Scroll-stopping first lines for TikTok, Reels, X and LinkedIn.", "Promoting your services on social media.", "orange", true),
@@ -98,7 +98,7 @@ export const CUSTOM_TOOL_SLUGS = [
   "invoice-generator",
 ] as const;
 
-/** The next tool in a student's workflow — shown at the end of each tool page. */
+/** The next tool in a student's workflow, shown at the end of each tool page. */
 export const nextTool: Record<string, string> = {
   "color-palette-generator": "font-pairing-picker",
   "font-pairing-picker": "brand-style-guide",

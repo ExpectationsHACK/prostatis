@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { submitFinal, submitQuiz, type ActionResult } from "@/app/learn/actions";
 import { btn, size } from "@/components/ui";
+import { Celebrate } from "./celebrate";
 
 type Q = { q: string; options: string[] };
 
@@ -96,7 +97,7 @@ export function Quiz({
                 {r && (
                   <p className={"mt-3 flex gap-2 font-mono text-[13px] leading-relaxed " + (r.correct ? "text-success" : "text-danger")}>
                     {r.correct ? <Check className="mt-0.5 size-4 shrink-0" strokeWidth={3} /> : <X className="mt-0.5 size-4 shrink-0" strokeWidth={3} />}
-                    <span>{r.why ?? (r.correct ? "Correct." : "Not quite — re-read the lesson and try again.")}</span>
+                    <span>{r.why ?? (r.correct ? "Correct." : "Not quite: re-read the lesson and try again.")}</span>
                   </p>
                 )}
               </fieldset>
@@ -117,7 +118,7 @@ export function Quiz({
       ) : (
         <div role="status" className={"mt-6 border-2 border-edge p-5 " + (graded.passed ? "bg-[#e3f5e9]" : "bg-[#fff4d6]")}>
           <p className="display text-[26px] text-ink">
-            {graded.score}/{graded.total} — {graded.passed ? "passed!" : "not yet"}
+            {graded.score}/{graded.total}: {graded.passed ? "passed!" : "not yet"}
           </p>
           <p className="mt-1 font-mono text-[13px] text-ink/80">
             {graded.passed
@@ -144,6 +145,14 @@ export function Quiz({
             </button>
           ) : null}
         </div>
+      )}
+      {result && (result.completed || result.levelUp || result.newBadges.length > 0) && (
+        <Celebrate
+          title={day === undefined ? "Final assessment passed!" : result.completed ? "Lesson complete!" : "Quiz passed!"}
+          xp={result.xpGained}
+          levelUp={result.levelUp}
+          badges={result.newBadges}
+        />
       )}
     </div>
   );

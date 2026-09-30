@@ -4,35 +4,55 @@ import { lines, n, opts, or, s, slugify, type Block, type ToolDef, type Values }
 // ---------- Tech Stack Picker ----------
 const techStack: ToolDef = {
   kind: "generator",
-  intro: "Answer five questions about the project. You get a stack recommendation, hosting cost estimate and the reasoning.",
+  intro: "Answer six questions about the project. You get the stack, what it costs each month (and who pays), and a kick-off prompt for your AI.",
+  examples: [
+    { label: "Salon website (client)", values: { type: "Booking site", who: "A paying client", skill: "Beginner (AI writes the code)", edits: "Sometimes", payments: "Paystack", traffic: "Under 10k" } },
+    { label: "My portfolio", values: { type: "Business website", who: "Me (practice / portfolio)", skill: "Beginner (AI writes the code)", edits: "No", payments: "None", traffic: "Under 10k" } },
+    { label: "School portal (client)", values: { type: "Web app with logins", who: "A paying client", skill: "Some code", edits: "Yes, often", payments: "Paystack", traffic: "10k–100k" } },
+    { label: "Fashion store (client)", values: { type: "Online store", who: "A paying client", skill: "Beginner (AI writes the code)", edits: "Yes, often", payments: "Both", traffic: "10k–100k" } },
+  ],
   fields: [
     { key: "type", label: "What are you building?", type: "select", default: "Business website", options: opts("Business website", "Landing page", "Online store", "Booking site", "Blog / content site", "Web app with logins", "Client dashboard / portal") },
+    { key: "who", label: "Who is it for?", type: "select", default: "A paying client", options: opts("A paying client", "Me (practice / portfolio)"), hint: "Paid client work is “commercial”. It changes which hosting plans you may use." },
     { key: "skill", label: "Your coding level", type: "select", default: "Beginner (AI writes the code)", options: opts("Beginner (AI writes the code)", "Some code", "Comfortable coding") },
-    { key: "edits", label: "Will the client edit content?", type: "select", default: "Yes, often", options: opts("No", "Sometimes", "Yes, often") },
+    { key: "edits", label: "Will the client edit content?", type: "select", default: "Sometimes", options: opts("No", "Sometimes", "Yes, often") },
     { key: "payments", label: "Payments", type: "select", default: "Paystack", options: opts("None", "Paystack", "Stripe", "Both") },
     { key: "traffic", label: "Expected monthly visitors", type: "select", default: "Under 10k", options: opts("Under 10k", "10k–100k", "100k+") },
   ],
   generate(v) {
     const type = s(v, "type"), edits = s(v, "edits"), pay = s(v, "payments"), beginner = s(v, "skill").startsWith("Beginner");
+    const client = s(v, "who") !== "Me (practice / portfolio)";
     const app = /app|dashboard|portal/i.test(type);
     const store = /store/i.test(type);
+    const booking = /booking/i.test(type);
     const rows: string[][] = [];
-    rows.push(["Framework", app || !beginner ? "Next.js (App Router) + TypeScript" : "Next.js (App Router)", "Most AI coding tools write it best; one codebase for pages and APIs"]);
-    rows.push(["Styling", "Tailwind CSS", "Fast to build, easy for AI to edit, tiny CSS"]);
-    if (app) rows.push(["Auth + database", "Supabase", "Logins, Postgres and file storage with a free tier"]);
-    if (edits !== "No") rows.push(["Content editing", edits === "Yes, often" ? "Sanity or Payload CMS" : "Markdown files + simple admin", "Client updates text and photos without calling you"]);
-    if (store) rows.push(["Store", beginner ? "Next.js + Paystack checkout (few products) or Shopify (many products)" : "Next.js + Medusa or Shopify headless", "Pick by product count and who manages stock"]);
-    if (pay !== "None") rows.push(["Payments", pay === "Both" ? "Paystack (Naira) + Stripe (USD)" : pay, pay === "Paystack" ? "Card, transfer and USSD in Naira" : "Cards in USD and other currencies"]);
-    rows.push(["Forms + email", "Resend (email) + server actions", "Contact forms that actually arrive"]);
-    rows.push(["Hosting", s(v, "traffic") === "100k+" ? "Vercel Pro or Netlify Pro" : "Vercel (free tier to start)", "Push to GitHub → live in a minute, HTTPS included"]);
-    rows.push(["Domain + DNS", "Namecheap / Whogohost + Cloudflare DNS", ".com or .com.ng; Cloudflare for speed"]);
-    rows.push(["Analytics", "Vercel Analytics or Plausible", "Privacy-friendly visitor stats"]);
-    const cost = (s(v, "traffic") === "100k+" ? 20 : 0) + (app ? (s(v, "traffic") === "Under 10k" ? 0 : 25) : 0);
+    rows.push(["Framework", app || !beginner ? "Next.js (App Router) + TypeScript" : "Next.js (App Router)", "AI coding tools write it well; one project for pages and server code"]);
+    rows.push(["Styling", "Tailwind CSS", "Fast to build, easy for AI to edit, small CSS"]);
+    if (app) rows.push(["Logins + database", "Supabase", "Sign-in, a Postgres database and file storage; Row Level Security keeps each user's data private"]);
+    if (edits === "Yes, often") rows.push(["Content editing", beginner ? "A simple admin page (Supabase) or a hosted CMS such as Sanity" : "Sanity or Payload CMS", "The client updates text, prices and photos without calling you"]);
+    if (edits === "Sometimes") rows.push(["Content editing", "Content in simple files; you make changes on a care plan", "Cheapest and safest when changes are rare"]);
+    if (booking) rows.push(["Bookings", "Cal.com embed + a Paystack deposit link (custom build only if needed)", "Reliable in an hour; upgrade later if the business outgrows it"]);
+    if (store) rows.push(["Store", beginner ? "Next.js + Paystack checkout (up to ~50 products) or Paystack Storefront / Shopify (many products)" : "Next.js + Supabase products + Paystack", "Pick by product count and who manages stock"]);
+    if (pay !== "None") rows.push(["Payments", pay === "Both" ? "Paystack (naira) + Stripe (dollars)" : pay, pay === "Stripe" ? "Cards in USD and other currencies" : "Card, bank transfer and USSD in naira; verify every payment on the server"]);
+    rows.push(["Forms + email", "Formspree (simple) or Resend (from your own server)", "Contact forms that actually arrive in the inbox"]);
+    rows.push(["Hosting", client ? "Vercel Pro: or a host whose free plan allows business use" : "Vercel Hobby (free)", client ? "Vercel's free Hobby plan is for personal, non-commercial projects only" : "Free for personal and portfolio projects"]);
+    rows.push(["Domain", "Registered in the client's name: .com.ng / .ng from a NiRA-accredited registrar, .com from any registrar", "The domain is the client's asset"]);
+    rows.push(["Analytics", "Vercel Web Analytics or Plausible", "Privacy-friendly visitor counts for your monthly report"]);
+
+    const costs: string[][] = [["Domain", "₦5,000–₦25,000 / year", "Client"]];
+    costs.push(["Hosting", client ? "Vercel Pro ≈ $20 / month per team member (or the chosen host's price)" : "$0 on Hobby", client ? "Client" : "You"]);
+    if (app) costs.push(["Supabase", client ? "Pro ≈ $25 / month (free projects pause after a quiet week)" : "Free tier", client ? "Client" : "You"]);
+    if (pay !== "None") costs.push(["Payments", "No monthly fee; Paystack takes a small fee per transaction (see paystack.com/pricing)", "Client"]);
+    if (edits === "Yes, often" && !beginner) costs.push(["CMS", "Free tier to start; check limits", "Client"]);
+    costs.push(["Your care plan", "Your monthly fee for updates and monitoring", "Client"]);
+
     const blocks: Block[] = [
-      { type: "table", title: `Recommended stack — ${type}`, columns: ["Layer", "Pick", "Why"], rows },
-      { type: "stats", items: [{ label: "Hosting to start", value: cost === 0 ? "$0/mo" : `~$${cost}/mo`, sub: "plus ~$12/yr domain" }, { label: "Build time with AI", value: app ? "1–2 weeks" : store ? "4–7 days" : "2–4 days", sub: "for a first version" }] },
-      { type: "text", title: "Kick-off prompt for your AI", text: `Create a new ${rows[0][1]} project for a ${type.toLowerCase()}. Use ${rows.map((r) => `${r[0]}: ${r[1]}`).slice(1).join("; ")}. Start with the folder structure, a mobile-first layout and a README with setup steps.` },
+      { type: "table", title: `Recommended stack: ${type}`, columns: ["Layer", "Pick", "Why"], rows },
+      { type: "table", title: "Monthly running costs: put these in your proposal", columns: ["Item", "Cost (check current prices)", "Who pays"], rows: costs },
+      { type: "stats", items: [{ label: "First version with AI", value: app ? "1–2 weeks" : store ? "4–7 days" : booking ? "2–4 days" : "2–4 days", sub: beginner ? "at a beginner's pace" : "for a first version" }, { label: "Accounts owned by", value: client ? "The client" : "You", sub: client ? "add yourself as a team member" : "" }] },
+      { type: "text", title: "Kick-off prompt for your AI", text: `Create a new ${rows[0][1]} project for a ${type.toLowerCase()}. Use: ${rows.slice(1).map((r) => `${r[0]}: ${r[1]}`).join("; ")}. Start with the folder structure, a mobile-first layout, a CLAUDE.md with these decisions, and a README with setup steps. Keep secrets in .env.local only.` },
     ];
+    if (client) blocks.push({ type: "notice", tone: "warn", text: "Paid client work is commercial use. Don't host it on Vercel's free Hobby plan: use Pro, or a host whose free plan allows business sites (check its terms)." });
     return blocks;
   },
 };
@@ -40,32 +60,37 @@ const techStack: ToolDef = {
 // ---------- Component Prompt Library ----------
 const components: Record<string, { name: string; spec: string }[]> = {
   Navigation: [
-    { name: "Sticky header with mobile menu", spec: "sticky header with logo left, 4 links, a primary button right; on mobile collapse links into a slide-down menu with a close button; highlight the current page" },
-    { name: "WhatsApp floating button", spec: "floating round WhatsApp button bottom-right that opens https://wa.me/<number>?text=<prefilled message>; hide on print; accessible label" },
+    { name: "Sticky header with mobile menu", spec: "a sticky header with the logo on the left, 4 links, a primary button right; on mobile collapse links into a slide-down menu with a close button; highlight the current page" },
+    { name: "WhatsApp floating button", spec: "a floating round WhatsApp button bottom-right that opens https://wa.me/<number>?text=<prefilled message>; hide on print; accessible label" },
   ],
   Hero: [
-    { name: "Hero with image + two buttons", spec: "hero with headline, subhead, primary and secondary buttons, image on the right on desktop and below on mobile" },
-    { name: "Hero with search bar", spec: "hero with headline and a search bar (location, type, budget) that submits to /search with query params" },
+    { name: "Hero with image + two buttons", spec: "a hero section with a headline, subhead, primary and secondary buttons, image on the right on desktop and below on mobile" },
+    { name: "Hero with search bar", spec: "a hero section with a headline and a search bar (location, type, budget) that submits to /search with query params" },
   ],
   Content: [
-    { name: "Services grid", spec: "responsive grid of service cards (icon, title, short text, price from) — 1 column mobile, 3 desktop" },
-    { name: "Testimonials slider", spec: "testimonial cards with name, business, photo and quote; horizontal scroll-snap on mobile, 3-up grid on desktop" },
-    { name: "FAQ accordion", spec: "accessible FAQ accordion using <details>/<summary>, with FAQPage JSON-LD schema generated from the same data" },
-    { name: "Pricing table", spec: "3 pricing tiers with the middle one highlighted as most popular, feature checklist, monthly/annual toggle" },
+    { name: "Services grid", spec: "a responsive grid of service cards (icon, title, short text, price from), 1 column mobile, 3 desktop" },
+    { name: "Testimonials slider", spec: "testimonial cards with the name, business, photo and quote; horizontal scroll-snap on mobile, 3-up grid on desktop" },
+    { name: "FAQ accordion", spec: "an accessible FAQ accordion using <details>/<summary>, with the questions and answers stored in one data array" },
+    { name: "Pricing table", spec: "a pricing table with 3 tiers, the middle one highlighted as most popular, feature checklist, monthly/annual toggle" },
   ],
   Commerce: [
-    { name: "Product card + grid", spec: "product card with image, name, price in Naira formatted like ₦12,500, add-to-cart button; responsive grid with category filter" },
-    { name: "Paystack checkout button", spec: "button that calls a server route to initialise a Paystack transaction and redirects to the authorization_url; verify the reference server-side on return" },
+    { name: "Product card + grid", spec: "a product card with an image, name, price in Naira formatted like ₦12,500, add-to-cart button; responsive grid with category filter" },
+    { name: "Paystack checkout button", spec: "a “Pay now” button that calls a server route to initialise a Paystack transaction and redirects to the authorization_url; verify the reference server-side on return" },
   ],
   Forms: [
-    { name: "Contact form with validation", spec: "contact form (name, email, phone, message) with client + server validation, honeypot spam field, success and error states, sends via a server action" },
-    { name: "Booking form", spec: "booking form with service select, date picker that disables past dates and Sundays, time-slot buttons, and a confirmation screen" },
+    { name: "Contact form with validation", spec: "a contact form (name, email, phone, message) with client + server validation, honeypot spam field, success and error states, sends via a server action" },
+    { name: "Booking form", spec: "a booking form with a service select, date picker that disables past dates and Sundays, time-slot buttons, and a confirmation screen" },
   ],
-  Footer: [{ name: "Business footer", spec: "footer with logo, short about, quick links, contact (phone, WhatsApp, email, address), opening hours, social icons and copyright" }],
+  Footer: [{ name: "Business footer", spec: "a footer with the logo, short about, quick links, contact (phone, WhatsApp, email, address), opening hours, social icons and copyright" }],
 };
 const componentLib: ToolDef = {
   kind: "generator",
-  intro: "Pick a component and your stack. You get a precise prompt that makes AI build it right the first time.",
+  intro: "Pick a component group and your stack. You get precise prompts that make AI build components right the first time, and a checklist to test them.",
+  examples: [
+    { label: "Next.js salon site", values: { group: "Content", stack: "Next.js + Tailwind", brand: "primary #b8336a, soft cream backgrounds, rounded corners" } },
+    { label: "Store checkout", values: { group: "Commerce", stack: "Next.js + Tailwind", brand: "primary #0f4d3a, accent #ff6719, square corners" } },
+    { label: "Plain HTML page", values: { group: "Forms", stack: "Plain HTML + CSS", brand: "blue #1c6fb8, white, simple" } },
+  ],
   fields: [
     { key: "group", label: "Category", type: "select", default: "Content", options: opts(...Object.keys(components)) },
     { key: "stack", label: "Stack", type: "select", default: "Next.js + Tailwind", options: opts("Next.js + Tailwind", "React + Tailwind", "Plain HTML + CSS", "WordPress (block theme)") },
@@ -75,16 +100,34 @@ const componentLib: ToolDef = {
     const list = components[s(v, "group")] ?? components.Content;
     const items = list.map(
       (c) =>
-        `${c.name.toUpperCase()}\nBuild a ${c.spec}. Stack: ${s(v, "stack")}. Style: ${or(s(v, "brand"), "clean and modern")}. Requirements: mobile-first, accessible (labels, focus states, 4.5:1 contrast), no extra libraries unless needed, typed props, example data included.`,
+        `${c.name.toUpperCase()}\nBuild ${c.spec}. Stack: ${s(v, "stack")}. Style: ${or(s(v, "brand"), "clean and modern")}. Requirements: mobile-first (works at 360px), accessible (labels, visible focus, 4.5:1 contrast, keyboard usable), no extra libraries unless needed${/Next|React/.test(s(v, "stack")) ? ", typed props" : ""}, realistic example data in naira where prices appear. Explain how to use it when done.`,
     );
-    return [{ type: "list", title: `${s(v, "group")} components (${items.length})`, items }];
+    return [
+      { type: "list", title: `${s(v, "group")} components (${items.length})`, items },
+      {
+        type: "list",
+        title: "Test it before you move on",
+        items: [
+          "Open it at 360px wide: nothing spills off the side.",
+          "Press Tab through it: you can see where you are and reach every button.",
+          "Check text contrast on its colours with the Color Palette tool.",
+          "Try the unhappy path: empty fields, a failed payment, no internet.",
+          "Commit once it works.",
+        ],
+      },
+    ];
   },
 };
 
 // ---------- Bug / Error Debug Prompt Template ----------
 const debugPrompt: ToolDef = {
   kind: "generator",
-  intro: "Paste the error and what you were doing. You get a debugging prompt that gives the AI everything it needs.",
+  intro: "Paste the exact error and what you were doing. You get a debugging prompt that gives the AI everything it needs, plus hints for common errors.",
+  examples: [
+    { label: "Form won't send", values: { stack: "Next.js, Tailwind, Formspree", expected: "Contact form sends and shows 'Thanks!'", actual: "Button spins forever, nothing arrives", error: "Error: fetch failed\n  at POST (app/api/contact/route.ts:14:5)", tried: "Restarted the dev server", files: "app/api/contact/route.ts, components/ContactForm.tsx" } },
+    { label: "Supabase insert blocked", values: { stack: "Next.js, Supabase", expected: "Saving a booking adds a row", actual: "Nothing is saved", error: "new row violates row-level security policy for table \"bookings\"", tried: "Checked the table exists", files: "app/book/actions.ts, supabase/migrations" } },
+    { label: "Module not found", values: { stack: "Next.js, Tailwind", expected: "The site starts with npm run dev", actual: "The page shows an error", error: "Module not found: Can't resolve '@/components/Hero'", tried: "", files: "app/page.tsx" } },
+  ],
   fields: [
     { key: "stack", label: "Stack", type: "text", default: "Next.js 16, Tailwind, Supabase" },
     { key: "expected", label: "What should happen", type: "text", default: "Contact form sends an email and shows 'Thanks!'" },
@@ -109,7 +152,7 @@ ${errs || "(no error shown)"}
 ALREADY TRIED:
 ${lines(s(v, "tried")).map((x) => "- " + x).join("\n") || "- nothing yet"}
 
-RELEVANT FILES: ${or(s(v, "files"), "(unknown — search the project)")}
+RELEVANT FILES: ${or(s(v, "files"), "(unknown: search the project)")}
 
 Please:
 1. Read the relevant files first.
@@ -123,8 +166,21 @@ Please:
     if (/401|403|unauthori/i.test(errs)) hints.push("Auth error: the key or session is missing or wrong in this environment.");
     if (/404/i.test(errs)) hints.push("404: the route or file path doesn't exist where you think it does.");
     if (/CORS/i.test(errs)) hints.push("CORS: call the third-party API from your server route, not the browser.");
+    if (/module not found|can't resolve|cannot find module/i.test(errs)) hints.push("Missing module: the file path or import name is wrong, or a package isn't installed (npm install <package>).");
+    if (/row-level security|violates row/i.test(errs)) hints.push("Supabase RLS: the table's policies don't allow this action for this user. Add a policy (or do the write on the server), don't switch RLS off.");
+    if (/EADDRINUSE|address already in use|port 3000/i.test(errs)) hints.push("Port in use: another dev server is already running. Close the other terminal, or run on another port.");
+    if (/process\.env|env var|environment variable|api key/i.test(errs)) hints.push("Environment variable: check the name matches exactly in .env.local, restart the dev server, and add it on your host too.");
+    if (/unexpected token|syntaxerror/i.test(errs)) hints.push("Syntax error: something is misspelled or a bracket/quote isn't closed near the line shown.");
+    if (/timeout|timed out|ETIMEDOUT/i.test(errs)) hints.push("Timeout: the service is slow or unreachable. Check your internet and the service's status page, then add a retry.");
     const out: Block[] = [{ type: "text", title: "Debug prompt", text: prompt }];
     if (hints.length) out.push({ type: "list", title: "Quick hints from your error", items: hints });
+    const missing = [!errs && "the exact error message (copy it from the terminal or browser console)", !s(v, "expected") && "what should happen", !s(v, "files") && "the files involved"].filter(Boolean) as string[];
+    out.push(
+      missing.length
+        ? { type: "notice", tone: "warn", text: `Add ${missing.join(", ")}: the AI finds the real cause much faster with them.` }
+        : { type: "notice", tone: "good", text: "Good prompt: exact error, expected result and files. Paste it into Claude Code and let it explain the cause before it changes anything." },
+    );
+    out.push({ type: "list", title: "After the fix", items: ["Test the exact thing that was broken.", "Test one thing next to it (fixes sometimes break neighbours).", "Commit with a message like “fix: contact form sends”."] });
     return out;
   },
 };
@@ -132,7 +188,7 @@ Please:
 // ---------- Website Speed Checklist ----------
 const speedChecklist: ToolDef = {
   kind: "checklist",
-  intro: "Paste a link to test the site live, or tick items by hand. Most visitors in Nigeria are on mobile data — speed is conversion.",
+  intro: "Paste a link to test the site live, or tick items by hand. Most visitors in Nigeria are on mobile data, speed is conversion.",
   live: {
     kind: "speed",
     title: "Test a website's speed",
@@ -155,7 +211,7 @@ const speedChecklist: ToolDef = {
     { title: "Server & delivery", checks: [
       { id: "cdn", weight: 2, text: "Served through a CDN (Vercel, Netlify, Cloudflare)", fix: "Put the site behind Cloudflare or host on Vercel/Netlify." },
       { id: "ttfb", weight: 2, text: "Server responds in under 600ms", fix: "Use static pages where possible; cache database queries." },
-      { id: "https", weight: 1, text: "HTTPS with HTTP/2 or HTTP/3", fix: "Modern hosts enable this — confirm in the browser's network tab." },
+      { id: "https", weight: 1, text: "HTTPS with HTTP/2 or HTTP/3", fix: "Modern hosts enable this: confirm in the browser's network tab." },
     ] },
     { title: "Measured", checks: [
       { id: "psi", weight: 3, text: "PageSpeed Insights mobile score 80+", fix: "Run pagespeed.web.dev and fix the top 3 opportunities it lists." },
@@ -163,7 +219,7 @@ const speedChecklist: ToolDef = {
       { id: "cls", weight: 2, text: "No layout jumping while loading (CLS under 0.1)", fix: "Set width/height on images and reserve space for embeds." },
     ] },
   ],
-  grades: [[85, "Fast — ready for ads"], [60, "Decent — fix the high-impact items"], [35, "Slow — visitors are leaving"], [0, "Very slow — start with images"]],
+  grades: [[85, "Fast: ready for ads"], [60, "Decent: fix the high-impact items"], [35, "Slow: visitors are leaving"], [0, "Very slow: start with images"]],
 };
 
 // ---------- Responsive Design Checklist ----------
@@ -199,11 +255,11 @@ const responsiveChecklist: ToolDef = {
       { id: "forms", weight: 2, text: "Forms use the right keyboard (tel, email, number)", fix: "Set type=\"tel\" / \"email\" and inputMode." },
     ] },
   ],
-  grades: [[85, "Phone-ready"], [60, "Mostly there — fix the high-impact items"], [0, "Needs work on mobile"]],
+  grades: [[85, "Phone-ready"], [60, "Mostly there: fix the high-impact items"], [0, "Needs work on mobile"]],
 };
 
 // ---------- Domain Name Idea Generator ----------
-/** The domain ideas for a set of inputs — shared by the generator and the live availability check. */
+/** The domain ideas for a set of inputs, shared by the generator and the live availability check. */
 export function domainIdeas(v: Values): string[] {
   const k = slugify(s(v, "keyword")).replace(/-/g, ""), e = slugify(s(v, "extra")).replace(/-/g, ""), loc = slugify(s(v, "location")).replace(/-/g, "");
   if (!k) return [];
@@ -221,7 +277,12 @@ export function domainIdeas(v: Values): string[] {
 
 const domainGen: ToolDef = {
   kind: "generator",
-  intro: "Enter a keyword and a style. You get short, brandable domain ideas — then check which are actually free, live.",
+  intro: "Enter a keyword. You get short, brandable domain ideas with a quality check on each, then see which are actually free, live.",
+  examples: [
+    { label: "Beauty studio", values: { keyword: "glow", extra: "beauty", location: "lagos", tld: ".com", max: 14 } },
+    { label: "Food (.ng)", values: { keyword: "mama", extra: "kitchen", location: "ikeja", tld: ".com.ng", max: 16 } },
+    { label: "Solar", values: { keyword: "sun", extra: "power", location: "abuja", tld: ".ng", max: 14 } },
+  ],
   fields: [
     { key: "keyword", label: "Main keyword", type: "text", default: "glow", half: true },
     { key: "extra", label: "Second word (optional)", type: "text", default: "beauty", half: true },
@@ -239,10 +300,20 @@ const domainGen: ToolDef = {
   generate(v) {
     const names = domainIdeas(v);
     if (!names.length) return [{ type: "notice", tone: "warn", text: "Enter a keyword to get ideas." }];
-    const rows = names.map((x) => [x, String(x.split(".")[0].length), `https://www.namecheap.com/domains/registration/results/?domain=${x}`]);
+    const ng = /\.ng$/.test(s(v, "tld"));
+    const verdict = (d: string) => {
+      const name = d.split(".")[0];
+      const flags: string[] = [];
+      if (name.length > 12) flags.push("long");
+      if (/(.)\1\1/.test(name) || /([a-z])\1/.test(name.slice(Math.max(0, s(v, "keyword").length - 1), s(v, "keyword").length + 1))) flags.push("double letters at the join, easy to misspell");
+      if (/and/.test(name) && s(v, "extra")) flags.push("“and” is often misheard");
+      if (/\d|-/.test(name)) flags.push("avoid numbers and hyphens");
+      return flags.length ? `Check: ${flags.join(", ")}` : name.length <= 8 ? "Excellent: short and sayable" : "Good";
+    };
+    const rows = names.map((x) => [x, String(x.split(".")[0].length), verdict(x), ng ? "Buy from a NiRA-accredited registrar (list at nira.org.ng)" : `https://www.namecheap.com/domains/registration/results/?domain=${x}`]);
     return [
-      { type: "table", title: `${rows.length} ideas`, columns: ["Domain", "Letters", "Search link"], rows },
-      { type: "notice", tone: "info", text: "Tap “Check availability” above to see which are free. Good domains are short, easy to say on a phone call, and have no hyphens." },
+      { type: "table", title: `${rows.length} ideas`, columns: ["Domain", "Letters", "Quality", ng ? "Where to buy" : "Search link"], rows },
+      { type: "list", title: "Pick the winner", items: ["Tap “Check availability” above and shortlist 3 that are free.", "Say each one out loud as if on a phone call, can the listener type it without asking “how do you spell that?”", "Buy it in the client's name, and check the renewal price, not just the first-year price."] },
     ];
   },
 };

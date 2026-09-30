@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { supabaseUrl } from "./env";
 
 /**
- * Privileged client (bypasses RLS). Server-only — used for payment/subscription writes
+ * Privileged client (bypasses RLS). Server-only: used for payment/subscription writes
  * and the waitlist. Never import this from client code.
  */
 export function createAdminClient() {

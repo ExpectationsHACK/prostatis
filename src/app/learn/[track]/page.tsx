@@ -2,12 +2,13 @@ import { ArrowRight, Award, Check, Lock, PlayCircle } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LessonThumb } from "@/components/art/lesson-thumb";
+import { BadgeShelf } from "@/components/learn/badges";
 import { LearnerStats, PreviewBanner } from "@/components/learn/stats";
 import { btn, size } from "@/components/ui";
 import { getLesson } from "@/content/lessons";
 import { getPillar } from "@/lib/curriculum";
 import { learnerTrack, requireLearner, slugOf, trackSlugs } from "@/lib/learning/access";
-import { trackProgress, XP } from "@/lib/learning/engine";
+import { badges, trackProgress, XP } from "@/lib/learning/engine";
 import { getStore } from "@/lib/learning/store";
 
 export default async function TrackHome({ params }: { params: Promise<{ track: string }> }) {
@@ -34,7 +35,7 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
           </div>
           {prog.next ? (
             <Link href={`/learn/${slug}/${prog.next.day}`} className={`${btn.primary} ${size.lg}`}>
-              <PlayCircle className="size-5" aria-hidden /> {prog.completed ? "Continue" : "Start"}: Day {prog.next.day}
+              <PlayCircle className="size-5" aria-hidden /> {prog.completed ? `Continue: Day ${prog.next.day}` : "Start Learning"}
             </Link>
           ) : (
             <Link href={`/learn/${slug}/final`} className={`${btn.primary} ${size.lg}`}>
@@ -43,9 +44,21 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
           )}
         </div>
 
+        {prog.completed === 0 && (
+          <Link href="/learn/start" className="ink-block block-press mt-8 flex items-center justify-between gap-4 bg-accent p-4 text-accent-ink">
+            <span>
+              <span className="label block text-brand">New here? Read this first · 10 min</span>
+              <span className="display mt-1 block text-[20px]">Start here: how the course works, what you&apos;ll need, and how to pay for AI tools from Nigeria</span>
+            </span>
+            <ArrowRight className="size-5 shrink-0" aria-hidden />
+          </Link>
+        )}
+
         <div className="mt-8">
           <LearnerStats state={state} done={prog.completed} total={prog.total} />
         </div>
+
+        <BadgeShelf list={badges(track, state)} />
 
         {track.weeks.map((w) => (
           <section key={w.week} className="mt-12">
@@ -101,7 +114,7 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
 
         <section className={"mt-12 border-2 border-edge p-6 sm:p-8 " + (prog.allDone ? "ink-block bg-brand" : "bg-card")}>
           <p className="label text-ink">Final assessment</p>
-          <h2 className="display mt-2 text-[28px] text-ink">{final?.passed_at ? "Passed — your certificate is ready" : "One question from every lesson"}</h2>
+          <h2 className="display mt-2 text-[28px] text-ink">{final?.passed_at ? "Passed: your certificate is ready" : "One question from every lesson"}</h2>
           <p className="mt-2 max-w-2xl font-mono text-[13px] leading-relaxed text-ink/80">
             {track.modules.length} questions, pass mark 75%. Pass to earn {XP.final} XP and your certificate of completion.
             {!prog.allDone && ` Unlocks after all ${track.modules.length} lessons are complete (${prog.completed} so far).`}

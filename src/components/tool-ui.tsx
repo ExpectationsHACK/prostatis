@@ -56,7 +56,7 @@ export function CopyButton({ text, label = "Copy" }: { text: string; label?: str
           setCopied(true);
           setTimeout(() => setCopied(false), 1500);
         } catch {
-          /* clipboard blocked — user can still select the text */
+          /* clipboard blocked: user can still select the text */
         }
       }}
       className={pill}

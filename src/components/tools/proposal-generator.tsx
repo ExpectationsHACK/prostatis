@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Field, Output, Select, TextArea, TextInput, ToolLayout } from "../tool-ui";
+import { AppToolLayout, useToolState } from "./kit/app-tool";
+import { Field, Output, Select, TextArea, TextInput } from "../tool-ui";
 
 const lines = (s: string) =>
   s
@@ -9,13 +9,12 @@ const lines = (s: string) =>
     .map((l) => l.trim())
     .filter(Boolean);
 
-export default function ProposalGenerator() {
-  const [f, setF] = useState({
+const initial = {
     you: "Ada Okafor",
     studio: "Ada Builds",
     client: "Sarah Mitchell",
     company: "Brightside Dental (Texas)",
-    problem: "Their website is slow, not mobile-friendly, and new patients can't book online — so they lose bookings to competitors.",
+    problem: "Their website is slow, not mobile-friendly, and new patients can't book online, so they lose bookings to competitors.",
     outcome: "A fast, mobile-first website with online booking and an AI chat assistant that answers common questions 24/7.",
     deliverables: "5-page website (Home, Services, About, Reviews, Contact)\nOnline booking integration\nAI chat assistant trained on their FAQs\nBasic SEO setup and Google Business link\n30 days of post-launch support",
     timeline: "2 weeks",
@@ -23,13 +22,21 @@ export default function ProposalGenerator() {
     price: "1,200",
     split: "50/50",
     validity: "14 days",
-  });
-  const set = (k: keyof typeof f) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value });
+};
+const examples = [
+  { label: "Lagos salon (₦)", values: { ...initial, client: "Kemi Adebayo", company: "Glow Beauty Studio, Lekki", problem: "Customers book by WhatsApp only, so the owner answers “are you free?” all day and loses two afternoons a week to no-shows.", outcome: "A mobile booking website with deposits, so customers book themselves and no-shows drop.", deliverables: "4-page website (Home, Services & prices, Gallery, Contact)\nOnline booking with a ₦5,000 Paystack deposit\nWhatsApp button and Google Maps\nGoogle Business Profile setup\n30 days of support after launch", timeline: "10 days", currency: "NGN", price: "450,000", split: "50/50" } },
+  { label: "US dental clinic ($)", values: initial },
+  { label: "Restaurant care plan (₦)", values: { ...initial, client: "Mama Nkechi", company: "Mama Nkechi's Kitchen, Ikeja", problem: "The website exists but nobody updates it, the menu and prices are months out of date.", outcome: "An always-up-to-date website: weekly menu updates, monthly SEO checks and a short report.", deliverables: "Weekly menu and price updates\nUptime monitoring\nMonthly Google Business Profile posts (4)\nA one-page monthly report", timeline: "Monthly, starting next week", currency: "NGN", price: "60,000", split: "100", validity: "7 days" } },
+];
+
+export default function ProposalGenerator() {
+  const { f, patch, load, source, shareUrl } = useToolState("proposal-generator", initial);
+  const set = (k: keyof typeof initial) => (e: { target: { value: string } }) => patch({ [k]: e.target.value });
 
   const sym = f.currency === "USD" ? "$" : f.currency === "GBP" ? "£" : f.currency === "EUR" ? "€" : "₦";
   const total = Number(f.price.replace(/,/g, "")) || 0;
   const [a, b] = f.split === "100" ? [100, 0] : f.split === "40/30/30" ? [40, 60] : [50, 50];
-  const money = (n: number) => sym + Math.round(n).toLocaleString("en-US");
+  const money = (n: number) => sym + Math.round(n).toLocaleString(f.currency === "NGN" ? "en-NG" : "en-US");
   const deliverables = lines(f.deliverables);
 
   const payment =
@@ -39,7 +46,7 @@ export default function ProposalGenerator() {
         ? `- 40% (${money(total * 0.4)}) to start\n- 30% (${money(total * 0.3)}) at design approval\n- 30% (${money(total * 0.3)}) on launch`
         : `- ${a}% (${money((total * a) / 100)}) to start\n- ${b}% (${money((total * b) / 100)}) on launch, before handover`;
 
-  const headline = f.outcome.split(/[.—]/)[0].trim();
+  const headline = f.outcome.split(/[. -]/)[0].trim();
   const out = `PROPOSAL: ${headline.length > 70 ? headline.slice(0, 67).trimEnd() + "…" : headline}
 Prepared for ${f.client}, ${f.company}
 Prepared by ${f.you}, ${f.studio}
@@ -55,7 +62,7 @@ ${f.outcome}
 3. DELIVERABLES
 ${deliverables.map((d, i) => `${i + 1}. ${d}`).join("\n")}
 
-4. TIMELINE — ${f.timeline}
+4. TIMELINE: ${f.timeline}
 - Day 1–2: Kick-off call, content and access collected
 - First half: Design and build; you review a live preview link
 - Second half: Revisions (2 rounds included), testing on mobile and desktop
@@ -67,7 +74,7 @@ Total: ${money(total)} ${f.currency}
 Payment schedule:
 ${payment}
 
-Payment by bank transfer, Wise, Payoneer or card (payment details provided).
+${f.currency === "NGN" ? "Payment by bank transfer or card/USSD via a Paystack payment link (details provided)." : "Payment by bank transfer, Payoneer, Grey or card (payment details provided)."}
 
 6. WHAT I NEED FROM YOU
 - Logo, photos and any existing text
@@ -87,7 +94,14 @@ ${f.you}
 ${f.studio}`;
 
   return (
-    <ToolLayout
+    <AppToolLayout
+      slug="proposal-generator"
+      source={source}
+      examples={examples}
+      onExample={(i) => load(examples[i].values)}
+      onReset={() => load(initial)}
+      shareUrl={shareUrl}
+      text={out}
       form={
         <>
           <div className="grid grid-cols-2 gap-3">
@@ -146,7 +160,7 @@ ${f.studio}`;
         <>
           <Output title="Proposal" text={out} filename={`proposal-${f.company.replace(/\W+/g, "-").toLowerCase()}.txt`} />
           <p className="text-sm text-muted">
-            Paste into Google Docs or Notion, add your logo, and export as PDF. Always get the deposit before starting.
+            Paste into Google Docs or Notion, add your logo, and export as PDF. Send it within 24 hours of the call, follow up after 3 days, and always get the deposit before starting.
           </p>
         </>
       }

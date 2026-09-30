@@ -6,10 +6,10 @@ const API = "https://api.paystack.co";
 export type PaymentsMode = "paystack" | "demo" | "disabled";
 
 /**
- * paystack — real Paystack checkout (use sk_test_… keys for test mode).
- * demo     — no Paystack key; a built-in simulator stands in for checkout. Development only
+ * paystack: real Paystack checkout (use sk_test_… keys for test mode).
+ * demo    : no Paystack key; a built-in simulator stands in for checkout. Development only
  *            unless PAYMENTS_DEMO=true is set explicitly.
- * disabled — production without a key.
+ * disabled: production without a key.
  */
 export function paymentsMode(): PaymentsMode {
   if (process.env.PAYSTACK_SECRET_KEY) return "paystack";

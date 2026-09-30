@@ -90,6 +90,6 @@ describe("trackProgress", () => {
 describe("certificateId", () => {
   it("is readable and track-specific", () => {
     const id = certificateId("3f2a9c1e-aaaa-bbbb", "main_track", new Date("2026-10-01T10:00:00Z"));
-    expect(id).toMatch(/^BWAC-MT-2026-3F2A9C[A-Z0-9]{4}$/);
+    expect(id).toMatch(/^STK-MT-2026-3F2A9C[A-Z0-9]{4}$/);
   });
 });

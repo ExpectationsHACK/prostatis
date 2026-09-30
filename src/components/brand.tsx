@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-/** Our mark: an orange tile with a bracketed spark — "build" + "AI". Not Substack's bookmark. */
+/** Our mark: an orange tile with a bracketed spark, "build" + "AI". Not Substack's bookmark. */
 export function LogoTile({ size = 36, className = "" }: { size?: number; className?: string }) {
   return (
     <span
@@ -19,9 +19,9 @@ export function LogoTile({ size = 36, className = "" }: { size?: number; classNa
 
 export function Brand({ size = 32, name = true }: { size?: number; name?: boolean }) {
   return (
-    <Link href="/" className="flex items-center gap-2.5 text-ink" aria-label="BuildWithAIClub home">
+    <Link href="/" className="flex items-center gap-2.5 text-ink" aria-label="STEINARK home">
       <LogoTile size={size} />
-      {name && <span className="display text-[17px] sm:text-[22px]">BuildWithAIClub</span>}
+      {name && <span className="display text-[17px] sm:text-[22px]">STEINARK</span>}
     </Link>
   );
 }

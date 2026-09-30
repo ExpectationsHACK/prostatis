@@ -149,7 +149,7 @@ const kinds: Record<WebsiteKind, () => ReactNode> = {
           <div className="flex items-center gap-1.5">
             <span className="grid size-6 place-items-center rounded-full border-2 border-edge bg-brand"><User className="size-3" /></span>
             <div>
-              <p className={h10}>Tunde — web developer</p>
+              <p className={h10}>Tunde: web developer</p>
               <p className={`${t7} text-muted`}>Websites that bring customers</p>
             </div>
           </div>

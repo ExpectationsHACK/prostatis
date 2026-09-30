@@ -4,7 +4,7 @@ import { CircleAlert, Mail } from "lucide-react";
 import Link from "next/link";
 import { useActionState, useState } from "react";
 import { btn, input, size } from "@/components/ui";
-import { sendMagicLink, signIn, signUp, type AuthState } from "./actions";
+import { requestPasswordReset, sendMagicLink, signIn, signUp, updatePassword, type AuthState } from "./actions";
 
 function Notice({ state }: { state: AuthState }) {
   if (state?.error)
@@ -32,8 +32,8 @@ function Label({ htmlFor, children }: { htmlFor: string; children: React.ReactNo
   );
 }
 
-export function SignupForm({ next, email }: { next: string; email?: string }) {
-  const [state, action, pending] = useActionState(signUp, undefined);
+export function SignupForm({ next, email, notice }: { next: string; email?: string; notice?: string }) {
+  const [state, action, pending] = useActionState(signUp, notice ? { message: notice } : undefined);
   return (
     <form action={action} className="space-y-4">
       <input type="hidden" name="next" value={next} />
@@ -84,7 +84,10 @@ export function LoginForm({ next, initialError }: { next: string; initialError?:
       </div>
       {!magic && (
         <div>
-          <Label htmlFor="li-pw">Password</Label>
+          <div className="mb-1.5 flex items-baseline justify-between gap-3">
+            <label htmlFor="li-pw" className="text-[14px] font-semibold text-ink">Password</label>
+            <Link href="/forgot-password" className="text-[13px] font-semibold text-brand-text underline">Forgot password?</Link>
+          </div>
           <input id="li-pw" name="password" type="password" required autoComplete="current-password" className={input} />
         </div>
       )}
@@ -101,6 +104,46 @@ export function LoginForm({ next, initialError }: { next: string; initialError?:
           Create an account
         </Link>
       </p>
+    </form>
+  );
+}
+
+export function ForgotForm() {
+  const [state, action, pending] = useActionState(requestPasswordReset, undefined);
+  return (
+    <form action={action} className="space-y-4">
+      <div>
+        <Label htmlFor="fp-email">Email</Label>
+        <input id="fp-email" name="email" type="email" required autoComplete="email" className={input} />
+      </div>
+      <Notice state={state} />
+      <button disabled={pending} className={`${btn.primary} ${size.lg} w-full`}>
+        {pending ? "Sending…" : "Email me a reset link"}
+      </button>
+      <p className="text-center text-[14px] text-muted">
+        Remembered it?{" "}
+        <Link href="/login" className="font-semibold text-ink underline">Back to sign in</Link>
+      </p>
+    </form>
+  );
+}
+
+export function ResetForm() {
+  const [state, action, pending] = useActionState(updatePassword, undefined);
+  return (
+    <form action={action} className="space-y-4">
+      <div>
+        <Label htmlFor="rp-pw">New password</Label>
+        <input id="rp-pw" name="password" type="password" required minLength={8} autoComplete="new-password" placeholder="At least 8 characters" className={input} />
+      </div>
+      <div>
+        <Label htmlFor="rp-confirm">Type it again</Label>
+        <input id="rp-confirm" name="confirm" type="password" required minLength={8} autoComplete="new-password" className={input} />
+      </div>
+      <Notice state={state} />
+      <button disabled={pending} className={`${btn.primary} ${size.lg} w-full`}>
+        {pending ? "Saving…" : "Save new password"}
+      </button>
     </form>
   );
 }

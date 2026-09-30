@@ -56,7 +56,7 @@ export async function recordSuccessfulPayment(p: {
   reference: string;
   amountKobo: number;
   currency: string;
-  provider: "paystack" | "demo";
+  provider: "paystack" | "demo" | "manual";
   customerCode?: string | null;
   raw?: unknown;
 }) {
@@ -78,7 +78,7 @@ export async function recordSuccessfulPayment(p: {
       { onConflict: "reference", ignoreDuplicates: true },
     )
     .select("id");
-  if (payErr) throw payErr;
+  if (payErr) throw new Error(`Couldn't record payment ${p.reference}: ${payErr.message}`);
   if (!inserted?.length) return { alreadyProcessed: true };
 
   const { data: existing } = await db
@@ -106,10 +106,10 @@ export async function recordSuccessfulPayment(p: {
     },
     { onConflict: "user_id" },
   );
-  if (subErr) throw subErr;
+  if (subErr) throw new Error(`Payment ${p.reference} recorded but access wasn't updated: ${subErr.message}`);
   return { alreadyProcessed: false };
 }
 
 export function newReference(userId: string) {
-  return `bwac_${userId.slice(0, 8)}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+  return `stk_${userId.slice(0, 8)}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
 }

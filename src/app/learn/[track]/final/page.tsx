@@ -43,7 +43,7 @@ export default async function FinalPage({ params }: { params: Promise<{ track: s
         ) : (
           <>
             <p className="mt-3 max-w-2xl font-mono text-[14px] leading-relaxed text-muted">
-              One question from each lesson — {prog.total} in all. Score 75% or more to pass, earn {XP.final} XP and your certificate. You can retake it as often as you like.
+              One question from each lesson, {prog.total} in all. Score 75% or more to pass, earn {XP.final} XP and your certificate. You can retake it as often as you like.
             </p>
             {final?.passed_at && (
               <Link href={`/learn/${slug}/certificate`} className={`${btn.primary} ${size.md} mt-5`}>

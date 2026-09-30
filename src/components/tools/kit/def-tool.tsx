@@ -1,11 +1,72 @@
 "use client";
 
-import { RotateCcw } from "lucide-react";
-import { useDeferredValue, useMemo, useState } from "react";
+import { Eraser, Link2, RotateCcw, Sparkles } from "lucide-react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
+import { blocksToText, decodeValues, encodeValues } from "@/lib/tool-defs/text";
 import { defaults, type ChecklistDef, type Field as FieldDef, type GeneratorDef, type ToolDef, type Values } from "@/lib/tool-defs/types";
 import { Field, Output, Select, TextArea, TextInput } from "../../tool-ui";
 import { BlockView } from "./blocks";
 import { LivePanel } from "./live-panel";
+import { ResultBar, StepHead } from "./result-bar";
+
+const store = {
+  get(key: string) {
+    try {
+      return localStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  },
+  set(key: string, value: string | null) {
+    try {
+      if (value === null) localStorage.removeItem(key);
+      else localStorage.setItem(key, value);
+    } catch {
+      /* storage blocked: nothing is saved, the tool still works */
+    }
+  },
+};
+
+/** Keep only values whose keys and types match the tool's fields (saved data, links, examples). */
+function sanitize(fields: FieldDef[], raw: unknown): Values {
+  const base = defaults(fields);
+  if (!raw || typeof raw !== "object") return base;
+  const r = raw as Record<string, unknown>;
+  for (const f of fields) {
+    const x = r[f.key];
+    if (x === undefined) continue;
+    const ok =
+      f.type === "multi"
+        ? Array.isArray(x) && x.every((y) => typeof y === "string")
+        : f.type === "toggle"
+          ? typeof x === "boolean"
+          : f.type === "number"
+            ? typeof x === "number"
+            : typeof x === "string";
+    if (ok) base[f.key] = x as Values[string];
+  }
+  return base;
+}
+
+/** Inputs to start with: a shared link wins, then this browser's last session, then the example. */
+function initial(def: GeneratorDef, slug: string): { v: Values; from: "link" | "saved" | "example" } {
+  const q = new URLSearchParams(window.location.search).get("in");
+  const shared = q ? decodeValues<Values>(q) : null;
+  if (shared) return { v: sanitize(def.fields, shared), from: "link" };
+  const saved = store.get(`bwac:tool:${slug}`);
+  if (saved) {
+    try {
+      return { v: sanitize(def.fields, JSON.parse(saved)), from: "saved" };
+    } catch {
+      /* fall through to the example */
+    }
+  }
+  return { v: defaults(def.fields), from: "example" };
+}
+
+function blank(fields: FieldDef[]): Values {
+  return Object.fromEntries(fields.map((f) => [f.key, f.type === "text" || f.type === "textarea" ? "" : f.type === "multi" ? [] : f.default]));
+}
 
 function FieldInput({ f, value, set }: { f: FieldDef; value: Values[string]; set: (v: Values[string]) => void }) {
   switch (f.type) {
@@ -82,8 +143,10 @@ function FieldInput({ f, value, set }: { f: FieldDef; value: Values[string]; set
   }
 }
 
-function GeneratorTool({ def }: { def: GeneratorDef }) {
-  const [v, setV] = useState<Values>(() => defaults(def.fields));
+function GeneratorTool({ def, slug }: { def: GeneratorDef; slug: string }) {
+  const [start] = useState(() => initial(def, slug));
+  const [v, setV] = useState<Values>(start.v);
+  const [source, setSource] = useState(start.from);
   // Keep typing responsive on slow phones: outputs render from a deferred copy.
   const deferred = useDeferredValue(v);
   const blocks = useMemo(() => {
@@ -94,6 +157,17 @@ function GeneratorTool({ def }: { def: GeneratorDef }) {
       return [{ type: "notice" as const, tone: "warn" as const, text: "Something in the inputs couldn't be processed. Check the fields and try again." }];
     }
   }, [def, deferred]);
+  const text = useMemo(() => blocksToText(blocks), [blocks]);
+
+  // Autosave this browser's inputs so nothing is lost on refresh.
+  useEffect(() => {
+    store.set(`bwac:tool:${slug}`, JSON.stringify(v));
+  }, [slug, v]);
+
+  const load = (next: Values, from: "saved" | "example") => {
+    setV(next);
+    setSource(from);
+  };
 
   const halfPairs: FieldDef[][] = [];
   for (const f of def.fields) {
@@ -103,41 +177,89 @@ function GeneratorTool({ def }: { def: GeneratorDef }) {
     else halfPairs.push([f]);
   }
 
+  const shareUrl = () => `${window.location.origin}${window.location.pathname}?in=${encodeValues(v)}`;
+  const note =
+    source === "link" ? "Loaded from a shared link" : source === "saved" ? "Saved on this device as you type" : "Showing an example: replace it with your own details";
+  const small = "inline-flex items-center gap-1.5 font-mono text-[12px] font-bold uppercase tracking-wider text-muted hover:text-ink";
+
   return (
     <>
       {def.live && <LivePanel spec={def.live} values={v} />}
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
         <div className="space-y-4 border-2 border-edge bg-card p-5 shadow-[5px_5px_0_var(--edge)]">
+          <StepHead n={1} title="Fill in your details" sub={note} />
           {def.intro && <p className="text-[14px] text-muted">{def.intro}</p>}
+          {def.examples && def.examples.length > 0 && (
+            <div className="border-2 border-dashed border-line p-3">
+              <p className="label flex items-center gap-1.5 text-muted">
+                <Sparkles className="size-3.5" aria-hidden /> Try an example
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {def.examples.map((ex) => (
+                  <button
+                    key={ex.label}
+                    type="button"
+                    onClick={() => load(sanitize(def.fields, ex.values), "example")}
+                    className="border-2 border-edge bg-paper px-2.5 py-1 font-mono text-[11.5px] font-bold uppercase tracking-wide text-ink transition-colors hover:bg-brand"
+                  >
+                    {ex.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           {halfPairs.map((row, i) => (
             <div key={i} className={row.length === 2 ? "grid grid-cols-2 gap-3" : ""}>
               {row.map((f) => (
                 <Field key={f.key} label={f.label} hint={f.hint}>
-                  <FieldInput f={f} value={v[f.key]} set={(x) => setV((prev) => ({ ...prev, [f.key]: x }))} />
+                  <FieldInput
+                    f={f}
+                    value={v[f.key]}
+                    set={(x) => {
+                      setV((prev) => ({ ...prev, [f.key]: x }));
+                      setSource("saved");
+                    }}
+                  />
                 </Field>
               ))}
             </div>
           ))}
-          <button
-            type="button"
-            onClick={() => setV(defaults(def.fields))}
-            className="inline-flex items-center gap-1.5 font-mono text-[12px] font-bold uppercase tracking-wider text-muted hover:text-ink"
-          >
-            <RotateCcw className="size-3.5" aria-hidden /> Reset example
-          </button>
+          <div className="flex flex-wrap gap-x-5 gap-y-2 border-t-2 border-dashed border-line pt-3">
+            <button type="button" onClick={() => load(blank(def.fields), "saved")} className={small}>
+              <Eraser className="size-3.5" aria-hidden /> Start blank
+            </button>
+            <button type="button" onClick={() => load(defaults(def.fields), "example")} className={small}>
+              <RotateCcw className="size-3.5" aria-hidden /> Reset example
+            </button>
+          </div>
         </div>
         <div className="min-w-0 space-y-4 lg:sticky lg:top-24 lg:self-start" aria-live="polite">
+          <StepHead n={2} title="Your result" sub="Updates as you type. Copy one part, or everything at once." />
+          <ResultBar text={text} filename={`${slug}.txt`} shareUrl={shareUrl} />
           {blocks.map((b, i) => (
             <BlockView key={i} b={b} />
           ))}
+          <p className="flex items-start gap-1.5 font-mono text-[11.5px] text-muted">
+            <Link2 className="mt-0.5 size-3.5 shrink-0" aria-hidden /> “Share link” copies a link that reopens this tool with your inputs, handy for a client or teammate. Anyone with the link can see them, so don't share private details this way.
+          </p>
         </div>
       </div>
     </>
   );
 }
 
-function ChecklistTool({ def }: { def: ChecklistDef }) {
-  const [done, setDone] = useState<Record<string, boolean>>({});
+function ChecklistTool({ def, slug }: { def: ChecklistDef; slug: string }) {
+  const [done, setDone] = useState<Record<string, boolean>>(() => {
+    try {
+      const saved: unknown = JSON.parse(store.get(`bwac:check:${slug}`) ?? "{}");
+      return saved && typeof saved === "object" ? (saved as Record<string, boolean>) : {};
+    } catch {
+      return {};
+    }
+  });
+  useEffect(() => {
+    store.set(`bwac:check:${slug}`, JSON.stringify(done));
+  }, [slug, done]);
   const all = def.groups.flatMap((g) => g.checks);
   const max = all.reduce((x, c) => x + c.weight, 0);
   const score = all.reduce((x, c) => x + (done[c.id] ? c.weight : 0), 0);
@@ -145,8 +267,8 @@ function ChecklistTool({ def }: { def: ChecklistDef }) {
   const grade = def.grades.find(([min]) => pct >= min)?.[1] ?? def.grades[def.grades.length - 1][1];
   const impact = { 1: "Low", 2: "Medium", 3: "High" } as const;
   const todo = all.filter((c) => !done[c.id]).sort((a, b) => b.weight - a.weight);
-  const report = `Score: ${pct}/100 — ${grade}\n\nFix these, most important first:\n${
-    todo.map((c, i) => `${i + 1}. ${c.text} (${impact[c.weight].toLowerCase()} impact)\n   → ${c.fix}`).join("\n") || "Nothing — every check passes."
+  const report = `Score: ${pct}/100: ${grade}\n\nFix these, most important first:\n${
+    todo.map((c, i) => `${i + 1}. ${c.text} (${impact[c.weight].toLowerCase()} impact)\n   → ${c.fix}`).join("\n") || "Nothing: every check passes."
   }`;
 
   return (
@@ -154,6 +276,7 @@ function ChecklistTool({ def }: { def: ChecklistDef }) {
       {def.live && <LivePanel spec={def.live} values={{}} onChecks={(found) => setDone((prev) => ({ ...prev, ...found }))} />}
       <div className="grid gap-6 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
         <div className="space-y-5">
+          <StepHead n={1} title="Check each item" sub="Your ticks are saved on this device." />
           {def.intro && <p className="text-[14px] text-muted">{def.intro}</p>}
           {def.groups.map((g) => (
             <fieldset key={g.title} className="border-2 border-edge bg-card p-5">
@@ -187,6 +310,8 @@ function ChecklistTool({ def }: { def: ChecklistDef }) {
           ))}
         </div>
         <div className="min-w-0 space-y-4 lg:sticky lg:top-24 lg:self-start">
+          <StepHead n={2} title="Your score and fix list" sub="Fix from the top: highest impact first." />
+          <ResultBar text={report} filename={`${slug}-fix-list.txt`} />
           <div className="border-2 border-edge bg-card p-5 shadow-[5px_5px_0_var(--edge)]">
             <div className="flex items-baseline justify-between">
               <span className="font-mono text-[12px] font-bold uppercase tracking-wider text-muted">Your score</span>
@@ -196,8 +321,15 @@ function ChecklistTool({ def }: { def: ChecklistDef }) {
               <div className="h-full bg-brand transition-all duration-300" style={{ width: pct + "%" }} />
             </div>
             <p className="mt-2 text-[14px] font-semibold text-ink">{grade}</p>
-            <p className="mt-1 font-mono text-[12px] text-muted">
-              {all.length - todo.length} of {all.length} done
+            <p className="mt-1 flex items-center justify-between gap-2 font-mono text-[12px] text-muted">
+              <span>
+                {all.length - todo.length} of {all.length} done
+              </span>
+              {all.length - todo.length > 0 && (
+                <button type="button" onClick={() => setDone({})} className="font-bold uppercase tracking-wider hover:text-ink">
+                  Clear ticks
+                </button>
+              )}
             </p>
           </div>
           <Output title="Your fix list" text={report} filename="fix-list.txt" />
@@ -207,6 +339,6 @@ function ChecklistTool({ def }: { def: ChecklistDef }) {
   );
 }
 
-export default function DefTool({ def }: { def: ToolDef }) {
-  return def.kind === "generator" ? <GeneratorTool def={def} /> : <ChecklistTool def={def} />;
+export default function DefTool({ def, slug }: { def: ToolDef; slug: string }) {
+  return def.kind === "generator" ? <GeneratorTool def={def} slug={slug} /> : <ChecklistTool def={def} slug={slug} />;
 }

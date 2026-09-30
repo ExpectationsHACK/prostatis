@@ -8,8 +8,8 @@ import { createClient, getCurrentUser } from "@/lib/supabase/server";
 
 const statusLabel: Record<string, string> = {
   active: "Active",
-  non_renewing: "Active — won't renew",
-  past_due: "Payment failed — please update your card",
+  non_renewing: "Active: won't renew",
+  past_due: "Payment failed: please update your card",
   cancelled: "Cancelled",
 };
 
@@ -65,7 +65,7 @@ export default async function BillingPage() {
           <div className="mt-5 flex flex-wrap gap-3">
             {plans.map((p) => (
               <Link key={p.id} href={`/checkout/${p.id}`} className={`${btn.primary} ${size.md}`}>
-                {sub ? "Buy again:" : "Join the"} {p.name} · {formatNgn(p.priceNgn)}
+                {sub ? "Buy again:" : "Enroll Now:"} {p.name} · {formatNgn(p.priceNgn)}
               </Link>
             ))}
           </div>

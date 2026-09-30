@@ -1,10 +1,10 @@
 "use client";
 
-import { CreditCard, GraduationCap, House, MessageCircle, Wrench, type LucideIcon } from "lucide-react";
+import { CreditCard, GraduationCap, House, MessageCircle, Newspaper, Wrench, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-type Item = { href: string; label: string; icon: LucideIcon; external?: boolean; soon?: boolean; memberOnly?: boolean };
+type Item = { href: string; label: string; icon: LucideIcon; external?: boolean; soon?: boolean; memberOnly?: boolean; desktopOnly?: boolean };
 
 function items(whatsapp: string): Item[] {
   return [
@@ -12,11 +12,12 @@ function items(whatsapp: string): Item[] {
     { href: "/learn", label: "My course", icon: GraduationCap, memberOnly: true },
     ...(whatsapp ? [{ href: whatsapp, label: "Community", icon: MessageCircle, external: true, memberOnly: true }] : []),
     { href: "/tools", label: "Free tools", icon: Wrench },
+    { href: "/blog", label: "Blog", icon: Newspaper, desktopOnly: true },
     { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
   ];
 }
 
-// Substack app sidebar: icon + label rows, active row in bold ink.
+// Sidebar: icon + label rows; the current page is an orange ink tab.
 export function SideNav({ whatsapp, active }: { whatsapp: string; active: boolean }) {
   const path = usePathname();
   return (
@@ -27,8 +28,8 @@ export function SideNav({ whatsapp, active }: { whatsapp: string; active: boolea
           const on = !i.external && i.href === path;
           const Icon = i.icon;
           const cls =
-            "flex h-11 items-center gap-3 rounded-lg px-3 text-[15px] transition-colors " +
-            (on ? "font-semibold text-ink" : "font-medium text-muted hover:bg-wash hover:text-ink");
+            "flex h-11 items-center gap-3 px-3 font-mono text-[12.5px] font-bold uppercase tracking-[0.06em] transition-colors " +
+            (on ? "border-2 border-edge bg-brand text-ink" : "text-muted hover:bg-wash hover:text-ink");
           if (i.soon)
             return (
               <span key={i.label} className={cls + " cursor-default hover:bg-transparent hover:text-muted"} aria-disabled>
@@ -50,20 +51,20 @@ export function SideNav({ whatsapp, active }: { whatsapp: string; active: boolea
   );
 }
 
-// Mobile bottom tab bar, as in the Substack app.
+// Mobile bottom tab bar.
 export function BottomNav({ whatsapp, active }: { whatsapp: string; active: boolean }) {
   const path = usePathname();
-  const list = items(whatsapp).filter((i) => !i.soon && (active || !i.memberOnly));
+  const list = items(whatsapp).filter((i) => !i.soon && !i.desktopOnly && (active || !i.memberOnly));
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-40 grid border-t border-line bg-paper/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-sm lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 grid border-t-2 border-edge bg-paper/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-sm lg:hidden"
       style={{ gridTemplateColumns: `repeat(${list.length}, minmax(0, 1fr))` }}
       aria-label="Dashboard"
     >
       {list.map((i) => {
         const on = !i.external && i.href === path;
         const Icon = i.icon;
-        const cls = "flex flex-col items-center gap-0.5 py-2 text-[11px] " + (on ? "font-semibold text-ink" : "text-muted");
+        const cls = "flex flex-col items-center gap-0.5 py-2 font-mono text-[10.5px] font-bold uppercase " + (on ? "bg-brand text-ink" : "text-muted");
         return i.external ? (
           <a key={i.label} href={i.href} target="_blank" rel="noopener" className={cls}>
             <Icon className="size-[22px]" aria-hidden />

@@ -5,7 +5,7 @@ import type { ThumbKind } from "@/components/art/product-thumb";
 export type ProductCategory = "Website" | "Web app" | "AI agent" | "Automation" | "SEO";
 
 /**
- * EXAMPLE products — what members learn to build and sell. Illustrations, not real client
+ * EXAMPLE products: what members learn to build and sell. Illustrations, not real client
  * projects. Replace with real member builds (with permission) as they come in.
  */
 export const products: { title: string; category: ProductCategory; thumb: ThumbKind; tone: Tone }[] = [
@@ -49,16 +49,16 @@ export const products: { title: string; category: ProductCategory; thumb: ThumbK
 ];
 
 /**
- * Member wins. PLACEHOLDERS — never ship invented income claims. Replace each with a
+ * Member wins. PLACEHOLDERS: never ship invented income claims. Replace each with a
  * real member's result (their words, their permission, a screenshot if possible).
  */
 export const wins: { name: string; result: string; detail: string; placeholder: boolean }[] = [
-  { name: "Member name", result: "First paid build", detail: "Add a real member's first client result here — what they built, for whom, and what they were paid.", placeholder: true },
+  { name: "Member name", result: "First paid build", detail: "Add a real member's first client result here, what they built, for whom, and what they were paid.", placeholder: true },
   { name: "Member name", result: "First dollar payment", detail: "Add a real result: the build, the client's country, and how the payment reached Nigeria.", placeholder: true },
   { name: "Member name", result: "Always-on agent live", detail: "Add a real result: the agent they set up and the time or money it saves each week.", placeholder: true },
 ];
 
-/** Team. PLACEHOLDERS — replace with real names, roles, photos and one-line bios. */
+/** Team. PLACEHOLDERS: replace with real names, roles, photos and one-line bios. */
 export const team: { name: string; role: string; bio: string; placeholder: boolean }[] = [
   { name: "Your name", role: "Founder · Lead instructor", bio: "One line on what you've built and who you've built it for.", placeholder: true },
   { name: "Team member", role: "Agents & automation", bio: "One line on their experience.", placeholder: true },

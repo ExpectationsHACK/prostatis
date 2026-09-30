@@ -1,8 +1,12 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, BadgeCheck, Download } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { LogoTile } from "@/components/brand";
+import { CopyLink } from "@/components/copy-link";
 import { PrintButton } from "@/components/learn/print-button";
+import { btn, size } from "@/components/ui";
+import { verifyUrl } from "@/lib/certificate-image";
+import { issueCertificate } from "@/lib/certificates";
 import { getPillar } from "@/lib/curriculum";
 import { learnerTrack, requireLearner } from "@/lib/learning/access";
 import { getStore } from "@/lib/learning/store";
@@ -15,7 +19,19 @@ export default async function CertificatePage({ params }: { params: Promise<{ tr
   if (!track) notFound();
   const state = await getStore().load(learner.id);
   const final = state.finals[track.id];
-  if (!final?.passed_at) redirect(`/learn/${slug}/final`);
+  if (!final?.passed_at || !final.certificate_id) redirect(`/learn/${slug}/final`);
+
+  // Backfills the public record for anyone who passed before certificates were stored.
+  const cert = await issueCertificate({
+    id: final.certificate_id,
+    user_id: learner.id,
+    track: track.id,
+    name: learner.name,
+    email: learner.email || null,
+    score: final.best,
+    total: final.total,
+    issued_at: final.passed_at,
+  });
 
   const date = new Date(final.passed_at).toLocaleDateString("en-NG", { day: "numeric", month: "long", year: "numeric", timeZone: "Africa/Lagos" });
   const skills = [...new Set(track.modules.map((m) => getPillar(m.pillar).title))];
@@ -37,7 +53,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ tr
           </div>
           <p className="label mt-8 text-brand-text">Certificate of completion</p>
           <p className="mt-6 font-mono text-[14px] text-muted">This certifies that</p>
-          <p className="display mt-2 text-balance text-[40px] leading-tight text-ink sm:text-[56px]">{learner.name || "Club member"}</p>
+          <p className="display mt-2 text-balance text-[40px] leading-tight text-ink sm:text-[56px]">{cert.name || "STEINARK member"}</p>
           <p className="mx-auto mt-4 max-w-lg font-mono text-[14px] leading-relaxed text-ink">
             completed all {track.modules.length} lessons, practical tasks and assessments of the <strong>{track.name}</strong> ({track.length}) and passed the final assessment with {final.best}/{final.total}.
           </p>
@@ -58,7 +74,20 @@ export default async function CertificatePage({ params }: { params: Promise<{ tr
           </div>
         </div>
       </section>
-      <p className="mt-6 text-center font-mono text-[12px] text-muted print:hidden">Tip: choose “Save as PDF” in the print dialog to download it.</p>
+      <div className="mt-6 space-y-4 print:hidden">
+        <div className="flex flex-wrap justify-center gap-3">
+          <a href={`/api/certificate/${cert.id}?download=1`} className={`${btn.primary} ${size.md}`}>
+            <Download className="size-4" aria-hidden /> Download PNG
+          </a>
+          <Link href={`/certificate/${cert.id}`} className={`${btn.secondary} ${size.md}`}>
+            <BadgeCheck className="size-4" aria-hidden /> Public proof page
+          </Link>
+          <CopyLink label="Copy verification link" url={verifyUrl(cert.id)} />
+        </div>
+        <p className="text-center font-mono text-[12px] leading-relaxed text-muted">
+          {cert.emailed_at ? `We also emailed a copy to ${cert.email}. ` : ""}Anyone can check it's real at the public proof page. Add it to LinkedIn, your portfolio and your proposals. For a PDF, use Print and choose “Save as PDF”.
+        </p>
+      </div>
     </div>
   );
 }

@@ -6,16 +6,16 @@ import type { ToolDef } from "@/lib/tool-defs/types";
 
 const loading = () => <div className="h-96 animate-pulse border-2 border-edge bg-sunk" />;
 
-// Hand-built tools. Tools whose output depends on the current date render client-only.
+// Hand-built tools. Client-only: they restore saved inputs and shared links from the browser.
 const custom: Record<string, ComponentType> = {
-  "claude-md-generator": dynamic(() => import("./claude-md-generator"), { loading }),
-  "token-cost-calculator": dynamic(() => import("./token-cost-calculator"), { loading }),
-  "cold-dm-script-generator": dynamic(() => import("./cold-dm-script-generator"), { loading }),
-  "whatsapp-business-bio": dynamic(() => import("./whatsapp-business-bio"), { loading }),
+  "claude-md-generator": dynamic(() => import("./claude-md-generator"), { loading, ssr: false }),
+  "token-cost-calculator": dynamic(() => import("./token-cost-calculator"), { loading, ssr: false }),
+  "cold-dm-script-generator": dynamic(() => import("./cold-dm-script-generator"), { loading, ssr: false }),
+  "whatsapp-business-bio": dynamic(() => import("./whatsapp-business-bio"), { loading, ssr: false }),
   "cron-schedule-generator": dynamic(() => import("./cron-schedule-generator"), { loading, ssr: false }),
-  "hook-line-generator": dynamic(() => import("./hook-line-generator"), { loading }),
-  "proposal-generator": dynamic(() => import("./proposal-generator"), { loading }),
-  "client-pricing-calculator": dynamic(() => import("./client-pricing-calculator"), { loading }),
+  "hook-line-generator": dynamic(() => import("./hook-line-generator"), { loading, ssr: false }),
+  "proposal-generator": dynamic(() => import("./proposal-generator"), { loading, ssr: false }),
+  "client-pricing-calculator": dynamic(() => import("./client-pricing-calculator"), { loading, ssr: false }),
   "invoice-generator": dynamic(() => import("./invoice-generator"), { loading, ssr: false }),
 };
 
@@ -43,7 +43,7 @@ function PillarTool({ slug, pillar }: { slug: string; pillar: string }) {
   }, [slug, pillar]);
   if (def === undefined) return loading();
   if (def === null) return <p className="text-muted">This tool is coming soon.</p>;
-  return <DefTool def={def} />;
+  return <DefTool def={def} slug={slug} />;
 }
 
 export default function ToolRenderer({ slug, pillar }: { slug: string; pillar: string }) {

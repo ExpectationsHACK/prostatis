@@ -1,8 +1,8 @@
 "use client";
 
 import { Printer, X } from "lucide-react";
-import { useState } from "react";
 import { btn, size } from "../ui";
+import { AppToolLayout, useToolState } from "./kit/app-tool";
 import { Field, Select, TextArea, TextInput } from "../tool-ui";
 
 type Item = { desc: string; qty: string; price: string };
@@ -10,8 +10,10 @@ type Item = { desc: string; qty: string; price: string };
 const symbols: Record<string, string> = { USD: "$", GBP: "£", EUR: "€", NGN: "₦" };
 const num = (s: string) => Number(String(s).replace(/,/g, "")) || 0;
 
-export default function InvoiceGenerator() {
-  const [f, setF] = useState(() => ({
+const today = () => new Date().toISOString().slice(0, 10);
+const inDays = (d: number) => new Date(Date.now() + d * 86400_000).toISOString().slice(0, 10);
+
+const initial = {
     number: "INV-001",
     date: new Date().toISOString().slice(0, 10),
     due: new Date(Date.now() + 7 * 86400_000).toISOString().slice(0, 10),
@@ -24,12 +26,21 @@ export default function InvoiceGenerator() {
     notes: "50% deposit per the approved proposal. Thank you for your business!",
     tax: "0",
     discount: "0",
-  }));
-  const [items, setItems] = useState<Item[]>([
-    { desc: "Website design & build (5 pages)", qty: "1", price: "900" },
-    { desc: "AI chat assistant setup", qty: "1", price: "300" },
-  ]);
-  const set = (k: keyof typeof f) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value });
+    items: [
+      { desc: "Website design & build (5 pages), 50% deposit", qty: "1", price: "600" },
+    ] as Item[],
+};
+const examples = [
+  { label: "Lagos client (₦ deposit)", values: { ...initial, number: "GBS-001", currency: "NGN", toName: "Glow Beauty Studio", toDetails: "Attn: Kemi Adebayo\nLekki Phase 1, Lagos", payment: "Bank transfer: [Bank name] · [Account number] · [Account name]\nOr pay by card/transfer/USSD: [Paystack payment link]", notes: "50% deposit as agreed in the proposal. Work starts once this is received. Thank you!", items: [{ desc: "Booking website: 50% deposit", qty: "1", price: "225000" }] } },
+  { label: "US client ($ balance)", values: { ...initial, items: [{ desc: "Website design & build (5 pages), 50% balance", qty: "1", price: "600" }], notes: "Final 50% before launch, as agreed. Thank you for your business!" } },
+  { label: "Monthly care plan (₦)", values: { ...initial, number: "MNK-CARE-07", currency: "NGN", toName: "Mama Nkechi's Kitchen", toDetails: "Ikeja, Lagos", payment: "Bank transfer: [Bank name] · [Account number] · [Account name]", notes: "Care plan for this month: menu updates, monitoring and report.", items: [{ desc: "Website care plan: monthly", qty: "1", price: "60000" }] } },
+];
+
+export default function InvoiceGenerator() {
+  const { f, patch, load, source } = useToolState("invoice-generator", { ...initial, date: today(), due: inDays(7) });
+  const items = f.items;
+  const setItems = (next: Item[]) => patch({ items: next });
+  const set = (k: Exclude<keyof typeof initial, "items">) => (e: { target: { value: string } }) => patch({ [k]: e.target.value });
   const setItem = (i: number, k: keyof Item, v: string) => setItems(items.map((it, j) => (j === i ? { ...it, [k]: v } : it)));
 
   const sym = symbols[f.currency];
@@ -39,9 +50,41 @@ export default function InvoiceGenerator() {
   const tax = ((subtotal - discount) * num(f.tax)) / 100;
   const total = subtotal - discount + tax;
 
+  const plain = `PAYMENT REQUEST ${f.number}
+From: ${f.fromName}
+${f.fromDetails}
+
+To: ${f.toName}
+${f.toDetails}
+
+Issued: ${f.date} · Due: ${f.due}
+
+${items.map((it) => `- ${it.desc}: ${num(it.qty)} × ${money(num(it.price))} = ${money(num(it.qty) * num(it.price))}`).join("\n")}
+Subtotal: ${money(subtotal)}${discount > 0 ? `\nDiscount: −${money(discount)}` : ""}${tax > 0 ? `\nTax (${num(f.tax)}%): ${money(tax)}` : ""}
+TOTAL DUE: ${money(total)} ${f.currency}
+
+How to pay:
+${f.payment}
+
+${f.notes}`;
+
+  const ready = [
+    [f.payment.trim().length > 10 && !/\[(bank|account|paystack)/i.test(f.payment), "Payment details are filled in (no [brackets] left)"],
+    [f.due >= f.date, "Due date is after the issue date"],
+    [total > 0, "The total is more than zero"],
+    [f.toName.trim().length > 0, "The client's name is filled in"],
+  ] as [boolean, string][];
+
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-      <div className="space-y-4 border-2 border-edge bg-card p-5 print:hidden">
+    <AppToolLayout
+      slug="invoice-generator"
+      source={source}
+      examples={examples}
+      onExample={(i) => load({ ...examples[i].values, date: today(), due: inDays(7) })}
+      onReset={() => load({ ...initial, date: today(), due: inDays(7) })}
+      text={plain}
+      form={
+      <div className="space-y-4 print:hidden">
         <div className="grid grid-cols-2 gap-3">
           <Field label="Reference number">
             <TextInput value={f.number} onChange={set("number")} />
@@ -90,15 +133,23 @@ export default function InvoiceGenerator() {
             <TextInput inputMode="decimal" value={f.tax} onChange={set("tax")} />
           </Field>
         </div>
-        <Field label="Payment details">
+        <Field label="Payment details" hint="Bank details, a Paystack payment link (card, transfer, USSD), or a USD account for clients abroad.">
           <TextArea value={f.payment} onChange={set("payment")} />
         </Field>
         <Field label="Notes">
           <TextArea value={f.notes} onChange={set("notes")} />
         </Field>
       </div>
-
-      <div className="min-w-0 space-y-3 lg:sticky lg:top-24 lg:self-start">
+      }
+      output={
+      <div className="min-w-0 space-y-3">
+        <ul className="border-2 border-edge bg-card p-3 text-[13.5px] print:hidden">
+          {ready.map(([ok, label]) => (
+            <li key={label} className={ok ? "text-success" : "text-danger"}>
+              {ok ? "✓" : "✗"} <span className="text-ink">{label}</span>
+            </li>
+          ))}
+        </ul>
         <button type="button" onClick={() => window.print()} className={`${btn.primary} ${size.md} w-full print:hidden`}>
           <Printer className="size-4" aria-hidden /> Print / Save as PDF
         </button>
@@ -157,6 +208,7 @@ export default function InvoiceGenerator() {
           {f.notes && <p className="mt-4 text-neutral-600">{f.notes}</p>}
         </div>
       </div>
-    </div>
+      }
+    />
   );
 }

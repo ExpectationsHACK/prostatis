@@ -14,9 +14,10 @@ export const metadata: Metadata = { title: "Checkout", robots: { index: false } 
 
 const errors: Record<string, string> = {
   init: "We couldn't start the payment. Please try again.",
-  declined: "The payment didn't go through. You haven't been charged — try again or use another card.",
+  declined: "The payment didn't go through. You haven't been charged: try again or use another card.",
   verify: "We couldn't confirm that payment. If you were charged, message us and we'll sort it out.",
   unavailable: "Payments aren't open yet.",
+  record: "The payment went through but we couldn't update your account. Please try again, or message us and we'll fix it right away.",
 };
 
 export default async function CheckoutPage({ params, searchParams }: PageProps<"/checkout/[plan]">) {
@@ -46,7 +47,7 @@ export default async function CheckoutPage({ params, searchParams }: PageProps<"
     <div className="mx-auto max-w-[480px] px-4 py-14">
       <div className="flex flex-col items-center text-center">
         <LogoTile size={48} />
-        <h1 className="display mt-5 text-[40px] text-ink">Join the {plan.name}</h1>
+        <h1 className="display mt-5 text-[40px] text-ink">Enroll in the {plan.name}</h1>
         <p className="mt-1 text-[15px] text-muted">Signed in as {user.email}</p>
       </div>
 

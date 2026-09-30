@@ -1,4 +1,4 @@
-import { ArrowRight, Lightbulb } from "lucide-react";
+import { ArrowRight, CircleAlert, Clock, Gift, ListChecks, Rocket } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -12,6 +12,7 @@ import { btn, byline, size } from "@/components/ui";
 import { SubscribeForm } from "@/components/waitlist-form";
 import { getPillar, lessonsForPillar } from "@/lib/curriculum";
 import { site } from "@/lib/site";
+import { guides } from "@/lib/tool-guides";
 import { coreTools, getTool, nextTool, tools } from "@/lib/tools";
 
 export const dynamicParams = false;
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: PageProps<"/tools/[slug]">): 
   const tool = getTool((await params).slug);
   if (!tool) return {};
   return {
-    title: `${tool.title} — free, no signup`,
+    title: `${tool.title}: free, no signup`,
     description: tool.description,
     alternates: { canonical: `/tools/${tool.slug}` },
   };
@@ -37,6 +38,7 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
   const lessons = lessonsForPillar(tool.pillar);
   const next = nextTool[tool.slug] ? getTool(nextTool[tool.slug]) : undefined;
   const related = coreTools.filter((t) => t.pillar === tool.pillar && t.slug !== tool.slug).slice(0, 3);
+  const guide = guides[tool.slug];
 
   return (
     <article className="paper-grid pb-16">
@@ -48,11 +50,22 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
             </Link>
             <h1 className="display mt-3 text-balance text-[40px] text-ink sm:text-[56px]">{tool.title}</h1>
             <p className="mt-3 text-pretty font-mono text-[15px] leading-relaxed text-muted">{tool.description}</p>
-            <p className="mt-4 flex items-start gap-2 border-2 border-edge bg-card px-3 py-2.5 text-[14px] text-ink">
-              <Lightbulb className="mt-0.5 size-4 shrink-0 text-brand-text" aria-hidden />
-              <span>
-                <strong>Where it helps:</strong> {tool.useCase}
-              </span>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <p className="flex items-start gap-2 border-2 border-edge bg-card px-3 py-2.5 text-[14px] leading-snug text-ink">
+                <CircleAlert className="mt-0.5 size-4 shrink-0 text-danger" aria-hidden />
+                <span>
+                  <strong>The problem:</strong> {guide.problem}
+                </span>
+              </p>
+              <p className="flex items-start gap-2 border-2 border-edge bg-[#e3f5e9] px-3 py-2.5 text-[14px] leading-snug text-ink">
+                <Gift className="mt-0.5 size-4 shrink-0 text-success" aria-hidden />
+                <span>
+                  <strong>You get:</strong> {guide.get}
+                </span>
+              </p>
+            </div>
+            <p className="label mt-3 inline-flex items-center gap-1.5 text-muted">
+              <Clock className="size-3.5" aria-hidden /> About {guide.minutes} min · {tool.useCase}
             </p>
             <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-3">
@@ -68,10 +81,42 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
         </div>
       </header>
 
+      {/* How to use it */}
+      <section className="mx-auto mt-10 max-w-6xl px-4" aria-labelledby="how">
+        <h2 id="how" className="label flex items-center gap-1.5 text-ink">
+          <ListChecks className="size-4" aria-hidden /> How to use it
+        </h2>
+        <ol className="mt-3 grid gap-3 md:grid-cols-3">
+          {guide.steps.map((step, i) => (
+            <li key={i} className="flex gap-3 border-2 border-edge bg-card p-3.5">
+              <span className="display grid size-7 shrink-0 place-items-center border-2 border-edge bg-brand text-[14px] text-ink">{i + 1}</span>
+              <span className="text-[14px] leading-snug text-ink">{step}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+
       {/* The tool itself */}
-      <div className="mx-auto mt-10 max-w-6xl px-4">
+      <div className="mx-auto mt-8 max-w-6xl px-4">
         <ToolRenderer slug={tool.slug} pillar={tool.pillar} />
       </div>
+
+      {/* What to do with the result */}
+      <section className="mx-auto mt-12 max-w-6xl px-4">
+        <div className="ink-block bg-accent p-5 text-accent-ink sm:p-7">
+          <h2 className="display flex items-center gap-2 text-[26px]">
+            <Rocket className="size-6" aria-hidden /> Now put it to work
+          </h2>
+          <ol className="mt-4 grid gap-3 md:grid-cols-3">
+            {guide.next.map((step, i) => (
+              <li key={i} className="flex gap-3 border-2 border-paper/40 p-3.5">
+                <span className="display text-[18px] text-brand">{i + 1}</span>
+                <span className="text-[14.5px] leading-snug">{step}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
 
       {/* Next tool in the workflow */}
       {next && (
@@ -108,7 +153,7 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
                 <h3 className="display mt-2 text-[22px] text-ink">{m.title}</h3>
                 <p className="mt-1.5 flex-1 font-mono text-[13px] leading-relaxed text-muted">{m.summary}</p>
                 <Link href={`/checkout/${track.id}`} className={`${btn.primary} ${size.md} mt-5 w-full`}>
-                  Join the {track.name} <ArrowRight className="size-4" aria-hidden />
+                  Enroll Now <ArrowRight className="size-4" aria-hidden />
                 </Link>
               </div>
             </div>

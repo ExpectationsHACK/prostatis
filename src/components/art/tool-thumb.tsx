@@ -161,7 +161,7 @@ const T: Record<string, () => ReactNode> = {
   "claude-md-generator": () => (
     <Stage>
       <Win title="CLAUDE.md" dark className="w-[250px]">
-        {[["# Mama's Kitchen site", "text-paper"], ["## Rules — always follow", "text-brand"], ["- Mobile-first, pages < 1MB", "text-paper/70"], ["- Prices in naira: ₦4,500", "text-paper/70"], ["- Ask before new packages", "text-paper/70"], ["## Decisions", "text-brand"]].map(([l, c]) => <p key={l} className={`${m10} ${c}`}>{l}</p>)}
+        {[["# Mama's Kitchen site", "text-paper"], ["## Rules: always follow", "text-brand"], ["- Mobile-first, pages < 1MB", "text-paper/70"], ["- Prices in naira: ₦4,500", "text-paper/70"], ["- Ask before new packages", "text-paper/70"], ["## Decisions", "text-brand"]].map(([l, c]) => <p key={l} className={`${m10} ${c}`}>{l}</p>)}
       </Win>
     </Stage>
   ),
@@ -293,7 +293,7 @@ const T: Record<string, () => ReactNode> = {
   ),
   "faq-generator": () => (
     <Stage className="flex-col gap-1.5">
-      {[["How much does a repair cost?", "From ₦25,000 — price confirmed before we start."], ["How long does it take?", ""], ["Do you give a warranty?", ""]].map(([q, a]) => (
+      {[["How much does a repair cost?", "From ₦25,000: price confirmed before we start."], ["How long does it take?", ""], ["Do you give a warranty?", ""]].map(([q, a]) => (
         <Box key={q} className="w-[250px] px-2 py-1.5">
           <div className="flex justify-between"><span className={`${m10} font-bold text-ink`}>{q}</span><span className={`${m10} font-bold text-brand-text`}>{a ? "−" : "+"}</span></div>
           {a && <p className={`${m9} mt-1 text-muted`}>{a}</p>}
@@ -309,7 +309,7 @@ const T: Record<string, () => ReactNode> = {
       <Box className="w-[130px] p-2">
         <div className="flex gap-0.5 text-[#e0a82e]">{[0, 1, 2, 3, 4].map((i) => <Star key={i} className="size-3 fill-current" />)}</div>
         <p className="mt-1 font-display text-[12px] font-bold leading-tight text-ink">“We got 3 bookings the first week.”</p>
-        <p className={`${m9} mt-1 text-muted`}>— Chioma O., Lash Studio</p>
+        <p className={`${m9} mt-1 text-muted`}>- Chioma O., Lash Studio</p>
       </Box>
     </Stage>
   ),
@@ -381,7 +381,7 @@ const T: Record<string, () => ReactNode> = {
     <Stage>
       <Win title="New message" className="w-[260px]">
         <p className={`${m9} text-muted`}>To: editor@techcabal.com</p>
-        <p className={`${m10} font-bold text-ink`}>Subject: Article idea — first 100 customers online</p>
+        <p className={`${m10} font-bold text-ink`}>Subject: Article idea: first 100 customers online</p>
         <div className="mt-1.5 space-y-1"><Bar w="90%" /><Bar w="80%" /><Bar w="60%" /></div>
         <div className="mt-2 flex items-center gap-1.5"><Link2 className="size-3.5 text-brand-text" /><span className={`${m9} font-bold text-success`}>Link earned → Domain authority ↑</span></div>
       </Win>
@@ -452,7 +452,7 @@ const T: Record<string, () => ReactNode> = {
   "email-autoresponder-generator": () => (
     <Stage className="gap-2">
       <Win title="Inbox" className="w-[170px]">
-        {[["New enquiry — Kemi", false], ["Re: Thanks for contacting us", true]].map(([t, auto]) => (
+        {[["New enquiry: Kemi", false], ["Re: Thanks for contacting us", true]].map(([t, auto]) => (
           <div key={t as string} className="mb-1 flex items-center gap-1 border-b border-line pb-1"><Mail className="size-3 text-brand-text" /><span className={`${m9} flex-1 truncate text-ink`}>{t}</span>{auto && <span className={`${m9} font-bold text-success`}>0:02</span>}</div>
         ))}
       </Win>
@@ -536,7 +536,7 @@ const T: Record<string, () => ReactNode> = {
           </div>
         ))}
       </div>
-      <p className={`ml-8 self-start border-2 border-edge bg-[#d7f5c4] px-2 py-1 ${m10} text-ink`}>“Yes, send the video!” — reply on day 7</p>
+      <p className={`ml-8 self-start border-2 border-edge bg-[#d7f5c4] px-2 py-1 ${m10} text-ink`}>“Yes, send the video!”: reply on day 7</p>
     </Stage>
   ),
   "web-scraper-config": () => (
@@ -653,7 +653,7 @@ const T: Record<string, () => ReactNode> = {
     <Stage>
       <Box className="w-[210px] p-3">
         <p className={`${m9} font-bold uppercase text-muted`}>Proposal · Brightside Dental</p>
-        {["1. The problem", "2. What you'll get", "3. Timeline — 2 weeks", "4. Investment"].map((l) => <p key={l} className={`${m10} mt-1 text-ink`}>{l}</p>)}
+        {["1. The problem", "2. What you'll get", "3. Timeline: 2 weeks", "4. Investment"].map((l) => <p key={l} className={`${m10} mt-1 text-ink`}>{l}</p>)}
         <p className="mt-1.5 font-display text-[20px] font-bold text-ink">$1,200 <span className={`${m9} text-muted`}>· 50/50</span></p>
       </Box>
     </Stage>

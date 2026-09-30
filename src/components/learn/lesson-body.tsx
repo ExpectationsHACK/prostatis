@@ -1,33 +1,19 @@
-import { AlertTriangle, ArrowUpRight, Lightbulb, Wrench } from "lucide-react";
+import { AlertTriangle, ArrowUpRight, BookA, Lightbulb, MapPin, Wrench, XCircle, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
-import { Fragment, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { LessonDiagram } from "@/components/art/lesson-diagram";
 import { ProductThumb } from "@/components/art/product-thumb";
 import { ToolThumb } from "@/components/art/tool-thumb";
 import type { Tone } from "@/components/cover";
 import { CopyButton } from "@/components/tool-ui";
 import type { Figure, Lesson, LessonBlock } from "@/content/types";
+import { SelfCheck, TryIt } from "./practice";
+import { Rich } from "./rich";
 import { getTool } from "@/lib/tools";
 
 const figureTones: Tone[] = ["sand", "peach", "forest", "indigo", "orange"];
 
-/** Inline formatting used in lesson text: **bold** and `code`. */
-export function Rich({ text }: { text: string }) {
-  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
-  return (
-    <>
-      {parts.map((p, i) =>
-        p.startsWith("**") && p.endsWith("**") ? (
-          <strong key={i} className="font-bold text-ink">{p.slice(2, -2)}</strong>
-        ) : p.startsWith("`") && p.endsWith("`") && p.length > 1 ? (
-          <code key={i} className="border border-line bg-wash px-1 py-px font-mono text-[0.92em] text-ink">{p.slice(1, -1)}</code>
-        ) : (
-          <Fragment key={i}>{p}</Fragment>
-        ),
-      )}
-    </>
-  );
-}
+export { Rich };
 
 function FigureView({ f, i }: { f: Figure; i: number }) {
   let art: ReactNode = null;
@@ -57,7 +43,9 @@ function Callout({ tone, icon, title, children }: { tone: "tip" | "warn"; icon: 
   );
 }
 
-function Block({ b, i }: { b: LessonBlock; i: number }) {
+export const slugTerm = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+function Block({ b, i, lessonId }: { b: LessonBlock; i: number; lessonId: string }) {
   switch (b.t) {
     case "p":
       return <p className="my-4 text-[16px] leading-[1.75] text-ink/90"><Rich text={b.text} /></p>;
@@ -129,6 +117,45 @@ function Block({ b, i }: { b: LessonBlock; i: number }) {
           </table>
         </div>
       );
+    case "define":
+      return (
+        <div id={`term-${slugTerm(b.term)}`} className="my-5 scroll-mt-24 border-2 border-edge bg-card">
+          <p className="label flex items-center gap-1.5 border-b-2 border-edge bg-accent px-3 py-1.5 text-accent-ink">
+            <BookA className="size-3.5" aria-hidden /> Jargon buster
+          </p>
+          <div className="px-4 py-3">
+            <p className="display text-[19px] text-ink">{b.term}</p>
+            <p className="mt-1 text-[15.5px] leading-relaxed text-ink/90"><Rich text={b.meaning} /></p>
+            {b.like && <p className="mt-2 border-l-4 border-brand pl-3 text-[14.5px] italic leading-relaxed text-muted">Think of it like: <Rich text={b.like} /></p>}
+          </div>
+        </div>
+      );
+    case "scenario":
+      return (
+        <div className="my-6 border-2 border-edge bg-[#fff8ec] p-4 shadow-[4px_4px_0_var(--brand)]">
+          <p className="label flex items-center gap-1.5 text-brand-text"><MapPin className="size-3.5" aria-hidden /> Real-life scenario</p>
+          <p className="display mt-1.5 text-[18px] text-ink">{b.title}</p>
+          <p className="mt-1.5 text-[15.5px] leading-relaxed text-ink/90"><Rich text={b.text} /></p>
+        </div>
+      );
+    case "try":
+      return <TryIt id={`${lessonId}:${i}`} title={b.title} minutes={b.minutes} steps={b.steps} />;
+    case "check":
+      return <SelfCheck q={b.q} options={b.options} answer={b.answer} why={b.why} />;
+    case "mistakes":
+      return (
+        <div className="my-6 border-2 border-edge">
+          <p className="label border-b-2 border-edge bg-ink px-3 py-1.5 text-paper">Common mistakes: and the fix</p>
+          <ul>
+            {b.items.map((m, n) => (
+              <li key={n} className={"grid gap-2 px-3 py-3 sm:grid-cols-2 " + (n ? "border-t border-line" : "")}>
+                <p className="flex gap-2 text-[14.5px] leading-snug text-ink/80"><XCircle className="mt-0.5 size-4 shrink-0 text-danger" aria-hidden /><span><Rich text={m.wrong} /></span></p>
+                <p className="flex gap-2 text-[14.5px] font-semibold leading-snug text-ink"><CheckCircle2 className="mt-0.5 size-4 shrink-0 text-success" aria-hidden /><span><Rich text={m.right} /></span></p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
     case "tool": {
       const tool = getTool(b.slug);
       if (!tool) return null;
@@ -149,15 +176,17 @@ function Block({ b, i }: { b: LessonBlock; i: number }) {
   }
 }
 
-export function LessonBody({ lesson }: { lesson: Lesson }) {
-  let figure = 0;
+export function LessonBody({ lesson }: { lesson: Pick<Lesson, "id" | "sections"> }) {
+  // Number figures across the whole lesson so each picks a different background tone.
+  const figureNo = new Map<LessonBlock, number>();
+  lesson.sections.flatMap((s) => s.blocks).filter((b) => b.t === "figure").forEach((b, n) => figureNo.set(b, n));
   return (
     <>
       {lesson.sections.map((s, n) => (
         <section key={s.heading} id={`s${n + 1}`} className="scroll-mt-24 border-t-2 border-dashed border-line pt-8 first:border-0 first:pt-0 [&+section]:mt-10">
           <h2 className="display text-[26px] text-ink sm:text-[30px]">{s.heading}</h2>
           {s.blocks.map((b, i) => (
-            <Block key={i} b={b} i={b.t === "figure" ? figure++ : i} />
+            <Block key={i} b={b} i={figureNo.get(b) ?? n * 100 + i} lessonId={lesson.id} />
           ))}
         </section>
       ))}

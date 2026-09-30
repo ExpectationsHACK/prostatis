@@ -38,20 +38,20 @@ export function Hero() {
 
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-14 sm:py-20 lg:grid-cols-[1.15fr_1fr]">
         <div className="text-center lg:text-left">
-          <p className="ink-block label inline-flex -rotate-1 items-center gap-2 bg-paper px-3.5 py-2 text-ink">
+          <p className="ink-block label inline-flex -rotate-1 items-center gap-2 whitespace-nowrap bg-paper px-3 py-2 text-[10px] tracking-[0.1em] text-ink sm:px-3.5 sm:text-[11px] sm:tracking-[0.16em]">
             <span className="size-2 bg-accent" aria-hidden />
-            Websites first · no code needed
+            If you can type it, you can build it
           </p>
-          <h1 className="display mt-7 text-balance text-[46px] text-ink sm:text-[68px] lg:text-[80px]">
-            Build <span className="text-paper [text-shadow:3px_3px_0_var(--edge)]">websites</span> with AI. Get paid in dollars.
+          <h1 className="display mt-7 text-balance text-[40px] text-ink sm:text-[60px] lg:text-[66px]">
+            Learn to build <span className="text-paper [text-shadow:3px_3px_0_var(--edge)]">websites</span> with AI. And turn it into a source of <span className="text-paper [text-shadow:3px_3px_0_var(--edge)]">income</span>.
           </h1>
           <p className="mx-auto mt-6 max-w-xl font-mono text-[15px] leading-relaxed text-ink lg:mx-0">{site.subhead}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-4 lg:justify-start">
             <Link href="/pricing" className={`${btn.secondary} ${size.lg} bg-paper`}>
-              Choose your track <ArrowRight className="size-4" aria-hidden />
+              Enroll Now <ArrowRight className="size-4" aria-hidden />
             </Link>
-            <Link href="/tools" className={`${btn.accent} ${size.lg}`}>
-              Try the free tools
+            <Link href="/tracks/fast-track" className={`${btn.accent} ${size.lg}`}>
+              Start Learning
             </Link>
           </div>
           <p className="label mt-4 text-ink/80">Fast Track 14 days · Main Track 1 month · from {formatNgn(from)}</p>

@@ -23,7 +23,7 @@ export default async function DemoCheckoutPage({ searchParams }: PageProps<"/che
   return (
     <div className="mx-auto max-w-[400px] px-4 py-14">
       <p className="mb-4 flex items-center justify-center gap-2 rounded-lg bg-brand-wash px-3 py-2 text-[13px] font-semibold text-ink">
-        <FlaskConical className="size-4 text-brand-text" aria-hidden /> Demo checkout — simulates Paystack. No real payment.
+        <FlaskConical className="size-4 text-brand-text" aria-hidden /> Demo checkout: simulates Paystack. No real payment.
       </p>
       <div className="rounded-xl border border-line bg-card p-6 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.18)]">
         <div className="flex items-center justify-between gap-3 border-b border-line pb-4">

@@ -45,7 +45,7 @@ export function SubscribeForm({ source = "homepage", buttonLabel = "Subscribe" }
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           <Link href="/pricing" className={`${btn.primary} ${size.md}`}>
-            Upgrade to paid
+            Enroll Now
           </Link>
           <Link href="/tools" className={`${btn.secondary} ${size.md}`}>
             Try the free tools

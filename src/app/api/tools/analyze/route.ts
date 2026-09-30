@@ -201,7 +201,7 @@ async function scrape(body: { url: string; item: string; fields: { name: string;
 
 export async function POST(req: Request) {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
-  if (rateLimited(ip)) return Response.json({ error: "Too many checks in a minute — wait a moment and try again." }, { status: 429 });
+  if (rateLimited(ip)) return Response.json({ error: "Too many checks in a minute, wait a moment and try again." }, { status: 429 });
   let body: Record<string, unknown>;
   try {
     body = await req.json();

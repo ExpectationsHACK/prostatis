@@ -1,4 +1,4 @@
-# BuildWithAIClub
+# STEINARK
 
 Nigeria-first club that teaches website building with AI, plus web solutions, SEO, automation, lead generation and AI agents. Two one-time tracks — **Fast Track** (14 days, ₦15,000) and **Main Track** (1 month, ₦30,000) — a WhatsApp community, and 50 free public tools.
 
@@ -55,6 +55,10 @@ Flow: `/pricing` → `/checkout/[plan]` (sign-up/login first if needed) → Pays
 - **XP, levels, streaks** (`src/lib/learning/engine.ts`): 10 XP per correct answer on the first pass, +25 for a perfect quiz, +50 for the task, +100 for completing the lesson, +300 for the final. Every award is idempotent per (kind, ref) and written only by the server. Streaks count consecutive Africa/Lagos days with a quiz submission or task completion.
 - **Storage** (`src/lib/learning/store.ts`): Supabase tables `lesson_progress`, `xp_events`, `activity_days`, `final_exams` (migration `20260929120000_learning.sql`; members can read their own rows, only the secret key writes).
 
+### Lesson format
+
+Every lesson has: a “You'll need” list, plain-English Jargon busters for each new word, real-life scenarios, “Try it now” practice, ungraded quick checks, common-mistakes tables, a real-world mission, key takeaways, and a 5-question assessment where each question points at the takeaway that teaches it. A “Start here” orientation (`/learn/start`) covers costs, paying for AI tools from Nigeria, study habits and getting unstuck; `/learn/glossary` collects every Jargon buster. Gamification: XP, levels, streaks, badges (`badges()` in the engine) and a celebration when a lesson completes or a level/badge is earned.
+
 ### Adding or editing a lesson
 
 Edit or add a file in `src/content/lessons/`, register new ones in `index.ts`, and point a module's `lesson` at it. `npm test` checks every day has a lesson, every lesson has a figure, a task, 3+ https resources, a valid 5-question quiz, and that every tool it links to exists.
@@ -81,10 +85,14 @@ Edit or add a file in `src/content/lessons/`, register new ones in `index.ts`, a
 | `src/app/learn/` | The course: track overview, lessons, final assessment, certificate |
 | `src/app/api/tools/analyze/` | Live website checks for the tools (SSRF-guarded fetch, optional PageSpeed via `PAGESPEED_API_KEY`) |
 
+### Tool experience
+
+Every tool page wraps the tool in an app flow: the problem → how to use it (3 steps) → the tool → “Now put it to work”. The engine autosaves inputs on the device, restores them from a shareable link (`?in=` encodes the inputs), offers one-tap industry examples, and has a result bar (copy everything, download, print/PDF, share link). Checklists remember ticks. Hand-built tools get the same features through `useToolState` + `AppToolLayout` (`src/components/tools/kit/app-tool.tsx`).
+
 ### Adding a tool
 
 1. Add a definition to the right pillar file in `src/lib/tool-defs/` (fields + a pure `generate` function, or a checklist).
-2. Add its entry to `src/lib/tools.ts` with a pillar, description, use case and illustration scene.
+2. Add its entry to `src/lib/tools.ts` with a pillar, description, use case and illustration scene, and a guide in `src/lib/tool-guides.ts`. Give generators 2+ `examples`.
 3. Run `npm test` — the suite checks every tool with example, empty and messy inputs, speed, and that no tool is missing an implementation.
 
 ## Tests

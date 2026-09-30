@@ -6,14 +6,15 @@ import { fastTrack, mainTrack } from "@/lib/curriculum";
 import { formatNgn, plans } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Pricing — Fast Track ₦15,000 · Main Track ₦30,000",
+  title: "Pricing: Fast Track ₦15,000 · Main Track ₦30,000",
   description: "Two one-time tracks: a 14-day Fast Track for websites, landing pages, stores, booking systems and web apps, or the one-month Main Track that adds full SEO, automation, AI agents and lead generation.",
 };
 
 const pricingFaqs = [
-  { q: "How do I pay?", a: "Once, in naira, through Paystack — card, bank transfer or USSD. No subscription and no dollar card needed." },
-  { q: "How long do I keep access?", a: "The Fast Track stays unlocked for 30 days and the Main Track for 60 — the track itself plus time to catch up." },
+  { q: "How do I pay?", a: "Once, in naira, through Paystack, card, bank transfer or USSD. No subscription and no dollar card needed." },
+  { q: "How long do I keep access?", a: "The Fast Track stays unlocked for 30 days and the Main Track for 60, the track itself plus time to catch up." },
   { q: "What happens right after I pay?", a: "You're taken straight to the WhatsApp community invite, and your dashboard unlocks immediately." },
+  { q: "Do I get a certificate?", a: "Yes, on both tracks. Pass every lesson and the final assessment and your certificate is ready to download, emailed to you, and verifiable on a public page with its unique ID." },
   { q: "Can I upgrade from the Fast Track later?", a: "Yes. Everything in the Fast Track is part of the Main Track, so nothing you've learned is wasted." },
 ];
 
@@ -25,7 +26,7 @@ export default function PricingPage() {
       <header className="field-grid border-b-2 border-edge bg-brand px-4 py-14 text-center sm:py-20">
         <h1 className="display mx-auto max-w-3xl text-balance text-[44px] text-ink sm:text-[68px]">Pick your track</h1>
         <p className="mx-auto mt-4 max-w-xl font-mono text-[14px] leading-relaxed text-ink">
-          Pay once. Build websites, stores and web apps in 14 days — or learn the whole offer in a month.
+          Pay once. Build websites, stores and web apps in 14 days, or learn the whole offer in a month.
         </p>
       </header>
 
@@ -52,7 +53,7 @@ export default function PricingPage() {
                 ))}
               </ul>
               <Link href={`/checkout/${p.id}`} className={`${hi ? `${btn.secondary} bg-paper` : btn.primary} ${size.lg} mt-8 w-full`}>
-                Join the {p.name} <ArrowRight className="size-4" aria-hidden />
+                Enroll Now <ArrowRight className="size-4" aria-hidden />
               </Link>
               <Link href={p.id === "fast_track" ? "/tracks/fast-track" : "/tracks/main-track"} className="mt-3 text-center font-mono text-[12px] font-bold uppercase tracking-wider text-ink underline">
                 See the {p.name} curriculum
@@ -64,7 +65,7 @@ export default function PricingPage() {
 
       <div className="mx-auto max-w-3xl px-4 pb-16">
         <p className="ink-block bg-card px-4 py-3 text-center font-mono text-[13px] text-muted">
-          Not ready to pay? All 50 tools are free —{" "}
+          Not ready to pay? All 50 tools are free, {" "}
           <Link href="/tools" className="font-bold text-ink underline">
             start with those
           </Link>

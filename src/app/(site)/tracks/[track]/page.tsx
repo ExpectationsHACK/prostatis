@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ track: st
   const track = bySlug[(await params).track];
   if (!track) return {};
   const plan = plans.find((p) => p.id === track.id)!;
-  return { title: `${track.name} — ${track.length}, ${formatNgn(plan.priceNgn)}`, description: track.blurb };
+  return { title: `${track.name}: ${track.length}, ${formatNgn(plan.priceNgn)}`, description: track.blurb };
 }
 
 export default async function TrackPage({ params }: { params: Promise<{ track: string }> }) {
@@ -40,7 +40,7 @@ export default async function TrackPage({ params }: { params: Promise<{ track: s
             <p className={"mt-4 max-w-xl font-mono text-[15px] leading-relaxed " + (plan.highlight ? "text-ink" : "text-paper/85")}>{track.blurb}</p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link href={`/checkout/${track.id}`} className={`${btn.secondary} ${size.lg} bg-paper`}>
-                Join for {formatNgn(plan.priceNgn)} <ArrowRight className="size-4" aria-hidden />
+                Enroll Now · {formatNgn(plan.priceNgn)} <ArrowRight className="size-4" aria-hidden />
               </Link>
               <span className={"label " + (plan.highlight ? "text-ink/80" : "text-paper/80")}>One-time · {plan.accessDays} days access</span>
             </div>
@@ -65,7 +65,7 @@ export default async function TrackPage({ params }: { params: Promise<{ track: s
           {[
             { icon: ClipboardCheck, title: "A quiz after every lesson", body: "Score 70% or more to complete the lesson. Every question explains the right answer." },
             { icon: Trophy, title: "XP and levels", body: "Earn XP for lessons, quizzes and practical tasks. Level up as you ship real work." },
-            { icon: Flame, title: "Daily streak", body: "Learn something every day to keep your streak alive — small steps, every day." },
+            { icon: Flame, title: "Daily streak", body: "Learn something every day to keep your streak alive, small steps, every day." },
           ].map((c) => (
             <div key={c.title} className="ink-block flex gap-4 bg-card p-5">
               <span className="grid size-11 shrink-0 place-items-center border-2 border-edge bg-brand">
@@ -84,12 +84,12 @@ export default async function TrackPage({ params }: { params: Promise<{ track: s
         <TrackLessons track={track} />
         <div className="ink-block mx-auto mt-16 max-w-3xl bg-card p-6 text-center">
           <p className="label text-brand-text">Final assessment</p>
-          <h2 className="display mt-2 text-[26px] text-ink">Finish with a capstone and a certificate of completion</h2>
+          <h2 className="display mt-2 text-[26px] text-ink">Finish with a capstone and a verified certificate</h2>
           <p className="mt-2 font-mono text-[13px] leading-relaxed text-muted">
-            A final exam drawn from every lesson, plus a project checklist that proves you can deliver what the track promises.
+            A final exam drawn from every lesson, plus a project checklist that proves you can deliver what the track promises. Pass it and your certificate is ready to download, emailed to you, and backed by a public proof page with a unique ID that clients can check.
           </p>
           <Link href={`/checkout/${track.id}`} className={`${btn.primary} ${size.lg} mt-6`}>
-            Start the {track.name} <ArrowRight className="size-4" aria-hidden />
+            Enroll Now <ArrowRight className="size-4" aria-hidden />
           </Link>
           <p className="mt-4 font-mono text-[12px] text-muted">
             Want {track.id === "fast_track" ? "everything" : "something shorter"}?{" "}

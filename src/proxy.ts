@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { supabaseConfigured, supabasePublishableKey, supabaseUrl } from "@/lib/supabase/env";
 
-const MEMBER_PATHS = ["/dashboard", "/learn", "/checkout", "/welcome"];
+const MEMBER_PATHS = ["/dashboard", "/learn", "/checkout", "/welcome", "/admin"];
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -26,9 +26,11 @@ export async function proxy(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const signedIn = Boolean(data?.claims?.sub);
 
-  // Optimistic redirect only — pages still check auth and membership themselves.
+  // Optimistic redirect only: pages still check auth and membership themselves.
   const { pathname, search } = request.nextUrl;
-  if (!signedIn && MEMBER_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"))) {
+  // Local preview (development only) lets /learn, /admin and /dashboard through without signing in.
+  const coursePreview = process.env.NODE_ENV === "development" && process.env.COURSE_PREVIEW === "true" && /^\/(learn|admin|dashboard)(\/|$)/.test(pathname);
+  if (!signedIn && !coursePreview && MEMBER_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"))) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.search = `?next=${encodeURIComponent(pathname + search)}`;

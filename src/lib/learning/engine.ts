@@ -23,7 +23,7 @@ export const levels = [
   { at: 2800, name: "Automator" },
   { at: 3600, name: "Agent Builder" },
   { at: 4500, name: "Closer" },
-  { at: 5400, name: "Club Legend" },
+  { at: 5400, name: "STEINARK Legend" },
 ] as const;
 
 export function levelFor(xp: number) {
@@ -164,5 +164,33 @@ export function finalQuestions(track: Track, quizOf: (lessonId: string) => Quest
 export function certificateId(userId: string, track: Track["id"], at: Date) {
   const code = track === "main_track" ? "MT" : "FT";
   const u = userId.replace(/-/g, "").slice(0, 6).toUpperCase();
-  return `BWAC-${code}-${at.getUTCFullYear()}-${u}${at.getTime().toString(36).slice(-4).toUpperCase()}`;
+  return `STK-${code}-${at.getUTCFullYear()}-${u}${at.getTime().toString(36).slice(-4).toUpperCase()}`;
+}
+
+/* ---------- Badges ---------- */
+export type Badge = { id: string; name: string; desc: string; icon: "spark" | "target" | "flame" | "trophy" | "flag" | "award" | "star"; earned: boolean };
+
+/** Badges for a track, computed from saved progress, nothing extra to store. */
+export function badges(track: Track, state: LearnerState): Badge[] {
+  const prog = trackProgress(track, state);
+  const rows = track.modules.map((m) => state.lessons[m.lesson]).filter(Boolean);
+  const st = streaks(state.days);
+  const list: Badge[] = [
+    { id: "first", name: "First steps", desc: "Complete your first lesson", icon: "spark", earned: prog.completed >= 1 },
+    { id: "perfect", name: "Sharp shooter", desc: "Score 5/5 on a lesson quiz", icon: "target", earned: rows.some((r) => r.quiz_total > 0 && r.quiz_best === r.quiz_total) },
+    { id: "streak3", name: "On a roll", desc: "Learn 3 days in a row", icon: "flame", earned: st.longest >= 3 },
+    { id: "streak7", name: "Unstoppable", desc: "Learn 7 days in a row", icon: "flame", earned: st.longest >= 7 },
+    ...track.weeks.map((w) => ({
+      id: `week${w.week}`,
+      name: `Week ${w.week} done`,
+      desc: w.title,
+      icon: "flag" as const,
+      earned: track.modules.filter((m) => m.week === w.week).every((m) => state.lessons[m.lesson]?.completed_at),
+    })),
+    { id: "half", name: "Halfway hero", desc: "Complete half the lessons", icon: "star", earned: prog.completed * 2 >= prog.total },
+    { id: "xp1000", name: "1,000 XP club", desc: "Earn 1,000 XP", icon: "spark", earned: state.xp >= 1000 },
+    { id: "done", name: "Track complete", desc: "Finish every lesson", icon: "trophy", earned: prog.allDone },
+    { id: "cert", name: "Certified", desc: "Pass the final assessment", icon: "award", earned: Boolean(state.finals[track.id]?.passed_at) },
+  ];
+  return list;
 }

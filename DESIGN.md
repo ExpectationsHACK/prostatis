@@ -60,6 +60,10 @@ All art is **coded**, not images: drawn on a fixed 320×200 canvas (`src/compone
 - Locked days: faded card with a lock over the thumbnail.
 - Certificate: double ink frame on grid paper, printable (`print:` variants hide chrome).
 
+## The admin (`/admin`)
+
+A different, calm workspace (owner's reference: a clean HR dashboard), scoped under `.admin-ui` in `globals.css`: white page, light grey sidebar with expandable groups, top bar with a greeting, page title with breadcrumbs and Lagos date/time, stat cards with an icon and change vs the previous 30 days, tables with a grey rounded header, soft outlined status pills, search with ⌘K, and numbered pagination. Accent `--a-accent` (#5b4de6); change that one token to re-colour it. Components live in `src/components/admin/blocks.tsx`.
+
 ## Rules
 
 - Never invent wins, member counts, press logos or team members.

@@ -88,7 +88,7 @@ export async function POST(req: Request) {
           .eq("paystack_customer_code", customerCode)
           .select("id");
         if (error) throw error;
-        // Can arrive before charge.success has created the row — fail so Paystack retries.
+        // Can arrive before charge.success has created the row, fail so Paystack retries.
         if (!updated?.length) throw new Error(`no subscription row yet for ${customerCode}`);
         break;
       }

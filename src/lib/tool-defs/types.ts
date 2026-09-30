@@ -47,6 +47,8 @@ export type GeneratorDef = {
   /** Short line shown above the form: what to do. */
   intro?: string;
   live?: LiveSpec;
+  /** One-tap example inputs for different kinds of business; merged over the defaults. */
+  examples?: { label: string; values: Values }[];
 };
 
 export type ChecklistDef = {
@@ -86,3 +88,4 @@ export const usd = (x: number) => "$" + Math.round(x).toLocaleString("en-US");
 export function defaults(fields: Field[]): Values {
   return Object.fromEntries(fields.map((f) => [f.key, f.default]));
 }
+

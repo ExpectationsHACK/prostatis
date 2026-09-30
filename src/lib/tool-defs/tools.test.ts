@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { hasToolThumb } from "@/components/art/tool-thumb";
 import { tracks } from "../curriculum";
+import { guides } from "../tool-guides";
 import { CUSTOM_TOOL_SLUGS, coreTools, getTool, tools } from "../tools";
 import { defs as agents } from "./agents";
 import { defs as automation } from "./automation";
@@ -213,9 +214,39 @@ describe("parsers and calculators", () => {
     expect(list.items[0]).toContain("₦18,000");
   });
   it("FAQ schema is valid JSON-LD", () => {
-    const schema = run("faq-generator").find((b) => b.type === "text");
+    const schema = run("faq-generator").find((b) => b.type === "text" && /schema/i.test(b.title));
     const parsed = JSON.parse(schema && schema.type === "text" ? schema.text : "{}");
     expect(parsed["@type"]).toBe("FAQPage");
     expect(parsed.mainEntity.length).toBeGreaterThan(3);
+  });
+});
+
+describe("tool guides", () => {
+  it("every tool has a complete guide: problem, result, 3 steps and next actions", () => {
+    for (const t of tools) {
+      const g = guides[t.slug];
+      expect(g, t.slug).toBeDefined();
+      expect(g.problem.length, t.slug).toBeGreaterThan(30);
+      expect(g.get.length, t.slug).toBeGreaterThan(20);
+      expect(g.steps, t.slug).toHaveLength(3);
+      expect(g.next.length, t.slug).toBeGreaterThanOrEqual(2);
+      expect(g.minutes, t.slug).toBeGreaterThan(0);
+    }
+    expect(Object.keys(guides).sort()).toEqual(tools.map((t) => t.slug).sort());
+  });
+});
+
+describe("tool examples", () => {
+  const all = { ...design, ...dev, ...solutions, ...seo, ...automation, ...leadgen, ...agents };
+  const generators = Object.entries(all).filter(([, d]) => d.kind === "generator") as [string, GeneratorDef][];
+  it.each(generators.filter(([slug]) => slug !== "on-page-seo-audit"))("%s has one-tap examples that only use real fields and produce output", (_, d) => {
+    expect(d.examples?.length ?? 0).toBeGreaterThanOrEqual(2);
+    const keys = new Set(d.fields.map((f) => f.key));
+    for (const ex of d.examples!) {
+      for (const k of Object.keys(ex.values)) expect(keys.has(k), `${ex.label}: unknown field ${k}`).toBe(true);
+      const blocks = d.generate({ ...defaults(d.fields), ...ex.values });
+      expect(blocks.length, ex.label).toBeGreaterThan(0);
+      expect(blocks.some((b) => b.type === "notice" && b.tone === "warn" && /couldn't|enter|add at least|pick at least/i.test(b.text)), `${ex.label} produced an input error`).toBe(false);
+    }
   });
 });

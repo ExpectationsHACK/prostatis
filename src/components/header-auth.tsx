@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { supabaseConfigured } from "@/lib/supabase/env";
 import { btn, size } from "./ui";
 
-// Client-side so public pages stay statically rendered. Display only — the server
+// Client-side so public pages stay statically rendered. Display only: the server
 // re-checks auth on every protected page.
 export function HeaderAuth({ stacked = false }: { stacked?: boolean }) {
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
@@ -31,7 +31,7 @@ export function HeaderAuth({ stacked = false }: { stacked?: boolean }) {
   return (
     <>
       <Link href="/pricing" className={`${btn.primary} ${stacked ? size.lg : size.md} ${wide}`}>
-        Join the club
+        Enroll Now
       </Link>
       <Link href="/login" className={`${stacked ? `${btn.secondary} ${size.lg}` : `${btn.ghost} ${size.md}`} ${wide}`}>
         Sign in

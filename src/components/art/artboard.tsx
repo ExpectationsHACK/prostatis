@@ -7,7 +7,7 @@ export const ART_H = 200;
 
 /**
  * Draws its children on a fixed 320×200 canvas and scales the whole canvas to the card's
- * width. The illustration is identical on every screen — a phone shows the same picture
+ * width. The illustration is identical on every screen, a phone shows the same picture
  * as a desktop, just resized, so nothing shrinks out of proportion or wraps.
  */
 export function Artboard({ children, bg, className = "" }: { children: ReactNode; bg: string; className?: string }) {
