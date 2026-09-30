@@ -102,13 +102,13 @@ export function AppToolLayout({
   shareUrl?: () => string;
 }) {
   const note = source === "link" ? "Loaded from a shared link" : source === "saved" ? "Saved on this device as you type" : "Showing an example: replace it with your own details";
-  const small = "inline-flex items-center gap-1.5 font-mono text-[12px] font-bold uppercase tracking-wider text-muted hover:text-ink";
+  const small = "inline-flex items-center gap-1.5 font-mono text-[12px] font-bold text-muted hover:text-ink";
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-      <div className="space-y-4 border-2 border-edge bg-card p-5 shadow-[5px_5px_0_var(--edge)]">
+      <div className="space-y-4 border border-edge bg-card p-5">
         <StepHead n={1} title="Fill in your details" sub={note} />
         {examples && examples.length > 0 && onExample && (
-          <div className="border-2 border-dashed border-line p-3">
+          <div className="border border-dashed border-line p-3">
             <p className="label flex items-center gap-1.5 text-muted">
               <Sparkles className="size-3.5" aria-hidden /> Try an example
             </p>
@@ -118,7 +118,7 @@ export function AppToolLayout({
                   key={ex.label}
                   type="button"
                   onClick={() => onExample(i)}
-                  className="border-2 border-edge bg-paper px-2.5 py-1 font-mono text-[11.5px] font-bold uppercase tracking-wide text-ink transition-colors hover:bg-brand"
+                  className="border border-edge bg-paper px-2.5 py-1 font-mono text-[11.5px] font-bold text-ink transition-colors hover:bg-brand"
                 >
                   {ex.label}
                 </button>
@@ -127,7 +127,7 @@ export function AppToolLayout({
           </div>
         )}
         {form}
-        <div className="flex flex-wrap gap-x-5 gap-y-2 border-t-2 border-dashed border-line pt-3">
+        <div className="flex flex-wrap gap-x-5 gap-y-2 border-t border-dashed border-line pt-3">
           {onBlank && (
             <button type="button" onClick={onBlank} className={small}>
               <Eraser className="size-3.5" aria-hidden /> Start blank

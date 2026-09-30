@@ -65,7 +65,7 @@ export function Quiz({
         {questions.map((q, i) => {
           const r = graded?.results[i];
           return (
-            <li key={i} className={"border-2 bg-card p-4 " + (r ? (r.correct ? "border-success" : "border-danger") : "border-edge")}>
+            <li key={i} className={"border bg-card p-4 " + (r ? (r.correct ? "border-success" : "border-danger") : "border-edge")}>
               <fieldset disabled={Boolean(graded) || pending}>
                 <legend className="flex gap-2 font-bold leading-snug text-ink">
                   <span className="display text-brand-text">{i + 1}.</span> {q.q}
@@ -116,7 +116,7 @@ export function Quiz({
           <span className="font-mono text-[13px] text-muted">{answered}/{questions.length} answered</span>
         </div>
       ) : (
-        <div role="status" className={"mt-6 border-2 border-edge p-5 " + (graded.passed ? "bg-[#e3f5e9]" : "bg-[#fff4d6]")}>
+        <div role="status" className={"mt-6 border border-edge p-5 " + (graded.passed ? "bg-[#e3f5e9]" : "bg-[#fff4d6]")}>
           <p className="display text-[26px] text-ink">
             {graded.score}/{graded.total}: {graded.passed ? "passed!" : "not yet"}
           </p>
@@ -131,11 +131,11 @@ export function Quiz({
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {result.xpGained > 0 && (
-              <span className="label inline-flex items-center gap-1.5 border-2 border-edge bg-brand px-2 py-1 text-ink">
+              <span className="label inline-flex items-center gap-1.5 border border-edge bg-brand px-2 py-1 text-ink">
                 <Sparkles className="size-3.5" aria-hidden /> +{result.xpGained} XP
               </span>
             )}
-            <span className="label inline-flex items-center gap-1.5 border-2 border-edge bg-card px-2 py-1 text-ink">
+            <span className="label inline-flex items-center gap-1.5 border border-edge bg-card px-2 py-1 text-ink">
               <Flame className="size-3.5 text-brand-text" aria-hidden /> {result.streak}-day streak
             </span>
           </div>

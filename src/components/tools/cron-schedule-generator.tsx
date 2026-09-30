@@ -173,7 +173,7 @@ export default function CronScheduleGenerator() {
       }
       output={
         <>
-          <div className="border-2 border-edge bg-card p-5">
+          <div className="border border-edge bg-card p-5">
             <div className="flex items-center justify-between gap-3">
               <code className="font-mono text-3xl font-bold text-ink">{expr}</code>
               <CopyButton text={expr} />
@@ -195,14 +195,14 @@ export default function CronScheduleGenerator() {
             </ul>
           </div>
           {frequent && (
-            <p className="border-2 border-edge bg-danger/10 px-3 py-2.5 text-[14px] text-ink">
+            <p className="border border-edge bg-danger/10 px-3 py-2.5 text-[14px] text-ink">
               <strong>Heads-up:</strong> Vercel's free Hobby plan only runs cron jobs once a day (and not at an exact minute). For every-few-minutes or hourly jobs, use Vercel Pro, GitHub Actions, or your automation tool's own scheduler.
             </p>
           )}
           {Object.entries(snippets).map(([k, v]) => (
-            <div key={k} className="overflow-hidden border-2 border-edge bg-card">
+            <div key={k} className="overflow-hidden border border-edge bg-card">
               <div className="flex items-center justify-between border-b border-line bg-sunk px-4 py-2">
-                <span className="text-xs font-semibold uppercase tracking-wider text-muted">{k}</span>
+                <span className="text-xs font-semibold text-muted">{k}</span>
                 <CopyButton text={v} />
               </div>
               <pre className="overflow-x-auto p-4 font-mono text-[13px] text-ink">{v}</pre>

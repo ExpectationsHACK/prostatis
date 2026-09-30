@@ -98,7 +98,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </nav>
         <h1 className="display mt-4 text-balance text-[36px] leading-[1.08] text-ink sm:text-[52px]">{post.title}</h1>
         {post.excerpt && <p className="mt-4 text-pretty font-mono text-[15px] leading-relaxed text-muted">{post.excerpt}</p>}
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-y-2 border-edge py-3">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-y border-edge py-3">
           <p className={byline}>
             {post.author_name} · <time dateTime={post.published_at ?? undefined}>{postDate(post.published_at)}</time>
             {updated && <> · Updated <time dateTime={post.updated_at}>{postDate(post.updated_at)}</time></>} · {readingMinutes(post.content_md)} min read
@@ -115,7 +115,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
       <div className="mx-auto max-w-3xl px-4">
         {toc.length >= 3 && (
-          <nav className="mt-10 border-2 border-edge bg-card p-5" aria-label="In this article">
+          <nav className="mt-10 border border-edge bg-card p-5" aria-label="In this article">
             <p className="label text-muted">In this article</p>
             <ol className="mt-3 list-decimal space-y-1.5 pl-5 font-mono text-[13.5px] marker:text-brand-text">
               {toc.map((h) => (
@@ -135,23 +135,23 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           <ul className="mt-10 flex flex-wrap gap-2" aria-label="Tags">
             {post.tags.map((t) => (
               <li key={t}>
-                <Link href={`/blog/tag/${tagSlug(t)}`} className="label border-2 border-edge bg-card px-2.5 py-1.5 text-ink hover:bg-wash">{t}</Link>
+                <Link href={`/blog/tag/${tagSlug(t)}`} className="label border border-edge bg-card px-2.5 py-1.5 text-ink hover:bg-wash">{t}</Link>
               </li>
             ))}
           </ul>
         )}
 
-        <aside className="field-grid ink-block mt-12 bg-brand p-6 sm:p-8">
-          <p className="label text-ink/80">Learn it properly</p>
-          <p className="display mt-2 text-balance text-[26px] leading-tight text-ink sm:text-[30px]">Build websites with AI and turn it into income.</p>
-          <p className="mt-2 font-mono text-[13px] leading-relaxed text-ink">
+        <aside className="mt-12 rounded-[16px] bg-night p-6 text-white sm:p-8">
+          <p className="text-[13px] font-semibold text-brand">Learn it properly</p>
+          <p className="display mt-2 text-balance text-[26px] leading-tight text-white sm:text-[30px]">Build websites with AI and turn it into income.</p>
+          <p className="mt-2 text-[15px] leading-relaxed text-white/70">
             Step-by-step lessons, real client projects and a verified certificate when you finish. From {from}, paid once.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <Link href="/pricing" className={`${btn.secondary} ${size.md} bg-paper`}>
+            <Link href="/pricing" className={`${btn.primary} ${size.md}`}>
               Enroll Now <ArrowRight className="size-4" aria-hidden />
             </Link>
-            <Link href="/tools" className={`${btn.accent} ${size.md}`}>Free tools</Link>
+            <Link href="/tools" className={`${btn.secondary} ${size.md} border-white/15 bg-white/10 text-white hover:bg-white/15`}>Free tools</Link>
           </div>
         </aside>
       </div>

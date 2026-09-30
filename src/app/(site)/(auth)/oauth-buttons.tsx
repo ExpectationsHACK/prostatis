@@ -38,7 +38,7 @@ function Mark({ p }: { p: SocialProvider }) {
 export function OAuthButtons({ providers, next, from }: { providers: SocialProvider[]; next: string; from: "login" | "signup" }) {
   if (!providers.length)
     return process.env.NODE_ENV === "development" ? (
-      <p className="mb-6 border-2 border-dashed border-line px-3 py-2.5 text-center font-mono text-[12px] text-muted">
+      <p className="mb-6 border border-dashed border-line px-3 py-2.5 text-center font-mono text-[12px] text-muted">
         Dev note: “Continue with Google” appears here once Google is enabled in Supabase → Authentication → Sign In / Providers.
       </p>
     ) : null;
@@ -56,7 +56,7 @@ export function OAuthButtons({ providers, next, from }: { providers: SocialProvi
           </form>
         ))}
       </div>
-      <p className="mt-6 flex items-center gap-3 font-mono text-[12px] uppercase tracking-widest text-muted before:h-px before:flex-1 before:bg-line after:h-px after:flex-1 after:bg-line">
+      <p className="mt-6 flex items-center gap-3 font-mono text-[12px] text-muted before:h-px before:flex-1 before:bg-line after:h-px after:flex-1 after:bg-line">
         or with email
       </p>
     </div>

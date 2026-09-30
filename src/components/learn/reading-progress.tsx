@@ -33,7 +33,7 @@ export function ReadingProgress({ day, total, title, doneLessons, steps }: { day
   const marks = [readPart >= 1, steps[1].ok, steps[2].ok];
 
   return (
-    <div className="sticky top-14 z-20 border-b-2 border-edge bg-paper/95 backdrop-blur print:hidden">
+    <div className="sticky top-14 z-20 border-b border-edge bg-paper/95 backdrop-blur print:hidden">
       <div className="mx-auto flex h-11 max-w-6xl items-center gap-3 px-4">
         <p className="label shrink-0 text-brand-text">
           Day {day}/{total}
@@ -42,7 +42,7 @@ export function ReadingProgress({ day, total, title, doneLessons, steps }: { day
         <ol className="hidden items-center gap-2 md:flex" aria-label="Today's steps">
           {steps.map((s, i) => (
             <li key={s.label} className="flex items-center gap-1 font-mono text-[11.5px] text-ink">
-              <span className={"grid size-4 place-items-center border-2 border-edge " + (marks[i] ? "bg-success text-paper" : "bg-card")} aria-hidden>
+              <span className={"grid size-4 place-items-center border border-edge " + (marks[i] ? "bg-success text-paper" : "bg-card")} aria-hidden>
                 {marks[i] && <Check className="size-2.5" strokeWidth={4} />}
               </span>
               <span className={marks[i] ? "text-muted line-through" : ""}>{s.label}</span>

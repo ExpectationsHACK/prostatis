@@ -30,7 +30,7 @@ export default async function Glossary() {
         <h1 className="display mt-2 text-[36px] text-ink sm:text-[48px]">Every word, in plain English</h1>
         <nav className="mt-6 flex flex-wrap gap-1.5" aria-label="Jump to letter">
           {letters.map((l) => (
-            <a key={l} href={`#letter-${l}`} className="grid size-8 place-items-center border-2 border-edge bg-card font-mono text-[13px] font-bold text-ink hover:bg-brand">{l}</a>
+            <a key={l} href={`#letter-${l}`} className="grid size-8 place-items-center border border-edge bg-card font-mono text-[13px] font-bold text-ink hover:bg-brand">{l}</a>
           ))}
         </nav>
         <dl className="mt-8 space-y-4">
@@ -40,7 +40,7 @@ export default async function Glossary() {
             const t = track.modules.find((m) => m.lesson === e.lesson) ? track : tracks.find((x) => x.modules.some((m) => m.lesson === e.lesson))!;
             const d = day ?? t.modules.find((m) => m.lesson === e.lesson)!.day;
             return (
-              <div key={e.term} id={first ? `letter-${e.term[0].toUpperCase()}` : undefined} className="scroll-mt-24 border-2 border-edge bg-card p-4">
+              <div key={e.term} id={first ? `letter-${e.term[0].toUpperCase()}` : undefined} className="scroll-mt-24 border border-edge bg-card p-4">
                 <dt className="display text-[20px] text-ink" id={`term-${slugTerm(e.term)}`}>{e.term}</dt>
                 <dd className="mt-1 text-[15.5px] leading-relaxed text-ink/90"><Rich text={e.meaning} /></dd>
                 {e.like && <dd className="mt-2 border-l-4 border-brand pl-3 text-[14.5px] italic text-muted">Think of it like: <Rich text={e.like} /></dd>}

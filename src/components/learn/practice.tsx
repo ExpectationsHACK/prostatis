@@ -30,7 +30,7 @@ function useStored(key: string) {
 export function TryIt({ id, title, minutes, steps }: { id: string; title: string; minutes: number; steps: string[] }) {
   const [done, setDone] = useStored(`bwac:try:${id}`);
   return (
-    <div className={"my-6 border-2 border-edge p-4 shadow-[4px_4px_0_var(--edge)] transition-colors " + (done ? "bg-[#e3f5e9]" : "bg-[#eaf0ff]")}>
+    <div className={"my-6 border border-edge p-4 transition-colors " + (done ? "bg-[#e3f5e9]" : "bg-[#eaf0ff]")}>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="label flex items-center gap-1.5 text-ink">
           <Dumbbell className="size-4" aria-hidden /> Try it now · {minutes} min
@@ -49,7 +49,7 @@ export function TryIt({ id, title, minutes, steps }: { id: string; title: string
       <button
         type="button"
         onClick={() => setDone(!done)}
-        className={"label mt-3 inline-flex items-center gap-1.5 border-2 border-edge px-2.5 py-1.5 " + (done ? "bg-card text-ink" : "bg-ink text-paper")}
+        className={"label mt-3 inline-flex items-center gap-1.5 border border-edge px-2.5 py-1.5 " + (done ? "bg-card text-ink" : "bg-ink text-paper")}
       >
         {done ? <><RotateCcw className="size-3.5" aria-hidden /> Mark as not done</> : <><Check className="size-3.5" strokeWidth={3} aria-hidden /> I did this</>}
       </button>
@@ -62,7 +62,7 @@ export function SelfCheck({ q, options, answer, why }: { q: string; options: str
   const [picked, setPicked] = useState<number | null>(null);
   const right = picked === answer;
   return (
-    <div className="my-6 border-2 border-dashed border-edge bg-card p-4">
+    <div className="my-6 border border-dashed border-edge bg-card p-4">
       <p className="label flex items-center gap-1.5 text-brand-text">
         <Lightbulb className="size-4" aria-hidden /> Quick check · not graded
       </p>
@@ -76,7 +76,7 @@ export function SelfCheck({ q, options, answer, why }: { q: string; options: str
               type="button"
               disabled={picked !== null}
               onClick={() => setPicked(k)}
-              className={"border-2 border-line px-3 py-2 text-left text-[15px] leading-snug text-ink transition-colors enabled:hover:border-edge " + state}
+              className={"border border-line px-3 py-2 text-left text-[15px] leading-snug text-ink transition-colors enabled:hover:border-edge " + state}
             >
               {o}
             </button>

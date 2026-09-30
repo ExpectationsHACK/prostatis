@@ -1,73 +1,49 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Award, Clock, Wallet } from "lucide-react";
 import Link from "next/link";
-import { ProductThumb } from "@/components/art/product-thumb";
-import { Marquee } from "@/components/marquee";
+import { LiveSite } from "@/components/art/live-site";
 import { btn, size } from "@/components/ui";
 import { formatNgn, plans, site } from "@/lib/site";
 
-const chipRows = [
-  ["Landing pages", "Business websites", "Online stores", "Web apps", "Booking sites", "Portfolios", "Restaurant menus", "School sites"],
-  ["Next.js", "Tailwind", "Deploy to Vercel", "Custom domains", "SEO", "Paystack checkout", "WhatsApp buttons", "Mobile-first"],
-  ["Hero sections", "Pricing pages", "Contact forms", "Blogs", "Dashboards", "Client portals", "Admin panels", "Fast on 4G"],
-  ["Redesigns", "Website retainers", "Dollar clients", "Proposals", "Get paid", "AI agents", "Automations", "Lead generation"],
-];
-
-function Chip({ text }: { text: string }) {
-  return (
-    <span className="whitespace-nowrap border-2 border-edge/60 bg-paper/25 px-3.5 py-2 font-mono text-[13px] font-bold uppercase tracking-[0.1em] text-ink/70">
-      {text}
-    </span>
-  );
-}
-
 export function Hero() {
-  const from = Math.min(...plans.map((p) => p.priceNgn));
+  const fast = plans.find((p) => p.id === "fast_track")!;
 
   return (
-    <section className="field-grid relative isolate overflow-hidden border-b-2 border-edge bg-brand">
-      {/* Drifting chips: everything you'll learn to make */}
-      <div className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 flex h-[50svh] -translate-y-1/2 flex-col justify-evenly overflow-hidden opacity-30 motion-reduce:opacity-20 lg:inset-y-0 lg:h-auto lg:translate-y-0 lg:justify-center lg:gap-4" aria-hidden>
-        {chipRows.map((row, i) => (
-          <Marquee key={i} reverse={i % 2 === 1} seconds={40 + i * 8} gap="gap-4">
-            {row.map((t) => (
-              <Chip key={t} text={t} />
-            ))}
-          </Marquee>
-        ))}
-      </div>
-
-      <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-14 sm:py-20 lg:grid-cols-[1.15fr_1fr]">
+    <section className="relative overflow-hidden border-b border-line">
+      {/* One soft wash of the accent behind the demo, nothing else. */}
+      <div className="pointer-events-none absolute -right-40 top-10 -z-10 size-[560px] rounded-full bg-brand/10 blur-3xl" aria-hidden />
+      <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-14 sm:pt-20 lg:grid-cols-[1.05fr_1fr] lg:pb-24">
         <div className="text-center lg:text-left">
-          <p className="ink-block label inline-flex -rotate-1 items-center gap-2 whitespace-nowrap bg-paper px-3 py-2 text-[10px] tracking-[0.1em] text-ink sm:px-3.5 sm:text-[11px] sm:tracking-[0.16em]">
-            <span className="size-2 bg-accent" aria-hidden />
+          <p className="inline-flex items-center gap-2 rounded-full border border-line bg-card px-3.5 py-1.5 text-[13px] font-medium text-ink">
+            <span className="size-1.5 rounded-full bg-brand" aria-hidden />
             If you can type it, you can build it
           </p>
-          <h1 className="display mt-7 text-balance text-[40px] text-ink sm:text-[60px] lg:text-[66px]">
-            Learn to build <span className="text-paper [text-shadow:3px_3px_0_var(--edge)]">websites</span> with AI. And turn it into a source of <span className="text-paper [text-shadow:3px_3px_0_var(--edge)]">income</span>.
+          <h1 className="display mt-6 text-balance text-[40px] text-ink sm:text-[56px] lg:text-[62px]">
+            Learn to build <span className="text-brand">websites</span> with AI. And turn it into a source of <span className="text-brand">income</span>.
           </h1>
-          <p className="mx-auto mt-6 max-w-xl font-mono text-[15px] leading-relaxed text-ink lg:mx-0">{site.subhead}</p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4 lg:justify-start">
-            <Link href="/pricing" className={`${btn.secondary} ${size.lg} bg-paper`}>
+          <p className="mx-auto mt-5 max-w-xl text-pretty text-[17px] leading-relaxed text-muted lg:mx-0">{site.subhead}</p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
+            <Link href="/pricing" className={`${btn.primary} ${size.lg}`}>
               Enroll Now <ArrowRight className="size-4" aria-hidden />
             </Link>
-            <Link href="/tracks/fast-track" className={`${btn.accent} ${size.lg}`}>
+            <Link href="/tracks/fast-track" className={`${btn.secondary} ${size.lg}`}>
               Start Learning
             </Link>
           </div>
-          <p className="label mt-4 text-ink/80">Fast Track 14 days · Main Track 1 month · from {formatNgn(from)}</p>
+          <ul className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-[13.5px] text-muted lg:justify-start">
+            <li className="flex items-center gap-1.5"><Clock className="size-4 text-ink" aria-hidden /> Fast Track in {fast.period}</li>
+            <li className="flex items-center gap-1.5"><Wallet className="size-4 text-ink" aria-hidden /> {formatNgn(fast.priceNgn)}, paid once</li>
+            <li className="flex items-center gap-1.5"><Award className="size-4 text-ink" aria-hidden /> Verified certificate</li>
+          </ul>
         </div>
 
-        {/* What you'll build: a fanned stack of real website thumbnails */}
-        <div className="relative mx-auto h-[300px] w-full max-w-[440px] sm:h-[360px]">
-          <div className="ink-block absolute left-0 top-6 w-[62%] -rotate-6 bg-card">
-            <ProductThumb kind="restaurant" tone="sand" />
+        {/* A real kind of site students build, working: add to cart, pay with Paystack. */}
+        <div className="mx-auto w-full max-w-[560px]">
+          <div className="overflow-hidden rounded-[18px] border border-line bg-card p-2 shadow-[0_30px_60px_-30px_rgba(21,21,21,0.35)]">
+            <div className="overflow-hidden rounded-[12px]">
+              <LiveSite kind="store" />
+            </div>
           </div>
-          <div className="ink-block absolute right-0 top-0 w-[62%] rotate-[5deg] bg-card">
-            <ProductThumb kind="store" tone="peach" />
-          </div>
-          <div className="ink-block absolute bottom-0 left-1/2 w-[68%] -translate-x-1/2 bg-card">
-            <ProductThumb kind="coach" tone="forest" />
-          </div>
+          <p className="mt-3 text-center text-[12.5px] text-muted">An online store with Paystack checkout, one of the projects in the Fast Track.</p>
         </div>
       </div>
     </section>

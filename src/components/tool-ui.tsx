@@ -42,7 +42,7 @@ export function Select({
 }
 
 const pill =
-  "inline-flex h-8 shrink-0 items-center gap-1.5 border-2 border-edge bg-card px-2.5 font-mono text-[11px] font-bold uppercase tracking-wider text-ink transition-colors hover:bg-wash";
+  "inline-flex h-8 shrink-0 items-center gap-1.5 rounded-lg border border-line bg-card px-2.5 text-[12.5px] font-medium text-ink transition-colors hover:bg-wash";
 
 export function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) {
   const [copied, setCopied] = useState(false);
@@ -89,9 +89,9 @@ export function DownloadButton({ text, filename, label = "Download" }: { text: s
 
 export function Output({ title, text, filename }: { title: string; text: string; filename?: string }) {
   return (
-    <div className="overflow-hidden border-2 border-edge bg-card">
-      <div className="flex items-center justify-between gap-2 border-b-2 border-edge px-4 py-2.5">
-        <span className="font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-muted">{title}</span>
+    <div className="overflow-hidden border border-edge bg-card">
+      <div className="flex items-center justify-between gap-2 border-b border-edge px-4 py-2.5">
+        <span className="font-mono text-[11px] font-bold text-muted">{title}</span>
         <div className="flex gap-2">
           {filename && <DownloadButton text={text} filename={filename} />}
           <CopyButton text={text} />
@@ -107,7 +107,7 @@ export function Output({ title, text, filename }: { title: string; text: string;
 export function ToolLayout({ form, output }: { form: ReactNode; output: ReactNode }) {
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-      <div className="space-y-4 border-2 border-edge bg-card p-5 shadow-[5px_5px_0_var(--edge)]">{form}</div>
+      <div className="space-y-4 border border-edge bg-card p-5">{form}</div>
       <div className="min-w-0 space-y-4 lg:sticky lg:top-24 lg:self-start">{output}</div>
     </div>
   );

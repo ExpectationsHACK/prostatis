@@ -38,7 +38,7 @@ export function TaskCheck({ slug, day, done: items, confirmed }: { slug: string;
         ))}
       </ul>
       {confirmed ? (
-        <p className="label mt-4 inline-flex items-center gap-1.5 border-2 border-edge bg-[#e3f5e9] px-2 py-1 text-ink">
+        <p className="label mt-4 inline-flex items-center gap-1.5 border border-edge bg-[#e3f5e9] px-2 py-1 text-ink">
           <Check className="size-3.5 text-success" strokeWidth={3} aria-hidden /> Task confirmed
           {gained ? ` · +${gained} XP` : ""}
         </p>

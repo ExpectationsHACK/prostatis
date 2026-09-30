@@ -11,9 +11,9 @@ export const personas = [
 
 export const navMenus = {
   tracks: [
-    { href: "/tracks/fast-track", label: "Fast Track", note: "14 days · ship a website" },
-    { href: "/tracks/main-track", label: "Main Track", note: "1 month · everything" },
-    { href: "/pricing", label: "Compare plans", note: "₦15,000 · ₦30,000" },
+    { href: "/tracks/fast-track", label: "Fast Track", note: "14 days · ₦15,000 · build and sell websites" },
+    { href: "/tracks/main-track", label: "Main Track", note: "1 month · ₦30,000 · adds SEO, automation, AI agents" },
+    { href: "/pricing", label: "Compare the tracks", note: "What's in each, side by side" },
   ],
   tools: [...pillars.map((p) => ({ href: `/tools#${p.id}`, label: p.title, note: "" })), { href: "/tools", label: "All 50 free tools", note: "" }],
   who: personas.map((p) => ({ href: `/#${p.id}`, label: p.label, note: "" })),

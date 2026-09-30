@@ -15,11 +15,11 @@ export function BlogIndex({ posts, allForTags, activeTag, tagName }: { posts: Po
   const [first, ...rest] = posts;
 
   return (
-    <div className="paper-grid pb-20">
-      <header className="field-grid border-b-2 border-edge bg-brand px-4 py-12 text-center sm:py-16">
-        <p className="label text-ink/80">{tagName ? "Topic" : "The blog"}</p>
+    <div className="pb-20">
+      <header className="border-b border-line bg-card px-4 py-12 text-center sm:py-16">
+        <p className="text-[13px] font-semibold text-brand-text">{tagName ? "Topic" : "The blog"}</p>
         <h1 className="display mx-auto mt-3 max-w-3xl text-balance text-[42px] text-ink sm:text-[62px]">{tagName ?? "Build it. Sell it. Get paid."}</h1>
-        <p className="mx-auto mt-4 max-w-xl font-mono text-[14px] leading-relaxed text-ink">
+        <p className="mx-auto mt-4 max-w-xl text-[16.5px] leading-relaxed text-muted">
           Practical guides on building websites with AI, finding clients, pricing, SEO and getting paid, written for Nigeria.
         </p>
       </header>
@@ -27,11 +27,11 @@ export function BlogIndex({ posts, allForTags, activeTag, tagName }: { posts: Po
       <div className="mx-auto max-w-6xl px-4">
         {tags.length > 0 && (
           <nav className="mt-8 flex flex-wrap items-center gap-2" aria-label="Topics">
-            <Link href="/blog" className={"label border-2 border-edge px-2.5 py-1.5 " + (!activeTag ? "bg-ink text-paper" : "bg-card text-ink hover:bg-wash")}>
+            <Link href="/blog" className={"rounded-full border px-3 py-1.5 text-[13px] font-medium " + (!activeTag ? "border-ink bg-ink text-white" : "border-line bg-card text-ink hover:bg-sunk")}>
               All
             </Link>
             {tags.map(([s, t]) => (
-              <Link key={s} href={`/blog/tag/${s}`} className={"label border-2 border-edge px-2.5 py-1.5 " + (activeTag === s ? "bg-ink text-paper" : "bg-card text-ink hover:bg-wash")}>
+              <Link key={s} href={`/blog/tag/${s}`} className={"rounded-full border px-3 py-1.5 text-[13px] font-medium " + (activeTag === s ? "border-ink bg-ink text-white" : "border-line bg-card text-ink hover:bg-sunk")}>
                 {t.name} <span className="opacity-60">{t.n}</span>
               </Link>
             ))}

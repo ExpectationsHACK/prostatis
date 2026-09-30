@@ -98,7 +98,7 @@ function FieldInput({ f, value, set }: { f: FieldDef; value: Values[string]; set
             type="color"
             value={String(value)}
             onChange={(e) => set(e.target.value)}
-            className="h-11 w-14 shrink-0 cursor-pointer border-2 border-edge bg-card p-1"
+            className="h-11 w-14 shrink-0 cursor-pointer border border-edge bg-card p-1"
             aria-label={f.label}
           />
           <TextInput value={String(value)} onChange={(e) => set(e.target.value)} />
@@ -111,9 +111,9 @@ function FieldInput({ f, value, set }: { f: FieldDef; value: Values[string]; set
           role="switch"
           aria-checked={value === true}
           onClick={() => set(!(value === true))}
-          className={"flex h-8 w-14 items-center border-2 border-edge px-0.5 transition-colors " + (value === true ? "bg-brand" : "bg-wash")}
+          className={"flex h-8 w-14 items-center border border-edge px-0.5 transition-colors " + (value === true ? "bg-brand" : "bg-wash")}
         >
-          <span className={"size-6 border-2 border-edge bg-card transition-transform " + (value === true ? "translate-x-6" : "")} />
+          <span className={"size-6 border border-edge bg-card transition-transform " + (value === true ? "translate-x-6" : "")} />
         </button>
       );
     case "multi": {
@@ -180,17 +180,17 @@ function GeneratorTool({ def, slug }: { def: GeneratorDef; slug: string }) {
   const shareUrl = () => `${window.location.origin}${window.location.pathname}?in=${encodeValues(v)}`;
   const note =
     source === "link" ? "Loaded from a shared link" : source === "saved" ? "Saved on this device as you type" : "Showing an example: replace it with your own details";
-  const small = "inline-flex items-center gap-1.5 font-mono text-[12px] font-bold uppercase tracking-wider text-muted hover:text-ink";
+  const small = "inline-flex items-center gap-1.5 font-mono text-[12px] font-bold text-muted hover:text-ink";
 
   return (
     <>
       {def.live && <LivePanel spec={def.live} values={v} />}
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-        <div className="space-y-4 border-2 border-edge bg-card p-5 shadow-[5px_5px_0_var(--edge)]">
+        <div className="space-y-4 border border-edge bg-card p-5">
           <StepHead n={1} title="Fill in your details" sub={note} />
           {def.intro && <p className="text-[14px] text-muted">{def.intro}</p>}
           {def.examples && def.examples.length > 0 && (
-            <div className="border-2 border-dashed border-line p-3">
+            <div className="border border-dashed border-line p-3">
               <p className="label flex items-center gap-1.5 text-muted">
                 <Sparkles className="size-3.5" aria-hidden /> Try an example
               </p>
@@ -200,7 +200,7 @@ function GeneratorTool({ def, slug }: { def: GeneratorDef; slug: string }) {
                     key={ex.label}
                     type="button"
                     onClick={() => load(sanitize(def.fields, ex.values), "example")}
-                    className="border-2 border-edge bg-paper px-2.5 py-1 font-mono text-[11.5px] font-bold uppercase tracking-wide text-ink transition-colors hover:bg-brand"
+                    className="border border-edge bg-paper px-2.5 py-1 font-mono text-[11.5px] font-bold text-ink transition-colors hover:bg-brand"
                   >
                     {ex.label}
                   </button>
@@ -224,7 +224,7 @@ function GeneratorTool({ def, slug }: { def: GeneratorDef; slug: string }) {
               ))}
             </div>
           ))}
-          <div className="flex flex-wrap gap-x-5 gap-y-2 border-t-2 border-dashed border-line pt-3">
+          <div className="flex flex-wrap gap-x-5 gap-y-2 border-t border-dashed border-line pt-3">
             <button type="button" onClick={() => load(blank(def.fields), "saved")} className={small}>
               <Eraser className="size-3.5" aria-hidden /> Start blank
             </button>
@@ -279,8 +279,8 @@ function ChecklistTool({ def, slug }: { def: ChecklistDef; slug: string }) {
           <StepHead n={1} title="Check each item" sub="Your ticks are saved on this device." />
           {def.intro && <p className="text-[14px] text-muted">{def.intro}</p>}
           {def.groups.map((g) => (
-            <fieldset key={g.title} className="border-2 border-edge bg-card p-5">
-              <legend className="bg-paper px-2 font-mono text-[12px] font-bold uppercase tracking-[0.12em] text-ink">{g.title}</legend>
+            <fieldset key={g.title} className="border border-edge bg-card p-5">
+              <legend className="bg-paper px-2 font-mono text-[12px] font-bold text-ink">{g.title}</legend>
               <ul className="space-y-3">
                 {g.checks.map((c) => (
                   <li key={c.id}>
@@ -295,7 +295,7 @@ function ChecklistTool({ def, slug }: { def: ChecklistDef; slug: string }) {
                         {c.text}
                         <span
                           className={
-                            "ml-2 inline-block px-1.5 py-px align-middle font-mono text-[10px] font-bold uppercase " +
+                            "ml-2 inline-block px-1.5 py-px align-middle font-mono text-[10px] font-bold " +
                             (c.weight === 3 ? "bg-brand-wash text-brand-text" : "bg-wash text-muted")
                           }
                         >
@@ -312,12 +312,12 @@ function ChecklistTool({ def, slug }: { def: ChecklistDef; slug: string }) {
         <div className="min-w-0 space-y-4 lg:sticky lg:top-24 lg:self-start">
           <StepHead n={2} title="Your score and fix list" sub="Fix from the top: highest impact first." />
           <ResultBar text={report} filename={`${slug}-fix-list.txt`} />
-          <div className="border-2 border-edge bg-card p-5 shadow-[5px_5px_0_var(--edge)]">
+          <div className="border border-edge bg-card p-5">
             <div className="flex items-baseline justify-between">
-              <span className="font-mono text-[12px] font-bold uppercase tracking-wider text-muted">Your score</span>
+              <span className="font-mono text-[12px] font-bold text-muted">Your score</span>
               <span className="display tabular text-[44px] text-ink">{pct}</span>
             </div>
-            <div className="mt-2 h-3 border-2 border-edge bg-wash">
+            <div className="mt-2 h-3 border border-edge bg-wash">
               <div className="h-full bg-brand transition-all duration-300" style={{ width: pct + "%" }} />
             </div>
             <p className="mt-2 text-[14px] font-semibold text-ink">{grade}</p>
@@ -326,7 +326,7 @@ function ChecklistTool({ def, slug }: { def: ChecklistDef; slug: string }) {
                 {all.length - todo.length} of {all.length} done
               </span>
               {all.length - todo.length > 0 && (
-                <button type="button" onClick={() => setDone({})} className="font-bold uppercase tracking-wider hover:text-ink">
+                <button type="button" onClick={() => setDone({})} className="font-bold hover:text-ink">
                   Clear ticks
                 </button>
               )}

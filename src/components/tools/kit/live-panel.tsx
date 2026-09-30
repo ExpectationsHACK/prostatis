@@ -39,8 +39,8 @@ export function LivePanel({ spec, values, onChecks }: { spec: LiveSpec; values: 
   }
 
   return (
-    <section className="mb-8 border-2 border-edge bg-brand-wash p-5 shadow-[5px_5px_0_var(--edge)]">
-      <p className="flex items-center gap-2 font-mono text-[12px] font-bold uppercase tracking-[0.14em] text-brand-text">
+    <section className="mb-8 border border-edge bg-brand-wash p-5">
+      <p className="flex items-center gap-2 font-mono text-[12px] font-bold text-brand-text">
         <Globe className="size-4" aria-hidden /> Live check
       </p>
       <h2 className="display mt-1 text-[22px] text-ink">{spec.title}</h2>
@@ -72,7 +72,7 @@ export function LivePanel({ spec, values, onChecks }: { spec: LiveSpec; values: 
       {spec.url?.hint && <p className="mt-2 font-mono text-[12px] text-muted">{spec.url.hint}</p>}
       {state === "running" && spec.kind === "speed" && <p className="mt-3 font-mono text-[12px] text-muted">Loading the page and weighing every image, script and stylesheet, this can take up to a minute.</p>}
       {state === "error" && (
-        <p className="mt-3 border-2 border-edge bg-danger/10 px-3 py-2 text-[14px] text-danger" role="alert">
+        <p className="mt-3 border border-edge bg-danger/10 px-3 py-2 text-[14px] text-danger" role="alert">
           {error}
         </p>
       )}

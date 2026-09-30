@@ -8,7 +8,7 @@ export function BadgeShelf({ list }: { list: Badge[] }) {
   const got = list.filter((b) => b.earned).length;
   return (
     <section className="mt-10">
-      <h2 className="flex items-baseline justify-between gap-3 border-b-2 border-edge pb-2">
+      <h2 className="flex items-baseline justify-between gap-3 border-b border-edge pb-2">
         <span className="display text-[24px] text-ink">Badges</span>
         <span className="label text-muted">{got}/{list.length} earned</span>
       </h2>
@@ -16,8 +16,8 @@ export function BadgeShelf({ list }: { list: Badge[] }) {
         {list.map((b) => {
           const Icon = b.earned ? icons[b.icon] : Lock;
           return (
-            <li key={b.id} className={"flex flex-col items-center border-2 p-3 text-center " + (b.earned ? "border-edge bg-card shadow-[3px_3px_0_var(--edge)]" : "border-dashed border-line bg-paper/60")}>
-              <span className={"grid size-12 place-items-center rounded-full border-2 " + (b.earned ? "border-edge bg-[#f2c230]" : "border-line bg-wash")}>
+            <li key={b.id} className={"flex flex-col items-center border p-3 text-center " + (b.earned ? "border-edge bg-card" : "border-dashed border-line bg-paper/60")}>
+              <span className={"grid size-12 place-items-center rounded-full border " + (b.earned ? "border-edge bg-[#f2c230]" : "border-line bg-wash")}>
                 <Icon className={"size-5 " + (b.earned ? "text-ink" : "text-muted")} aria-hidden />
               </span>
               <p className={"mt-2 font-mono text-[12px] font-bold leading-tight " + (b.earned ? "text-ink" : "text-muted")}>{b.name}</p>

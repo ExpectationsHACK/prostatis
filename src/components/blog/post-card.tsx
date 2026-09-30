@@ -20,7 +20,7 @@ export function PostCover({ post, eager = false }: { post: Pick<Post, "slug" | "
   const t = tones[toneList[hash % toneList.length]];
   return (
     <div className="field-grid flex aspect-[16/9] h-full flex-col justify-between p-5" style={{ background: t.bg, color: t.fg }} aria-hidden>
-      <span className="font-mono text-[11px] font-bold uppercase tracking-[0.16em]" style={{ color: t.dim }}>
+      <span className="font-mono text-[11px] font-bold" style={{ color: t.dim }}>
         {post.tags[0] ?? "Blog"}
       </span>
       <span className="display line-clamp-3 text-balance text-[22px] leading-tight sm:text-[26px]">{post.title}</span>
@@ -31,7 +31,7 @@ export function PostCover({ post, eager = false }: { post: Pick<Post, "slug" | "
 export function PostCard({ post, big = false }: { post: Post; big?: boolean }) {
   return (
     <Link href={`/blog/${post.slug}`} className={"ink-block block-press group flex flex-col overflow-hidden bg-card " + (big ? "md:flex-row" : "")}>
-      <div className={"border-edge " + (big ? "border-b-2 md:w-[55%] md:shrink-0 md:border-b-0 md:border-r-2" : "border-b-2")}>
+      <div className={"border-edge " + (big ? "border-b md:w-[55%] md:shrink-0 md:border-b-0 md:border-r" : "border-b")}>
         <PostCover post={post} eager={big} />
       </div>
       <div className="flex flex-1 flex-col p-5">

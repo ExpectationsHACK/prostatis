@@ -14,7 +14,7 @@ import { site } from "@/lib/site";
 
 function Bar({ pct, tone = "bg-brand" }: { pct: number; tone?: string }) {
   return (
-    <div className="h-2.5 border-2 border-edge bg-paper" role="progressbar" aria-valuenow={Math.round(pct)} aria-valuemin={0} aria-valuemax={100}>
+    <div className="h-2.5 border border-edge bg-paper" role="progressbar" aria-valuenow={Math.round(pct)} aria-valuemin={0} aria-valuemax={100}>
       <div className={`h-full ${tone}`} style={{ width: `${Math.min(100, pct)}%` }} />
     </div>
   );
@@ -58,7 +58,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:py-8">
       {sp.password === "updated" && (
-        <p className="mb-5 flex items-center gap-2 border-2 border-edge bg-[#e3f5e9] px-4 py-2.5 font-mono text-[13px] text-ink" role="status">
+        <p className="mb-5 flex items-center gap-2 border border-edge bg-[#e3f5e9] px-4 py-2.5 font-mono text-[13px] text-ink" role="status">
           <CircleCheck className="size-4 text-success" aria-hidden /> Your password has been updated.
         </p>
       )}
@@ -69,38 +69,38 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
           <p className="label text-muted">{new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "Africa/Lagos" })}</p>
           <h1 className="display mt-1 text-[32px] leading-tight text-ink sm:text-[40px]">Welcome back{first ? `, ${first}` : ""}</h1>
         </div>
-        <p className="label border-2 border-edge bg-card px-2.5 py-1.5 text-ink">
+        <p className="label border border-edge bg-card px-2.5 py-1.5 text-ink">
           {track.name} · {prog.completed}/{prog.total} lessons
         </p>
       </div>
 
       {/* Continue learning */}
-      <section className="field-grid ink-block mt-6 grid gap-5 bg-brand p-5 sm:p-6 md:grid-cols-[260px_1fr] md:items-center">
+      <section className="ink-block mt-6 grid gap-5 bg-card p-5 sm:p-6 md:grid-cols-[260px_1fr] md:items-center">
         {next ? (
           <>
-            <div className="border-2 border-edge bg-card">
+            <div className="border border-edge bg-card">
               <LessonThumb thumb={next.thumb} index={next.day} />
             </div>
             <div className="min-w-0">
-              <p className="label text-ink/80">
+              <p className="label text-brand-text">
                 {prog.completed ? "Up next" : "Start here"} · Day {next.day} of {prog.total} · {getPillar(next.pillar).title}
               </p>
               <h2 className="display mt-1.5 text-balance text-[26px] leading-tight text-ink sm:text-[32px]">{next.title}</h2>
-              <p className="mt-2 line-clamp-2 font-mono text-[13px] leading-relaxed text-ink/85">{next.summary}</p>
+              <p className="mt-2 line-clamp-2 font-mono text-[13px] leading-relaxed text-muted">{next.summary}</p>
               <div className="mt-4 max-w-md">
-                <Bar pct={prog.pct} tone="bg-ink" />
+                <Bar pct={prog.pct} />
                 <p className="mt-1.5 font-mono text-[12px] font-bold text-ink">{prog.pct}% of the {track.name} complete</p>
               </div>
-              <Link href={`/learn/${slug}/${next.day}`} className={`${btn.secondary} ${size.lg} mt-5 bg-paper`}>
+              <Link href={`/learn/${slug}/${next.day}`} className={`${btn.primary} ${size.lg} mt-5`}>
                 <PlayCircle className="size-5" aria-hidden /> {prog.completed ? "Continue Learning" : "Start Learning"}
               </Link>
             </div>
           </>
         ) : (
           <div className="md:col-span-2">
-            <p className="label text-ink/80">All {prog.total} lessons complete</p>
+            <p className="label text-brand-text">All {prog.total} lessons complete</p>
             <h2 className="display mt-1.5 text-[30px] text-ink">{final?.passed_at ? "You're certified. Well done!" : "One step left: the final assessment"}</h2>
-            <Link href={final?.passed_at ? `/learn/${slug}/certificate` : `/learn/${slug}/final`} className={`${btn.secondary} ${size.lg} mt-5 bg-paper`}>
+            <Link href={final?.passed_at ? `/learn/${slug}/certificate` : `/learn/${slug}/final`} className={`${btn.primary} ${size.lg} mt-5`}>
               <Award className="size-5" aria-hidden /> {final?.passed_at ? "View your certificate" : "Take the final assessment"}
             </Link>
           </div>
@@ -138,18 +138,18 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
         {/* Main column: this week, then every week */}
         <div className="min-w-0 space-y-6">
           <section className="ink-block bg-card">
-            <div className="flex flex-wrap items-baseline justify-between gap-2 border-b-2 border-edge px-5 py-3">
+            <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-edge px-5 py-3">
               <h2 className="display text-[20px] text-ink">
                 <span className="label mr-2 bg-ink px-2 py-0.5 align-middle text-paper">Week {week.week}</span>
                 {week.title}
               </h2>
               <Link href={`/learn/${slug}`} className="label text-brand-text hover:underline">Full course map</Link>
             </div>
-            <ol className="divide-y-2 divide-line">
+            <ol className="divide-y divide-line">
               {weekDays.map(({ module: m, status }) => {
                 const row = (
                   <div className="flex items-center gap-4 px-5 py-3.5">
-                    <span className={"grid size-9 shrink-0 place-items-center border-2 border-edge font-mono text-[13px] font-bold " + (status === "done" ? "bg-success text-paper" : status === "open" ? "bg-brand text-ink" : "bg-paper text-muted")}>
+                    <span className={"grid size-9 shrink-0 place-items-center border border-edge font-mono text-[13px] font-bold " + (status === "done" ? "bg-success text-paper" : status === "open" ? "bg-brand text-ink" : "bg-paper text-muted")}>
                       {status === "done" ? <Check className="size-4" strokeWidth={3} aria-hidden /> : status === "locked" ? <Lock className="size-3.5" aria-hidden /> : m.day}
                     </span>
                     <div className="min-w-0 flex-1">
@@ -171,14 +171,14 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
                 const days = prog.days.filter((d) => d.module.week === w.week);
                 const done = days.filter((d) => d.status === "done").length;
                 return (
-                  <details key={w.week} className="group border-2 border-edge bg-card" open={w.week === nextWeek}>
+                  <details key={w.week} className="group border border-edge bg-card" open={w.week === nextWeek}>
                     <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-3">
                       <span className="label bg-ink px-2 py-0.5 text-paper">Week {w.week}</span>
                       <span className="min-w-0 flex-1 truncate font-bold text-ink">{w.title}</span>
                       <span className="tabular font-mono text-[12px] text-muted">{done}/{days.length}</span>
                       <span className="font-mono text-ink transition-transform group-open:rotate-90" aria-hidden>›</span>
                     </summary>
-                    <ul className="grid gap-2 border-t-2 border-edge p-3 sm:grid-cols-2">
+                    <ul className="grid gap-2 border-t border-edge p-3 sm:grid-cols-2">
                       {days.map(({ module: m, status }) => (
                         <li key={m.day}>
                           {status === "locked" ? (

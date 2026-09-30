@@ -13,14 +13,14 @@ export const metadata: Metadata = {
 export default function ToolsPage() {
   return (
     <div className="paper-grid">
-      <header className="field-grid border-b-2 border-edge bg-brand px-4 py-14 text-center sm:py-20">
+      <header className="border-b border-line bg-card px-4 py-14 text-center sm:py-20">
         <h1 className="display mx-auto max-w-3xl text-balance text-[44px] text-ink sm:text-[68px]">{coreTools.length} free tools</h1>
         <p className="mx-auto mt-4 max-w-xl font-mono text-[14px] leading-relaxed text-ink">
           Everything you need to design, build, rank, automate and sell websites, no signup, runs on your phone, output you can copy.
         </p>
         <nav className="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-2" aria-label="Pillars">
           {pillars.map((p) => (
-            <Link key={p.id} href={`#${p.id}`} className="border-2 border-edge bg-paper px-3 py-1.5 font-mono text-[12px] font-bold uppercase tracking-wider text-ink hover:bg-ink hover:text-paper">
+            <Link key={p.id} href={`#${p.id}`} className="border border-edge bg-paper px-3 py-1.5 font-mono text-[12px] font-bold text-ink hover:bg-ink hover:text-paper">
               {p.title} · {coreTools.filter((t) => t.pillar === p.id).length}
             </Link>
           ))}
@@ -32,7 +32,7 @@ export default function ToolsPage() {
           const list = coreTools.filter((t) => t.pillar === p.id);
           return (
             <section key={p.id} id={p.id} className="scroll-mt-24 pb-16">
-              <div className="flex flex-wrap items-end justify-between gap-3 border-b-2 border-edge pb-3">
+              <div className="flex flex-wrap items-end justify-between gap-3 border-b border-edge pb-3">
                 <div>
                   <h2 className="display text-[32px] text-ink sm:text-[40px]">{p.title}</h2>
                   <p className="mt-1 font-mono text-[13px] text-muted">{p.blurb}</p>
@@ -49,7 +49,7 @@ export default function ToolsPage() {
         })}
 
         <section id="bonus" className="scroll-mt-24">
-          <div className="border-b-2 border-edge pb-3">
+          <div className="border-b border-edge pb-3">
             <h2 className="display text-[32px] text-ink sm:text-[40px]">Bonus: getting paid</h2>
             <p className="mt-1 font-mono text-[13px] text-muted">Proposals, pricing, getting paid and promotion.</p>
           </div>

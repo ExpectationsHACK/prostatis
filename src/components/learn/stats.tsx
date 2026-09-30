@@ -10,7 +10,7 @@ export function LearnerStats({ state, done, total }: { state: LearnerState; done
       <div className="ink-block bg-card p-4">
         <p className="label flex items-center gap-1.5 text-brand-text"><Sparkles className="size-3.5" aria-hidden /> Level {lvl.level} · {lvl.name}</p>
         <p className="display mt-1 text-[32px] text-ink">{state.xp.toLocaleString("en-NG")} XP</p>
-        <div className="mt-2 h-2.5 border-2 border-edge bg-wash" role="progressbar" aria-label="Progress to next level" aria-valuenow={Math.round(lvl.progress * 100)} aria-valuemin={0} aria-valuemax={100}>
+        <div className="mt-2 h-2.5 border border-edge bg-wash" role="progressbar" aria-label="Progress to next level" aria-valuenow={Math.round(lvl.progress * 100)} aria-valuemin={0} aria-valuemax={100}>
           <div className="h-full bg-brand" style={{ width: `${lvl.progress * 100}%` }} />
         </div>
         <p className="mt-1.5 font-mono text-[11.5px] text-muted">{lvl.next ? `${lvl.next - state.xp} XP to level ${lvl.level + 1}` : "Top level reached"}</p>
@@ -25,7 +25,7 @@ export function LearnerStats({ state, done, total }: { state: LearnerState; done
       <div className="ink-block bg-card p-4">
         <p className="label flex items-center gap-1.5 text-brand-text"><Trophy className="size-3.5" aria-hidden /> Lessons</p>
         <p className="display mt-1 text-[32px] text-ink">{done}/{total}</p>
-        <div className="mt-2 h-2.5 border-2 border-edge bg-wash" role="progressbar" aria-label="Lessons complete" aria-valuenow={done} aria-valuemin={0} aria-valuemax={total}>
+        <div className="mt-2 h-2.5 border border-edge bg-wash" role="progressbar" aria-label="Lessons complete" aria-valuenow={done} aria-valuemin={0} aria-valuemax={total}>
           <div className="h-full bg-success" style={{ width: `${(done / total) * 100}%` }} />
         </div>
         <p className="mt-1.5 font-mono text-[11.5px] text-muted">{Math.round((done / total) * 100)}% complete</p>
@@ -36,7 +36,7 @@ export function LearnerStats({ state, done, total }: { state: LearnerState; done
 
 export function PreviewBanner() {
   return (
-    <p className="border-b-2 border-edge bg-[#fff4d6] px-4 py-2 text-center font-mono text-[12px] text-ink">
+    <p className="border-b border-edge bg-[#fff4d6] px-4 py-2 text-center font-mono text-[12px] text-ink">
       Local preview mode (development only), no sign-in needed; progress is saved to <code>.data/learning.json</code> on this computer.
     </p>
   );

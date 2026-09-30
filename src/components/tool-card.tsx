@@ -8,7 +8,7 @@ import { ToolThumb } from "./art/tool-thumb";
 export function ToolCard({ tool }: { tool: ToolMeta }) {
   return (
     <Link href={`/tools/${tool.slug}`} className="ink-block block-press group flex h-full flex-col bg-card">
-      <div className="border-b-2 border-edge">
+      <div className="border-b border-edge">
         <ToolThumb slug={tool.slug} tone={tool.tone} />
       </div>
       <div className="flex flex-1 flex-col p-4">

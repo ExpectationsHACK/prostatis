@@ -1,72 +1,69 @@
 # Design
 
-Direction set by the owner (2026-09-29): a **retro print / neo-brutalist** club site — cream grid paper, orange fields, Naija green, ink outlines, hard offset shadows, typewriter text. It's a style genre implemented our own way: our layouts, copy, numbers and components. Nothing is copied from another site's code, text, images or logos. **Websites and web development lead** every page.
+Direction set by the owner (2026-10-01): **STEINARK is calm, neutral and precise.** Warm off-white pages, white cards, near-black text, hairline borders, and **one orange accent** reserved for the main action. Minimal, but not cold: the work itself (animated website mock-ups) carries the energy. **Websites and web development lead** every page.
 
-## Colour (`src/app/globals.css` — light only, it's a printed-paper world)
+The brand name suggests stone and an arch: solid, trustworthy, an opening you build through. The logo is a stone arch with its keystone.
+
+## Colour (`src/app/globals.css`, light only)
 
 | Token | Value | Use |
 |---|---|---|
-| `paper` | #f6efe2 | Page background (with `.paper-grid`) |
-| `card` | #fffdf8 | Cards, blocks, the certificate |
-| `sunk` / `wash` | #efe5d3 / #e9dcc5 | Alternate sections, chips, table stripes |
-| `ink` / `edge` / `night` | #1b1714 | Text, 2px outlines, dark bands |
-| `muted` | #5c5249 | Secondary text (7:1 on paper) |
-| `line` | #d8caaf | Hairlines, dashed dividers |
-| `brand` | #ff6719 | Orange fields and primary buttons — **ink text on orange** |
-| `brand-text` | #b8430a | Orange text on paper |
-| `accent` | #0f4d3a | Naija green: second field colour, accent buttons |
-| `success` / `danger` | #1f7a4d / #b3261e | Passed/complete, errors and wrong answers |
+| `paper` | #fafaf8 | Page background |
+| `card` | #ffffff | Cards, alternate sections, header and footer |
+| `sunk` / `wash` | #f4f3ef / #efede8 | Hover fills, table heads, image wells |
+| `ink` / `night` | #151515 | Text; the one dark band (final call to action) |
+| `muted` | #625f58 | Secondary text (6.3:1 on paper) |
+| `line` / `edge` | #e7e5e0 / #dcd9d2 | Hairlines; stronger borders and outlines inside illustrations |
+| `brand` | #eb5e28 | **The accent.** Primary buttons, key highlights. Text on it is ink (5.4:1) |
+| `brand-text` | #b8400f | Orange text on light backgrounds (5.6:1) |
+| `brand-wash` | #fdeee6 | Soft orange tint for numbered steps and ticks |
+| `success` / `danger` | #16794a / #b42318 | Status only |
+
+Rules: at most one orange button per view; no coloured section backgrounds (paper and white alternate, plus one dark band); illustration grounds use the quiet `tones` in `components/cover.tsx`.
 
 ## Type
 
-- **Display** (`.display`): Archivo, wide, weight 600, tight tracking, sentence case. Headlines, card titles, big numbers.
-- **Labels** (`.label`): Geist Mono, 11px caps, 0.16em tracking.
-- **Marketing body**: Geist Mono. **Lesson reading text**: Geist sans at 16–17px, line-height 1.75, for long-form comfort.
+- **One family: Geist.** Headlines use `.display` (Geist 600, tight tracking); body 15–17px; lessons 16–17px at line-height 1.75.
+- `.label` is sentence case, 12.5px, medium. No letter-spaced capitals in the UI.
+- **Code only** uses Geist Mono: `pre`, `code`, `kbd` and the `font-code` utility. (`font-mono` now maps to Geist so older markup reads as normal text.)
 
-## Surfaces and signatures
+## Surfaces
 
-- `.ink-block`: 2px ink border + 5px hard offset shadow. `.block-press` presses it in on hover/click. (Never name a class `.block` — it collides with Tailwind's `block`.)
-- `.paper-grid` / `.field-grid`: the grid-paper texture on cream and on coloured fields.
-- `.scribble`: green hand-drawn underline under one word in a heading.
-- Buttons (`src/components/ui.ts`): `btn.primary` orange, `btn.secondary` card, `btn.accent` green, `btn.ghost`. Square, mono, caps.
+- `.ink-block`: 1px `line` border, 14px radius, barely-there shadow, clips its content. `.block-press` lifts 1px with a soft shadow on hover.
+- Buttons (`src/components/ui.ts`): `btn.primary` orange with ink text, `btn.secondary` white with a hairline, `btn.accent` near-black, `btn.ghost`. 10px radius, sentence case, semibold.
+- `.paper-grid`, `.field-grid` and `.scribble` are kept as no-ops so old markup stays calm. No tilts, no hard offset shadows, no grid-paper texture.
+
+## Brand
+
+- `ArchMark`, `LogoTile` and `Wordmark` in `src/components/brand.tsx`; the same arch as plain SVG in `src/lib/og-mark.tsx` for icons, share images and certificates.
+- Wordmark: STEINARK in capitals, Geist semibold, 0.12em tracking. The only letter-spaced capitals on the site.
 
 ## Illustrations
 
-All art is **coded**, not images: drawn on a fixed 320×200 canvas (`src/components/art/artboard.tsx`) and scaled to the card, so a phone shows exactly the desktop picture.
+All art is **coded**, on a fixed 320×200 `Artboard` scaled to the card (a phone shows the same picture as a desktop).
 
-- `ToolThumb` — each free tool's real output (56 designs).
-- `ProductThumb` — 37 recognisable example products (store, salon, clinic, dashboard…).
-- `WebsiteKindThumb` — the six website kinds in "Websites first", with orange callout tags naming the parts that matter.
-- `LessonThumb` — a track day's thumbnail (tool or product).
-- `LessonDiagram` — 12 teaching diagrams (web stack, prompt anatomy, page anatomy, SERP, git flow, funnel, trigger→action, agent loop, delivery timeline, payment flow, keyword intent, booking flow).
+- `LiveSite` (`components/art/live-site.tsx`): six realistic website mock-ups that **act out what the real thing does**, each with its own loop: landing page (scroll to proof, tap, booking arrives), business site (map pin drops, WhatsApp question and reply), online store (add to cart, item flies to the bag, Paystack succeeds), web app (sign in, chart grows, new payment row), booking (pick day and time, pay deposit, confirmation and reminder), portfolio (work slides past, "Hire me", message sent). Keyframes live in `globals.css` under "Live site mock-ups". They play only while on screen (`.is-live`, set by `Artboard`) and never under reduced motion, where the base styles show a still frame.
+- `ToolThumb`, `ProductThumb`, `LessonDiagram`: static coded illustrations for tools, lessons and diagrams.
 
 ## Page patterns
 
-- **Header**: floating rounded pill (`site-nav.tsx`) with dropdowns (Tracks, Free tools, Who it's for), and a full-screen mobile sheet. Closes on outside click, Escape and navigation.
-- **Hero**: orange grid field; four rows of topic chips drift in alternating directions behind the headline — full height on desktop, a centred band 50% of the screen tall on phones. Product-thumbnail collage on the right.
-- **Track sections**: one row per week, each an auto-advancing carousel (`WeekCarousel`) with back/forward arrows; pauses on hover, focus, touch or off-screen; never auto-moves under reduced motion. Fast Track = 2 rows, Main Track = 4.
-- **What you'll build**: two marquee rows — top slides left, bottom slides right.
-- **Ledger**: before/after printed table; before struck through, after with a green check.
-- **Plans**: dark band, two cards listing concrete results; the Main Track card is the orange highlight.
-- **Placeholders** (wins, team): dashed outline + "Placeholder" stamp until real content exists (`src/lib/showcase.ts`).
-- **Footer**: dark band with the email signup box.
+- **Header**: sticky, full-width, translucent paper with a hairline. Logo, then Tracks (menu) · Free tools · Pricing · Blog, then Sign in and Enroll Now.
+- **Homepage (7 sections)**: hero (headline with "websites" and "income" in orange, one orange button, a live store demo) → websites businesses pay for (six LiveSites) → how it works (3 steps) → the Fast Track (the main offer, with its 14 days listed) → free tools (3 cards) → pricing (Fast Track highlighted as "Start here") → FAQ. Then the dark call-to-action card and the footer.
+- **Page headers** (pricing, tools, tracks, blog): white band, orange eyebrow, large headline, muted intro.
+- **Footer**: white, brand and email signup, then Learn · Resources · Legal.
+- **Legal**: `/privacy`, `/terms`, `/refund-policy` share `components/legal.tsx`. The contact route comes from `NEXT_PUBLIC_CONTACT_EMAIL`.
 
-## The learning area (`/learn`)
+## The learning area (`/learn`) and dashboard
 
-- Slim sticky paper header with an orange "LEARN" stamp.
-- Stats row: three ink cards — XP + level bar, streak, lessons done bar.
-- Lesson page: orange "By the end of today you'll have" block; 3-step checklist strip (read → task → quiz); table of contents; sections with numbered steps, dark **prompt cards** with a copy button, tip (yellow) and watch-out (pink) callouts, striped tables, figures with "Fig." captions, and tool cards linking to the free tools.
-- Quiz: bordered question cards; green/red states after marking; result panel with XP and streak chips.
-- Locked days: faded card with a lock over the thumbnail.
-- Certificate: double ink frame on grid paper, printable (`print:` variants hide chrome).
+Same tokens and components: white cards on paper, the sticky lesson header with the three-step progress bar, prompt and code blocks in Geist Mono on near-black, tip and watch-out callouts, quiz cards with green/red states. The dashboard's "continue" card is white with the orange button as its one action.
 
 ## The admin (`/admin`)
 
-A different, calm workspace (owner's reference: a clean HR dashboard), scoped under `.admin-ui` in `globals.css`: white page, light grey sidebar with expandable groups, top bar with a greeting, page title with breadcrumbs and Lagos date/time, stat cards with an icon and change vs the previous 30 days, tables with a grey rounded header, soft outlined status pills, search with ⌘K, and numbered pagination. Accent `--a-accent` (#5b4de6); change that one token to re-colour it. Components live in `src/components/admin/blocks.tsx`.
+A separate calm workspace (owner's reference: a clean HR dashboard), scoped under `.admin-ui` in `globals.css`, with its own accent `--a-accent` (#5b4de6). Components in `src/components/admin/blocks.tsx`.
 
 ## Rules
 
-- Never invent wins, member counts, press logos or team members.
-- Orange as text uses `brand-text`; text on orange is ink.
-- Everything moving (marquees, carousels, pressed shadows) respects `prefers-reduced-motion`.
+- Never invent wins, member counts, press logos or team members. Sections that need real proof (testimonials, team) stay off the site until the content is real.
+- Orange text uses `brand-text`; text on orange is ink.
+- Everything that moves respects `prefers-reduced-motion`, and animated art pauses off screen.
 - No horizontal page scroll at 360px; tap targets ≥ 44px; body text ≥ 16px in lessons.

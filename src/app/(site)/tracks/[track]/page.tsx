@@ -29,20 +29,20 @@ export default async function TrackPage({ params }: { params: Promise<{ track: s
   const otherSlug = track.id === "fast_track" ? "main-track" : "fast-track";
 
   return (
-    <div className="paper-grid">
-      <header className={"field-grid border-b-2 border-edge px-4 py-14 sm:py-20 " + (plan.highlight ? "bg-brand" : "bg-accent")}>
+    <div>
+      <header className="border-b border-line bg-card px-4 py-14 sm:py-20">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-start">
           <div>
-            <p className={"label " + (plan.highlight ? "text-ink" : "text-paper")}>
+            <p className="text-[13px] font-semibold text-brand-text">
               {track.length} · {track.modules.length} lessons · {track.weeks.length} weeks
             </p>
-            <h1 className={"display mt-3 text-[48px] sm:text-[72px] " + (plan.highlight ? "text-ink" : "text-paper")}>The {track.name}</h1>
-            <p className={"mt-4 max-w-xl font-mono text-[15px] leading-relaxed " + (plan.highlight ? "text-ink" : "text-paper/85")}>{track.blurb}</p>
+            <h1 className="display mt-3 text-[44px] text-ink sm:text-[60px]">The {track.name}</h1>
+            <p className="mt-4 max-w-xl text-[16.5px] leading-relaxed text-muted">{track.blurb}</p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Link href={`/checkout/${track.id}`} className={`${btn.secondary} ${size.lg} bg-paper`}>
+              <Link href={`/checkout/${track.id}`} className={`${btn.primary} ${size.lg}`}>
                 Enroll Now · {formatNgn(plan.priceNgn)} <ArrowRight className="size-4" aria-hidden />
               </Link>
-              <span className={"label " + (plan.highlight ? "text-ink/80" : "text-paper/80")}>One-time · {plan.accessDays} days access</span>
+              <span className="text-[13.5px] text-muted">One-time · {plan.accessDays} days access</span>
             </div>
           </div>
           <div className="ink-block bg-card p-6">
@@ -60,7 +60,7 @@ export default async function TrackPage({ params }: { params: Promise<{ track: s
       </header>
 
       {/* How learning works */}
-      <section className="border-b-2 border-edge px-4 py-12">
+      <section className="border-b border-edge px-4 py-12">
         <div className="mx-auto grid max-w-6xl gap-5 md:grid-cols-3">
           {[
             { icon: ClipboardCheck, title: "A quiz after every lesson", body: "Score 70% or more to complete the lesson. Every question explains the right answer." },
@@ -68,7 +68,7 @@ export default async function TrackPage({ params }: { params: Promise<{ track: s
             { icon: Flame, title: "Daily streak", body: "Learn something every day to keep your streak alive, small steps, every day." },
           ].map((c) => (
             <div key={c.title} className="ink-block flex gap-4 bg-card p-5">
-              <span className="grid size-11 shrink-0 place-items-center border-2 border-edge bg-brand">
+              <span className="grid size-11 shrink-0 place-items-center border border-edge bg-brand">
                 <c.icon className="size-5 text-ink" aria-hidden />
               </span>
               <div>

@@ -132,15 +132,15 @@ export default function HookLineGenerator() {
       }
       output={
         <>
-          <p className="border-2 border-edge bg-brand-wash px-3 py-2 text-sm text-ink">
+          <p className="border border-edge bg-brand-wash px-3 py-2 text-sm text-ink">
             <strong>{f.platform}:</strong> {platformTip[f.platform]}
           </p>
-          <div className="overflow-hidden border-2 border-edge bg-card">
+          <div className="overflow-hidden border border-edge bg-card">
             <ul className="divide-y divide-line">
               {hooks.map((h, i) => (
                 <li key={i} className="flex items-start justify-between gap-3 px-4 py-3">
                   <div>
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-brand-text">{h.type}</span>
+                    <span className="text-[11px] font-semibold text-brand-text">{h.type}</span>
                     <p className="text-[15px] text-ink">{h.text}</p>
                   </div>
                   <CopyButton text={h.text} />

@@ -42,7 +42,8 @@ Before calling work done: typecheck, lint, tests and build must pass, and anythi
 | `src/lib/tool-guides.ts` | The app wrapper for every tool: problem, steps, result, next actions |
 | `src/components/tools/kit/` | Tool engine: autosave, share links (`?in=`), examples, result bar; `app-tool.tsx` gives hand-built tools the same features |
 | `src/app/api/tools/analyze/` | Live website checks (use `safeFetch` — never fetch user URLs directly) |
-| `src/components/art/` | Coded illustrations on a fixed 320×200 `Artboard` |
+| `src/components/art/` | Coded illustrations on a fixed 320×200 `Artboard`; `live-site.tsx` holds the six animated website mock-ups (keyframes in `globals.css`) |
+| `src/components/legal.tsx`, `(site)/privacy`, `/terms`, `/refund-policy` | Legal pages; contact from `NEXT_PUBLIC_CONTACT_EMAIL` |
 | `src/app/admin/`, `src/lib/admin/` | Admin: overview, visitors, students, student affairs, payments, certificates, blog, waitlist, audit log, setup & health. Access = signed in + email confirmed + listed in `ADMIN_EMAILS` (checked server-side on every page and action). Every change is written to `admin_audit`. |
 | `src/lib/blog.ts`, `src/app/(site)/blog/` | Blog (Supabase `posts`): per-post SEO fields, `BlogPosting` JSON-LD, RSS, sitemap, related posts. `src/components/markdown.tsx` renders posts safely (no raw HTML). |
 | `src/lib/analytics*.ts`, `/api/track` | Cookieless visitor analytics: daily-rotating salted hash, no IPs stored; country/city from Vercel headers |

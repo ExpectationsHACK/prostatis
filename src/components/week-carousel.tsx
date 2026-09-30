@@ -52,7 +52,7 @@ export function WeekCarousel({ children, label, seconds = 4, dark = false }: { c
 
   const pause = () => (paused.current = true);
   const resume = () => (paused.current = false);
-  const arrow = `grid size-11 place-items-center border-2 disabled:opacity-40 ${dark ? "border-paper bg-paper text-ink" : "border-edge bg-card text-ink"} shadow-[3px_3px_0_var(--edge)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none`;
+  const arrow = `grid size-11 place-items-center border disabled:opacity-40 ${dark ? "border-paper bg-paper text-ink" : "border-edge bg-card text-ink"} active:translate-x-[2px] active:translate-y-[2px] active:shadow-none`;
 
   return (
     <div

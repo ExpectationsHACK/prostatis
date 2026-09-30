@@ -57,7 +57,7 @@ export function SubscribeForm({ source = "homepage", buttonLabel = "Subscribe" }
 
   return (
     <form onSubmit={onSubmit} className="w-full">
-      <div className="flex overflow-hidden rounded-none border-2 border-brand bg-card focus-within:ring-2 focus-within:ring-brand/25">
+      <div className="flex overflow-hidden rounded-[10px] border border-line bg-card focus-within:border-brand focus-within:ring-4 focus-within:ring-brand/15">
         <label htmlFor={`sub-${source}`} className="sr-only">
           Email address
         </label>
@@ -68,12 +68,12 @@ export function SubscribeForm({ source = "homepage", buttonLabel = "Subscribe" }
           required
           autoComplete="email"
           placeholder="Type your email…"
-          className="min-w-0 flex-1 bg-transparent px-3.5 py-3 text-[15px] text-ink placeholder:text-muted focus:outline-none"
+          className="min-w-0 flex-1 bg-transparent px-3.5 py-3 text-[15px] text-ink placeholder:text-faint focus:outline-none"
         />
         <button
           type="submit"
           disabled={state === "sending"}
-          className="shrink-0 bg-brand px-5 text-[14px] font-extrabold uppercase tracking-[0.06em] text-brand-ink transition-colors hover:bg-brand-hover disabled:opacity-60"
+          className="m-1 shrink-0 rounded-[8px] bg-ink px-4 text-[14px] font-semibold text-white transition-colors hover:bg-[#2b2b2b] disabled:opacity-60"
         >
           {state === "sending" ? "Subscribing…" : buttonLabel}
         </button>

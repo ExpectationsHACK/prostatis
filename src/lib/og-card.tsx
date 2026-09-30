@@ -1,34 +1,24 @@
 import { Mark, og } from "./og-mark";
 
-/** 1200×630 share card in the site's print style: orange field, ink block, receipt-style footer. */
+/** 1200×630 share card: calm off-white page, the arch tile and wordmark, one big line. */
 export function OgCard({ kicker, title: rawTitle, sub: rawSub }: { kicker: string; title: string; sub: string }) {
   // The share-image font has no ₦ glyph, so spell the currency out here.
   const title = rawTitle.replace(/₦/g, "NGN ");
   const sub = rawSub.replace(/₦/g, "NGN ");
   return (
-    <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", background: og.orange, padding: 56, color: og.ink }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-        <div style={{ display: "flex", width: 64, height: 64, alignItems: "center", justifyContent: "center", background: og.paper, border: `4px solid ${og.ink}` }}>
-          <Mark size={44} />
+    <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", background: og.paper, padding: "64px 72px", color: og.ink }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+        <div style={{ display: "flex", width: 60, height: 60, alignItems: "center", justifyContent: "center", background: og.orange, borderRadius: 16 }}>
+          <Mark size={40} />
         </div>
-        <div style={{ display: "flex", fontSize: 34, fontWeight: 700 }}>STEINARK</div>
+        <div style={{ display: "flex", fontSize: 30, fontWeight: 600, letterSpacing: 4 }}>STEINARK</div>
       </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          marginTop: 44,
-          background: og.paper,
-          border: `4px solid ${og.ink}`,
-          boxShadow: `12px 12px 0 ${og.ink}`,
-          padding: "36px 44px",
-          flex: 1,
-        }}
-      >
-        <div style={{ display: "flex", fontSize: 22, letterSpacing: 4, textTransform: "uppercase", color: og.green, fontWeight: 700 }}>{kicker}</div>
-        <div style={{ display: "flex", fontSize: title.length > 40 ? 58 : 72, fontWeight: 700, lineHeight: 1.05, marginTop: 14, letterSpacing: -1.5 }}>{title}</div>
-        <div style={{ display: "flex", fontSize: 28, marginTop: "auto", color: "#5c5249" }}>{sub}</div>
+      <div style={{ display: "flex", flexDirection: "column", marginTop: "auto" }}>
+        <div style={{ display: "flex", fontSize: 26, color: og.label, fontWeight: 600 }}>{kicker}</div>
+        <div style={{ display: "flex", fontSize: title.length > 48 ? 60 : 72, fontWeight: 700, lineHeight: 1.06, marginTop: 14, letterSpacing: -2 }}>{title}</div>
+        <div style={{ display: "flex", fontSize: 28, marginTop: 26, color: og.muted }}>{sub}</div>
       </div>
+      <div style={{ display: "flex", height: 8, width: 120, background: og.orange, borderRadius: 4, marginTop: 40 }} />
     </div>
   );
 }

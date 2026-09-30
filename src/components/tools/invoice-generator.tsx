@@ -143,7 +143,7 @@ ${f.notes}`;
       }
       output={
       <div className="min-w-0 space-y-3">
-        <ul className="border-2 border-edge bg-card p-3 text-[13.5px] print:hidden">
+        <ul className="border border-edge bg-card p-3 text-[13.5px] print:hidden">
           {ready.map(([ok, label]) => (
             <li key={label} className={ok ? "text-success" : "text-danger"}>
               {ok ? "✓" : "✗"} <span className="text-ink">{label}</span>
@@ -153,7 +153,7 @@ ${f.notes}`;
         <button type="button" onClick={() => window.print()} className={`${btn.primary} ${size.md} w-full print:hidden`}>
           <Printer className="size-4" aria-hidden /> Print / Save as PDF
         </button>
-        <div id="invoice-print" className="border-2 border-edge bg-white p-6 text-[13px] text-neutral-900 sm:p-8 print:border-0 print:p-0">
+        <div id="invoice-print" className="border border-edge bg-white p-6 text-[13px] text-neutral-900 sm:p-8 print:border-0 print:p-0">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="text-xl font-bold">{f.fromName}</p>
@@ -166,7 +166,7 @@ ${f.notes}`;
           </div>
           <div className="mt-6 flex flex-wrap justify-between gap-4">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">Bill to</p>
+              <p className="text-[11px] font-semibold text-neutral-500">Bill to</p>
               <p className="font-semibold">{f.toName}</p>
               <p className="whitespace-pre-line text-neutral-600">{f.toDetails}</p>
             </div>
@@ -177,7 +177,7 @@ ${f.notes}`;
           </div>
           <table className="mt-6 w-full">
             <thead>
-              <tr className="border-b border-neutral-300 text-left text-[11px] uppercase tracking-wider text-neutral-500">
+              <tr className="border-b border-neutral-300 text-left text-[11px] text-neutral-500">
                 <th className="py-2">Description</th>
                 <th className="py-2 text-right">Qty</th>
                 <th className="py-2 text-right">Price</th>
@@ -202,7 +202,7 @@ ${f.notes}`;
             <div className="flex justify-between border-t border-neutral-300 pt-2 text-base font-bold"><span>Total due</span><span>{money(total)} {f.currency}</span></div>
           </div>
           <div className="mt-8">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">Payment details</p>
+            <p className="text-[11px] font-semibold text-neutral-500">Payment details</p>
             <p className="whitespace-pre-line">{f.payment}</p>
           </div>
           {f.notes && <p className="mt-4 text-neutral-600">{f.notes}</p>}

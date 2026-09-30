@@ -112,8 +112,8 @@ We reply fastest on WhatsApp.`.trim();
       }
       output={
         <>
-          <div className="overflow-hidden border-2 border-edge bg-card">
-            <div className="border-b border-line bg-sunk px-4 py-2 text-xs font-semibold uppercase tracking-wider text-muted">“About” line options: limit {ABOUT_LIMIT} characters</div>
+          <div className="overflow-hidden border border-edge bg-card">
+            <div className="border-b border-line bg-sunk px-4 py-2 text-xs font-semibold text-muted">“About” line options: limit {ABOUT_LIMIT} characters</div>
             <ul className="divide-y divide-line">
               {aboutVariants.map((v, i) => {
                 const over = v.length > ABOUT_LIMIT;

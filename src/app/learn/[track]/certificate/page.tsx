@@ -45,8 +45,8 @@ export default async function CertificatePage({ params }: { params: Promise<{ tr
         <PrintButton />
       </div>
 
-      <section className="mt-6 border-[3px] border-edge bg-card p-2 shadow-[8px_8px_0_var(--edge)] print:mt-0 print:shadow-none">
-        <div className="field-grid border-2 border-edge bg-paper px-6 py-10 text-center sm:px-14 sm:py-14">
+      <section className="mt-6 border-[3px] border-edge bg-card p-2 print:mt-0 print:shadow-none">
+        <div className="field-grid border border-edge bg-paper px-6 py-10 text-center sm:px-14 sm:py-14">
           <div className="flex items-center justify-center gap-2.5">
             <LogoTile size={40} />
             <span className="display text-[22px] text-ink">{site.name}</span>
@@ -59,10 +59,10 @@ export default async function CertificatePage({ params }: { params: Promise<{ tr
           </p>
           <ul className="mx-auto mt-6 flex max-w-xl flex-wrap justify-center gap-2">
             {skills.map((s) => (
-              <li key={s} className="label border-2 border-edge bg-card px-2 py-1 text-ink">{s}</li>
+              <li key={s} className="label border border-edge bg-card px-2 py-1 text-ink">{s}</li>
             ))}
           </ul>
-          <div className="mt-10 grid gap-6 border-t-2 border-edge pt-6 sm:grid-cols-2">
+          <div className="mt-10 grid gap-6 border-t border-edge pt-6 sm:grid-cols-2">
             <div>
               <p className="label text-muted">Date</p>
               <p className="mt-1 font-bold text-ink">{date}</p>

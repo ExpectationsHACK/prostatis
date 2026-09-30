@@ -16,6 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${site.url}/tools`, priority: 0.9 },
     ...liveTools.map((t) => ({ url: `${site.url}/tools/${t.slug}`, priority: 0.7 })),
     { url: `${site.url}/blog`, priority: 0.8, lastModified: posts[0]?.updated_at },
+    ...["privacy", "terms", "refund-policy"].map((p) => ({ url: `${site.url}/${p}`, priority: 0.2 })),
     ...posts.map((p) => ({ url: `${site.url}/blog/${p.slug}`, lastModified: p.updated_at, priority: 0.7 })),
     ...tags.map((t) => ({ url: `${site.url}/blog/tag/${t}`, priority: 0.4 })),
   ];

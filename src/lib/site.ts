@@ -7,6 +7,8 @@ export const site = {
   description:
     "A Nigeria-first school for building and selling websites with AI: a 14-day Fast Track for websites, landing pages, stores and web apps, a one-month Main Track that adds full SEO, automation, lead generation and AI agents, and 50 free tools, no signup required.",
   whatsappInviteUrl: process.env.NEXT_PUBLIC_WHATSAPP_INVITE_URL ?? "",
+  /** Public support address, shown on the legal pages. */
+  contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "",
 };
 
 /**
@@ -20,7 +22,7 @@ export const plans = [
     priceNgn: 15000,
     period: "14 days",
     accessDays: 30,
-    highlight: false,
+    highlight: true,
     blurb: "Design, build and ship websites, landing pages, stores and web apps, your first paid project in two weeks.",
     covers: "Web design · Web development · Web solutions · SEO basics · Shipping",
     results: [
@@ -41,7 +43,7 @@ export const plans = [
     priceNgn: 30000,
     period: "1 month",
     accessDays: 60,
-    highlight: true,
+    highlight: false,
     blurb: "The complete skill set: build, rank, automate, sell, as one offer.",
     covers: "Everything: design · development · web solutions · SEO · automation · lead gen · AI agents",
     results: [

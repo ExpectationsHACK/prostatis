@@ -69,9 +69,9 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
           </p>
           <h1 className="display mt-2 text-balance text-[36px] leading-[1.05] text-ink sm:text-[48px]">{lesson.title}</h1>
           <div className="mt-4 flex flex-wrap gap-2">
-            <span className="label inline-flex items-center gap-1.5 border-2 border-edge bg-card px-2 py-1 text-ink"><Clock className="size-3.5" aria-hidden /> {lesson.minutes} min</span>
-            <span className="label inline-flex items-center gap-1.5 border-2 border-edge bg-[#f2c230] px-2 py-1 text-ink"><Sparkles className="size-3.5" aria-hidden /> Up to {maxXp} XP</span>
-            {done && <span className="label inline-flex items-center gap-1.5 border-2 border-edge bg-[#e3f5e9] px-2 py-1 text-success"><CheckCircle2 className="size-3.5" aria-hidden /> Complete</span>}
+            <span className="label inline-flex items-center gap-1.5 border border-edge bg-card px-2 py-1 text-ink"><Clock className="size-3.5" aria-hidden /> {lesson.minutes} min</span>
+            <span className="label inline-flex items-center gap-1.5 border border-edge bg-[#f2c230] px-2 py-1 text-ink"><Sparkles className="size-3.5" aria-hidden /> Up to {maxXp} XP</span>
+            {done && <span className="label inline-flex items-center gap-1.5 border border-edge bg-[#e3f5e9] px-2 py-1 text-success"><CheckCircle2 className="size-3.5" aria-hidden /> Complete</span>}
           </div>
         </header>
 
@@ -80,10 +80,10 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
           <p className="mt-1.5 text-[17px] font-bold leading-snug text-ink">{lesson.outcome}</p>
         </div>
 
-        <ol className="mt-5 grid grid-cols-3 border-2 border-edge bg-card" aria-label="Lesson checklist">
+        <ol className="mt-5 grid grid-cols-3 border border-edge bg-card" aria-label="Lesson checklist">
           {steps.map((s, i) => (
-            <li key={s.label} className={"flex items-center gap-2 px-3 py-2.5 font-mono text-[12px] font-bold text-ink " + (i < 2 ? "border-r-2 border-edge" : "")}>
-              <span className={"grid size-5 shrink-0 place-items-center border-2 border-edge " + (s.ok ? "bg-success text-paper" : "bg-paper")}>{s.ok ? "✓" : i + 1}</span>
+            <li key={s.label} className={"flex items-center gap-2 px-3 py-2.5 font-mono text-[12px] font-bold text-ink " + (i < 2 ? "border-r border-edge" : "")}>
+              <span className={"grid size-5 shrink-0 place-items-center border border-edge " + (s.ok ? "bg-success text-paper" : "bg-paper")}>{s.ok ? "✓" : i + 1}</span>
               <span className="leading-tight">{s.label}</span>
             </li>
           ))}
@@ -92,7 +92,7 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
         <p className="mt-8 text-[17px] leading-[1.75] text-ink/90"><Rich text={lesson.intro} /></p>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          <div className="border-2 border-edge bg-card p-4">
+          <div className="border border-edge bg-card p-4">
             <p className="label flex items-center gap-1.5 text-ink"><Package className="size-3.5" aria-hidden /> You&apos;ll need</p>
             <ul className="mt-2 space-y-1.5">
               {lesson.youNeed.map((n) => (
@@ -101,12 +101,12 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
             </ul>
           </div>
           {terms.length > 0 && (
-            <div className="border-2 border-edge bg-card p-4">
+            <div className="border border-edge bg-card p-4">
               <p className="label flex items-center gap-1.5 text-ink"><BookA className="size-3.5" aria-hidden /> New words today</p>
               <p className="mt-1 font-mono text-[12px] text-muted">Each one is explained in plain English when it comes up. Tap to jump.</p>
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {terms.map((t) => (
-                  <a key={t} href={`#term-${slugTerm(t)}`} className="border-2 border-edge bg-accent px-2 py-0.5 font-mono text-[12px] font-bold text-accent-ink hover:bg-ink">{t}</a>
+                  <a key={t} href={`#term-${slugTerm(t)}`} className="border border-edge bg-accent px-2 py-0.5 font-mono text-[12px] font-bold text-accent-ink hover:bg-ink">{t}</a>
                 ))}
               </div>
               <Link href="/learn/glossary" className="label mt-3 inline-block text-brand-text underline">Full glossary →</Link>
@@ -114,7 +114,7 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
           )}
         </div>
 
-        <nav className="mt-8 border-2 border-edge bg-card p-4" aria-label="In this lesson">
+        <nav className="mt-8 border border-edge bg-card p-4" aria-label="In this lesson">
           <p className="label flex items-center gap-1.5 text-ink"><BookOpen className="size-3.5" aria-hidden /> In this lesson</p>
           <ol className="mt-2 space-y-1 font-mono text-[13px]">
             {lesson.sections.map((s, i) => (
@@ -142,7 +142,7 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
               </li>
             ))}
           </ol>
-          <div className="mt-6 border-t-2 border-dashed border-line pt-5">
+          <div className="mt-6 border-t border-dashed border-line pt-5">
             <TaskCheck slug={slug} day={day} done={lesson.task.done} confirmed={Boolean(row?.task_done_at)} />
           </div>
         </section>
@@ -153,7 +153,7 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
             {lesson.resources.map((r) => (
               <li key={r.url}>
-                <a href={r.url} target="_blank" rel="noopener noreferrer" className="flex h-full gap-3 border-2 border-edge bg-card p-3 hover:bg-wash">
+                <a href={r.url} target="_blank" rel="noopener noreferrer" className="flex h-full gap-3 border border-edge bg-card p-3 hover:bg-wash">
                   <ExternalLink className="mt-0.5 size-4 shrink-0 text-brand-text" aria-hidden />
                   <span>
                     <span className="block font-bold leading-snug text-ink">{r.label}</span>
@@ -171,14 +171,14 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
           <ol className="mt-4 space-y-2.5">
             {lesson.recap.map((r, i) => (
               <li key={i} className="flex gap-3 text-[15.5px] leading-relaxed text-ink">
-                <span className="display grid size-6 shrink-0 place-items-center border-2 border-edge bg-card text-[13px]">{i + 1}</span>
+                <span className="display grid size-6 shrink-0 place-items-center border border-edge bg-card text-[13px]">{i + 1}</span>
                 <span><Rich text={r} /></span>
               </li>
             ))}
           </ol>
         </section>
 
-        <section id="assessment" className="mt-12 scroll-mt-24 border-t-2 border-edge pt-8">
+        <section id="assessment" className="mt-12 scroll-mt-24 border-t border-edge pt-8">
           <p className="label text-brand-text">Assessment</p>
           <h2 className="display mt-1 text-[30px] text-ink">Check what you learned</h2>
           <div className="mt-4">
@@ -186,7 +186,7 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
           </div>
         </section>
 
-        <nav className="mt-14 flex items-center justify-between gap-3 border-t-2 border-edge pt-6" aria-label="Lesson navigation">
+        <nav className="mt-14 flex items-center justify-between gap-3 border-t border-edge pt-6" aria-label="Lesson navigation">
           {prev ? (
             <Link href={`/learn/${slug}/${prev.day}`} className={`${btn.secondary} ${size.md}`}>
               <ArrowLeft className="size-4" aria-hidden /> Day {prev.day}

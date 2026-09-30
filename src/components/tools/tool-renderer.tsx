@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useState, type ComponentType } from "react";
 import type { ToolDef } from "@/lib/tool-defs/types";
 
-const loading = () => <div className="h-96 animate-pulse border-2 border-edge bg-sunk" />;
+const loading = () => <div className="h-96 animate-pulse border border-edge bg-sunk" />;
 
 // Hand-built tools. Client-only: they restore saved inputs and shared links from the browser.
 const custom: Record<string, ComponentType> = {

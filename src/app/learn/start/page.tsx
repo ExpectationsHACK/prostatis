@@ -24,7 +24,7 @@ export default async function StartHere() {
         <div className="mt-10">
           <LessonBody lesson={startHere} />
         </div>
-        <div className="mt-12 border-t-2 border-edge pt-6 text-center">
+        <div className="mt-12 border-t border-edge pt-6 text-center">
           <Link href={first} className={`${btn.primary} ${size.lg}`}>I&apos;m ready: start Day 1</Link>
         </div>
       </article>

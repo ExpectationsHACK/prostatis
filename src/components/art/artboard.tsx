@@ -13,6 +13,8 @@ export const ART_H = 200;
 export function Artboard({ children, bg, className = "" }: { children: ReactNode; bg: string; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
+  // Animated art only plays while it's on screen (saves battery and data on phones).
+  const [live, setLive] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -22,11 +24,16 @@ export function Artboard({ children, bg, className = "" }: { children: ReactNode
       if (w) setScale(w / ART_W);
     });
     ro.observe(el);
-    return () => ro.disconnect();
+    const io = new IntersectionObserver(([e]) => setLive(e.isIntersecting), { threshold: 0.25 });
+    io.observe(el);
+    return () => {
+      ro.disconnect();
+      io.disconnect();
+    };
   }, []);
 
   return (
-    <div ref={ref} className={`relative w-full overflow-hidden ${className}`} style={{ aspectRatio: `${ART_W} / ${ART_H}`, background: bg }} aria-hidden>
+    <div ref={ref} className={`relative w-full overflow-hidden ${live ? "is-live" : ""} ${className}`} style={{ aspectRatio: `${ART_W} / ${ART_H}`, background: bg }} aria-hidden>
       <div className="absolute left-0 top-0 origin-top-left" style={{ width: ART_W, height: ART_H, transform: `scale(${scale})` }}>
         {children}
       </div>

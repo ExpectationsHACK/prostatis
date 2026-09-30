@@ -4,12 +4,14 @@
  * on a flat field of colour like a printed zine cover.
  */
 export const tones = {
-  orange: { bg: "#ff6719", fg: "#ffffff", dim: "rgba(255,255,255,0.72)" },
-  ink: { bg: "#1f2021", fg: "#f4f4f4", dim: "#ff8a4c" },
-  peach: { bg: "#ffe1cf", fg: "#5b2406", dim: "#a8471a" },
-  forest: { bg: "#0f4d3a", fg: "#eaf4ee", dim: "#9fd3b8" },
-  indigo: { bg: "#2a2e6e", fg: "#eceefe", dim: "#aab0f5" },
-  sand: { bg: "#f1e9dc", fg: "#3a3128", dim: "#8a6f4e" },
+  // One quiet family: warm neutrals, a soft orange tint and a single dark. The orange itself
+  // appears only inside the art (buttons, tags), never as a whole background.
+  orange: { bg: "#fbe8de", fg: "#151515", dim: "#b8400f" },
+  ink: { bg: "#1b1b1b", fg: "#f4f4f2", dim: "#f0946b" },
+  peach: { bg: "#f6f0ea", fg: "#151515", dim: "#8a5a3c" },
+  forest: { bg: "#eef0ec", fg: "#151515", dim: "#55604f" },
+  indigo: { bg: "#eeeff3", fg: "#151515", dim: "#555a6e" },
+  sand: { bg: "#f3f1ec", fg: "#151515", dim: "#6f6858" },
 } as const;
 
 export type Tone = keyof typeof tones;
@@ -37,7 +39,7 @@ export function Cover({
       aria-hidden
     >
       {label && size !== "sm" && (
-        <span className="text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: t.dim }}>
+        <span className="text-[10px] font-semibold" style={{ color: t.dim }}>
           {label}
         </span>
       )}

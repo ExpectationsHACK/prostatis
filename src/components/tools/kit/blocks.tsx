@@ -5,9 +5,9 @@ import { useEffect } from "react";
 import type { Block } from "@/lib/tool-defs/types";
 import { CopyButton, Output } from "../../tool-ui";
 
-const head = "flex items-center justify-between gap-2 border-b-2 border-edge px-4 py-2.5";
-const headTitle = "font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-muted";
-const box = "overflow-hidden border-2 border-edge bg-card";
+const head = "flex items-center justify-between gap-2 border-b border-edge px-4 py-2.5";
+const headTitle = "font-mono text-[11px] font-bold text-muted";
+const box = "overflow-hidden border border-edge bg-card";
 
 function FontLoader({ families }: { families: string[] }) {
   useEffect(() => {
@@ -31,7 +31,7 @@ export function BlockView({ b }: { b: Block }) {
       const Icon = b.tone === "warn" ? CircleAlert : b.tone === "good" ? Check : Info;
       const cls = b.tone === "warn" ? "bg-danger/10 text-danger" : b.tone === "good" ? "bg-success/10 text-success" : "bg-brand-wash text-ink";
       return (
-        <p className={`flex items-start gap-2 border-2 border-edge px-3 py-2.5 text-[14px] ${cls}`}>
+        <p className={`flex items-start gap-2 border border-edge px-3 py-2.5 text-[14px] ${cls}`}>
           <Icon className="mt-0.5 size-4 shrink-0" aria-hidden />
           <span className="text-ink">{b.text}</span>
         </p>
@@ -68,7 +68,7 @@ export function BlockView({ b }: { b: Block }) {
               <thead className="bg-sunk">
                 <tr>
                   {b.columns.map((c) => (
-                    <th key={c} className="whitespace-nowrap px-3 py-2 font-mono text-[11px] font-bold uppercase tracking-wider text-muted">
+                    <th key={c} className="whitespace-nowrap px-3 py-2 font-mono text-[11px] font-bold text-muted">
                       {c}
                     </th>
                   ))}
@@ -94,7 +94,7 @@ export function BlockView({ b }: { b: Block }) {
       return (
         <div className="grid grid-cols-2 gap-3">
           {b.items.map((it) => (
-            <div key={it.label} className="border-2 border-edge bg-card p-4 shadow-[4px_4px_0_var(--edge)]">
+            <div key={it.label} className="border border-edge bg-card p-4">
               <p className={headTitle}>{it.label}</p>
               <p className="display tabular mt-1 text-[28px] text-ink">{it.value}</p>
               {it.sub && <p className="mt-0.5 text-[12px] text-muted">{it.sub}</p>}
@@ -156,7 +156,7 @@ export function BlockView({ b }: { b: Block }) {
             {b.sections.map((sec, i) => (
               <div
                 key={i}
-                className={"flex items-center justify-between border-2 border-dashed border-edge/50 bg-card px-3 font-mono text-[11px] font-bold uppercase tracking-wider text-muted " + (i === 0 ? "h-8" : i === 1 ? "h-24" : "h-14")}
+                className={"flex items-center justify-between border border-dashed border-edge/50 bg-card px-3 font-mono text-[11px] font-bold text-muted " + (i === 0 ? "h-8" : i === 1 ? "h-24" : "h-14")}
               >
                 <span>{sec}</span>
                 <span className="text-faint">{String(i + 1).padStart(2, "0")}</span>
@@ -207,7 +207,7 @@ export function BlockView({ b }: { b: Block }) {
           <ol className="bg-sunk p-4">
             {b.steps.map((st, i) => (
               <li key={i} className="flex flex-col items-center">
-                <div className="w-full max-w-md border-2 border-edge bg-card px-3 py-2 shadow-[3px_3px_0_var(--edge)]">
+                <div className="w-full max-w-md border border-edge bg-card px-3 py-2">
                   <p className="text-[13px] font-bold text-ink">
                     <span className="mr-2 font-mono text-brand-text">{String(i + 1).padStart(2, "0")}</span>
                     {st.label}
@@ -229,7 +229,7 @@ export function BlockView({ b }: { b: Block }) {
           </div>
           <div className="grid place-items-center bg-sunk p-3">
             {/* eslint-disable-next-line @next/next/no-img-element -- data URL from the analysis, not an optimisable asset */}
-            <img src={b.src} alt={b.alt} className="max-h-[420px] w-auto border-2 border-edge" />
+            <img src={b.src} alt={b.alt} className="max-h-[420px] w-auto border border-edge" />
           </div>
         </div>
       );

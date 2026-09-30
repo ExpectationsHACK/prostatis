@@ -75,7 +75,7 @@ export default async function BillingPage() {
       <h2 className="mt-10 font-display text-xl font-semibold text-ink">Payment history</h2>
       {payments?.length ? (
         <table className="tabular mt-3 w-full text-left text-[14px]">
-          <thead className="text-[11px] uppercase tracking-[0.06em] text-muted">
+          <thead className="text-[11px] text-muted">
             <tr>
               <th className="py-2">Date</th>
               <th className="py-2">Plan</th>

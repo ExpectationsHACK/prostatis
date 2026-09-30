@@ -23,19 +23,31 @@ export function HeaderAuth({ stacked = false }: { stacked?: boolean }) {
   const wide = stacked ? "w-full" : "";
   if (signedIn) {
     return (
-      <Link href="/dashboard" className={`${btn.primary} ${stacked ? size.lg : size.md} ${wide}`}>
+      <Link href="/dashboard" className={`${btn.primary} ${stacked ? size.lg : size.sm} ${wide}`}>
         My dashboard <ArrowRight className="size-4" aria-hidden />
       </Link>
     );
   }
-  return (
+  const enroll = (
+    <Link href="/pricing" className={`${btn.primary} ${stacked ? size.lg : size.sm} ${wide}`}>
+      Enroll Now
+    </Link>
+  );
+  const signIn = (
+    <Link href="/login" className={`${stacked ? `${btn.secondary} ${size.lg}` : `${btn.ghost} ${size.sm}`} ${wide}`}>
+      Sign in
+    </Link>
+  );
+  // Phones: the main action first. Desktop: quiet Sign in, then the orange button at the end.
+  return stacked ? (
     <>
-      <Link href="/pricing" className={`${btn.primary} ${stacked ? size.lg : size.md} ${wide}`}>
-        Enroll Now
-      </Link>
-      <Link href="/login" className={`${stacked ? `${btn.secondary} ${size.lg}` : `${btn.ghost} ${size.md}`} ${wide}`}>
-        Sign in
-      </Link>
+      {enroll}
+      {signIn}
+    </>
+  ) : (
+    <>
+      {signIn}
+      {enroll}
     </>
   );
 }
