@@ -1,82 +1,65 @@
-import { ArrowRight, Check } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { btn, size } from "@/components/ui";
-import { fastTrack, mainTrack } from "@/lib/curriculum";
-import { formatNgn, plans } from "@/lib/site";
+import { PlanCard } from "@/components/plan-card";
+import { plans } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Pricing: Fast Track ₦15,000 · Main Track ₦30,000",
-  description: "Two one-time tracks: a 14-day Fast Track for websites, landing pages, stores, booking systems and web apps, or the one-month Main Track that adds full SEO, automation, AI agents and lead generation.",
+  description: "Pay once in naira. The 14-day Fast Track takes you from zero to your first paid website; the one-month Main Track adds SEO, automation, AI agents and lead generation.",
 };
 
 const pricingFaqs = [
-  { q: "How do I pay?", a: "Once, in naira, through Paystack, card, bank transfer or USSD. No subscription and no dollar card needed." },
-  { q: "How long do I keep access?", a: "The Fast Track stays unlocked for 30 days and the Main Track for 60, the track itself plus time to catch up." },
-  { q: "What happens right after I pay?", a: "You're taken straight to the WhatsApp community invite, and your dashboard unlocks immediately." },
-  { q: "Do I get a certificate?", a: "Yes, on both tracks. Pass every lesson and the final assessment and your certificate is ready to download, emailed to you, and verifiable on a public page with its unique ID." },
-  { q: "Can I upgrade from the Fast Track later?", a: "Yes. Everything in the Fast Track is part of the Main Track, so nothing you've learned is wasted." },
+  { q: "How do I pay?", a: "Once, in naira, through Paystack: card, bank transfer or USSD. No subscription and no dollar card needed." },
+  { q: "What happens right after I pay?", a: "Your dashboard and first lesson unlock immediately, and you get the invite to the WhatsApp community." },
+  { q: "How long do I keep access?", a: "The Fast Track stays open for 30 days and the Main Track for 60: the track itself plus time to catch up." },
+  { q: "Do I get a certificate?", a: "Yes, on both tracks. Pass every lesson and the final assessment and your certificate is ready to download, emailed to you, and verifiable on a public page." },
+  { q: "Can I upgrade later?", a: "Yes. Everything in the Fast Track is part of the Main Track, so nothing you've learned is wasted." },
+  { q: "What if it's not for me?", a: "Read the refund policy before you pay. It explains when you can get your money back and how." },
 ];
 
 export default function PricingPage() {
-  const lessons = { fast_track: fastTrack.modules.length, main_track: mainTrack.modules.length };
+  // The Fast Track is the main offer, so it always comes first.
+  const ordered = [...plans].sort((a, b) => Number(b.id === "fast_track") - Number(a.id === "fast_track"));
 
   return (
     <div>
-      <header className="border-b border-line bg-card px-4 py-14 text-center sm:py-20">
-        <p className="text-[13px] font-semibold text-brand-text">Pricing</p>
-        <h1 className="display mx-auto mt-2 max-w-3xl text-balance text-[40px] text-ink sm:text-[56px]">Pick your track</h1>
+      <header className="border-b-2 border-ink bg-card px-4 py-14 text-center sm:py-20">
+        <p className="label text-brand-text">Pricing</p>
+        <h1 className="display mx-auto mt-3 max-w-3xl text-balance text-[40px] text-ink sm:text-[60px]">Pay once. Keep everything you build.</h1>
         <p className="mx-auto mt-4 max-w-xl text-[16.5px] leading-relaxed text-muted">
-          Pay once. Build websites, stores and web apps in 14 days, or learn the whole offer in a month.
+          Start with the Fast Track to build and sell websites in 14 days. Choose the Main Track to sell SEO, automation and AI agents on top.
         </p>
       </header>
 
-      <div className="mx-auto grid max-w-5xl gap-6 px-4 py-14 md:grid-cols-2">
-        {plans.map((p) => {
-          const hi = p.highlight;
-          return (
-            <div key={p.id} className={"relative flex flex-col rounded-[16px] border bg-card p-7 " + (hi ? "border-brand shadow-[0_20px_50px_-30px_rgba(235,94,40,0.6)]" : "border-line")}>
-              {hi && <span className="absolute -top-3 left-7 rounded-full bg-brand px-3 py-1 text-[12px] font-semibold text-brand-ink">Start here</span>}
-              <h2 className="display text-[34px] text-ink">{p.name}</h2>
-              <p className="mt-1 text-[14.5px] leading-relaxed text-muted">{p.blurb}</p>
-              <p className="display tabular mt-5 text-[52px] text-ink">{formatNgn(p.priceNgn)}</p>
-              <p className="label text-muted">
-                One-time · {p.period} · {lessons[p.id]} lessons · {p.accessDays} days access
-              </p>
-              <p className={"mt-3 border border-dashed px-3 py-2 font-mono text-[12px] " + "border-line text-muted"}>{p.covers}</p>
-              <p className="label mt-6 text-ink">What you&apos;ll walk away with</p>
-              <ul className="mt-3 flex-1 space-y-2.5">
-                {p.results.map((r) => (
-                  <li key={r} className="flex gap-2.5 text-[14px] text-ink">
-                    <Check className="mt-0.5 size-[18px] shrink-0 text-brand-text" strokeWidth={2.5} aria-hidden />
-                    {r}
-                  </li>
-                ))}
-              </ul>
-              <Link href={`/checkout/${p.id}`} className={`${hi ? btn.primary : btn.secondary} ${size.lg} mt-8 w-full`}>
-                Enroll Now <ArrowRight className="size-4" aria-hidden />
-              </Link>
-              <Link href={p.id === "fast_track" ? "/tracks/fast-track" : "/tracks/main-track"} className="mt-3 text-center font-mono text-[12px] font-bold text-ink underline">
-                See the {p.name} curriculum
-              </Link>
-            </div>
-          );
-        })}
+      <div className="mx-auto grid max-w-5xl gap-8 px-4 py-14 md:grid-cols-2">
+        {ordered.map((p) => (
+          <PlanCard key={p.id} plan={p} badge={p.highlight ? "Start here" : "Everything"} />
+        ))}
       </div>
 
-      <div className="mx-auto max-w-3xl px-4 pb-16">
-        <p className="ink-block bg-card px-4 py-3 text-center font-mono text-[13px] text-muted">
-          Not ready to pay? All 50 tools are free, {" "}
-          <Link href="/tools" className="font-bold text-ink underline">
-            start with those
+      <div className="mx-auto max-w-4xl px-4 pb-20">
+        <p className="ink-block bg-brand-wash px-5 py-4 text-center text-[15px] text-ink">
+          Not ready yet? All 50 tools are free, no signup.{" "}
+          <Link href="/tools" className="font-semibold underline">
+            Start with those
           </Link>
           .
         </p>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2">
+        <div className="mt-12 grid gap-x-10 gap-y-8 sm:grid-cols-2">
           {pricingFaqs.map((f) => (
             <div key={f.q}>
-              <h3 className="font-mono text-[14px] font-bold text-ink">{f.q}</h3>
-              <p className="mt-1 font-mono text-[13px] leading-relaxed text-muted">{f.a}</p>
+              <h3 className="text-[16px] font-semibold text-ink">{f.q}</h3>
+              <p className="mt-1.5 text-[15px] leading-relaxed text-muted">
+                {f.a}
+                {f.q.startsWith("What if") && (
+                  <>
+                    {" "}
+                    <Link href="/refund-policy" className="font-semibold text-ink underline">
+                      Refund policy
+                    </Link>
+                  </>
+                )}
+              </p>
             </div>
           ))}
         </div>

@@ -45,10 +45,10 @@ export const fastTrack: Track = {
   id: "fast_track",
   name: "Fast Track",
   length: "14 days",
-  blurb: "Design and build landing pages, business websites, online stores, booking systems and web apps with logins, then get found and get paid, in two weeks.",
+  blurb: "One lesson a day. Your first site is live on your own domain by day 7. By day 14 you have built a store, a booking system and a web app, and pitched real businesses.",
   weeks: [
-    { week: 1, title: "Design & build websites", blurb: "Brand, layout, AI setup, a business site, landing pages, polish, deploy." },
-    { week: 2, title: "Web solutions, SEO & shipping", blurb: "Bookings, stores, web apps, SEO basics, portfolio, pitch, get paid." },
+    { week: 1, title: "Design & build websites", blurb: "Brand, layout, your AI setup, a five-page business site and a landing page, live on your own domain." },
+    { week: 2, title: "Web solutions, SEO & shipping", blurb: "Booking systems, online stores and web apps, then SEO, your portfolio, your price and your first pitches." },
   ],
   modules: [
     { day: 1, lesson: "design-brand-kit", week: 1, pillar: "web_design", title: "Design direction & brand kit", summary: "Pick a look that fits the business: colours, fonts and a logo concept, with AI.", outcomes: ["Colour palette with contrast checks", "Font pairing", "Logo concept prompts"], thumb: { tool: "color-palette-generator" } },
@@ -73,12 +73,12 @@ export const mainTrack: Track = {
   id: "main_track",
   name: "Main Track",
   length: "1 month",
-  blurb: "Everything: web design, development, web solutions, SEO, automation, lead generation and AI agents, sold as one offer.",
+  blurb: "Everything in the Fast Track, plus SEO that ranks businesses on Google, automations that save them hours and AI agents that answer their customers 24/7, sold together as one package.",
   weeks: [
-    { week: 1, title: "Design & build", blurb: "Brand, layout, AI dev setup, a business website, landing pages, live on a domain." },
-    { week: 2, title: "Web solutions & SEO", blurb: "Stores, bookings, web apps, then make Google find them." },
-    { week: 3, title: "Automation & AI agents", blurb: "Save a business hours and answer its customers 24/7." },
-    { week: 4, title: "Lead gen, sales & shipping", blurb: "Find clients, close them, deliver the full package." },
+    { week: 1, title: "Design & build", blurb: "Brand, layout, your AI setup, a business website and landing pages, live on your own domain." },
+    { week: 2, title: "Web solutions & SEO", blurb: "Online stores, booking systems and web apps, then the SEO that makes Google show them." },
+    { week: 3, title: "Automation & AI agents", blurb: "Automations that save a business hours and AI agents that answer its customers 24/7." },
+    { week: 4, title: "Lead gen, sales & shipping", blurb: "Find clients, win them with a proposal, then deliver the full package and get paid." },
   ],
   modules: [
     { day: 1, lesson: "design-brand-kit", week: 1, pillar: "web_design", title: "Design direction & brand kits", summary: "Moodboards, palettes, fonts and a style guide clients can keep.", outcomes: ["Brand style guide", "Palette + fonts", "Logo concepts"], thumb: { tool: "brand-style-guide" } },

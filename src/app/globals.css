@@ -1,26 +1,26 @@
 @import "tailwindcss";
 
 /*
-  STEINARK: calm, neutral and precise. Warm off-white page, white cards, near-black text,
-  hairline borders and one orange accent reserved for the main action. One sans-serif
-  family (Geist) for everything; Geist Mono only for code. Light only.
+  STEINARK: bold and crafted. Warm off-white pages, white cards drawn with a crisp ink
+  outline and a hard offset shadow, near-black text, and one orange accent for the main
+  action. Archivo for headlines, Geist for everything you read, Geist Mono only for code.
 */
 :root {
-  --paper: #fafaf8;
+  --paper: #faf8f4;
   --card: #ffffff;
-  --sunk: #f4f3ef;
-  --wash: #efede8;
+  --sunk: #f3f0ea;
+  --wash: #ece7de;
   --ink: #151515;
-  --muted: #625f58; /* 6.3:1 on paper */
-  --faint: #b5b1a8;
-  --line: #e7e5e0;
-  --edge: #dcd9d2; /* borders and the outlines inside illustrations */
+  --muted: #5f5b53; /* 6.4:1 on paper */
+  --faint: #b3ada2;
+  --line: #e6e1d8; /* hairline dividers */
+  --edge: #151515; /* ink outlines */
   --brand: #eb5e28;
   --brand-hover: #d9501d;
   --brand-ink: #151515; /* ink on orange: 5.4:1 */
   --brand-text: #b8400f; /* orange text on white: 5.6:1 */
   --brand-wash: #fdeee6;
-  --accent: #151515; /* secondary solid buttons */
+  --accent: #151515;
   --accent-ink: #ffffff;
   --danger: #b42318;
   --success: #16794a;
@@ -48,9 +48,9 @@
   --color-danger: var(--danger);
   --color-success: var(--success);
   --font-sans: var(--font-geist), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: var(--font-geist), system-ui, sans-serif;
+  --font-display: var(--font-archivo), "Arial Narrow", sans-serif;
   --font-serif: var(--font-geist), system-ui, sans-serif;
-  /* "font-mono" is body text now; real code uses font-code (and pre/code/kbd below). */
+  /* "font-mono" reads as normal text; real code uses font-code (and pre/code/kbd below). */
   --font-mono: var(--font-geist), system-ui, sans-serif;
   --font-code: var(--font-geist-mono), ui-monospace, monospace;
 }
@@ -72,32 +72,40 @@ samp {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
 }
 
-/* Legacy texture hooks: kept as no-ops so the calmer look applies everywhere. */
-.paper-grid,
-.field-grid {
+/* A faint dot grid for the few places that want texture (hero, dark bands). */
+.paper-grid {
   background-image: none;
 }
+.field-grid {
+  background-image: radial-gradient(rgba(21, 21, 21, 0.12) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
 
-/* Card surface: hairline border, soft radius, barely-there shadow. */
+/* Signature card: crisp ink outline, soft corners, hard offset shadow. */
 .ink-block {
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  box-shadow: 0 1px 2px rgba(21, 21, 21, 0.04);
+  border: 2px solid var(--edge);
+  border-radius: 16px;
+  box-shadow: 4px 4px 0 var(--edge);
   overflow: hidden;
 }
 .block-press {
-  transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+  transition: transform 150ms ease, box-shadow 150ms ease;
 }
 .block-press:hover {
-  border-color: var(--edge);
-  box-shadow: 0 6px 20px -8px rgba(21, 21, 21, 0.14);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--edge);
 }
-@media (prefers-reduced-motion: no-preference) {
-  .block-press:hover { transform: translateY(-1px); }
+.block-press:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--edge);
+}
+@media (prefers-reduced-motion: reduce) {
+  .block-press:hover,
+  .block-press:active { transform: none; }
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--brand) 24%, transparent);
+  background: color-mix(in srgb, var(--brand) 26%, transparent);
 }
 
 :focus-visible {
@@ -119,116 +127,31 @@ textarea {
   scrollbar-color: var(--faint) transparent;
 }
 
-/* Headlines: same family as the body, heavier and tighter. */
+/* Headlines: Archivo, wide and heavy. */
 .display {
-  font-family: var(--font-geist), system-ui, sans-serif;
+  font-family: var(--font-archivo), "Arial Narrow", sans-serif;
+  font-stretch: 108%;
   font-weight: 600;
-  letter-spacing: -0.028em;
-  line-height: 1.08;
+  letter-spacing: -0.03em;
+  line-height: 1.04;
 }
 
-/* Small labels and eyebrows: sentence case, medium weight. */
+/* Eyebrows and small labels: short, capitals, a little air. Use sparingly. */
 .label {
   font-family: var(--font-geist), system-ui, sans-serif;
-  font-size: 12.5px;
-  font-weight: 500;
-  letter-spacing: 0;
-  text-transform: none;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }
 
-/* Kept for markup compatibility; no hand-drawn underline in the new look. */
+/* Hand-drawn underline under one word in a heading. */
 .scribble {
-  background: none;
-}
-
-/* Sliding rows: each track holds its items twice and moves by half its width. */
-@keyframes slide-left {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(-50%, 0, 0); }
-}
-@keyframes slide-right {
-  from { transform: translate3d(-50%, 0, 0); }
-  to { transform: translate3d(0, 0, 0); }
-}
-.slide-left { animation: slide-left var(--dur, 60s) linear infinite; }
-.slide-right { animation: slide-right var(--dur, 60s) linear infinite; }
-.pause-on-hover:hover .slide-left,
-.pause-on-hover:hover .slide-right { animation-play-state: paused; }
-
-@media (prefers-reduced-motion: reduce) {
-  .slide-left,
-  .slide-right { animation: none; }
-}
-
-/* Rotating highlight border: a conic sweep behind a 2px gap. */
-@property --spin {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-@keyframes spin-border {
-  to { --spin: 360deg; }
-}
-.spin-border {
-  position: relative;
-  isolation: isolate;
-}
-.spin-border::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  z-index: -1;
-  border-radius: inherit;
-  background: conic-gradient(from var(--spin), transparent 0deg, var(--brand) 60deg, #ffd2b8 110deg, transparent 170deg, transparent 360deg);
-  animation: spin-border 4s linear infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .spin-border::before { animation: none; background: var(--brand); }
-}
-
-.tabular {
-  font-variant-numeric: tabular-nums;
-}
-
-/* Invoice generator: print only the invoice */
-@media print {
-  body * {
-    visibility: hidden;
-  }
-  #invoice-print,
-  #invoice-print * {
-    visibility: visible;
-  }
-  #invoice-print {
-    position: absolute;
-    inset: 0 0 auto 0;
-  }
-}
-
-/* Lesson-complete confetti: each bit flies from the centre to its own --x/--y. */
-@keyframes confetti-burst {
-  0% { transform: translate(0, 0) rotate(0deg) scale(0.4); opacity: 1; }
-  80% { opacity: 1; }
-  100% { transform: translate(var(--x), var(--y)) rotate(var(--r)) scale(1); opacity: 0; }
-}
-.confetti {
-  animation: confetti-burst 1.1s cubic-bezier(0.2, 0.7, 0.3, 1) both;
-}
-@media (prefers-reduced-motion: reduce) {
-  .confetti { animation: none; display: none; }
-}
-
-/* Pre-footer paper squares: a slow bob and turn. Still for reduced motion. */
-@keyframes float-bit {
-  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
-  50% { transform: translateY(-10px) rotate(calc(var(--r, 0deg) + 12deg)); }
-}
-.float-bit {
-  transform: rotate(var(--r, 0deg));
-  animation: float-bit 10s ease-in-out infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .float-bit { animation: none; }
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8c30-5 60-6 98-4s70 3 98-1' fill='none' stroke='%23eb5e28' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 0.32em;
+  padding-bottom: 0.12em;
 }
 
 /* ---------- Live site mock-ups (components/art/live-site.tsx) ----------
@@ -357,6 +280,77 @@ textarea {
   76%, 100% { opacity: 0; transform: translate(112px, -113px); }
 }
 @keyframes lk-pf-modal { 0%, 68% { opacity: 0; } 72%, 92% { opacity: 1; } 96%, 100% { opacity: 0; } }
+
+/* ---------- Thumbnail motion kit (components/art/kit.tsx) ----------
+   Small building blocks every tool and product thumbnail combines into its own story.
+   All loop on the thumbnail's --d and start at the element's --at, so items build up in
+   sequence and fade out in the same order. Base styles are the finished frame, which is
+   what reduced-motion users see. */
+.ak {
+  animation-duration: var(--d, 8s);
+  animation-delay: var(--at, 0s);
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.ak-in { animation-name: ak-in; }
+.ak-pop { animation-name: ak-pop; }
+.ak-left { animation-name: ak-left; }
+.ak-right { animation-name: ak-right; }
+.ak-type { animation-name: ak-type; animation-timing-function: steps(18, end); }
+.ak-grow-y { animation-name: ak-grow-y; transform-origin: bottom; }
+.ak-grow-x { animation-name: ak-grow-x; transform-origin: left; }
+.ak-press { animation-name: ak-press; }
+.ak-glow { animation-name: ak-glow; }
+.ak-mark { animation-name: ak-mark; }
+.ak-cursor { animation-name: ak-cursor; opacity: 0; }
+.ak-stamp { animation-name: ak-stamp; transform: rotate(var(--rot, -12deg)); }
+.ak-needle { animation-name: ak-needle; transform-origin: 50% 100%; transform: rotate(var(--r1, 40deg)); }
+.ak-draw { animation-name: ak-draw; stroke-dasharray: var(--len, 300); }
+.ak-scroll-y { animation-name: ak-scroll-y; }
+.ak-scroll-x { animation-name: ak-scroll-x; }
+.ak-swap-a { animation-name: ak-swap-a; }
+.ak-swap-b { animation-name: ak-swap-b; opacity: 0; }
+.ak-shake { animation-name: ak-shake; }
+.ak-scan { animation-name: ak-scan; opacity: 0; }
+.ak-fill { animation-name: ak-fill; }
+.ak-blink { animation: ak-blink 1s steps(1) infinite; }
+.ak-pulse { animation: ak-pulse 1.8s ease-out infinite; }
+.ak-float { animation: ak-float 3.6s ease-in-out infinite alternate; }
+.ak-spin { animation: ak-spin 1.1s linear infinite; }
+
+@keyframes ak-in { 0% { opacity: 0; transform: translateY(5px); } 7%, 84% { opacity: 1; transform: none; } 92%, 100% { opacity: 0; transform: translateY(-3px); } }
+@keyframes ak-pop { 0% { opacity: 0; transform: scale(0.6); } 6% { opacity: 1; transform: scale(1.08); } 9%, 84% { opacity: 1; transform: scale(1); } 92%, 100% { opacity: 0; transform: scale(0.9); } }
+@keyframes ak-left { 0% { opacity: 0; transform: translateX(-10px); } 7%, 84% { opacity: 1; transform: none; } 92%, 100% { opacity: 0; } }
+@keyframes ak-right { 0% { opacity: 0; transform: translateX(10px); } 7%, 84% { opacity: 1; transform: none; } 92%, 100% { opacity: 0; } }
+@keyframes ak-type { 0% { clip-path: inset(0 100% 0 0); } 18%, 84% { clip-path: inset(0 0 0 0); } 92%, 100% { clip-path: inset(0 100% 0 0); } }
+@keyframes ak-grow-y { 0% { transform: scaleY(0); } 14%, 84% { transform: scaleY(1); } 94%, 100% { transform: scaleY(0); } }
+@keyframes ak-grow-x { 0% { transform: scaleX(0); } 16%, 84% { transform: scaleX(1); } 94%, 100% { transform: scaleX(0); } }
+@keyframes ak-press { 0%, 1% { transform: none; } 3% { transform: scale(0.88); } 6%, 100% { transform: none; } }
+@keyframes ak-glow { 0% { box-shadow: 0 0 0 0 rgba(235, 94, 40, 0.6); } 9%, 100% { box-shadow: 0 0 0 8px rgba(235, 94, 40, 0); } }
+@keyframes ak-mark { 0% { background-color: var(--off, #ffffff); color: var(--off-ink, currentColor); } 5%, 84% { background-color: var(--on, #eb5e28); color: var(--on-ink, currentColor); } 92%, 100% { background-color: var(--off, #ffffff); color: var(--off-ink, currentColor); } }
+@keyframes ak-cursor {
+  0% { opacity: 0; transform: translate(0, 0); }
+  6% { opacity: 1; transform: translate(0, 0); }
+  22% { transform: translate(var(--tx, 0), var(--ty, 0)); }
+  25% { transform: translate(var(--tx, 0), var(--ty, 0)) scale(0.82); }
+  28%, 60% { opacity: 1; transform: translate(var(--tx, 0), var(--ty, 0)); }
+  68%, 100% { opacity: 0; transform: translate(var(--tx, 0), var(--ty, 0)); }
+}
+@keyframes ak-stamp { 0% { opacity: 0; transform: scale(2) rotate(var(--rot, -12deg)); } 6% { opacity: 1; transform: scale(0.94) rotate(var(--rot, -12deg)); } 9%, 84% { opacity: 1; transform: scale(1) rotate(var(--rot, -12deg)); } 92%, 100% { opacity: 0; transform: scale(1) rotate(var(--rot, -12deg)); } }
+@keyframes ak-needle { 0% { transform: rotate(var(--r0, -90deg)); } 24%, 84% { transform: rotate(var(--r1, 40deg)); } 96%, 100% { transform: rotate(var(--r0, -90deg)); } }
+@keyframes ak-draw { 0% { stroke-dashoffset: var(--len, 300); } 32%, 84% { stroke-dashoffset: 0; } 96%, 100% { stroke-dashoffset: var(--len, 300); } }
+@keyframes ak-scroll-y { 0%, 12% { transform: translateY(0); } 36%, 58% { transform: translateY(var(--sy, -40px)); } 82%, 100% { transform: translateY(0); } }
+@keyframes ak-scroll-x { 0%, 12% { transform: translateX(0); } 36%, 58% { transform: translateX(var(--sx, -40px)); } 82%, 100% { transform: translateX(0); } }
+@keyframes ak-swap-a { 0%, 46% { opacity: 1; } 50%, 96% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes ak-swap-b { 0%, 46% { opacity: 0; } 50%, 96% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes ak-shake { 0%, 2% { transform: none; } 3% { transform: translateX(-3px); } 5% { transform: translateX(3px); } 7% { transform: translateX(-2px); } 9%, 100% { transform: none; } }
+@keyframes ak-scan { 0% { opacity: 0; transform: translateY(0); } 5% { opacity: 1; } 45% { opacity: 1; transform: translateY(var(--sy, 100px)); } 50%, 100% { opacity: 0; transform: translateY(var(--sy, 100px)); } }
+@keyframes ak-fill { 0% { width: 0; } 30%, 84% { width: var(--w, 100%); } 96%, 100% { width: 0; } }
+@keyframes ak-blink { 50% { opacity: 0; } }
+@keyframes ak-pulse { 0% { opacity: 0.8; transform: scale(0.5); } 100% { opacity: 0; transform: scale(2.2); } }
+@keyframes ak-float { from { transform: translateY(0); } to { transform: translateY(-4px); } }
+@keyframes ak-spin { to { transform: rotate(360deg); } }
 
 /* ---------- Admin theme ----------
    The admin is a calm, light workspace (owner's reference: a clean HR dashboard), not the

@@ -36,14 +36,20 @@ export function Hero() {
           </ul>
         </div>
 
-        {/* A real kind of site students build, working: add to cart, pay with Paystack. */}
-        <div className="mx-auto w-full max-w-[560px]">
-          <div className="overflow-hidden rounded-[18px] border border-line bg-card p-2 shadow-[0_30px_60px_-30px_rgba(21,21,21,0.35)]">
-            <div className="overflow-hidden rounded-[12px]">
+        {/* What you'll build: a fanned stack of three working website mock-ups */}
+        <div className="mx-auto w-full max-w-[470px]">
+          <div className="relative h-[300px] sm:h-[370px]">
+            <div className="ink-block absolute left-0 top-6 w-[62%] -rotate-6 bg-card">
+              <LiveSite kind="business" />
+            </div>
+            <div className="ink-block absolute right-0 top-0 w-[62%] rotate-[5deg] bg-card">
+              <LiveSite kind="booking" />
+            </div>
+            <div className="ink-block absolute bottom-0 left-1/2 w-[70%] -translate-x-1/2 bg-card">
               <LiveSite kind="store" />
             </div>
           </div>
-          <p className="mt-3 text-center text-[12.5px] text-muted">An online store with Paystack checkout, one of the projects in the Fast Track.</p>
+          <p className="mt-4 text-center text-[12.5px] text-muted">A business site, a booking system and an online store: three of the projects you build in the Fast Track.</p>
         </div>
       </div>
     </section>

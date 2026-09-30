@@ -4,7 +4,7 @@ import type { Tone } from "../cover";
 import { ProductThumb } from "./product-thumb";
 import { ToolThumb } from "./tool-thumb";
 
-const cycle: Tone[] = ["peach", "orange", "forest", "indigo", "sand", "ink"];
+const cycle: Tone[] = ["peach", "orange", "forest", "indigo", "sand"];
 
 /** A lesson's cover: the tool output or the finished product that lesson produces. */
 export function LessonThumb({ thumb, index }: { thumb: Thumb; index: number }) {

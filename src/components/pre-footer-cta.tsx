@@ -14,11 +14,11 @@ export function PreFooterCta({ from }: { from: string }) {
   if (HIDDEN.some((p) => path === p || path.startsWith(p + "/"))) return null;
   return (
     <section className="px-4 py-16 sm:py-20">
-      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[24px] bg-night px-6 py-14 text-center sm:px-12 sm:py-20">
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[24px] border-2 border-ink bg-night px-6 py-14 text-center shadow-[6px_6px_0_var(--brand)] sm:px-12 sm:py-20">
         <div className="pointer-events-none absolute -top-40 left-1/2 size-[520px] -translate-x-1/2 rounded-full bg-brand/25 blur-3xl" aria-hidden />
-        <h2 className="display relative mx-auto max-w-3xl text-balance text-[34px] text-white sm:text-[52px]">Learn it. Build it. Get paid for it.</h2>
+        <h2 className="display relative mx-auto max-w-3xl text-balance text-[34px] text-white sm:text-[56px]">Your first paid website is 14 days away.</h2>
         <p className="relative mx-auto mt-4 max-w-lg text-[16.5px] leading-relaxed text-white/70">
-          Your first paid website in 14 days, from {from}. Pay once, in naira.
+          Enroll now and start your first lesson in the next five minutes. From {from}, paid once in naira.
         </p>
         <div className="relative mt-9 flex flex-wrap justify-center gap-3">
           <Link href="/pricing" className={`${btn.primary} ${size.lg}`}>

@@ -1,12 +1,12 @@
 import { pillars } from "@/lib/curriculum";
 
 export const personas = [
-  { id: "beginners", label: "Complete beginners", blurb: "Never built a website? Start here: no code needed." },
-  { id: "students", label: "Students", blurb: "Earn while you study with a skill businesses pay for." },
-  { id: "freelancers", label: "Freelancers", blurb: "Add websites, SEO and automation to what you sell." },
-  { id: "business-owners", label: "Business owners", blurb: "Build your own site, bookings and WhatsApp bot." },
-  { id: "career-switchers", label: "Career switchers", blurb: "Move into tech without a four-year degree." },
-  { id: "agencies", label: "Agencies & creators", blurb: "Deliver faster with AI and add new services." },
+  { id: "beginners", label: "Complete beginners", blurb: "Never built a website? Your first one goes live in week one. If you can type, you can do this." },
+  { id: "students", label: "Students", blurb: "Earn while you study, with a skill every business needs and hours that fit around lectures." },
+  { id: "freelancers", label: "Freelancers", blurb: "Add websites, SEO and automation to what you already sell, and charge more per client." },
+  { id: "business-owners", label: "Business owners", blurb: "Build your own website, bookings and WhatsApp bot instead of waiting on an agency." },
+  { id: "career-switchers", label: "Career switchers", blurb: "Move into tech in weeks, not years, with a portfolio clients and employers can see." },
+  { id: "agencies", label: "Agencies & creators", blurb: "Deliver client sites faster with AI, and add automation and AI agents to your services." },
 ];
 
 export const navMenus = {

@@ -1,538 +1,367 @@
-import {
-  BedDouble,
-  Bell,
-  Bike,
-  Bot,
-  Briefcase,
-  Camera,
-  Car,
-  Check,
-  Church,
-  CirclePlay,
-  Clock,
-  Dumbbell,
-  GraduationCap,
-  Heart,
-  HeartHandshake,
-  House,
-  Lock,
-  Mail,
-  MapPin,
-  Package,
-  QrCode,
-  Scale,
-  Scissors,
-  Search,
-  Shirt,
-  ShoppingBag,
-  Star,
-  Stethoscope,
-  Truck,
-  User,
-  Users,
-  Utensils,
-} from "lucide-react";
-import type { ReactNode } from "react";
+import { Bell, Calendar, Check, MessageCircle, Minus, Phone as PhoneIcon, Plus, Send, ShoppingBag, Star } from "lucide-react";
 import { tones, type Tone } from "../cover";
 import { Artboard } from "./artboard";
+import { at, Box, Line, m, Phone, Stage, Stars, t, Tick, Win } from "./kit";
 
-/* Print-style primitives */
-const edge = "border-2 border-edge";
-const shadow = "shadow-[3px_3px_0_var(--edge)]";
-const t6 = "font-mono text-[6px] leading-tight";
-const t7 = "font-mono text-[7px] leading-tight";
-const h8 = "font-display text-[9px] font-bold leading-tight";
-
-function Browser({ url, children, nav }: { url: string; children: ReactNode; nav?: ReactNode }) {
-  return (
-    <div className={`${edge} ${shadow} w-full overflow-hidden bg-card`}>
-      <div className="flex items-center gap-1 border-b-2 border-edge bg-wash px-1.5 py-[3px]">
-        <span className="size-1.5 rounded-full bg-danger" />
-        <span className="size-1.5 rounded-full bg-[#e0a82e]" />
-        <span className="size-1.5 rounded-full bg-success" />
-        <span className={`ml-1 flex-1 truncate bg-paper px-1 ${t6} text-muted`}>{url}</span>
-      </div>
-      {nav}
-      <div className="p-1.5">{children}</div>
-    </div>
-  );
-}
-function Nav({ brand, cta, dark }: { brand: string; cta?: string; dark?: boolean }) {
-  return (
-    <div className={`flex items-center justify-between border-b border-line px-1.5 py-[3px] ${dark ? "bg-night" : ""}`}>
-      <span className={`${t7} font-bold ${dark ? "text-paper" : "text-ink"}`}>{brand}</span>
-      {cta && <span className={`bg-brand px-1 ${t6} font-bold text-ink`}>{cta}</span>}
-    </div>
-  );
-}
-function Phone({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return (
-    <div className={`${edge} ${shadow} flex h-full w-[42%] flex-col rounded-[10px] bg-card p-1 ${className}`}>
-      <span className="mx-auto mb-0.5 h-1 w-5 rounded-full bg-edge/60" />
-      <div className="flex-1 overflow-hidden rounded-[6px] bg-paper">{children}</div>
-    </div>
-  );
-}
-function Img({ c, icon, h = "h-7", className = "" }: { c: string; icon?: ReactNode; h?: string; className?: string }) {
-  return <div className={`grid place-items-center ${h} ${className}`} style={{ background: c }}>{icon}</div>;
-}
-const Bar = ({ w = "100%", c = "bg-wash" }: { w?: string; c?: string }) => <span className={`block h-1 ${c}`} style={{ width: w }} />;
-const ic = "size-3.5 text-ink/70";
-
-/* ---------- products ---------- */
+/**
+ * Example products students build, each acting out what it does for the business
+ * (an order placed, an appointment booked, a deal won, an invoice paid). Used in lessons
+ * and on the course map. Distinct from the homepage LiveSite mock-ups on purpose.
+ */
 const thumbs = {
   coach: () => (
-    <Browser url="kemicoaching.com" nav={<Nav brand="Kemi Coaching" cta="Book a call" />}>
-      <div className="flex items-center gap-1.5">
-        <div className="min-w-0 flex-1">
-          <p className={h8}>Lose 8kg eating Nigerian food</p>
-          <p className={`${t6} mt-0.5 text-muted`}>12-week coaching for busy mums</p>
-          <span className={`mt-1 inline-block bg-brand px-1 ${t6} font-bold`}>Book a free call →</span>
+    <Stage d={10}>
+      <Win title="kemicoaching.com" className="relative w-[262px]" bodyClass="p-3">
+        <p className={`${t.xs} font-semibold tracking-[0.1em] text-[#b8400f]`}>1:1 COACHING · ONLINE</p>
+        <p className={"mt-1 text-[16px] font-bold leading-[1.05] tracking-[-0.02em] " + m("type")} style={at(0.2)}>Lose 8kg eating Nigerian food.</p>
+        <p className={`${t.sm} mt-1 text-[#6b675f] ` + m("in")} style={at(1.4)}>12-week plans built around jollof, not against it.</p>
+        <div className="mt-2 flex items-center gap-2">
+          <span className={`rounded-full bg-[#151515] px-2.5 py-1 ${t.sm} font-semibold text-white ` + m("press")} style={at(3.6)}>Book a free call</span>
+          <span className={`flex items-center gap-1 ${t.xs} text-[#6b675f] ` + m("in")} style={at(2)}><Stars /> 48 clients</span>
         </div>
-        <div className="grid size-10 shrink-0 place-items-center rounded-full border-2 border-edge bg-[#ffd0b0]"><User className="size-5 text-ink/70" /></div>
-      </div>
-      <p className={`${t6} mt-1 border-l-2 border-brand pl-1 italic text-muted`}>“Down 9kg in 3 months!” - Bisi</p>
-    </Browser>
+        <p className={`mt-2 rounded-[6px] bg-[#f7f5f1] p-1.5 ${t.xs} italic ` + m("in")} style={at(2.6)}>“Down 9kg and I still eat amala on Sundays.” · Bisi</p>
+        <div className={"absolute right-2 top-2 flex items-center gap-1.5 rounded-[8px] border border-[#efece6] bg-white p-1.5 shadow-md " + m("pop")} style={at(4.4)}>
+          <Calendar className="size-3 text-[#16794a]" />
+          <span className={`${t.xs} font-semibold`}>Call booked · Thu 4pm</span>
+        </div>
+      </Win>
+    </Stage>
   ),
+
   store: () => (
-    <Browser url="adashop.ng" nav={<Nav brand="ADA SHOP" cta="🛒 2" />}>
-      <div className="grid grid-cols-3 gap-1">
-        {[["#ffe1cf", "Tote bag", "₦18,500"], ["#dfe7ff", "Sneakers", "₦42,000"], ["#e6f3ea", "Perfume", "₦25,000"]].map(([c, n, p]) => (
-          <div key={n} className="border border-edge/40">
-            <Img c={c} icon={<ShoppingBag className={ic} />} h="h-6" />
-            <p className={`${t6} px-0.5 text-ink`}>{n}</p>
-            <p className={`${t6} px-0.5 font-bold text-ink`}>{p}</p>
-            <p className={`bg-ink text-center ${t6} text-paper`}>Add to cart</p>
+    <Stage d={10} className="gap-3">
+      <Phone className="h-[170px] w-[104px]">
+        <p className={`px-2 pb-1 pt-3 ${t.sm} font-bold`}>Ada&apos;s Bakery</p>
+        {[["Chocolate cake", "₦18,000", "#7b4a36"], ["Meat pie ×6", "₦4,500", "#e0b27a"], ["Small chops", "₦25,000", "#c9793d"]].map(([n, p, c], i) => (
+          <div key={n} className="flex items-center gap-1.5 border-t border-[#f1ede6] px-1.5 py-1">
+            <span className="size-[20px] shrink-0 rounded-[5px]" style={{ background: c }} />
+            <span className="min-w-0 flex-1">
+              <span className={`block truncate ${t.xs}`}>{n}</span>
+              <span className={`block text-[7px] font-bold`}>{p}</span>
+            </span>
+            <span className="flex items-center gap-[2px]">
+              <Minus className="size-[7px] text-[#8a857b]" />
+              <span className="relative w-[6px] text-center text-[7px] font-bold">
+                <span className={i === 0 ? m("swap-a") : ""} style={i === 0 ? at(0) : undefined}>1</span>
+                {i === 0 && <span className={"absolute inset-0 " + m("swap-b")} style={at(0)}>2</span>}
+              </span>
+              <Plus className={"size-[7px] " + (i === 0 ? m("press") : "")} style={i === 0 ? at(4.7) : undefined} />
+            </span>
           </div>
         ))}
-      </div>
-    </Browser>
-  ),
-  restaurant: () => (
-    <Browser url="mamaskitchen.ng" nav={<Nav brand="Mama's Kitchen" cta="Order" />}>
-      <p className={`${t7} font-bold uppercase tracking-wider text-brand-text`}>Menu</p>
-      {[["Jollof rice & chicken", "₦3,500"], ["Pounded yam & egusi", "₦4,000"], ["Pepper soup (goat)", "₦3,000"]].map(([d, p]) => (
-        <div key={d} className="mt-0.5 flex items-center gap-1">
-          <span className="grid size-3.5 shrink-0 place-items-center rounded-full bg-[#ffd0b0]"><Utensils className="size-2 text-ink/70" /></span>
-          <span className={`${t6} flex-1 text-ink`}>{d}</span>
-          <span className="flex-1 border-b border-dotted border-edge/40" />
-          <span className={`${t6} font-bold text-ink`}>{p}</span>
-        </div>
-      ))}
-    </Browser>
-  ),
-  realestate: () => (
-    <Browser url="adeolaproperties.ng" nav={<Nav brand="Adeola Properties" />}>
-      <div className={`flex border border-edge ${t6}`}>
-        <span className="flex-1 px-1 text-muted">Lekki · 3 bed · Any price</span>
-        <span className="bg-brand px-1 font-bold"><Search className="inline size-2" /> Search</span>
-      </div>
-      <div className="mt-1 grid grid-cols-2 gap-1">
-        {[["₦85,000,000", "3 bed · Lekki"], ["₦4.5m/yr", "2 bed · Yaba"]].map(([p, d]) => (
-          <div key={p} className="border border-edge/40">
-            <Img c="#dfe7ff" icon={<House className={ic} />} h="h-5" />
-            <p className={`${t6} px-0.5 font-bold text-ink`}>{p}</p>
-            <p className={`${t6} px-0.5 text-muted`}>{d}</p>
-          </div>
-        ))}
-      </div>
-    </Browser>
-  ),
-  hotel: () => (
-    <Browser url="palmshortlets.com" nav={<Nav brand="Palm Shortlets" cta="Book" />}>
-      <div className={`grid grid-cols-3 gap-0.5 border border-edge ${t6}`}>
-        <span className="px-0.5">Check-in 12 Oct</span><span className="px-0.5">Check-out 15 Oct</span><span className="bg-brand px-0.5 font-bold">2 guests</span>
-      </div>
-      <div className="mt-1 flex gap-1 border border-edge/40">
-        <Img c="#e6f3ea" icon={<BedDouble className={ic} />} className="w-10" h="h-8" />
-        <div className="py-0.5">
-          <p className={`${t7} font-bold text-ink`}>Deluxe apartment</p>
-          <p className={`${t6} text-muted`}>Wi-Fi · 24h power · pool</p>
-          <p className={`${t6} font-bold text-ink`}>₦65,000 / night</p>
-        </div>
-      </div>
-    </Browser>
-  ),
-  salon: () => (
-    <div className="flex h-full items-center gap-2">
-      <Phone>
-        <p className={`bg-[#b8336a] px-1 py-0.5 ${t6} font-bold text-paper`}>Glow Studio</p>
-        <div className="p-1">
-          <p className={`${t6} font-bold text-ink`}><Scissors className="inline size-2" /> Knotless braids</p>
-          <p className={`${t6} text-muted`}>4 hrs · ₦30,000</p>
-          <div className="mt-0.5 grid grid-cols-3 gap-0.5">
-            {["9:00", "11:00", "1:00", "3:00", "5:00", "6:00"].map((x, i) => <span key={x} className={`border border-edge/50 text-center ${t6} ${i === 2 ? "bg-brand font-bold" : ""}`}>{x}</span>)}
-          </div>
-          <p className={`mt-0.5 bg-ink text-center ${t6} text-paper`}>Pay ₦5,000 deposit</p>
+        <div className="absolute inset-x-1.5 bottom-1.5">
+          <span className={`flex items-center justify-center gap-1 rounded-[6px] bg-[#0ba4db] py-[3px] text-[7px] font-semibold text-white`}>
+            <ShoppingBag className="size-[7px]" /> Pay with Paystack
+          </span>
         </div>
       </Phone>
-      <p className={`${h8} max-w-[40%] text-ink`}>Salon booking</p>
-    </div>
+      <div className="space-y-1.5">
+        <Box className="w-[118px] p-2">
+          <p className={`${t.xs} text-[#8a857b]`}>Cart total</p>
+          <div className="relative h-[20px]">
+            <p className={"absolute text-[16px] font-bold " + m("swap-a")} style={at(0)}>₦47,500</p>
+            <p className={"absolute text-[16px] font-bold " + m("swap-b")} style={at(0)}>₦65,500</p>
+          </div>
+        </Box>
+        <Box className={"flex w-[118px] items-center gap-1.5 bg-[#e6f4ec] p-2 " + m("pop")} style={at(6.2)}>
+          <Tick /> <span className={`${t.xs} font-semibold text-[#16794a]`}>Order #1042 paid</span>
+        </Box>
+      </div>
+    </Stage>
   ),
+
+  restaurant: () => (
+    <Stage d={10} className="gap-2.5">
+      <Win title="bukkaexpress.ng/menu" className="w-[170px]" bodyClass="p-2">
+        <div className="relative mb-1.5 flex gap-1">
+          {["Rice", "Swallow", "Drinks"].map((c, i) => (
+            <span key={c} className={`rounded-full border border-[#e4e0d8] px-1.5 ${t.xs} ` + (i === 0 ? "bg-[#151515] text-white" : "")}>{c}</span>
+          ))}
+        </div>
+        {[["Jollof rice + chicken", "₦3,500"], ["Fried rice + turkey", "₦4,200"], ["Ofada + ayamase", "₦3,800"]].map(([d, p], i) => (
+          <div key={d} className={"flex items-center justify-between border-b border-[#f1ede6] py-1 " + m("left")} style={at(0.2 + i * 0.3)}>
+            <span className={t.xs}>{d}</span>
+            <span className={`${t.xs} font-semibold`}>{p}</span>
+          </div>
+        ))}
+        <span className={`mt-1.5 flex items-center justify-center gap-1 rounded-[6px] bg-[#1faa53] py-[3px] ${t.xs} font-semibold text-white ` + m("press")} style={at(1.8)}>
+          <MessageCircle className="size-[8px]" /> Order on WhatsApp
+        </span>
+      </Win>
+      <Phone className="h-[150px] w-[98px]">
+        <p className={`bg-[#075e54] px-1.5 pb-1 pt-3 text-[7px] font-semibold text-white`}>Bukka Express</p>
+        <div className="space-y-1 bg-[#efeae2] p-1.5">
+          <p className={`ml-auto w-[88%] rounded-[5px] bg-[#d9fdd3] p-1 text-[6.5px] ` + m("pop")} style={at(2.4)}>Hi! 2× Jollof rice + chicken, to Allen Ave.</p>
+          <p className={`w-[88%] rounded-[5px] bg-white p-1 text-[6.5px] ` + m("pop")} style={at(3.6)}>Got it! ₦7,000 + delivery. Pay here 👇</p>
+          <p className={`w-[70%] rounded-[5px] bg-white p-1 text-[6.5px] font-semibold text-[#0ba4db] ` + m("pop")} style={at(4.4)}>paystack.com/pay/bukka</p>
+        </div>
+      </Phone>
+    </Stage>
+  ),
+
+  salon: () => (
+    <Stage d={10}>
+      <Phone className="h-[172px] w-[124px]">
+        <div className="px-2 pb-2 pt-3.5">
+          <p className={`${t.sm} font-bold`}>Glow Studio</p>
+          <p className={`${t.xs} text-[#8a857b]`}>Book an appointment</p>
+          {[["Classic lashes", "₦18,000"], ["Knotless braids", "₦35,000"]].map(([s, p], i) => (
+            <div key={s} className={`mt-1 flex justify-between rounded-[5px] border border-[#e4e0d8] px-1.5 py-1 ${t.xs} ` + (i === 0 ? m("mark") : "")} style={i === 0 ? at(0.4, { off: "#fff", on: "#fdeee6" }) : undefined}>
+              <span>{s}</span>
+              <span className="font-semibold">{p}</span>
+            </div>
+          ))}
+          <p className={`${t.xs} mt-1.5 font-semibold`}>Saturday 18 Oct</p>
+          <div className="mt-0.5 grid grid-cols-3 gap-1">
+            {["10:00", "12:30", "15:00"].map((x, i) => (
+              <span key={x} className={`rounded-[4px] border border-[#e4e0d8] py-[2px] text-center text-[6.5px] ` + (i === 1 ? m("mark") : "")} style={i === 1 ? at(1.4, { off: "#fff", on: "#151515", "on-ink": "#fff" }) : undefined}>{x}</span>
+            ))}
+          </div>
+          <span className={`mt-1.5 block rounded-[5px] bg-[#eb5e28] py-[3px] text-center text-[7px] font-semibold ` + m("press")} style={at(2.4)}>Confirm · ₦5,000 deposit</span>
+        </div>
+        <div className={"absolute inset-0 grid place-items-center bg-white/90 " + m("in")} style={at(3)}>
+          <div className="text-center">
+            <span className="mx-auto grid size-[22px] place-items-center rounded-full bg-[#16794a] text-white"><Check className="size-[12px]" strokeWidth={3} /></span>
+            <p className={`${t.sm} mt-1 font-bold`}>You&apos;re booked</p>
+            <p className="text-[6.5px] text-[#6b675f]">Sat 18 Oct · 12:30</p>
+          </div>
+        </div>
+      </Phone>
+    </Stage>
+  ),
+
   clinic: () => (
-    <Browser url="smilecaredental.ng" nav={<Nav brand="SmileCare Dental" cta="Book" />}>
-      <div className="flex gap-1.5">
-        <div className="grid size-9 shrink-0 place-items-center rounded-full bg-[#dff1f7]"><Stethoscope className="size-4 text-ink/70" /></div>
-        <div className="flex-1">
-          <p className={`${t7} font-bold text-ink`}>Dr. Okafor · Dentist</p>
-          <p className={`${t6} text-muted`}>Next available: Tue 10:30am</p>
-          <div className="mt-0.5 flex gap-0.5">{["Cleaning", "Braces", "Whitening"].map((x) => <span key={x} className={`border border-edge/50 px-0.5 ${t6}`}>{x}</span>)}</div>
-        </div>
-      </div>
-      <p className={`mt-1 bg-[#0f4d3a] text-center ${t6} font-bold text-paper`}>Book appointment</p>
-    </Browser>
-  ),
-  school: () => (
-    <Browser url="brightfutureschools.edu.ng" nav={<Nav brand="Bright Future Schools" cta="Apply" />}>
-      <div className="flex items-center gap-1.5">
-        <div className="grid size-9 shrink-0 place-items-center border-2 border-edge bg-[#2a2e6e]"><GraduationCap className="size-5 text-paper" /></div>
+    <Stage d={10}>
+      <Win title="brightcareclinic.ng/appointments" className="relative w-[262px]" bodyClass="grid grid-cols-[1fr_1.2fr] gap-2.5 p-2.5">
         <div>
-          <p className={h8}>Admissions open for 2026/27</p>
-          <p className={`${t6} text-muted`}>Nursery · Primary · Secondary</p>
-        </div>
-      </div>
-      <div className="mt-1 grid grid-cols-3 gap-0.5">{["Programmes", "Fees", "Gallery"].map((x) => <span key={x} className={`border border-edge/40 py-0.5 text-center ${t6}`}>{x}</span>)}</div>
-    </Browser>
-  ),
-  church: () => (
-    <Browser url="gracechapel.org" nav={<Nav brand="Grace Chapel" cta="Give" />}>
-      <div className="flex items-center gap-1.5">
-        <Church className="size-6 shrink-0 text-ink/70" />
-        <div>
-          <p className={h8}>Join us this Sunday</p>
-          <p className={`${t6} text-muted`}>Services: 7:30am · 9:30am · 11:30am</p>
-        </div>
-      </div>
-      <div className="mt-1 flex gap-1">
-        <span className={`flex-1 border border-edge/40 px-1 ${t6}`}><CirclePlay className="inline size-2" /> Watch live</span>
-        <span className={`flex-1 border border-edge/40 px-1 ${t6}`}>Sermons</span>
-      </div>
-    </Browser>
-  ),
-  gym: () => (
-    <Browser url="fitzone.ng" nav={<Nav brand="FITZONE" cta="Join" dark />}>
-      <p className={`${t7} font-bold text-ink`}><Dumbbell className="inline size-2.5" /> Class timetable</p>
-      <div className="mt-0.5 grid grid-cols-4 gap-0.5">
-        {["Mon", "Tue", "Wed", "Thu"].map((d, i) => (
-          <div key={d} className="border border-edge/40">
-            <p className={`bg-wash text-center ${t6} font-bold`}>{d}</p>
-            <p className={`text-center ${t6} ${i % 2 ? "bg-brand" : ""}`}>{["HIIT", "Yoga", "Boxing", "Spin"][i]}</p>
-            <p className={`text-center ${t6} text-muted`}>6:00</p>
-          </div>
-        ))}
-      </div>
-    </Browser>
-  ),
-  tickets: () => (
-    <div className="flex h-full items-center gap-2">
-      <div className={`${edge} ${shadow} flex w-[70%] bg-card`}>
-        <div className="flex-1 p-1.5">
-          <p className={`${t6} uppercase text-muted`}>Afrobeats Night</p>
-          <p className={h8}>Sat 14 Dec · Eko Hotel</p>
-          <p className={`${t6} mt-0.5 font-bold text-ink`}>VIP · ₦50,000</p>
-        </div>
-        <div className="grid place-items-center border-l-2 border-dashed border-edge px-1.5"><QrCode className="size-7 text-ink" /></div>
-      </div>
-      <p className={`${h8} text-ink`}>Event tickets</p>
-    </div>
-  ),
-  photographer: () => (
-    <Browser url="lensbytobi.com" nav={<Nav brand="Lens by Tobi" cta="Book shoot" dark />}>
-      <div className="grid grid-cols-3 gap-0.5">
-        {["#2a2e6e", "#b8336a", "#0f4d3a", "#ff6719", "#1b1714", "#e0a82e"].map((c, i) => <Img key={i} c={c} h="h-5" icon={i === 1 ? <Camera className="size-3 text-paper/80" /> : undefined} />)}
-      </div>
-      <p className={`${t6} mt-0.5 text-muted`}>Weddings · Portraits · Brands</p>
-    </Browser>
-  ),
-  portfolio: () => (
-    <Browser url="tunde.dev" nav={<Nav brand="Tunde A." cta="Hire me" />}>
-      <p className={h8}>I build websites that bring customers.</p>
-      <div className="mt-1 grid grid-cols-2 gap-1">
-        {[["Case study", "Clinic site +40% bookings"], ["Case study", "Store: ₦2m first month"]].map(([k, d]) => (
-          <div key={d} className="border border-edge/40 p-0.5">
-            <p className={`${t6} uppercase text-brand-text`}>{k}</p>
-            <p className={`${t6} font-bold text-ink`}>{d}</p>
-          </div>
-        ))}
-      </div>
-    </Browser>
-  ),
-  lawfirm: () => (
-    <Browser url="okekelegal.com" nav={<Nav brand="Okeke & Partners" dark />}>
-      <div className="flex items-center gap-1.5">
-        <Scale className="size-6 shrink-0 text-ink/70" />
-        <div>
-          <p className={h8}>Corporate & property law, Lagos</p>
-          <p className={`${t6} text-muted`}>Company registration · Tenancy · Contracts</p>
-        </div>
-      </div>
-      <p className={`mt-1 border border-edge text-center ${t6} font-bold`}>Book a consultation</p>
-    </Browser>
-  ),
-  cars: () => (
-    <Browser url="autoking.ng" nav={<Nav brand="AutoKing" cta="Sell your car" />}>
-      <div className="grid grid-cols-2 gap-1">
-        {[["Toyota Camry 2019", "₦18.5m"], ["Lexus RX 350 2018", "₦32m"]].map(([n, p]) => (
-          <div key={n} className="border border-edge/40">
-            <Img c="#dfe7ff" icon={<Car className={ic} />} h="h-5" />
-            <p className={`${t6} px-0.5 text-ink`}>{n}</p>
-            <p className={`${t6} px-0.5 font-bold text-ink`}>{p} · Foreign used</p>
-          </div>
-        ))}
-      </div>
-    </Browser>
-  ),
-  logistics: () => (
-    <Browser url="quickship.ng/track" nav={<Nav brand="QuickShip" />}>
-      <div className={`flex border border-edge ${t6}`}><span className="flex-1 px-1">QS-48213</span><span className="bg-brand px-1 font-bold">Track</span></div>
-      <div className="mt-1 flex items-center">
-        {["Picked up", "In transit", "Out for delivery", "Delivered"].map((s, i, a) => (
-          <div key={s} className="flex flex-1 items-center">
-            <span className={`grid size-3 shrink-0 place-items-center rounded-full border border-edge ${i < 3 ? "bg-success" : "bg-card"}`}>{i < 3 && <Check className="size-2 text-paper" strokeWidth={4} />}</span>
-            {i < a.length - 1 && <span className={`h-0.5 flex-1 ${i < 2 ? "bg-success" : "bg-line"}`} />}
-          </div>
-        ))}
-      </div>
-      <p className={`${t6} mt-0.5 text-muted`}><Truck className="inline size-2" /> Out for delivery · ETA 2:30pm</p>
-    </Browser>
-  ),
-  fashion: () => (
-    <Browser url="zaraadire.com" nav={<Nav brand="ZARA ADIRE" cta="Shop" dark />}>
-      <div className="flex gap-1">
-        <Img c="#2a2e6e" h="h-12" className="w-1/2" icon={<Shirt className="size-5 text-paper/80" />} />
-        <div className="flex-1">
-          <p className={`${t6} uppercase text-muted`}>New collection</p>
-          <p className={h8}>Adire kaftans</p>
-          <p className={`${t6} font-bold`}>from ₦35,000</p>
-          <p className={`mt-0.5 bg-ink text-center ${t6} text-paper`}>Shop now</p>
-        </div>
-      </div>
-    </Browser>
-  ),
-  ngo: () => (
-    <Browser url="feedafamily.org" nav={<Nav brand="Feed A Family" cta="Donate" />}>
-      <p className={h8}><HeartHandshake className="inline size-3" /> Help 500 families this Christmas</p>
-      <div className="mt-1 h-2 border border-edge bg-wash"><div className="h-full w-[68%] bg-success" /></div>
-      <p className={`${t6} mt-0.5 text-muted`}>₦6.8m of ₦10m raised · 412 donors</p>
-      <div className="mt-0.5 flex gap-0.5">{["₦5k", "₦10k", "₦25k"].map((x, i) => <span key={x} className={`flex-1 border border-edge/50 text-center ${t6} ${i === 1 ? "bg-brand font-bold" : ""}`}>{x}</span>)}</div>
-    </Browser>
-  ),
-  fooddelivery: () => (
-    <div className="flex h-full items-center justify-center gap-2">
-      <Phone>
-        <p className={`bg-brand px-1 py-0.5 ${t6} font-bold`}>ChopNow</p>
-        <div className="space-y-0.5 p-1">
-          {[["Suya Spot", "25 min"], ["Chicken Republic", "30 min"], ["Amala Place", "20 min"]].map(([n, m]) => (
-            <div key={n} className="flex items-center gap-0.5 border border-edge/40 p-0.5">
-              <Utensils className="size-2 text-ink/70" />
-              <span className={`${t6} flex-1`}>{n}</span>
-              <span className={`${t6} text-muted`}>{m}</span>
+          <p className={`${t.md} font-bold`}>See a doctor this week</p>
+          {[["Dr. Okafor", "General"], ["Dr. Bello", "Paediatrics"]].map(([n, r], i) => (
+            <div key={n} className={"mt-1.5 flex items-center gap-1.5 " + m("left")} style={at(0.2 + i * 0.3)}>
+              <span className="size-[18px] rounded-full bg-[radial-gradient(circle_at_50%_38%,#7a5646_0_30%,#e9d7c6_31%)]" />
+              <span><span className={`block ${t.xs} font-semibold`}>{n}</span><span className="block text-[6.5px] text-[#8a857b]">{r}</span></span>
             </div>
           ))}
         </div>
-      </Phone>
-      <Bike className="size-8 text-ink/70" />
-    </div>
-  ),
-  course: () => (
-    <Browser url="learnexcel.ng/course" nav={<Nav brand="LearnExcel" />}>
-      <div className="flex gap-1">
-        <div className="grid h-10 w-[55%] place-items-center bg-night"><CirclePlay className="size-5 text-paper" /></div>
-        <div className="flex-1 space-y-0.5">
-          {["1. Basics", "2. Formulas", "3. Pivot tables"].map((l, i) => <p key={l} className={`${t6} ${i === 1 ? "bg-brand font-bold" : ""}`}>{i === 0 && <Check className="inline size-2 text-success" />} {l}</p>)}
+        <div className="space-y-1">
+          {[["Name", "Chinedu Eze"], ["Phone", "0803 555 0192"], ["Day", "Wed 22 Oct, 10:00"]].map(([k, v], i) => (
+            <div key={k} className="rounded-[4px] border border-[#e4e0d8] px-1.5 py-[2px]">
+              <span className="block text-[6px] text-[#8a857b]">{k}</span>
+              <span className={`block ${t.xs} ` + m("type")} style={at(0.8 + i * 0.6)}>{v}</span>
+            </div>
+          ))}
+          <span className={`block rounded-[4px] bg-[#151515] py-[3px] text-center ${t.xs} font-semibold text-white ` + m("press")} style={at(2.8)}>Request appointment</span>
         </div>
-      </div>
-      <div className="mt-1 h-1.5 border border-edge bg-wash"><div className="h-full w-[40%] bg-success" /></div>
-    </Browser>
-  ),
-  saas: () => (
-    <Browser url="payflow.app" nav={<Nav brand="PayFlow" cta="Start free" />}>
-      <p className={`${h8} text-center`}>Get paid faster, Nigerian freelancers</p>
-      <div className={`mx-auto mt-1 w-[85%] ${edge} bg-sunk p-1`}>
-        <div className="flex items-end gap-0.5">{[30, 45, 35, 60, 75].map((hh, i) => <span key={i} className="flex-1 bg-brand" style={{ height: hh / 5 }} />)}</div>
-      </div>
-    </Browser>
-  ),
-  jobs: () => (
-    <Browser url="naijajobs.ng" nav={<Nav brand="NaijaJobs" cta="Post a job" />}>
-      {[["Frontend Developer", "Lagos · Remote", "₦600k"], ["Sales Executive", "Abuja", "₦250k"], ["Customer Support", "Port Harcourt", "₦180k"]].map(([r, l, p]) => (
-        <div key={r} className="mb-0.5 flex items-center gap-1 border border-edge/40 px-1 py-0.5">
-          <Briefcase className="size-2.5 text-ink/70" />
-          <span className={`${t6} flex-1 font-bold`}>{r}</span>
-          <span className={`${t6} text-muted`}>{l}</span>
-          <span className={`${t6} font-bold`}>{p}</span>
+        <div className={"absolute bottom-2 left-2 flex items-center gap-1.5 rounded-[8px] bg-[#151515] px-2 py-1 text-white shadow-md " + m("in")} style={at(3.6)}>
+          <Bell className="size-3 text-[#f0946b]" /><span className={t.xs}>SMS reminder set for Tue 6pm</span>
         </div>
-      ))}
-    </Browser>
+      </Win>
+    </Stage>
   ),
-  blog: () => (
-    <Browser url="techinlagos.blog" nav={<Nav brand="Tech in Lagos" />}>
-      <div className="flex gap-1">
-        <Img c="#ff6719" h="h-10" className="w-[45%]" />
-        <div className="flex-1">
-          <p className={`${t6} uppercase text-brand-text`}>Startups</p>
-          <p className={h8}>How Lagos SMEs are using AI in 2026</p>
-          <p className={`${t6} text-muted`}>6 min read</p>
+
+  portfolio: () => (
+    <Stage d={10}>
+      <Win title="tunde.dev/work/glow-studio" className="w-[262px]" bodyClass="p-2.5">
+        <p className={`${t.xs} font-semibold tracking-[0.1em] text-[#b8400f]`}>CASE STUDY</p>
+        <p className={"text-[13px] font-bold leading-tight " + m("type")} style={at(0.2)}>A booking site for Glow Studio</p>
+        <div className="mt-2 grid grid-cols-2 gap-2">
+          {[["Bookings a week", "Before", 38, "After", 62], ["Mobile speed", "Before", 30, "After", 88]].map(([label, b, bv, a, av], i) => (
+            <div key={label as string} className="rounded-[6px] border border-[#efece6] p-1.5">
+              <p className={`${t.xs} font-semibold`}>{label as string}</p>
+              {[[b, bv, "#dcd6c8"], [a, av, "#eb5e28"]].map(([k, v, c], j) => (
+                <div key={k as string} className="mt-1 flex items-center gap-1">
+                  <span className="w-[26px] text-[6px] text-[#8a857b]">{k as string}</span>
+                  <span className={"h-[6px] rounded-full " + m("grow-x")} style={{ ...at(0.8 + i * 0.4 + j * 0.3), width: `${(v as number) * 0.7}px`, background: c as string }} />
+                  <span className="text-[6.5px] font-semibold">{v as number}</span>
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
-      </div>
-      <div className="mt-1 grid grid-cols-3 gap-0.5">{[0, 1, 2].map((i) => <Img key={i} c={["#2a2e6e", "#0f4d3a", "#e0a82e"][i]} h="h-3" />)}</div>
-    </Browser>
+        <div className="mt-2 flex items-center justify-between">
+          <span className={`flex items-center gap-1 ${t.xs} ` + m("in")} style={at(2.6)}><Stars /> “Our Saturdays are full now.”</span>
+          <span className={`rounded-full bg-[#eb5e28] px-2 py-[2px] ${t.xs} font-semibold ` + m("glow")} style={at(3.4)}>Hire me</span>
+        </div>
+      </Win>
+    </Stage>
   ),
+
   dashboard: () => (
-    <Browser url="app.salesboard.ng" nav={<Nav brand="SalesBoard" dark />}>
-      <div className="grid grid-cols-3 gap-0.5">{[["Revenue", "₦4.2m"], ["Orders", "318"], ["New", "+24%"]].map(([k, v]) => <div key={k} className="border border-edge/40 p-0.5"><p className={`${t6} text-muted`}>{k}</p><p className={`${t7} font-bold`}>{v}</p></div>)}</div>
-      <svg viewBox="0 0 100 20" className="mt-1 h-5 w-full" aria-hidden><polyline points="0,18 15,14 30,15 45,9 60,11 75,5 100,2" fill="none" stroke="var(--brand)" strokeWidth="2.5" /></svg>
-    </Browser>
+    <Stage d={11}>
+      <Win title="shop.adire.ng/admin" className="w-[266px]" bodyClass="p-2">
+        <div className="grid grid-cols-3 gap-1.5">
+          {[["Sales today", "₦184,000", "₦226,500"], ["Orders", "23", "27"], ["Visitors", "1,204", "1,318"]].map(([k, a, b]) => (
+            <div key={k} className="rounded-[5px] border border-[#efece6] p-1">
+              <p className="text-[6px] text-[#8a857b]">{k}</p>
+              <div className="relative h-[13px]">
+                <p className={"absolute text-[9.5px] font-bold " + m("swap-a")} style={at(0)}>{a}</p>
+                <p className={"absolute text-[9.5px] font-bold text-[#16794a] " + m("swap-b")} style={at(0)}>{b}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <svg viewBox="0 0 250 54" className="mt-1.5 h-[54px] w-full rounded-[5px] border border-[#efece6]" aria-hidden>
+          <path d="M0 44 L30 38 L60 40 L90 30 L120 33 L150 22 L180 25 L210 14 L250 8" fill="none" stroke="#eb5e28" strokeWidth="2.5" strokeLinejoin="round" strokeDasharray="280" className={m("draw")} style={at(0.2, { len: 280 })} />
+          <path d="M0 44 L30 38 L60 40 L90 30 L120 33 L150 22 L180 25 L210 14 L250 8 L250 54 L0 54Z" fill="#eb5e28" opacity="0.08" />
+        </svg>
+        <div className="mt-1.5 rounded-[5px] border border-[#efece6]">
+          <p className={"flex justify-between bg-[#fdeee6] px-1.5 py-[2px] text-[6.5px] " + m("in")} style={at(5.4)}>
+            <span className="font-semibold">#1043 · Adire dress</span><span className="font-semibold text-[#16794a]">₦25,000 paid</span>
+          </p>
+          <p className="flex justify-between border-t border-[#efece6] px-1.5 py-[2px] text-[6.5px]"><span>#1042 · Tote bag ×2</span><span className="text-[#16794a]">₦16,000 paid</span></p>
+        </div>
+      </Win>
+    </Stage>
   ),
+
   crm: () => (
-    <Browser url="app.leadpipe.ng" nav={<Nav brand="LeadPipe CRM" />}>
-      <div className="grid grid-cols-3 gap-0.5">
-        {[["New", 3], ["Proposal", 2], ["Won", 1]].map(([c, cnt]) => (
-          <div key={c as string} className="bg-sunk p-0.5">
-            <p className={`${t6} font-bold`}>{c}</p>
-            {Array.from({ length: cnt as number }).map((_, i) => <div key={i} className={`mt-0.5 border border-edge/50 bg-card px-0.5 ${t6}`}>{["SmileCare", "FitZone", "Kora Foods"][i]}</div>)}
-          </div>
-        ))}
-      </div>
-    </Browser>
+    <Stage d={10}>
+      <Box className="relative w-[272px] p-2">
+        <div className="grid grid-cols-3 gap-1.5">
+          {["New lead", "Proposal sent", "Won"].map((c, i) => (
+            <div key={c} className="h-[112px] rounded-[6px] bg-[#f7f5f1] p-1">
+              <p className={`${t.xs} mb-1 font-semibold ${i === 2 ? "text-[#16794a]" : "text-[#6b675f]"}`}>{c}</p>
+              {i === 0 && <div className="mb-1 rounded-[4px] border border-[#e4e0d8] bg-white p-1"><p className="text-[6.5px] font-semibold">SmileCare Dental</p><p className="text-[6px] text-[#8a857b]">₦650,000</p></div>}
+              {i === 1 && <div className="mb-1 rounded-[4px] border border-[#e4e0d8] bg-white p-1"><p className="text-[6.5px] font-semibold">Bukka Express</p><p className="text-[6px] text-[#8a857b]">₦400,000</p></div>}
+            </div>
+          ))}
+        </div>
+        <div className={"absolute left-[12px] top-[62px] w-[80px] rounded-[4px] border border-[#eb5e28] bg-white p-1 shadow-md " + m("scroll-x")} style={at(0.8, { sx: "176px" })}>
+          <p className="text-[6.5px] font-semibold">Glow Studio</p>
+          <p className="text-[6px] text-[#8a857b]">₦350,000</p>
+        </div>
+        <p className={`mt-1.5 flex items-center gap-1 ${t.xs} font-semibold text-[#16794a] ` + m("pop")} style={at(3.8)}>
+          <Tick /> Won this month: ₦1,000,000
+        </p>
+      </Box>
+    </Stage>
   ),
+
   invoicing: () => (
-    <Browser url="app.billme.ng" nav={<Nav brand="BillMe" cta="+ Get paid" />}>
-      {[["INV-014", "Brightside Dental", "$1,200", "Paid"], ["INV-015", "Kora Foods", "₦450,000", "Due"], ["INV-016", "FitZone", "$800", "Overdue"]].map(([n, c, a, st]) => (
-        <div key={n} className="mb-0.5 flex items-center gap-1 border-b border-line py-0.5">
-          <span className={`${t6} w-8 text-muted`}>{n}</span>
-          <span className={`${t6} flex-1`}>{c}</span>
-          <span className={`${t6} font-bold`}>{a}</span>
-          <span className={`${t6} px-0.5 font-bold ${st === "Paid" ? "bg-success/20 text-success" : st === "Due" ? "bg-wash" : "bg-danger/15 text-danger"}`}>{st}</span>
-        </div>
-      ))}
-    </Browser>
-  ),
-  property: () => (
-    <Browser url="rentease.ng/portal" nav={<Nav brand="RentEase" dark />}>
-      <p className={`${t7} font-bold`}><House className="inline size-2.5" /> Flat 3B · Yaba</p>
-      <div className="mt-0.5 grid grid-cols-2 gap-0.5">
-        <div className="border border-edge/40 p-0.5"><p className={`${t6} text-muted`}>Rent due</p><p className={`${t7} font-bold`}>₦1.2m · 1 Jan</p></div>
-        <div className="border border-edge/40 p-0.5"><p className={`${t6} text-muted`}>Maintenance</p><p className={`${t7} font-bold`}>1 open</p></div>
-      </div>
-      <p className={`mt-0.5 bg-brand text-center ${t6} font-bold`}>Pay rent</p>
-    </Browser>
-  ),
-  wabot: () => (
-    <div className="flex h-full items-center justify-center gap-2">
-      <Phone>
-        <p className={`bg-[#0f4d3a] px-1 py-0.5 ${t6} font-bold text-paper`}>Mama&apos;s Kitchen</p>
-        <div className="space-y-0.5 bg-[#e7ddd0] p-1">
-          <p className={`w-[90%] bg-card px-0.5 ${t6}`}>Hi! 1. Menu 2. Order 3. Track</p>
-          <p className={`ml-auto w-6 bg-[#d7f5c4] px-0.5 text-right ${t6}`}>2</p>
-          <p className={`w-[90%] bg-card px-0.5 ${t6}`}>What would you like? 🍛</p>
-          <p className={`ml-auto w-[70%] bg-[#d7f5c4] px-0.5 ${t6}`}>2 jollof + chicken</p>
-          <p className={`w-[90%] bg-card px-0.5 ${t6}`}>₦7,000 · Pay here →</p>
-        </div>
-      </Phone>
-      <Bot className="size-8 text-ink/70" />
-    </div>
-  ),
-  supportagent: () => (
-    <Browser url="quickship.ng" nav={<Nav brand="QuickShip" />}>
-      <div className="flex justify-end">
-        <div className={`${edge} w-[70%] bg-card`}>
-          <p className={`flex items-center gap-0.5 bg-accent px-1 py-0.5 ${t6} font-bold text-accent-ink`}><Bot className="size-2.5" /> Support · online</p>
-          <div className="space-y-0.5 p-0.5">
-            <p className={`w-[85%] bg-sunk px-0.5 ${t6}`}>Where is my order?</p>
-            <p className={`ml-auto w-[85%] bg-brand-wash px-0.5 ${t6}`}>QS-48213 is out for delivery 🚚</p>
-          </div>
-        </div>
-      </div>
-    </Browser>
-  ),
-  leadgen: () => (
-    <div className={`${edge} ${shadow} w-full overflow-hidden bg-card`}>
-      <p className={`bg-[#0f4d3a] px-1 py-0.5 ${t6} font-bold text-paper`}>Prospects: Dental clinics, Lagos</p>
-      <div className={`grid grid-cols-[1.3fr_1fr_0.8fr_0.5fr] bg-wash ${t6} font-bold`}>{["Business", "Area", "Website", "Score"].map((h) => <span key={h} className="border-r border-line px-0.5">{h}</span>)}</div>
-      {[["SmileCare", "Lekki", "none", "5"], ["DentPro", "Ikeja", "old", "4"], ["BrightTeeth", "Yaba", "none", "5"], ["OralPlus", "VI", "good", "2"]].map((r) => (
-        <div key={r[0]} className={`grid grid-cols-[1.3fr_1fr_0.8fr_0.5fr] border-t border-line ${t6}`}>{r.map((c, j) => <span key={j} className={`border-r border-line px-0.5 ${j === 3 && Number(c) >= 4 ? "font-bold text-success" : ""}`}>{c}</span>)}</div>
-      ))}
-    </div>
-  ),
-  gbp: () => (
-    <div className="flex w-full gap-1.5">
-      <div className="relative w-[45%] border-2 border-edge bg-[#e9efe4]">
-        <div className="h-full min-h-14 w-full bg-[linear-gradient(90deg,transparent_45%,#fff_45%,#fff_52%,transparent_52%),linear-gradient(0deg,transparent_40%,#fff_40%,#fff_48%,transparent_48%)]" />
-        <MapPin className="absolute left-[40%] top-1 size-5 fill-brand text-edge" />
-      </div>
-      <div className={`${edge} ${shadow} flex-1 bg-white p-1`}>
-        <p className={`${t7} font-bold`}>Glow Beauty Studio</p>
-        <p className={`${t6} text-[#e0a82e]`}>4.9 ★★★★★ (212)</p>
-        <p className={`${t6} text-muted`}>Beauty salon · Lekki</p>
-        <p className={`${t6} text-success`}>Open · Closes 7pm</p>
-        <div className="mt-0.5 flex gap-0.5">{["Call", "Directions", "Book"].map((x) => <span key={x} className={`border border-edge/50 px-0.5 ${t6}`}>{x}</span>)}</div>
-      </div>
-    </div>
-  ),
-  newsletter: () => (
-    <div className="flex w-full items-center gap-1.5">
-      <div className={`${edge} ${shadow} w-[55%] bg-card`}>
-        <p className={`bg-brand px-1 py-0.5 ${t6} font-bold`}><Mail className="inline size-2" /> Weekly deals</p>
-        <div className="space-y-0.5 p-1"><Bar w="90%" /><Bar w="70%" /><Img c="#ffe1cf" h="h-4" /><Bar w="80%" /></div>
-      </div>
-      <div className="flex-1 space-y-0.5">
-        {[["Sent", "2,410"], ["Opened", "48%"], ["Clicked", "9%"]].map(([k, v]) => <div key={k} className={`flex justify-between border border-edge/50 bg-card px-1 ${t6}`}><span>{k}</span><b>{v}</b></div>)}
-      </div>
-    </div>
-  ),
-  reminders: () => (
-    <div className="flex h-full items-center justify-center gap-2">
-      <Phone>
-        <div className="space-y-0.5 p-1">
-          <p className={`flex items-center gap-0.5 ${t6} font-bold`}><Bell className="size-2" /> Reminder</p>
-          <p className={`bg-card px-0.5 ${t6} border border-edge/40`}>Hi Bisi, your dental check-up is tomorrow at 10:30am. Reply 1 to confirm, 2 to reschedule.</p>
-          <p className={`ml-auto w-5 bg-[#d7f5c4] text-center ${t6}`}>1</p>
-          <p className={`bg-card px-0.5 ${t6} border border-edge/40`}>Confirmed ✓ See you!</p>
-        </div>
-      </Phone>
-      <Clock className="size-8 text-ink/70" />
-    </div>
-  ),
-  wedding: () => (
-    <Browser url="tolaandsegun.com" nav={<Nav brand="Tola & Segun" cta="RSVP" />}>
-      <p className={`text-center ${h8}`}><Heart className="inline size-3 fill-[#b8336a] text-[#b8336a]" /> We&apos;re getting married</p>
-      <p className={`text-center ${t6} text-muted`}>Sat 20 Dec 2026 · Ibadan</p>
-      <div className="mt-1 grid grid-cols-3 gap-0.5">{["Our story", "Venue", "Registry"].map((x) => <span key={x} className={`border border-edge/40 py-0.5 text-center ${t6}`}>{x}</span>)}</div>
-    </Browser>
-  ),
-  membership: () => (
-    <Browser url="bookclub.ng/members" nav={<Nav brand="Lagos Book Club" />}>
-      <div className="flex items-center gap-1.5">
-        <Lock className="size-5 shrink-0 text-ink/70" />
-        <div>
-          <p className={h8}>Members area</p>
-          <p className={`${t6} text-muted`}>₦5,000/month · cancel any time</p>
-        </div>
-      </div>
-      <div className="mt-1 flex items-center gap-0.5"><Users className="size-2.5 text-ink/70" /><span className={`${t6}`}>Next meetup · Sat 5pm</span></div>
-    </Browser>
-  ),
-  pharmacy: () => (
-    <Browser url="healthplus.ng" nav={<Nav brand="MedsPlus Pharmacy" cta="🛒" />}>
-      <div className={`flex border border-edge ${t6}`}><span className="flex-1 px-1 text-muted">Search medicines…</span><Search className="size-2.5" /></div>
-      <div className="mt-1 grid grid-cols-3 gap-0.5">
-        {[["Vitamin C", "₦2,500"], ["Paracetamol", "₦800"], ["BP monitor", "₦28,000"]].map(([n, p]) => (
-          <div key={n} className="border border-edge/40">
-            <Img c="#dff1f7" icon={<Package className="size-3 text-ink/70" />} h="h-4" />
-            <p className={`${t6} px-0.5`}>{n}</p>
-            <p className={`${t6} px-0.5 font-bold`}>{p}</p>
+    <Stage d={10}>
+      <Win title="Invoices" className="w-[252px]" bodyClass="p-2">
+        {[["INV-014", "Glow Studio", "₦350,000", false], ["INV-013", "Bukka Express", "₦400,000", true], ["INV-012", "SmileCare", "₦650,000", true]].map(([id, c, amt, paid]) => (
+          <div key={id as string} className="flex items-center gap-2 border-b border-[#f1ede6] py-1.5">
+            <span className="font-code text-[7px] text-[#8a857b]">{id as string}</span>
+            <span className={`${t.xs} flex-1 font-semibold`}>{c as string}</span>
+            <span className={t.xs}>{amt as string}</span>
+            {paid ? (
+              <span className={`rounded-full bg-[#e6f4ec] px-1.5 text-[6.5px] font-semibold text-[#16794a]`}>Paid</span>
+            ) : (
+              <span className="relative w-[40px]">
+                <span className={`absolute right-0 top-1/2 -translate-y-1/2 rounded-full bg-[#fff4d6] px-1.5 text-[6.5px] font-semibold text-[#8a6d00] ` + m("swap-a")} style={at(0)}>Pending</span>
+                <span className={`absolute right-0 top-1/2 -translate-y-1/2 rounded-full bg-[#e6f4ec] px-1.5 text-[6.5px] font-semibold text-[#16794a] ` + m("swap-b")} style={at(0)}>Paid</span>
+              </span>
+            )}
           </div>
         ))}
-      </div>
-    </Browser>
+        <div className="mt-2 flex items-end justify-between">
+          <span className={`${t.xs} text-[#8a857b]`}>Paid this month</span>
+          <span className="relative h-[16px] w-[80px] text-right">
+            <span className={"absolute right-0 text-[13px] font-bold " + m("swap-a")} style={at(0)}>₦1,050,000</span>
+            <span className={"absolute right-0 text-[13px] font-bold text-[#16794a] " + m("swap-b")} style={at(0)}>₦1,400,000</span>
+          </span>
+        </div>
+      </Win>
+    </Stage>
   ),
-  reviews: () => (
-    <Browser url="kora.ng/reviews" nav={<Nav brand="Kora Foods" />}>
-      <p className={`${h8}`}>4.8 <Star className="inline size-2.5 fill-[#e0a82e] text-[#e0a82e]" /> from 1,240 reviews</p>
-      {["“Best jollof in Ikeja!”", "“Delivery was fast.”"].map((q) => <p key={q} className={`mt-0.5 border-l-2 border-brand pl-1 ${t6}`}>{q}</p>)}
-      <p className={`mt-0.5 ${t6} text-muted`}>Auto-requested after every order</p>
-    </Browser>
+
+  wabot: () => (
+    <Stage d={11}>
+      <Phone className="h-[176px] w-[150px]">
+        <p className="flex items-center gap-1 bg-[#075e54] px-2 pb-1 pt-3.5 text-[7.5px] font-semibold text-white">
+          <span className="size-[10px] rounded-full bg-white/80" /> Mama&apos;s Kitchen · bot
+        </p>
+        <div className="space-y-1 bg-[#efeae2] p-1.5 text-[6.5px]">
+          <p className={"w-[86%] rounded-[5px] bg-white p-1 " + m("in")} style={at(0.2)}>Hi! Reply with a number: 1 Menu · 2 Order · 3 Track · 4 Talk to us</p>
+          <p className={"ml-auto w-fit rounded-[5px] bg-[#d9fdd3] px-1.5 py-1 " + m("in")} style={at(1.4)}>2</p>
+          <p className={"w-[80%] rounded-[5px] bg-white p-1 " + m("in")} style={at(2.4)}>What would you like?</p>
+          <p className={"ml-auto w-[70%] rounded-[5px] bg-[#d9fdd3] p-1 " + m("in")} style={at(3.4)}>Jollof ×2, to Ikeja</p>
+          <p className={"w-[86%] rounded-[5px] bg-white p-1 " + m("in")} style={at(4.6)}>
+            Total ₦7,000. Pay here: <span className="font-semibold text-[#0ba4db]">paystack.com/pay/mk</span>
+          </p>
+        </div>
+      </Phone>
+    </Stage>
+  ),
+
+  supportagent: () => (
+    <Stage d={11}>
+      <div className="relative h-[168px] w-[272px]">
+        <Win title="quickship.ng" className="absolute inset-0" bodyClass="space-y-1.5 p-2.5">
+          <Line w="50%" h="h-[7px]" c="bg-[#dcd6c8]" />
+          <Line w="80%" />
+          <Line w="70%" />
+          <Line w="40%" />
+        </Win>
+        <div className={"absolute bottom-2 right-2 w-[150px] overflow-hidden rounded-[10px] border border-[#e4e0d8] bg-white shadow-lg " + m("in")} style={at(0.2)}>
+          <p className="bg-[#151515] px-2 py-1 text-[7px] font-semibold text-white">QuickShip assistant</p>
+          <div className="space-y-1 p-1.5 text-[6.5px]">
+            <p className={"ml-auto w-fit rounded-[5px] bg-[#f1ede6] px-1.5 py-1 " + m("in")} style={at(0.8)}>Do you deliver to Ibadan?</p>
+            <p className={"w-[92%] rounded-[5px] bg-[#fdeee6] p-1 " + m("in")} style={at(2)}>Yes, in 2 working days for ₦3,500.</p>
+            <span className={"inline-block rounded-full border border-[#e4e0d8] px-1 text-[6px] text-[#8a857b] " + m("pop")} style={at(2.6)}>Source: Delivery FAQ</span>
+            <span className={"block rounded-[5px] border border-[#151515] py-[2px] text-center text-[6.5px] font-semibold " + m("glow")} style={at(3.8)}>Talk to a person</span>
+          </div>
+        </div>
+      </div>
+    </Stage>
+  ),
+
+  leadgen: () => (
+    <Stage d={11} className="gap-2.5">
+      <Win title="freeaudit.tolubuilds.ng" className="w-[140px]" bodyClass="p-2">
+        <p className="text-[10px] font-bold leading-tight">Is your website losing customers?</p>
+        <p className="mt-0.5 text-[6.5px] text-[#6b675f]">Get a free 5-point check in 24 hours.</p>
+        <div className="mt-1.5 rounded-[4px] border border-[#e4e0d8] px-1 py-[2px] text-[7px]">
+          <span className={"inline-block " + m("type")} style={at(0.3)}>kemi@glowbeauty.ng</span>
+        </div>
+        <span className={"mt-1 block rounded-[4px] bg-[#eb5e28] py-[2px] text-center text-[7px] font-semibold " + m("press")} style={at(2)}>Send my audit</span>
+      </Win>
+      <div className="space-y-1.5">
+        <Box className="w-[124px] overflow-hidden">
+          <p className="bg-[#0f9d58] px-1.5 py-[2px] text-[6.5px] font-semibold text-white">Leads · Google Sheet</p>
+          {["Tobi · Bukka Express", "Ada · SmileCare"].map((r) => <p key={r} className="border-t border-[#efece6] px-1.5 py-[2px] text-[6.5px]">{r}</p>)}
+          <p className={"border-t border-[#efece6] bg-[#fdeee6] px-1.5 py-[2px] text-[6.5px] font-semibold " + m("left")} style={at(2.6)}>Kemi · Glow Beauty</p>
+        </Box>
+        <Box className={"flex w-[124px] items-center gap-1 bg-[#151515] px-1.5 py-1 text-white " + m("pop")} style={at(3.4)}>
+          <MessageCircle className="size-3 text-[#4ade80]" /><span className="text-[6.5px]">New lead: Kemi, Glow Beauty</span>
+        </Box>
+      </div>
+    </Stage>
+  ),
+
+  gbp: () => (
+    <Stage d={10}>
+      <Box className="relative w-[252px] p-2.5">
+        <div className="flex items-start justify-between">
+          <div>
+            <p className={`${t.md} font-bold`}>Glow Beauty Studio</p>
+            <p className="flex items-center gap-1 text-[7px] text-[#6b675f]">
+              <span className="font-semibold text-[#151515]">4.9</span> <Stars />
+              <span className="relative inline-block w-[42px]">
+                <span className={"absolute left-0 " + m("swap-a")} style={at(0)}>(211 reviews)</span>
+                <span className={"absolute left-0 font-semibold text-[#16794a] " + m("swap-b")} style={at(0)}>(212 reviews)</span>
+              </span>
+            </p>
+            <p className="text-[7px] text-[#6b675f]">Beauty salon · Lekki Phase 1 · Open until 7pm</p>
+          </div>
+        </div>
+        <div className="mt-1.5 flex gap-1">
+          {[[PhoneIcon, "Call"], [Send, "Directions"], [Calendar, "Book"]].map(([I, l], i) => {
+            const Icon = I as typeof Send;
+            return (
+              <span key={l as string} className={`flex flex-1 items-center justify-center gap-1 rounded-full border border-[#e4e0d8] py-[3px] text-[7px] font-semibold text-[#1a73e8] ` + (i === 2 ? m("glow") : "")} style={i === 2 ? at(3.2) : undefined}>
+                <Icon className="size-[8px]" /> {l as string}
+              </span>
+            );
+          })}
+        </div>
+        <div className={"mt-1.5 rounded-[6px] border border-[#efece6] p-1.5 " + m("left")} style={at(5)}>
+          <p className="flex items-center gap-1 text-[7px] font-semibold">Zainab A. <span className="flex">{[0, 1, 2, 3, 4].map((i) => <Star key={i} className="size-[6px] fill-[#f5a623] text-[#f5a623]" />)}</span></p>
+          <p className="text-[6.5px] text-[#6b675f]">Booked online in 2 minutes. My lashes are perfect!</p>
+        </div>
+        <span className={"absolute right-2 top-2 rounded-full bg-[#e6f4ec] px-1.5 text-[6.5px] font-semibold text-[#16794a] " + m("pop")} style={at(5.4)}>+1 review</span>
+      </Box>
+    </Stage>
   ),
 };
 
@@ -542,9 +371,7 @@ export function ProductThumb({ kind, tone }: { kind: ThumbKind; tone: Tone }) {
   const T = thumbs[kind];
   return (
     <Artboard bg={tones[tone].bg}>
-      <div className="flex h-full w-full items-center justify-center p-4">
-        <T />
-      </div>
+      <T />
     </Artboard>
   );
 }
