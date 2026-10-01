@@ -144,7 +144,7 @@ export function PostEditor({ post, siteUrl, onDelete }: { post: Post | null; sit
             <div className="flex flex-wrap items-center justify-between gap-2 border-2 border-b-0 border-edge bg-wash px-2 py-1.5">
               <div className="flex gap-1">
                 {(["write", "preview"] as const).map((t) => (
-                  <button key={t} type="button" onClick={() => setTab(t)} className={"label px-2.5 py-1 " + (tab === t ? "border-[var(--a-accent)] bg-[var(--a-accent-soft)] font-medium text-[var(--a-accent)]" : "text-ink")}>{t}</button>
+                  <button key={t} type="button" onClick={() => setTab(t)} className={"label px-2.5 py-1 " + (tab === t ? "border-[var(--a-accent)] bg-[var(--a-accent-soft)] font-medium text-[var(--a-accent-text)]" : "text-ink")}>{t}</button>
                 ))}
               </div>
               {tab === "write" && (

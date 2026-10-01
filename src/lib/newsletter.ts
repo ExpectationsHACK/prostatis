@@ -1,0 +1,160 @@
+import "server-only";
+import { promises as fs } from "node:fs";
+import path from "node:path";
+import { readTable, writeTable } from "@/lib/data/local";
+import { canEmailAnyone, sendBatch, sendEmail } from "@/lib/email";
+import { newsletterEmail, welcomeEmail } from "@/lib/email-templates";
+import { previewMode } from "@/lib/learning/store";
+import { site } from "@/lib/site";
+import { createAdminClient } from "@/lib/supabase/admin";
+
+/**
+ * The newsletter: subscribers live in the `waitlist` table (every email signup box on the
+ * site feeds it), issues in `newsletter_issues`. Every email carries a one-click unsubscribe
+ * link and the List-Unsubscribe headers mail apps use for their own unsubscribe button.
+ */
+
+export type Subscriber = { email: string; name: string; whatsapp: string | null; source: string; created_at: string; status: "subscribed" | "unsubscribed"; token: string | null; unsubscribed_at: string | null };
+export type Issue = { id: string; subject: string; preheader: string; body_md: string; status: "draft" | "sending" | "sent"; recipients: number; sent_at: string | null; sent_by: string | null; created_at: string; updated_at: string };
+
+export const unsubscribeUrl = (token: string) => `${site.url}/unsubscribe?t=${token}`;
+const oneClickUrl = (token: string) => `${site.url}/api/unsubscribe?t=${token}`;
+
+/* ---------- Subscribers ---------- */
+export async function listSubscribers(): Promise<Subscriber[]> {
+  if (previewMode) {
+    try {
+      const txt = await fs.readFile(path.join(process.cwd(), ".data", "waitlist.jsonl"), "utf8");
+      return txt
+        .split("\n")
+        .filter(Boolean)
+        .map((l) => ({ status: "subscribed", token: null, unsubscribed_at: null, ...JSON.parse(l) }) as Subscriber)
+        .reverse();
+    } catch {
+      return [];
+    }
+  }
+  const db = createAdminClient();
+  const out: Subscriber[] = [];
+  for (let from = 0; from < 200_000; from += 1000) {
+    const { data, error } = await db.from("waitlist").select("email, name, whatsapp, source, created_at, status, token, unsubscribed_at").order("created_at", { ascending: false }).range(from, from + 999);
+    if (error) throw new Error(/column .* does not exist/i.test(error.message) ? "Run the newsletter migration (20261001130000_newsletter.sql) in Supabase first." : error.message);
+    out.push(...((data ?? []) as Subscriber[]));
+    if (!data || data.length < 1000) break;
+  }
+  return out;
+}
+
+export async function setSubscription(email: string, status: Subscriber["status"]) {
+  if (previewMode) throw new Error("Subscriber changes need Supabase (not available in local preview).");
+  const { error } = await createAdminClient()
+    .from("waitlist")
+    .update({ status, unsubscribed_at: status === "unsubscribed" ? new Date().toISOString() : null })
+    .eq("email", email);
+  if (error) throw error;
+}
+
+/** Unsubscribe from a link. Returns the (partly hidden) email, or null if the link is unknown. */
+export async function unsubscribeByToken(token: string): Promise<string | null> {
+  if (!/^[0-9a-f-]{36}$/i.test(token) || previewMode) return null;
+  const { data, error } = await createAdminClient()
+    .from("waitlist")
+    .update({ status: "unsubscribed", unsubscribed_at: new Date().toISOString() })
+    .eq("token", token)
+    .select("email")
+    .maybeSingle();
+  if (error || !data) return null;
+  const [user, domain] = (data.email as string).split("@");
+  return `${user.slice(0, 2)}${"•".repeat(Math.max(1, user.length - 2))}@${domain}`;
+}
+
+/** After someone subscribes: switch them back on if they had left, then send the welcome email. */
+export async function afterSubscribe(email: string) {
+  const db = createAdminClient();
+  const { data } = await db.from("waitlist").select("status, token").eq("email", email).maybeSingle();
+  if (!data) return;
+  if (data.status === "unsubscribed") await db.from("waitlist").update({ status: "subscribed", unsubscribed_at: null }).eq("email", email);
+  if (!canEmailAnyone() || !data.token) return;
+  const mail = welcomeEmail(unsubscribeUrl(data.token));
+  const res = await sendEmail({ to: email, ...mail, headers: { "List-Unsubscribe": `<${oneClickUrl(data.token)}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" } });
+  if (!res.ok) console.error("welcome email", res.error);
+}
+
+/* ---------- Issues ---------- */
+const T = "newsletter_issues";
+
+export async function listIssues(): Promise<Issue[]> {
+  if (previewMode) return (await readTable<Issue>(T)).sort((a, b) => b.updated_at.localeCompare(a.updated_at));
+  const { data, error } = await createAdminClient().from(T).select("*").order("updated_at", { ascending: false }).limit(500);
+  if (error) throw new Error(/does not exist|schema cache/i.test(error.message) ? "Run the newsletter migration (20261001130000_newsletter.sql) in Supabase first." : error.message);
+  return (data ?? []) as Issue[];
+}
+
+export async function getIssue(id: string): Promise<Issue | null> {
+  if (previewMode) return (await readTable<Issue>(T)).find((i) => i.id === id) ?? null;
+  const { data } = await createAdminClient().from(T).select("*").eq("id", id).maybeSingle();
+  return (data as Issue | null) ?? null;
+}
+
+export async function saveIssue(input: { id?: string; subject: string; preheader: string; body_md: string }): Promise<Issue> {
+  const now = new Date().toISOString();
+  if (previewMode) {
+    return writeTable<Issue, Issue>(T, (rows) => {
+      const found = input.id ? rows.find((r) => r.id === input.id) : undefined;
+      if (found) {
+        if (found.status !== "draft") throw new Error("This issue has already been sent.");
+        return Object.assign(found, input, { updated_at: now });
+      }
+      const row: Issue = { ...input, id: crypto.randomUUID(), status: "draft", recipients: 0, sent_at: null, sent_by: null, created_at: now, updated_at: now };
+      rows.push(row);
+      return row;
+    });
+  }
+  const db = createAdminClient();
+  const fields = { subject: input.subject, preheader: input.preheader, body_md: input.body_md, updated_at: now };
+  const q = input.id ? db.from(T).update(fields).eq("id", input.id).eq("status", "draft") : db.from(T).insert(fields);
+  const { data, error } = await q.select("*").single();
+  if (error) throw new Error(input.id ? "Couldn't save: this issue may already have been sent." : error.message);
+  return data as Issue;
+}
+
+export async function deleteIssue(id: string) {
+  if (previewMode) {
+    await writeTable<Issue>(T, (rows) => {
+      const i = rows.findIndex((r) => r.id === id && r.status === "draft");
+      if (i >= 0) rows.splice(i, 1);
+    });
+    return;
+  }
+  const { error } = await createAdminClient().from(T).delete().eq("id", id).eq("status", "draft");
+  if (error) throw error;
+}
+
+/** Send one issue to one address, for checking it before the real send. */
+export async function sendTest(issue: Issue, to: string) {
+  const mail = newsletterEmail(issue, `${site.url}/unsubscribe`);
+  return sendEmail({ to, ...mail, subject: `[Test] ${mail.subject}` });
+}
+
+/**
+ * Send an issue to every subscribed address, once. The row is claimed (draft → sending)
+ * before anything goes out, so a double click can't send twice.
+ */
+export async function sendIssue(id: string, actor: string): Promise<{ sent: number; failed: number; error?: string }> {
+  if (previewMode) throw new Error("Sending needs Supabase (not available in local preview).");
+  if (!canEmailAnyone()) throw new Error("Verify your domain in Resend and set EMAIL_FROM to an address on it first. Until then emails only reach the Resend account owner.");
+  const db = createAdminClient();
+  const { data: claimed, error } = await db.from(T).update({ status: "sending", updated_at: new Date().toISOString() }).eq("id", id).eq("status", "draft").select("*").maybeSingle();
+  if (error) throw error;
+  if (!claimed) throw new Error("This issue has already been sent (or is sending now).");
+  const issue = claimed as Issue;
+
+  const subs = (await listSubscribers()).filter((s) => s.status === "subscribed" && s.token);
+  const emails = subs.map((s) => {
+    const mail = newsletterEmail(issue, unsubscribeUrl(s.token!));
+    return { to: s.email, ...mail, headers: { "List-Unsubscribe": `<${oneClickUrl(s.token!)}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" } };
+  });
+  const res = await sendBatch(emails);
+  await db.from(T).update({ status: res.sent > 0 || emails.length === 0 ? "sent" : "draft", recipients: res.sent, sent_at: new Date().toISOString(), sent_by: actor, updated_at: new Date().toISOString() }).eq("id", id);
+  return res;
+}

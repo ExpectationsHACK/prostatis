@@ -18,7 +18,7 @@ export default async function SignupPage({ searchParams }: PageProps<"/signup">)
   const email = prefill ?? (typeof sp.email === "string" ? sp.email : undefined);
   const notice = prefill ? `There's no account for ${prefill} yet. Create one below: it takes a minute.` : undefined;
   return (
-    <AuthShell title="Create your account" subtitle="Takes a minute. Then enroll with Paystack and get your WhatsApp invite.">
+    <AuthShell art="signup" title="Create your account" subtitle="Takes a minute. Then enroll with Paystack and get your WhatsApp invite.">
       <OAuthButtons providers={await oauthProviders()} next={next} from="signup" />
       <SignupForm next={next} email={email} notice={notice} />
     </AuthShell>

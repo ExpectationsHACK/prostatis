@@ -18,8 +18,8 @@ export const planName = (p: string | null) => (p === "main_track" ? "Main Track"
 /* ---------- Buttons and fields ---------- */
 const base = "inline-flex items-center justify-center gap-2 rounded-[10px] text-[13.5px] font-medium whitespace-nowrap transition-colors disabled:cursor-not-allowed disabled:opacity-50";
 export const ab = {
-  primary: `${base} h-10 px-4 bg-[var(--a-accent)] text-white hover:brightness-110`,
-  secondary: `${base} h-10 px-4 border border-[var(--a-border)] bg-white text-[#1c1c22] hover:bg-[var(--a-head)]`,
+  primary: `${base} h-10 px-4 border-2 border-[#151515] bg-[var(--a-accent)] text-[#151515] shadow-[2px_2px_0_#151515] hover:bg-[#d9501d]`,
+  secondary: `${base} h-10 px-4 border-2 border-[#151515] bg-white text-[#151515] shadow-[2px_2px_0_#151515] hover:bg-[var(--a-head)]`,
   danger: `${base} h-10 px-4 border border-[#f3c9c5] bg-white text-[#b3261e] hover:bg-[#fdf0ef]`,
   ghost: `${base} h-9 px-3 text-[#1c1c22] hover:bg-[var(--a-head)]`,
   sm: "h-8! px-3! text-[12.5px]!",
@@ -41,7 +41,7 @@ export function PageHead({ title, sub, crumbs = [], children }: { title: string;
   return (
     <div className="flex flex-wrap items-end justify-between gap-4">
       <div className="min-w-0">
-        <h1 className="text-[22px] font-semibold tracking-tight text-[#1c1c22] sm:text-[24px]">{title}</h1>
+        <h1 className="display text-[26px] text-[#151515] sm:text-[30px]">{title}</h1>
         {title !== "Dashboard" && (
           <nav className="mt-1 flex flex-wrap items-center gap-1.5 text-[12.5px] text-[var(--a-muted)]" aria-label="Breadcrumb">
             {trail.map((c, i) => {
@@ -52,7 +52,7 @@ export function PageHead({ title, sub, crumbs = [], children }: { title: string;
                   {c.href && !last ? (
                     <Link href={c.href} className="hover:text-[#1c1c22]">{c.label}</Link>
                   ) : (
-                    <span className={last ? "text-[var(--a-accent)]" : ""}>{c.label}</span>
+                    <span className={last ? "text-[var(--a-accent-text)]" : ""}>{c.label}</span>
                   )}
                 </span>
               );
@@ -80,18 +80,18 @@ export function Stat({ label, value, sub, href, icon: Icon, delta, tone = "plain
     <>
       <div className="flex items-start justify-between gap-2">
         {Icon ? (
-          <span className={"grid size-9 place-items-center rounded-[10px] border " + (accent ? "border-white/30 text-white" : "border-[var(--a-border)] text-[var(--a-accent)]")}>
+          <span className={"grid size-9 place-items-center rounded-[10px] border " + (accent ? "border-[#151515]/30 text-[#151515]" : "border-[var(--a-border)] bg-[var(--a-accent-soft)] text-[var(--a-accent-text)]")}>
             <Icon className="size-[18px]" aria-hidden />
           </span>
         ) : (
           <span />
         )}
         {delta && (
-          <span className={"text-right text-[11.5px] leading-tight " + (accent ? "text-white/80" : "text-[var(--a-muted)]")}>
+          <span className={"text-right text-[11.5px] leading-tight " + (accent ? "text-[#151515]/75" : "text-[var(--a-muted)]")}>
             {delta.pct === null ? (
               <span className="font-semibold">New</span>
             ) : (
-              <span className={"font-semibold " + (accent ? "text-white" : delta.pct > 0 ? "text-[#1f9d55]" : delta.pct < 0 ? "text-[#d93b30]" : "")}>
+              <span className={"font-semibold " + (accent ? "text-[#151515]" : delta.pct > 0 ? "text-[#1f9d55]" : delta.pct < 0 ? "text-[#d93b30]" : "")}>
                 {delta.pct > 0 ? "+" : ""}
                 {delta.pct}%
               </span>
@@ -100,14 +100,14 @@ export function Stat({ label, value, sub, href, icon: Icon, delta, tone = "plain
           </span>
         )}
       </div>
-      <p className={"mt-4 text-[12.5px] " + (accent ? "text-white/85" : "text-[var(--a-muted)]")}>{label}</p>
+      <p className={"mt-4 text-[12.5px] " + (accent ? "text-[#151515]/80" : "text-[var(--a-muted)]")}>{label}</p>
       <p className="tabular mt-0.5 text-[26px] font-semibold leading-tight tracking-tight">{value}</p>
-      {sub && <p className={"mt-1 text-[12px] " + (accent ? "text-white/80" : "text-[var(--a-muted)]")}>{sub}</p>}
+      {sub && <p className={"mt-1 text-[12px] " + (accent ? "text-[#151515]/75" : "text-[var(--a-muted)]")}>{sub}</p>}
     </>
   );
-  const cls = "block rounded-[14px] border p-4 transition-colors " + (accent ? "border-transparent bg-[var(--a-accent)] text-white" : "border-[var(--a-border)] bg-white text-[#1c1c22]");
+  const cls = "block rounded-[14px] border-2 border-[#151515] p-4 shadow-[3px_3px_0_#151515] transition-transform " + (accent ? "bg-[var(--a-accent)] text-[#151515]" : "bg-white text-[#151515]");
   return href ? (
-    <Link href={href} className={cls + (accent ? " hover:brightness-110" : " hover:border-[#d6d4f7]")}>
+    <Link href={href} className={cls + " hover:-translate-x-px hover:-translate-y-px hover:shadow-[4px_4px_0_#151515]"}>
       {body}
     </Link>
   ) : (
@@ -117,7 +117,7 @@ export function Stat({ label, value, sub, href, icon: Icon, delta, tone = "plain
 
 export function Panel({ title, children, action, className = "" }: { title: string; children: ReactNode; action?: ReactNode; className?: string }) {
   return (
-    <section className={"min-w-0 rounded-[14px] border border-[var(--a-border)] bg-white " + className}>
+    <section className={"min-w-0 rounded-[14px] border-2 border-[#151515] bg-white shadow-[3px_3px_0_#151515] " + className}>
       <div className="flex items-center justify-between gap-3 px-5 pt-4">
         <h2 className="text-[15px] font-semibold text-[#1c1c22]">{title}</h2>
         {action}
@@ -127,7 +127,7 @@ export function Panel({ title, children, action, className = "" }: { title: stri
   );
 }
 
-export const panelLink = "text-[12.5px] font-medium text-[var(--a-accent)] hover:underline";
+export const panelLink = "text-[12.5px] font-medium text-[var(--a-accent-text)] hover:underline";
 
 /** Horizontal bars for "top X" lists. */
 export function BarList({ rows, empty = "No data yet.", format = (k: string) => k }: { rows: { key: string; visitors: number; views: number }[]; empty?: string; format?: (k: string) => ReactNode }) {
@@ -161,7 +161,7 @@ export function DailyChart({ series }: { series: { day: string; views: number; v
         {series.map((d, i) => (
           <g key={d.day}>
             <title>{`${d.day}: ${d.visitors} visitors, ${d.views} views`}</title>
-            <rect x={i * w + w * 0.18} width={w * 0.64} y={40 - (d.views / max) * 38} height={(d.views / max) * 38} rx="0.4" fill="#e4e1fb" />
+            <rect x={i * w + w * 0.18} width={w * 0.64} y={40 - (d.views / max) * 38} height={(d.views / max) * 38} rx="0.4" fill="#f9d5c2" />
             <rect x={i * w + w * 0.18} width={w * 0.64} y={40 - (d.visitors / max) * 38} height={(d.visitors / max) * 38} rx="0.4" fill="var(--a-accent)" />
           </g>
         ))}
@@ -170,7 +170,7 @@ export function DailyChart({ series }: { series: { day: string; views: number; v
         <span>{series[0]?.day}</span>
         <span className="flex items-center gap-3">
           <span className="flex items-center gap-1"><span className="size-2.5 rounded-sm bg-[var(--a-accent)]" /> visitors</span>
-          <span className="flex items-center gap-1"><span className="size-2.5 rounded-sm bg-[#e4e1fb]" /> page views</span>
+          <span className="flex items-center gap-1"><span className="size-2.5 rounded-sm bg-[#f9d5c2]" /> page views</span>
         </span>
         <span>{series.at(-1)?.day}</span>
       </div>
@@ -210,7 +210,7 @@ export function Pill({ children, tone = "muted" }: { children: ReactNode; tone?:
     bad: "border-[#f3c9c5] bg-[#fdf0ef] text-[#c0392b]",
     warn: "border-[#f5dca0] bg-[#fff8e6] text-[#a8700a]",
     muted: "border-[var(--a-border)] bg-[var(--a-head)] text-[var(--a-muted)]",
-    brand: "border-[#d6d1fa] bg-[var(--a-accent-soft)] text-[var(--a-accent)]",
+    brand: "border-[#f6c7ae] bg-[var(--a-accent-soft)] text-[var(--a-accent-text)]",
     blue: "border-[#c7dcf8] bg-[#eff5fe] text-[#2563c9]",
   }[tone];
   return <span className={`inline-block whitespace-nowrap rounded-md border px-2 py-0.5 text-[12px] font-medium ${c}`}>{children}</span>;
@@ -229,7 +229,7 @@ export function ProgressBar({ pct }: { pct: number }) {
 
 export function Avatar({ name, size = 32 }: { name: string; size?: number }) {
   const letter = (name || "?").trim().charAt(0).toUpperCase();
-  const hues = ["#fde2d0", "#dff3e6", "#e4e1fb", "#dcebfb", "#fbe3ef", "#fff1c9"];
+  const hues = ["#fde2d0", "#dff3e6", "#f9d5c2", "#dcebfb", "#fbe3ef", "#fff1c9"];
   const bg = hues[[...(name || "?")].reduce((a, c) => a + c.charCodeAt(0), 0) % hues.length];
   return (
     <span className="grid shrink-0 place-items-center rounded-full text-[13px] font-semibold text-[#1c1c22]" style={{ width: size, height: size, background: bg }} aria-hidden>
@@ -275,7 +275,7 @@ export function Pagination({ p, noun, href }: { p: { page: number; pages: number
               <Link
                 href={href(n)}
                 aria-current={n === p.page ? "page" : undefined}
-                className={`${box} ${n === p.page ? "border-[var(--a-accent)] bg-[var(--a-accent-soft)] font-semibold text-[var(--a-accent)]" : "border-[var(--a-border)] hover:bg-[var(--a-head)]"}`}
+                className={`${box} ${n === p.page ? "border-[var(--a-accent)] bg-[var(--a-accent-soft)] font-semibold text-[var(--a-accent-text)]" : "border-[var(--a-border)] hover:bg-[var(--a-head)]"}`}
               >
                 {n}
               </Link>

@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { brandedAuthEmails, sendAuthEmail } from "@/lib/auth-email";
 import { oauthProviders, PREFILL_COOKIE, type SocialProvider } from "@/lib/auth-providers";
 import { site } from "@/lib/site";
 import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
@@ -59,6 +60,17 @@ export async function signUp(_: AuthState, form: FormData): Promise<AuthState> {
   if (!name) return { error: "Please enter your name." };
   if (password.length < 8) return { error: "Password must be at least 8 characters." };
 
+  // Branded STEINARK email once the sending domain is verified; Supabase's mailer otherwise.
+  if (brandedAuthEmails()) {
+    const sent = await sendAuthEmail("signup", { email, password, next, name, data: { name, whatsapp } });
+    if (!sent.ok && sent.reason === "exists") return { error: "An account with this email already exists. Sign in instead, or reset your password." };
+    if (!sent.ok) {
+      console.error("signup email", sent.error);
+      return { error: "We couldn't send your confirmation email. Please try again in a minute." };
+    }
+    return { message: `We sent a confirmation link to ${email}. Open it to finish creating your account.` };
+  }
+
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -99,6 +111,15 @@ export async function sendMagicLink(_: AuthState, form: FormData): Promise<AuthS
   const next = safeNext(form.get("next"));
   if (!email) return { error: "Enter your email first." };
 
+  if (brandedAuthEmails()) {
+    // Only for existing accounts: generating a link would otherwise create one.
+    if ((await emailRegistered(email)) === true) {
+      const sent = await sendAuthEmail("magiclink", { email, next });
+      if (!sent.ok) console.error("magic link email", sent.error);
+    }
+    return { message: `If an account exists for ${email}, a sign-in link is on its way.` };
+  }
+
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithOtp({
     email,
@@ -125,6 +146,12 @@ export async function requestPasswordReset(_: AuthState, form: FormData): Promis
   if (!supabaseConfigured) return notConfigured;
   const email = String(form.get("email") ?? "").trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: "Enter a valid email address." };
+  if (brandedAuthEmails()) {
+    const sent = await sendAuthEmail("recovery", { email, next: "/reset-password" });
+    if (!sent.ok && sent.reason === "failed") console.error("reset email", sent.error);
+    return { message: `If an account exists for ${email}, a reset link is on its way. Open it on this device.` };
+  }
+
   const supabase = await createClient();
   const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: callbackUrl("/reset-password") });
   if (error && /rate limit/i.test(error.message)) return { error: "Too many emails sent. Please wait a few minutes and try again." };

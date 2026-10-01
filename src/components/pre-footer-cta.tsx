@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { btn, size } from "./ui";
 
 // Pages where an "enroll" push would be out of place.
-const HIDDEN = ["/checkout", "/login", "/signup", "/welcome", "/auth", "/forgot-password", "/reset-password", "/privacy", "/terms", "/refund-policy"];
+const HIDDEN = ["/checkout", "/login", "/signup", "/welcome", "/auth", "/forgot-password", "/reset-password", "/privacy", "/terms", "/refund-policy", "/unsubscribe"];
 
 /** The last push before the footer: one promise, one button, the honest facts. */
 export function PreFooterCta({ from }: { from: string }) {

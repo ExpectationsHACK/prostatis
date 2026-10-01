@@ -18,8 +18,9 @@ export const size = {
   lg: "h-12 px-6 text-[15px]",
 };
 
+// Light fields: a hairline border at rest; on focus the border fades and a soft orange glow shows.
 export const input =
-  "w-full rounded-[10px] border-2 border-ink/80 bg-card px-3 py-2.5 text-[15px] text-ink placeholder:text-faint focus:border-brand focus:outline-none focus:ring-4 focus:ring-brand/15";
+  "w-full rounded-[12px] border border-line bg-card px-3.5 py-3 text-[15px] text-ink shadow-[inset_0_1px_2px_rgba(21,21,21,0.04)] transition-[border-color,box-shadow] duration-150 placeholder:text-faint hover:border-[#d6d0c5] focus:border-transparent focus:shadow-[0_0_0_3px_rgba(235,94,40,0.2),0_1px_2px_rgba(21,21,21,0.06)] focus:outline-none";
 
 /** Small byline under titles. */
 export const byline = "text-[12.5px] font-medium text-muted";

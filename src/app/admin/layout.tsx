@@ -16,16 +16,17 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="admin-ui flex min-h-screen">
-      <aside className="sticky top-0 hidden h-screen w-[250px] shrink-0 flex-col overflow-y-auto bg-[var(--a-side)] px-4 py-6 lg:flex">
+      <aside className="sticky top-0 hidden h-screen w-[250px] shrink-0 flex-col overflow-y-auto border-r-2 border-[#151515] bg-[var(--a-side)] px-4 py-6 lg:flex">
         <Link href="/admin" className="mb-9 flex items-center gap-2.5 px-2">
           <LogoTile size={32} />
-          <span className="text-[17px] font-semibold tracking-tight text-[#1c1c22]">STEINARK<span className="text-[var(--a-accent)]">.admin</span></span>
+          <span className="display text-[18px] text-[#151515]">STEINARK</span>
+          <span className="rounded-full border-2 border-[#151515] bg-[var(--a-accent)] px-2 py-[1px] text-[11px] font-semibold text-[#151515]">Admin</span>
         </Link>
         <AdminSidebar preview={admin.preview} signOut={signOut} />
       </aside>
 
       <div className="min-w-0 flex-1">
-        <header className="sticky top-0 z-30 flex h-[72px] items-center gap-3 border-b border-[var(--a-border)] bg-white/95 px-4 backdrop-blur sm:px-8">
+        <header className="sticky top-0 z-30 flex h-[72px] items-center gap-3 border-b-2 border-[#151515] bg-[#faf8f4]/95 px-4 backdrop-blur sm:px-8">
           <MobileNav preview={admin.preview} signOut={signOut} />
           <p className="min-w-0 flex-1 truncate text-[16px] text-[#1c1c22] sm:text-[18px]">
             Welcome back, <span className="font-semibold">{first}</span> <span aria-hidden>☀️</span>

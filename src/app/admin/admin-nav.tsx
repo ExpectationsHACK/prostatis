@@ -26,7 +26,8 @@ const items: Item[] = [
     icon: FileText,
     children: [
       { href: "/admin/blog", label: "Blog posts" },
-      { href: "/admin/waitlist", label: "Waitlist & subscribers" },
+      { href: "/admin/newsletter", label: "Newsletter" },
+      { href: "/admin/waitlist", label: "Subscribers" },
     ],
   },
   { label: "Audit log", icon: ScrollText, href: "/admin/audit" },
@@ -46,7 +47,7 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
         if (i.href) {
           const on = isOn(path, i.href);
           return (
-            <Link key={i.label} href={i.href} onClick={onNavigate} aria-current={on ? "page" : undefined} className={`${row} ${on ? "bg-[var(--a-accent)] font-medium text-white" : "text-[#3a3a44] hover:bg-white"}`}>
+            <Link key={i.label} href={i.href} onClick={onNavigate} aria-current={on ? "page" : undefined} className={`${row} ${on ? "bg-[var(--a-accent)] font-semibold text-[#151515] ring-2 ring-inset ring-[#151515] shadow-[2px_2px_0_#151515]" : "text-[#3a3a44] hover:bg-white"}`}>
               <Icon className="size-[18px]" aria-hidden /> {i.label}
             </Link>
           );
@@ -55,7 +56,7 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
         const expanded = open[i.label] ?? groupOn;
         return (
           <div key={i.label}>
-            <button type="button" onClick={() => setOpen((o) => ({ ...o, [i.label]: !expanded }))} aria-expanded={expanded} className={`${row} ${groupOn && !expanded ? "bg-[var(--a-accent)] font-medium text-white" : "text-[#3a3a44] hover:bg-white"}`}>
+            <button type="button" onClick={() => setOpen((o) => ({ ...o, [i.label]: !expanded }))} aria-expanded={expanded} className={`${row} ${groupOn && !expanded ? "bg-[var(--a-accent)] font-semibold text-[#151515] ring-2 ring-inset ring-[#151515] shadow-[2px_2px_0_#151515]" : "text-[#3a3a44] hover:bg-white"}`}>
               <Icon className="size-[18px]" aria-hidden /> {i.label}
               <ChevronDown className={"ml-auto size-4 transition-transform " + (expanded ? "rotate-180" : "")} aria-hidden />
             </button>
@@ -65,7 +66,7 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
                   const on = isOn(path, c.href);
                   return (
                     <li key={c.href}>
-                      <Link href={c.href} onClick={onNavigate} aria-current={on ? "page" : undefined} className={"flex h-9 items-center gap-3 rounded-lg px-3 text-[13.5px] " + (on ? "font-medium text-[var(--a-accent)]" : "text-[#55555f] hover:text-[#1c1c22]")}>
+                      <Link href={c.href} onClick={onNavigate} aria-current={on ? "page" : undefined} className={"flex h-9 items-center gap-3 rounded-lg px-3 text-[13.5px] " + (on ? "font-medium text-[var(--a-accent-text)]" : "text-[#55555f] hover:text-[#1c1c22]")}>
                         <span className={"size-1.5 rounded-full " + (on ? "bg-[var(--a-accent)]" : "bg-transparent")} aria-hidden />
                         {c.label}
                       </Link>

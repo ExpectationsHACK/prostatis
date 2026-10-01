@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleAlert, Mail } from "lucide-react";
+import { CircleAlert, Eye, EyeOff, Mail } from "lucide-react";
 import Link from "next/link";
 import { useActionState, useState } from "react";
 import { btn, input, size } from "@/components/ui";
@@ -22,6 +22,26 @@ function Notice({ state }: { state: AuthState }) {
       </p>
     );
   return null;
+}
+
+/** A password field with a show/hide button inside it. */
+function PasswordField({ id, name, autoComplete, placeholder, minLength }: { id: string; name: string; autoComplete: string; placeholder?: string; minLength?: number }) {
+  const [show, setShow] = useState(false);
+  return (
+    <div className="relative">
+      <input id={id} name={name} type={show ? "text" : "password"} required minLength={minLength} autoComplete={autoComplete} placeholder={placeholder} className={`${input} pr-12`} />
+      <button
+        type="button"
+        onClick={() => setShow((v) => !v)}
+        aria-label={show ? "Hide password" : "Show password"}
+        aria-pressed={show}
+        aria-controls={id}
+        className="absolute inset-y-0 right-1.5 my-auto grid size-10 place-items-center rounded-[10px] text-muted transition-colors hover:bg-sunk hover:text-ink"
+      >
+        {show ? <EyeOff className="size-[18px]" aria-hidden /> : <Eye className="size-[18px]" aria-hidden />}
+      </button>
+    </div>
+  );
 }
 
 function Label({ htmlFor, children }: { htmlFor: string; children: React.ReactNode }) {
@@ -53,7 +73,7 @@ export function SignupForm({ next, email, notice }: { next: string; email?: stri
       </div>
       <div>
         <Label htmlFor="su-pw">Password</Label>
-        <input id="su-pw" name="password" type="password" required minLength={8} autoComplete="new-password" placeholder="At least 8 characters" className={input} />
+        <PasswordField id="su-pw" name="password" minLength={8} autoComplete="new-password" placeholder="At least 8 characters" />
       </div>
       <Notice state={state} />
       <button disabled={pending} className={`${btn.primary} ${size.lg} w-full`}>
@@ -88,7 +108,7 @@ export function LoginForm({ next, initialError }: { next: string; initialError?:
             <label htmlFor="li-pw" className="text-[14px] font-semibold text-ink">Password</label>
             <Link href="/forgot-password" className="text-[13px] font-semibold text-brand-text underline">Forgot password?</Link>
           </div>
-          <input id="li-pw" name="password" type="password" required autoComplete="current-password" className={input} />
+          <PasswordField id="li-pw" name="password" autoComplete="current-password" />
         </div>
       )}
       <Notice state={magic ? mlState : pwState} />
@@ -134,11 +154,11 @@ export function ResetForm() {
     <form action={action} className="space-y-4">
       <div>
         <Label htmlFor="rp-pw">New password</Label>
-        <input id="rp-pw" name="password" type="password" required minLength={8} autoComplete="new-password" placeholder="At least 8 characters" className={input} />
+        <PasswordField id="rp-pw" name="password" minLength={8} autoComplete="new-password" placeholder="At least 8 characters" />
       </div>
       <div>
         <Label htmlFor="rp-confirm">Type it again</Label>
-        <input id="rp-confirm" name="confirm" type="password" required minLength={8} autoComplete="new-password" className={input} />
+        <PasswordField id="rp-confirm" name="confirm" minLength={8} autoComplete="new-password" />
       </div>
       <Notice state={state} />
       <button disabled={pending} className={`${btn.primary} ${size.lg} w-full`}>

@@ -1,3 +1,5 @@
+import { after } from "next/server";
+import { afterSubscribe } from "@/lib/newsletter";
 import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
 import { appendFile, mkdir } from "node:fs/promises";
 import path from "node:path";
@@ -42,6 +44,8 @@ export async function POST(req: Request) {
       console.error("waitlist insert failed", error);
       return Response.json({ error: "Couldn't save your details. Please try again." }, { status: 502 });
     }
+    // Re-subscribe anyone who had left, and send the welcome email, after responding.
+    after(() => afterSubscribe(entry.email).catch((e) => console.error("after subscribe", e)));
     return Response.json({ ok: true });
   }
 

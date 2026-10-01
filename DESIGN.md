@@ -60,7 +60,11 @@ All art is coded, drawn on a fixed 320×200 `Artboard` scaled to the card, and *
 
 ## The admin (`/admin`)
 
-A separate calm workspace (owner's reference: a clean HR dashboard), scoped under `.admin-ui` in `globals.css`, with its own accent `--a-accent` (#5b4de6). Components in `src/components/admin/blocks.tsx`.
+The admin keeps its dashboard structure (sidebar with groups, top bar, stat cards, tables, pagination) in the site's brand, scoped under `.admin-ui` in `globals.css`: warm off-white, the orange accent (`--a-accent`) with ink text on it, ink-outlined cards with a hard shadow, Archivo page titles, the spark logo with an "Admin" tag. Orange as small text uses `--a-accent-text`. Components in `src/components/admin/blocks.tsx`.
+
+## Forms
+
+Fields are light: a hairline border at rest; on focus the border fades and a soft orange glow shows (no outline). Password fields have a show/hide button. Sign-in, sign-up and password pages pair the form with an orange panel and an animated scene (`components/art/auth-art.tsx`).
 
 ## Rules
 

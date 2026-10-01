@@ -12,12 +12,12 @@ export default async function ResetPasswordPage() {
   const user = await getCurrentUser();
   if (!user)
     return (
-      <AuthShell title="Link expired" subtitle="That reset link is invalid or has already been used.">
+      <AuthShell art="reset" title="Link expired" subtitle="That reset link is invalid or has already been used.">
         <Link href="/forgot-password" className={`${btn.primary} ${size.lg} w-full`}>Send a new link</Link>
       </AuthShell>
     );
   return (
-    <AuthShell title="Set a new password" subtitle={`For ${user.email}. Use at least 8 characters.`}>
+    <AuthShell art="reset" title="Set a new password" subtitle={`For ${user.email}. Use at least 8 characters.`}>
       <ResetForm />
     </AuthShell>
   );

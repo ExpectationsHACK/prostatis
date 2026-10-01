@@ -50,9 +50,9 @@ export default async function AffairsPage({ searchParams }: { searchParams: Prom
       </div>
 
       <div className="flex flex-wrap gap-2">
-        <Link href="/admin/affairs" className={"rounded-lg border px-3 py-1.5 text-[13px] " + (!kind ? "border-[var(--a-accent)] bg-[var(--a-accent-soft)] font-medium text-[var(--a-accent)]" : "border-[var(--a-border)] bg-white")}>All {queue.length}</Link>
+        <Link href="/admin/affairs" className={"rounded-lg border px-3 py-1.5 text-[13px] " + (!kind ? "border-[var(--a-accent)] bg-[var(--a-accent-soft)] font-medium text-[var(--a-accent-text)]" : "border-[var(--a-border)] bg-white")}>All {queue.length}</Link>
         {Object.entries(KINDS).map(([k, v]) => (
-          <Link key={k} href={`/admin/affairs?kind=${k}`} className={"rounded-lg border px-3 py-1.5 text-[13px] " + (kind === k ? "border-[var(--a-accent)] bg-[var(--a-accent-soft)] font-medium text-[var(--a-accent)]" : "border-[var(--a-border)] bg-white")}>
+          <Link key={k} href={`/admin/affairs?kind=${k}`} className={"rounded-lg border px-3 py-1.5 text-[13px] " + (kind === k ? "border-[var(--a-accent)] bg-[var(--a-accent-soft)] font-medium text-[var(--a-accent-text)]" : "border-[var(--a-border)] bg-white")}>
             {v} {count(k)}
           </Link>
         ))}

@@ -83,10 +83,10 @@ export default async function AdminOverview() {
         </Panel>
         <Panel title="At a glance">
           <ul className="space-y-3 text-[13.5px]">
-            <li className="flex items-center gap-3"><Inbox className="size-4 text-[var(--a-accent)]" aria-hidden /> <span className="flex-1">Waitlist</span> <Link href="/admin/waitlist" className="font-semibold">{wait.data?.length ?? 0}</Link></li>
-            <li className="flex items-center gap-3"><FileText className="size-4 text-[var(--a-accent)]" aria-hidden /> <span className="flex-1">Published posts</span> <Link href="/admin/blog" className="font-semibold">{posts.data?.filter((p) => p.status === "published").length ?? 0}</Link></li>
-            <li className="flex items-center gap-3"><BookOpen className="size-4 text-[var(--a-accent)]" aria-hidden /> <span className="flex-1">Draft posts</span> <Link href="/admin/blog" className="font-semibold">{posts.data?.filter((p) => p.status === "draft").length ?? 0}</Link></li>
-            <li className="flex items-center gap-3"><BadgeCheck className="size-4 text-[var(--a-accent)]" aria-hidden /> <span className="flex-1">Signed-in visitors today</span> <span className="font-semibold">{s1?.signedInToday ?? 0}</span></li>
+            <li className="flex items-center gap-3"><Inbox className="size-4 text-[var(--a-accent-text)]" aria-hidden /> <span className="flex-1">Waitlist</span> <Link href="/admin/waitlist" className="font-semibold">{wait.data?.length ?? 0}</Link></li>
+            <li className="flex items-center gap-3"><FileText className="size-4 text-[var(--a-accent-text)]" aria-hidden /> <span className="flex-1">Published posts</span> <Link href="/admin/blog" className="font-semibold">{posts.data?.filter((p) => p.status === "published").length ?? 0}</Link></li>
+            <li className="flex items-center gap-3"><BookOpen className="size-4 text-[var(--a-accent-text)]" aria-hidden /> <span className="flex-1">Draft posts</span> <Link href="/admin/blog" className="font-semibold">{posts.data?.filter((p) => p.status === "draft").length ?? 0}</Link></li>
+            <li className="flex items-center gap-3"><BadgeCheck className="size-4 text-[var(--a-accent-text)]" aria-hidden /> <span className="flex-1">Signed-in visitors today</span> <span className="font-semibold">{s1?.signedInToday ?? 0}</span></li>
           </ul>
         </Panel>
       </div>

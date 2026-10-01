@@ -50,6 +50,8 @@ Before calling work done: typecheck, lint, tests and build must pass, and anythi
 | `src/lib/certificates.ts`, `certificate-*.ts` | Certificates: issued on passing a final, PNG via `/api/certificate/[id]`, public proof page `/certificate/[id]`, emailed through Resend (`RESEND_API_KEY`, `EMAIL_FROM`) |
 | `src/app/(site)/(auth)/` | Sign in / sign up / forgot + reset password. Social buttons appear only for providers enabled in Supabase (`src/lib/auth-providers.ts` reads the public auth settings). A sign-in with an unknown email goes to sign up (email carried in a short-lived cookie, never the URL) via the service-only `email_registered` SQL function. |
 | `src/lib/dashboard.ts` | Member dashboard context (a preview learner in local preview) |
+| `src/lib/email-templates.ts`, `src/lib/auth-email.ts` | Branded STEINARK emails (one table-based layout). Account emails (confirm, reset, sign-in link) are sent by us via Supabase `generateLink` + Resend once `EMAIL_FROM` is on a verified domain (`canEmailAnyone()`); before that Supabase's mailer is used. Matching templates to paste into Supabase live in `supabase/email-templates/`. |
+| `src/lib/newsletter.ts`, `/admin/newsletter`, `/unsubscribe` | Newsletter: subscribers are the `waitlist` table (status + private token), issues in `newsletter_issues`. Welcome email on signup, one-click unsubscribe (link + `List-Unsubscribe` headers), batch sending through Resend, claim-before-send so an issue can't go out twice. |
 | `src/lib/data/local.ts` | `.data/` JSON tables used only in local preview mode |
 | `supabase/migrations/` | SQL, run in order |
 

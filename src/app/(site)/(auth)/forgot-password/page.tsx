@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Forgot password", robots: { index: f
 
 export default function ForgotPasswordPage() {
   return (
-    <AuthShell title="Forgot your password?" subtitle="Enter your email and we'll send you a link to set a new one.">
+    <AuthShell art="reset" title="Forgot your password?" subtitle="Enter your email and we'll send you a link to set a new one.">
       <ForgotForm />
     </AuthShell>
   );
