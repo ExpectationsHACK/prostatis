@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { Contact, LegalPage, Section } from "@/components/legal";
-import { site } from "@/lib/site";
+import { refund, site } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Refund policy", description: `When and how you can get a refund from ${site.name}.`, alternates: { canonical: "/refund-policy" } };
 
-// Owner to confirm the window and lesson limit before launch (see DESIGN.md / chat notes).
-const REFUND_DAYS = 7;
-const REFUND_MAX_LESSONS = 3;
+// Owner to confirm the window and lesson limit before launch (set in src/lib/site.ts).
+const REFUND_DAYS = refund.days;
+const REFUND_MAX_LESSONS = refund.maxLessons;
 
 export default function RefundPolicyPage() {
   return (

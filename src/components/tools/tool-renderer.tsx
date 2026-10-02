@@ -2,10 +2,16 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useState, type ComponentType } from "react";
+import { ToolBodySkeleton } from "@/components/skeleton";
 import type { ToolDef } from "@/lib/tool-defs/types";
 import { AiEnabled } from "./kit/ai-writer";
 
-const loading = () => <div className="h-96 animate-pulse border border-edge bg-sunk" />;
+const loading = () => (
+  <div role="status" aria-busy="true">
+    <span className="sr-only">Loading tool…</span>
+    <ToolBodySkeleton />
+  </div>
+);
 
 // Hand-built tools. Client-only: they restore saved inputs and shared links from the browser.
 const custom: Record<string, ComponentType> = {

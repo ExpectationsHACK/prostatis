@@ -62,6 +62,9 @@ export const plans = [
 
 export type Plan = (typeof plans)[number];
 
+/** Refund terms, shown on the refund policy and billing pages. Owner to confirm before launch. */
+export const refund = { days: 7, maxLessons: 3 } as const;
+
 export function formatNgn(n: number) {
   return "₦" + Math.round(n).toLocaleString("en-NG");
 }

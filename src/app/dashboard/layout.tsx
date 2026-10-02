@@ -38,7 +38,7 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
 
   return (
     <div className="paper-grid flex min-h-screen">
-      <aside className="sticky top-0 hidden h-screen w-[248px] shrink-0 flex-col border-r border-edge bg-card px-3 py-5 lg:flex">
+      <aside className="sticky top-0 hidden h-screen w-[248px] shrink-0 flex-col border-r border-edge bg-card px-3 py-5 lg:flex print:hidden">
         <Link href="/" className="flex items-center gap-2.5 px-2" aria-label={`${site.name} home`}>
           <LogoTile size={30} />
           <span className="display text-[17px] text-ink">{site.name}</span>
@@ -63,7 +63,7 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
 
       <div className="min-w-0 flex-1 pb-20 lg:pb-0">
         {/* Mobile top bar */}
-        <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-edge bg-paper/95 px-4 backdrop-blur-sm lg:hidden">
+        <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-edge bg-paper/95 px-4 backdrop-blur-sm lg:hidden print:hidden">
           <Link href="/" className="flex items-center gap-2" aria-label={`${site.name} home`}>
             <LogoTile size={28} />
             <span className="display text-[16px] text-ink">{site.name}</span>
@@ -74,7 +74,11 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
             </button>
           </form>
         </header>
-        {preview && <PreviewBanner />}
+        {preview && (
+          <div className="print:hidden">
+            <PreviewBanner />
+          </div>
+        )}
         {children}
       </div>
 

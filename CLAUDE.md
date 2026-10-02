@@ -52,6 +52,7 @@ Before calling work done: typecheck, lint, tests and build must pass, and anythi
 | `src/lib/certificates.ts`, `certificate-*.ts` | Certificates: issued on passing a final, PNG via `/api/certificate/[id]`, public proof page `/certificate/[id]`, emailed through Resend (`RESEND_API_KEY`, `EMAIL_FROM`) |
 | `src/app/(site)/(auth)/` | Sign in / sign up / forgot + reset password. Social buttons appear only for providers enabled in Supabase (`src/lib/auth-providers.ts` reads the public auth settings). A sign-in with an unknown email goes to sign up (email carried in a short-lived cookie, never the URL) via the service-only `email_registered` SQL function. |
 | `src/lib/dashboard.ts` | Member dashboard context (a preview learner in local preview) |
+| `src/app/dashboard/billing/`, `src/lib/billing.ts` | Billing for one-time tracks: access and days left, Main Track upgrade, add-time, payment history, printable receipts (`receipt/[reference]`, own payments only via RLS), refund help |
 | `src/lib/email-templates.ts`, `src/lib/auth-email.ts` | Branded STEINARK emails (one table-based layout). Account emails (confirm, reset, sign-in link) are sent by us via Supabase `generateLink` + Resend once `EMAIL_FROM` is on a verified domain (`canEmailAnyone()`); before that Supabase's mailer is used. Matching templates to paste into Supabase live in `supabase/email-templates/`. |
 | `src/lib/newsletter.ts`, `/admin/newsletter`, `/unsubscribe` | Newsletter: subscribers are the `waitlist` table (status + private token), issues in `newsletter_issues`. Welcome email on signup, one-click unsubscribe (link + `List-Unsubscribe` headers), batch sending through Resend, claim-before-send so an issue can't go out twice. |
 | `src/lib/data/local.ts` | `.data/` JSON tables used only in local preview mode |
@@ -69,4 +70,5 @@ Before calling work done: typecheck, lint, tests and build must pass, and anythi
 - **Wording:** say "get paid", not "invoice", in site copy (the printed document itself may say INVOICE). Main CTAs are **Enroll Now** (to pay) and **Start Learning** (to open the course).
 - **Security:** secrets only in env vars; nothing sensitive in URLs; user-supplied URLs go through `safeFetch` (DNS + private-IP blocking).
 - **Mobile first:** users are on phones and metered data. Keep pages light; no horizontal scroll at 360px.
+- **Loading skeletons:** every dynamic route has a `loading.tsx` using a shape from `src/components/skeleton.tsx`. Keep **one** `loading.tsx` per route path: a parent folder's skeleton would flash first, so index pages that sit above other routes live in a route group (`dashboard/(home)`, `learn/(home)`, `learn/[track]/(overview)`, `blog/(index)`).
 - Match surrounding code style; comment the *why*, sparingly.
