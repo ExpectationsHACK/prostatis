@@ -1,7 +1,7 @@
-import { Award, Flag, Flame, Lock, Sparkles, Star, Target, Trophy } from "lucide-react";
+import { Award, Flag, Flame, Lock, Medal, Sparkles, Star, Target, Trophy } from "lucide-react";
 import type { Badge } from "@/lib/learning/engine";
 
-const icons = { spark: Sparkles, target: Target, flame: Flame, trophy: Trophy, flag: Flag, award: Award, star: Star };
+const icons = { spark: Sparkles, target: Target, flame: Flame, trophy: Trophy, flag: Flag, award: Award, star: Star, medal: Medal };
 
 /** The badge shelf: earned badges in colour, the rest greyed with how to earn them. */
 export function BadgeShelf({ list }: { list: Badge[] }) {

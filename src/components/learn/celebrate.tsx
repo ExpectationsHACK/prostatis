@@ -13,7 +13,7 @@ const bits = Array.from({ length: 18 }, (_, i) => ({
  * The payoff moment: a burst of paper confetti plus what was earned. The burst is purely
  * decorative and is skipped for people who prefer reduced motion.
  */
-export function Celebrate({ title, xp, levelUp, badges }: { title: string; xp: number; levelUp?: { level: number; name: string }; badges: { name: string; desc: string }[] }) {
+export function Celebrate({ title, proved, xp, levelUp, badges }: { title: string; proved?: string; xp: number; levelUp?: { level: number; name: string }; badges: { name: string; desc: string }[] }) {
   return (
     <div role="status" className="relative mt-5 overflow-hidden border border-edge bg-brand p-5 text-ink">
       <div className="pointer-events-none absolute left-1/2 top-1/2 motion-reduce:hidden" aria-hidden>
@@ -27,6 +27,7 @@ export function Celebrate({ title, xp, levelUp, badges }: { title: string; xp: n
       </div>
       <p className="label flex items-center gap-1.5"><Sparkles className="size-4" aria-hidden /> Nice work!</p>
       <p className="display mt-1 text-[28px] leading-tight">{title}</p>
+      {proved && <p className="mt-2 max-w-[36rem] text-[15.5px] leading-relaxed"><span className="font-bold">What you just proved: </span>{proved}</p>}
       <div className="mt-3 flex flex-wrap gap-2">
         {xp > 0 && <span className="label border border-edge bg-paper px-2 py-1">+{xp} XP</span>}
         {levelUp && <span className="label border border-edge bg-ink px-2 py-1 text-paper">Level up! → Level {levelUp.level} · {levelUp.name}</span>}

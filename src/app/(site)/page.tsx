@@ -44,8 +44,9 @@ const compare: [string, boolean | string, boolean | string][] = [
 ];
 
 const faqs = [
-  { q: "Do I need to know how to code?", a: "No. You build by describing what you want to AI tools like Claude Code, then learn to read and adjust what they make. Every lesson shows you the exact prompts." },
-  { q: "Do I need a powerful laptop?", a: "Any laptop that can run a modern browser is enough. You can read lessons on your phone, but you build on a laptop." },
+  { q: "Do I need to know how to code?", a: "No. You build by describing what you want to an AI builder, then check and adjust what it makes. We set you up with Google Antigravity, which is free; if you can afford Claude Pro, you can use Claude Code instead. Every lesson shows you the exact prompts." },
+  { q: "Do I need to pay for any tools?", a: "No. Every lesson uses free tools: Google Antigravity to build, Cloudflare to put sites online (business use allowed), Paystack in test mode, and the free plans of the rest. Paid upgrades are always marked optional, and a client pays for their own domain." },
+  { q: "Do I need a powerful laptop?", a: "No. Antigravity runs best on Windows 10 or 11 (64-bit) or a recent Mac, and any laptop with a modern browser can follow the free backup way. You can read lessons on your phone, but you build on a laptop." },
   { q: "How soon can I start earning?", a: "The Fast Track has you pricing your work and pitching real businesses in week two, with the scripts, proposal and portfolio to do it. How fast you land a client depends on how many businesses you reach, so we won't promise a date or an amount." },
   { q: "What's the difference between the Fast Track and the Main Track?", a: "The Fast Track (14 days, ₦15,000) takes you from zero to building and selling websites. The Main Track (1 month, ₦30,000) includes all of it and adds full SEO, automation, AI agents and lead generation, so you can sell monthly services, not just one-off websites." },
   { q: "Is it a subscription?", a: "No. You pay once per track. The Fast Track stays open for 30 days and the Main Track for 60, so you have time to catch up." },

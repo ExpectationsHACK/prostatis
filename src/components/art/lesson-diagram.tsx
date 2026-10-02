@@ -52,7 +52,7 @@ const D: Record<DiagramKind, { tone: Tone; draw: () => ReactNode }> = {
         <Arrow />
         <Node><Globe className="mx-auto size-5" /><p className={m10}>Domain + DNS</p><p className={m9}>name → address</p></Node>
         <Arrow />
-        <Node><Server className="mx-auto size-5" /><p className={m10}>Hosting</p><p className={m9}>Vercel sends files</p></Node>
+        <Node><Server className="mx-auto size-5" /><p className={m10}>Hosting</p><p className={m9}>Cloudflare sends files</p></Node>
         <Arrow />
         <Node className="bg-brand"><p className={m10}>Your site</p><p className={m9}>shows in 1–2s</p></Node>
       </Row>
@@ -103,7 +103,7 @@ const D: Record<DiagramKind, { tone: Tone; draw: () => ReactNode }> = {
     tone: "ink",
     draw: () => (
       <Row>
-        {[["Edit", "your files"], ["Commit", "save a snapshot"], ["Push", "send to GitHub"], ["Deploy", "Vercel goes live"]].map(([a, b], i, arr) => (
+        {[["Edit", "your files"], ["Commit", "a dated version"], ["GitHub", "keeps every version"], ["Deploy", "Cloudflare goes live"]].map(([a, b], i, arr) => (
           <div key={a} className="flex items-center gap-1.5">
             <Node className={i === 3 ? "bg-brand" : ""}><p className={m10}>{a}</p><p className={m9}>{b}</p></Node>
             {i < arr.length - 1 && <ArrowRight className="size-4 text-paper" strokeWidth={3} />}
@@ -220,7 +220,7 @@ const D: Record<DiagramKind, { tone: Tone; draw: () => ReactNode }> = {
     draw: () => (
       <div className="flex h-full items-center justify-center p-3">
         <div className="grid grid-cols-5 items-center gap-1">
-          {[["1", "You describe", "plain English"], ["2", "AI plans", "lists the changes"], ["3", "You approve", "yes / no / edit"], ["4", "You check", "open the browser"], ["5", "Commit", "save a snapshot"]].map(([n, a, b], i) => (
+          {[["1", "You describe", "plain English"], ["2", "AI writes", "the code"], ["3", "You save", "in VS Code"], ["4", "You check", "in the browser"], ["5", "Publish", "when it is right"]].map(([n, a, b], i) => (
             <div key={n} className="flex items-center gap-1">
               <Node className={i === 2 ? "bg-brand" : ""}>
                 <p className="display text-[14px] leading-none">{n}</p>

@@ -168,10 +168,13 @@ export function certificateId(userId: string, track: Track["id"], at: Date) {
 }
 
 /* ---------- Badges ---------- */
-export type Badge = { id: string; name: string; desc: string; icon: "spark" | "target" | "flame" | "trophy" | "flag" | "award" | "star"; earned: boolean };
+export type Badge = { id: string; name: string; desc: string; icon: "spark" | "target" | "flame" | "trophy" | "flag" | "award" | "star" | "medal"; earned: boolean };
+
+/** A lesson's own milestone badge ("Live on the internet"), earned when that lesson is complete. */
+export type Milestone = { lesson: string; name: string; desc: string };
 
 /** Badges for a track, computed from saved progress, nothing extra to store. */
-export function badges(track: Track, state: LearnerState): Badge[] {
+export function badges(track: Track, state: LearnerState, milestones: Milestone[] = []): Badge[] {
   const prog = trackProgress(track, state);
   const rows = track.modules.map((m) => state.lessons[m.lesson]).filter(Boolean);
   const st = streaks(state.days);
@@ -192,5 +195,11 @@ export function badges(track: Track, state: LearnerState): Badge[] {
     { id: "done", name: "Track complete", desc: "Finish every lesson", icon: "trophy", earned: prog.allDone },
     { id: "cert", name: "Certified", desc: "Pass the final assessment", icon: "award", earned: Boolean(state.finals[track.id]?.passed_at) },
   ];
-  return list;
+  // One milestone per lesson in this track, in the order the track teaches them.
+  const byLesson = new Map(milestones.map((m) => [m.lesson, m]));
+  const mile: Badge[] = track.modules.flatMap((m) => {
+    const ms = byLesson.get(m.lesson);
+    return ms ? [{ id: `m:${m.lesson}`, name: ms.name, desc: ms.desc, icon: "medal" as const, earned: Boolean(state.lessons[m.lesson]?.completed_at) }] : [];
+  });
+  return [...list, ...mile];
 }

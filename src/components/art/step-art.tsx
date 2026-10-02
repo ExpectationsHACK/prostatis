@@ -40,7 +40,7 @@ const scenes: Record<Step, () => React.ReactNode> = {
   // Describe it, AI builds it.
   build: () => (
     <Stage d={9} className="gap-2.5">
-      <Win title="Claude Code" dark className="w-[128px]" bodyClass="p-2">
+      <Win title="AI builder" dark className="w-[128px]" bodyClass="p-2">
         <p className={`${t.code} text-[#f0946b]`}>&gt; you</p>
         <p className={`${t.code} text-white/85 ` + m("type")} style={at(0.2)}>Build a booking page</p>
         <p className={`${t.code} text-white/85 ` + m("type")} style={at(0.9)}>for Glow Studio with</p>

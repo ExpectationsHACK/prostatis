@@ -2,6 +2,7 @@ import { ArrowRight, Award, BookA, CalendarClock, Check, CircleCheck, Compass, F
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { LessonThumb } from "@/components/art/lesson-thumb";
+import { milestones } from "@/content/lessons";
 import { BadgeShelf } from "@/components/learn/badges";
 import { btn, size } from "@/components/ui";
 import { fastTrack, getPillar, getTrack } from "@/lib/curriculum";
@@ -197,7 +198,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
             </div>
           </section>
 
-          <BadgeShelf list={badges(track, state)} />
+          <BadgeShelf list={badges(track, state, milestones)} />
         </div>
 
         {/* Side column */}

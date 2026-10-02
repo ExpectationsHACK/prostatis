@@ -1,4 +1,5 @@
 import "server-only";
+import type { Milestone } from "@/lib/learning/engine";
 import type { Lesson, Question } from "../types";
 import agentsPersonasKb from "./agents-personas-kb";
 import aiDevSetup from "./ai-dev-setup";
@@ -65,3 +66,6 @@ export const lessons: Record<string, Lesson> = Object.fromEntries(
 export function getLesson(id: string): Lesson | undefined {
   return lessons[id];
 }
+
+/** Every lesson's milestone badge, for the badge shelf and the "new badge" moment. */
+export const milestones: Milestone[] = Object.values(lessons).map((l) => ({ lesson: l.id, name: l.celebrate.badge, desc: l.celebrate.badgeDesc }));

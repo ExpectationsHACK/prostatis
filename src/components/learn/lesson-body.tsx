@@ -1,14 +1,18 @@
-import { AlertTriangle, ArrowUpRight, BookA, Lightbulb, MapPin, Wrench, XCircle, CheckCircle2 } from "lucide-react";
+import { AlertTriangle, ArrowUpRight, BookA, CheckCircle2, Clock3, Lightbulb, MapPin, MonitorX, Rocket, Wrench, XCircle } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { LessonDiagram } from "@/components/art/lesson-diagram";
+import { SketchIcon, SketchView } from "@/components/art/sketch";
 import { ProductThumb } from "@/components/art/product-thumb";
 import { ToolThumb } from "@/components/art/tool-thumb";
 import type { Tone } from "@/components/cover";
 import { CopyButton } from "@/components/tool-ui";
 import type { Figure, Lesson, LessonBlock } from "@/content/types";
+import { BuilderSteps } from "./builder-choice";
 import { SelfCheck, TryIt } from "./practice";
 import { Rich } from "./rich";
+import type { Track } from "@/lib/curriculum";
+import { tracks } from "@/lib/curriculum";
 import { getTool } from "@/lib/tools";
 
 const figureTones: Tone[] = ["sand", "peach", "forest", "indigo", "orange"];
@@ -45,7 +49,7 @@ function Callout({ tone, icon, title, children }: { tone: "tip" | "warn"; icon: 
 
 export const slugTerm = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
-function Block({ b, i, lessonId }: { b: LessonBlock; i: number; lessonId: string }) {
+function Block({ b, i, lessonId, track }: { b: LessonBlock; i: number; lessonId: string; track?: Track }) {
   switch (b.t) {
     case "p":
       return <p className="my-4 text-[16px] leading-[1.75] text-ink/90"><Rich text={b.text} /></p>;
@@ -125,8 +129,14 @@ function Block({ b, i, lessonId }: { b: LessonBlock; i: number; lessonId: string
           </p>
           <div className="px-4 py-3">
             <p className="display text-[19px] text-ink">{b.term}</p>
-            <p className="mt-1 text-[15.5px] leading-relaxed text-ink/90"><Rich text={b.meaning} /></p>
-            {b.like && <p className="mt-2 border-l-4 border-brand pl-3 text-[14.5px] italic leading-relaxed text-muted">Think of it like: <Rich text={b.like} /></p>}
+            <p className="mt-1.5 border-l-4 border-brand pl-3 text-[15.5px] leading-relaxed text-ink">
+              <span className="font-semibold">Think of it like </span>
+              <Rich text={b.like} />
+            </p>
+            <p className="mt-2 text-[15.5px] leading-relaxed text-ink/90">
+              <span className="font-semibold">In plain English: </span>
+              <Rich text={b.meaning} />
+            </p>
           </div>
         </div>
       );
@@ -173,10 +183,73 @@ function Block({ b, i, lessonId }: { b: LessonBlock; i: number; lessonId: string
         </Link>
       );
     }
+    case "sketch":
+      return <SketchView sketch={b.sketch} caption={b.caption} />;
+    case "builder":
+      return <BuilderSteps title={b.title} paths={{ antigravity: b.antigravity, "claude-code": b.claudeCode, chat: b.chat }} />;
+    case "win":
+      return (
+        <div className="ink-block relative my-7 overflow-hidden bg-brand p-5 text-ink" role="note">
+          <span className="pointer-events-none absolute -right-3 -top-3 opacity-90" aria-hidden>
+            <SketchIcon draw="trophy" className="size-20" />
+          </span>
+          <p className="label">Milestone</p>
+          <p className="display mt-1 max-w-[30rem] pr-14 text-[24px] leading-tight">{b.title}</p>
+          <p className="mt-2 text-[15.5px] leading-relaxed"><span className="font-bold">You just proved: </span><Rich text={b.proved} /></p>
+          <p className="label mt-3 inline-block border border-edge bg-paper px-2 py-1 normal-case tracking-normal"><Rich text={b.cue} /></p>
+        </div>
+      );
+    case "later": {
+      const at = laterAt(b.lesson, track);
+      return (
+        <div className="my-5 flex gap-3 border border-dashed border-edge bg-sunk p-4">
+          <Clock3 className="mt-0.5 size-5 shrink-0 text-ink" aria-hidden />
+          <div>
+            <p className="label text-ink">Coming later{at ? `: ${at}` : ""}</p>
+            <p className="mt-1 text-[15px] leading-relaxed text-ink"><span className="font-semibold">For now: </span><Rich text={b.text} /></p>
+          </div>
+        </div>
+      );
+    }
+    case "upgrade":
+      return (
+        <div className="my-5 flex gap-3 border border-edge bg-[#eef6ff] p-4">
+          <Rocket className="mt-0.5 size-5 shrink-0 text-ink" aria-hidden />
+          <div>
+            <p className="label text-ink">Optional upgrade · once you&apos;re earning</p>
+            <p className="mt-1 font-bold text-ink">{b.title}</p>
+            <p className="mt-1 text-[15px] leading-relaxed text-ink/90"><Rich text={b.text} /></p>
+            <p className="mt-2 text-[13px] text-muted">You don&apos;t need this to finish the lesson or the track. The free way above is complete.</p>
+          </div>
+        </div>
+      );
+    case "errors":
+      return (
+        <div className="my-6 border border-edge">
+          <p className="label flex items-center gap-1.5 border-b border-edge bg-[#ffe3dc] px-3 py-1.5 text-ink"><MonitorX className="size-3.5" aria-hidden /> If you see this on screen</p>
+          <ul>
+            {b.items.map((e, n) => (
+              <li key={n} className={"px-3 py-3 " + (n ? "border-t border-line" : "")}>
+                <p className="font-code text-[13px] font-semibold text-danger">{e.see}</p>
+                <p className="mt-1 text-[14.5px] leading-snug text-ink"><span className="font-semibold">It means: </span><Rich text={e.means} /></p>
+                <p className="mt-1 text-[14.5px] leading-snug text-ink"><span className="font-semibold">Do this: </span><Rich text={e.fix} /></p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
   }
 }
 
-export function LessonBody({ lesson }: { lesson: Pick<Lesson, "id" | "sections"> }) {
+/** "Day 9 · Online stores" in the learner's track, or the lesson's title when there's no track. */
+function laterAt(lessonId: string, track?: Track) {
+  const inTrack = track?.modules.find((m) => m.lesson === lessonId);
+  if (inTrack) return `Day ${inTrack.day}, ${inTrack.title}`;
+  const any = tracks.flatMap((t) => t.modules).find((m) => m.lesson === lessonId);
+  return any?.title ?? "";
+}
+
+export function LessonBody({ lesson, track }: { lesson: Pick<Lesson, "id" | "sections">; track?: Track }) {
   // Number figures across the whole lesson so each picks a different background tone.
   const figureNo = new Map<LessonBlock, number>();
   lesson.sections.flatMap((s) => s.blocks).filter((b) => b.t === "figure").forEach((b, n) => figureNo.set(b, n));
@@ -186,7 +259,7 @@ export function LessonBody({ lesson }: { lesson: Pick<Lesson, "id" | "sections">
         <section key={s.heading} id={`s${n + 1}`} className="scroll-mt-24 border-t border-dashed border-line pt-8 first:border-0 first:pt-0 [&+section]:mt-10">
           <h2 className="display text-[26px] text-ink sm:text-[30px]">{s.heading}</h2>
           {s.blocks.map((b, i) => (
-            <Block key={i} b={b} i={figureNo.get(b) ?? n * 100 + i} lessonId={lesson.id} />
+            <Block key={i} b={b} i={figureNo.get(b) ?? n * 100 + i} lessonId={lesson.id} track={track} />
           ))}
         </section>
       ))}

@@ -20,6 +20,7 @@ export function Quiz({
   passMark,
   passed: passedBefore,
   best,
+  celebrate,
 }: {
   slug: string;
   day?: number; // omitted for the final assessment
@@ -27,6 +28,8 @@ export function Quiz({
   passMark: number;
   passed: boolean;
   best: number;
+  /** The lesson's own completion moment. */
+  celebrate?: { title: string; proved: string };
 }) {
   const router = useRouter();
   const [picked, setPicked] = useState<(number | null)[]>(() => questions.map(() => null));
@@ -148,7 +151,8 @@ export function Quiz({
       )}
       {result && (result.completed || result.levelUp || result.newBadges.length > 0) && (
         <Celebrate
-          title={day === undefined ? "Final assessment passed!" : result.completed ? "Lesson complete!" : "Quiz passed!"}
+          title={day === undefined ? "Final assessment passed!" : result.completed ? (celebrate?.title ?? "Lesson complete!") : "Quiz passed!"}
+          proved={result.completed ? celebrate?.proved : undefined}
           xp={result.xpGained}
           levelUp={result.levelUp}
           badges={result.newBadges}

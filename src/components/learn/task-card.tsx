@@ -9,7 +9,7 @@ import { btn, size } from "@/components/ui";
 import { Celebrate } from "./celebrate";
 
 /** The practical task's done-checklist. Every box must be ticked before it can be confirmed. */
-export function TaskCheck({ slug, day, done: items, confirmed }: { slug: string; day: number; done: string[]; confirmed: boolean }) {
+export function TaskCheck({ slug, day, done: items, confirmed, celebrate }: { slug: string; day: number; done: string[]; confirmed: boolean; celebrate?: { title: string; proved: string } }) {
   const router = useRouter();
   const [ticked, setTicked] = useState<boolean[]>(() => items.map(() => confirmed));
   const [gained, setGained] = useState<number | null>(null);
@@ -63,7 +63,7 @@ export function TaskCheck({ slug, day, done: items, confirmed }: { slug: string;
       )}
       {error && <p className="mt-3 font-mono text-[13px] text-danger" role="alert">{error}</p>}
       {result && (result.completed || result.levelUp || result.newBadges.length > 0) && (
-        <Celebrate title={result.completed ? "Lesson complete!" : "Mission done!"} xp={result.xpGained} levelUp={result.levelUp} badges={result.newBadges} />
+        <Celebrate title={result.completed ? (celebrate?.title ?? "Lesson complete!") : "Mission done!"} proved={result.completed ? celebrate?.proved : undefined} xp={result.xpGained} levelUp={result.levelUp} badges={result.newBadges} />
       )}
     </div>
   );

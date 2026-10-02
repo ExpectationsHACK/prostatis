@@ -11,11 +11,15 @@ export default async function Glossary() {
   const learner = await requireLearner("/learn/glossary");
   const track = tracks.find((t) => learner.tracks.includes(t.id) && t.id === "main_track") ?? tracks[0];
   const where = new Map(track.modules.map((m) => [m.lesson, m.day]));
-  const seen = new Map<string, { term: string; meaning: string; like?: string; lesson: string; title: string }>();
-  for (const l of Object.values(lessons))
+  // Walk the learner's track in order first, so each word links to the earliest lesson that explains it.
+  const order = [...track.modules, ...tracks.filter((t) => t !== track).flatMap((t) => t.modules)].map((m) => m.lesson);
+  const seen = new Map<string, { term: string; meaning: string; like: string; lesson: string; title: string }>();
+  for (const id of order) {
+    const l = lessons[id];
     for (const s of l.sections)
       for (const b of s.blocks)
         if (b.t === "define" && !seen.has(b.term.toLowerCase())) seen.set(b.term.toLowerCase(), { term: b.term, meaning: b.meaning, like: b.like, lesson: l.id, title: l.title });
+  }
   const entries = [...seen.values()].sort((a, b) => a.term.localeCompare(b.term));
   const letters = [...new Set(entries.map((e) => e.term[0].toUpperCase()))];
 
@@ -42,8 +46,8 @@ export default async function Glossary() {
             return (
               <div key={e.term} id={first ? `letter-${e.term[0].toUpperCase()}` : undefined} className="scroll-mt-24 border border-edge bg-card p-4">
                 <dt className="display text-[20px] text-ink" id={`term-${slugTerm(e.term)}`}>{e.term}</dt>
-                <dd className="mt-1 text-[15.5px] leading-relaxed text-ink/90"><Rich text={e.meaning} /></dd>
-                {e.like && <dd className="mt-2 border-l-4 border-brand pl-3 text-[14.5px] italic text-muted">Think of it like: <Rich text={e.like} /></dd>}
+                <dd className="mt-1.5 border-l-4 border-brand pl-3 text-[15px] leading-relaxed text-ink"><span className="font-semibold">Think of it like </span><Rich text={e.like} /></dd>
+                <dd className="mt-2 text-[15.5px] leading-relaxed text-ink/90"><span className="font-semibold">In plain English: </span><Rich text={e.meaning} /></dd>
                 <dd className="mt-2">
                   <Link href={`/learn/${slugOf(t)}/${d}#term-${slugTerm(e.term)}`} className="label text-brand-text underline">
                     Taught in Day {d}: {e.title}

@@ -128,7 +128,7 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
         </nav>
 
         <div className="mt-10">
-          <LessonBody lesson={lesson} />
+          <LessonBody lesson={lesson} track={track} />
         </div>
 
         <section id="task" className="ink-block mt-12 scroll-mt-24 bg-card p-5 sm:p-7">
@@ -143,7 +143,7 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
             ))}
           </ol>
           <div className="mt-6 border-t border-dashed border-line pt-5">
-            <TaskCheck slug={slug} day={day} done={lesson.task.done} confirmed={Boolean(row?.task_done_at)} />
+            <TaskCheck slug={slug} day={day} done={lesson.task.done} confirmed={Boolean(row?.task_done_at)} celebrate={lesson.celebrate} />
           </div>
         </section>
 
@@ -167,7 +167,11 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
 
         <section id="takeaways" className="ink-block mt-12 scroll-mt-24 bg-[#fff4d6] p-5 sm:p-7">
           <p className="label flex items-center gap-1.5 text-ink"><KeyRound className="size-3.5" aria-hidden /> Key takeaways</p>
-          <p className="mt-1 font-mono text-[12.5px] text-muted">Everything the assessment asks is covered here. Read it once more before you start.</p>
+          <div className="mt-3 border border-edge bg-card p-3">
+            <p className="label text-brand-text">The one idea to remember</p>
+            <p className="mt-1 text-[16px] font-bold leading-snug text-ink"><Rich text={lesson.core} /></p>
+          </div>
+          <p className="mt-3 font-mono text-[12.5px] text-muted">Everything the assessment asks is covered here. Read it once more before you start.</p>
           <ol className="mt-4 space-y-2.5">
             {lesson.recap.map((r, i) => (
               <li key={i} className="flex gap-3 text-[15.5px] leading-relaxed text-ink">
@@ -182,7 +186,7 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
           <p className="label text-brand-text">Assessment</p>
           <h2 className="display mt-1 text-[30px] text-ink">Check what you learned</h2>
           <div className="mt-4">
-            <Quiz slug={slug} day={day} questions={publicQuestions(lesson.quiz)} passMark={PASS_MARK} passed={Boolean(row?.quiz_passed_at)} best={row?.quiz_best ?? 0} />
+            <Quiz slug={slug} day={day} questions={publicQuestions(lesson.quiz)} passMark={PASS_MARK} passed={Boolean(row?.quiz_passed_at)} best={row?.quiz_best ?? 0} celebrate={lesson.celebrate} />
           </div>
         </section>
 

@@ -5,7 +5,7 @@ import { LessonThumb } from "@/components/art/lesson-thumb";
 import { BadgeShelf } from "@/components/learn/badges";
 import { LearnerStats, PreviewBanner } from "@/components/learn/stats";
 import { btn, size } from "@/components/ui";
-import { getLesson } from "@/content/lessons";
+import { getLesson, milestones } from "@/content/lessons";
 import { getPillar } from "@/lib/curriculum";
 import { learnerTrack, requireLearner, slugOf, trackSlugs } from "@/lib/learning/access";
 import { badges, trackProgress, XP } from "@/lib/learning/engine";
@@ -58,7 +58,7 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
           <LearnerStats state={state} done={prog.completed} total={prog.total} />
         </div>
 
-        <BadgeShelf list={badges(track, state)} />
+        <BadgeShelf list={badges(track, state, milestones)} />
 
         {track.weeks.map((w) => (
           <section key={w.week} className="mt-12">

@@ -8,11 +8,11 @@ export const starterPosts: Omit<PostInput, "status" | "published_at">[] = [
   {
     slug: "build-your-first-website-with-ai-no-coding",
     title: "How to build your first website with AI (no coding background)",
-    excerpt: "What you actually need, the order to do things in, and how to go from a blank screen to a live website on your own domain.",
+    excerpt: "What you actually need, the order to do things in, and how to go from a blank screen to a live website, using free tools.",
     tags: ["Getting started", "Web development"],
     seo_title: "Build Your First Website With AI: No Coding Needed",
-    seo_description: "A plain-English guide to building your first website with AI: what you need, the steps in order, and how to put it live on your own domain.",
-    seo_keywords: ["build a website with AI", "website without coding", "Claude Code beginner"],
+    seo_description: "A plain-English guide to building your first website with AI using free tools: what you need, the steps in order, and how to put it live.",
+    seo_keywords: ["build a website with AI", "website without coding", "free AI website builder"],
     canonical_url: null,
     og_image: null,
     cover_image: null,
@@ -26,8 +26,8 @@ This guide walks through the whole path, in order.
 
 - **A laptop.** Lessons can be read on a phone, but building is far easier on a laptop.
 - **An internet connection.** Most of the tools are online.
-- **An AI coding assistant.** We use Claude Code in the course because it works inside your project folder and can create, edit and run files for you.
-- **A free GitHub account** to store your code, and a **free Vercel account** to put the site online. (Vercel's free Hobby plan is for personal, non-commercial projects; client work belongs on a paid plan.)
+- **An AI builder.** A coding agent works inside your project folder and creates and edits the files for you. Google Antigravity has a free plan; Claude Code is a strong paid option if you can afford it.
+- **A free Cloudflare account** to put the site online. Its free plan allows business websites, so the same setup works for paying clients.
 
 ## Step 1: Decide what the website is for
 
@@ -57,7 +57,7 @@ Most of your visitors will arrive on a phone, often on mobile data. Open the sit
 
 ## Step 5: Put it live
 
-Push your code to GitHub, import the project into Vercel, and connect a domain name. Your site now has a real address you can share.
+Upload your site's folder to Cloudflare Pages (you can drag and drop it) and you get a free address ending in .pages.dev. Later, connect GitHub so every change goes live by itself, and connect the business's own domain when it buys one.
 
 ## Step 6: Get found on Google
 

@@ -50,7 +50,7 @@ const scenes: Record<AuthArtKind, () => React.ReactNode> = {
         <div className="relative mt-2">
           <span className="absolute bottom-2 left-[9px] top-2 w-[2px] bg-[#f1ede6]" />
           <span className={"absolute left-[9px] top-2 h-[calc(100%-16px)] w-[2px] bg-[#eb5e28] " + m("grow-y")} style={{ ...at(0.2), transformOrigin: "top" }} />
-          {[["Day 1", "Brand kit and design"], ["Day 4", "A five-page business website"], ["Day 7", "Live on your own domain"], ["Day 9", "Online store with Paystack"], ["Day 14", "Ship it and get paid"]].map(([d, x], i, arr) => (
+          {[["Day 1", "Brand kit and design"], ["Day 3", "First page live, free"], ["Day 4", "A five-page business website"], ["Day 9", "Online store with Paystack"], ["Day 14", "Ship it and get paid"]].map(([d, x], i, arr) => (
             <div key={d} className={"relative mb-1.5 flex items-center gap-2 last:mb-0 " + m("left")} style={at(0.4 + i * 0.5)}>
               <span className={"relative z-10 grid size-[20px] shrink-0 place-items-center rounded-full border-2 border-white " + (i === arr.length - 1 ? "bg-[#eb5e28]" : "bg-[#16794a]")}>
                 <Check className="size-[10px] text-white" strokeWidth={3.5} />

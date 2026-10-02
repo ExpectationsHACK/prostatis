@@ -47,6 +47,7 @@ All art is coded, drawn on a fixed 320×200 `Artboard` scaled to the card, and *
 - `ProductThumb` (`product-thumb.tsx`): the 13 example products used in lessons and the course map, each acting out what it does for the business.
 - `StepArt` (`step-art.tsx`): the four "How it works" scenes.
 - `LessonDiagram`: static teaching diagrams inside lessons.
+- **Lesson sketches** (`sketch.tsx`, `sketch-glyphs.tsx`): hand-drawn style teaching pictures on exercise-book paper (ruled lines, orange margin). About 75 everyday glyphs (danfo, POS machine, tailor's tape, prepaid meter…) drawn as line art and roughened by one shared SVG filter, labelled in the Caveat handwriting face (loaded only where sketches appear). Layouts: `flow` (2–4 things joined by arrows, stacked with downward arrows on phones), `stack` (a phone or laptop wireframe) and `versus` (before/after). One `hot` item gets an orange marker circle. Static, so nothing to pause.
 
 ## Page patterns
 
@@ -63,6 +64,8 @@ All art is coded, drawn on a fixed 320×200 `Artboard` scaled to the card, and *
 The admin keeps its dashboard structure (sidebar with groups, top bar, stat cards, tables, pagination) in the site's brand, scoped under `.admin-ui` in `globals.css`: warm off-white, the orange accent (`--a-accent`) with ink text on it, ink-outlined cards with a hard shadow, Archivo page titles, the spark logo with an "Admin" tag. Orange as small text uses `--a-accent-text`. Components in `src/components/admin/blocks.tsx`.
 
 ## Forms
+
+Lesson extras: orange **Milestone** cards (`win`) at real accomplishments, blue **Optional upgrade** callouts, dashed **Coming later** notes, red **If you see this on screen** error explainers, and the **builder** box: three tabs (Antigravity · free · default, Claude Code · paid, Free chat · backup) whose choice is remembered across lessons.
 
 Fields are light: a hairline border at rest; on focus the border fades and a soft orange glow shows (no outline). Password fields have a show/hide button. Sign-in, sign-up and password pages pair the form with an orange panel and an animated scene (`components/art/auth-art.tsx`).
 

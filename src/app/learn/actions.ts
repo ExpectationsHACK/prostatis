@@ -1,7 +1,7 @@
 "use server";
 
 import { after } from "next/server";
-import { getLesson } from "@/content/lessons";
+import { getLesson, milestones } from "@/content/lessons";
 import { emailCertificate } from "@/lib/certificate-delivery";
 import { issueCertificate } from "@/lib/certificates";
 import { learnerTrack, requireLearner } from "@/lib/learning/access";
@@ -70,7 +70,7 @@ async function summary(store: Store, userId: string, track: Track, before: Learn
   const s: LearnerState = await store.load(userId);
   const was = levelFor(before.xp);
   const now = levelFor(s.xp);
-  const had = new Set(badges(track, before).filter((b) => b.earned).map((b) => b.id));
+  const had = new Set(badges(track, before, milestones).filter((b) => b.earned).map((b) => b.id));
   return {
     ok: true,
     graded,
@@ -79,7 +79,7 @@ async function summary(store: Store, userId: string, track: Track, before: Learn
     xp: s.xp,
     streak: streaks(s.days).current,
     levelUp: now.level > was.level ? { level: now.level, name: now.name } : undefined,
-    newBadges: badges(track, s)
+    newBadges: badges(track, s, milestones)
       .filter((b) => b.earned && !had.has(b.id))
       .map(({ name, desc }) => ({ name, desc })),
   };

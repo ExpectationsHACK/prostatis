@@ -12,7 +12,7 @@ const panels: Record<AuthArtKind, { eyebrow: string; title: string; points: stri
   signup: {
     eyebrow: "Your first 14 days",
     title: "From sign-up to your first paid website.",
-    points: ["Pay once in naira: card, transfer or USSD", "Your first site is live on your own domain by day 7", "A verified certificate when you finish"],
+    points: ["Pay once in naira: card, transfer or USSD", "Your first page is live on Day 3, with free tools", "A verified certificate when you finish"],
   },
   reset: {
     eyebrow: "Account help",
