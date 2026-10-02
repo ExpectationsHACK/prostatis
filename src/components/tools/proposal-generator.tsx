@@ -1,5 +1,6 @@
 "use client";
 
+import { AiWriter } from "./kit/ai-writer";
 import { AppToolLayout, useToolState } from "./kit/app-tool";
 import { Field, Output, Select, TextArea, TextInput } from "../tool-ui";
 
@@ -158,6 +159,7 @@ ${f.studio}`;
       }
       output={
         <>
+          <AiWriter slug="proposal-generator" values={f} />
           <Output title="Proposal" text={out} filename={`proposal-${f.company.replace(/\W+/g, "-").toLowerCase()}.txt`} />
           <p className="text-sm text-muted">
             Paste into Google Docs or Notion, add your logo, and export as PDF. Send it within 24 hours of the call, follow up after 3 days, and always get the deposit before starting.

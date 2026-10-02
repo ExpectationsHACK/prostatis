@@ -2,11 +2,13 @@
 
 import { Eraser, Link2, RotateCcw, Sparkles } from "lucide-react";
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
-import { blocksToText, decodeValues, encodeValues } from "@/lib/tool-defs/text";
-import { defaults, type ChecklistDef, type Field as FieldDef, type GeneratorDef, type ToolDef, type Values } from "@/lib/tool-defs/types";
+import { blocksToHtml, blocksToText, decodeValues, encodeValues } from "@/lib/tool-defs/text";
+import { defaults, liveList, type ChecklistDef, type Field as FieldDef, type GeneratorDef, type ToolDef, type Values } from "@/lib/tool-defs/types";
 import { Field, Output, Select, TextArea, TextInput } from "../../tool-ui";
 import { BlockView } from "./blocks";
+import { AiWriter } from "./ai-writer";
 import { LivePanel } from "./live-panel";
+import { LogoColors } from "./logo-colors";
 import { ResultBar, StepHead } from "./result-bar";
 
 const store = {
@@ -93,15 +95,18 @@ function FieldInput({ f, value, set }: { f: FieldDef; value: Values[string]; set
       return <Select value={String(value)} onChange={(e) => set(e.target.value)} options={f.options} />;
     case "color":
       return (
-        <div className="flex items-center gap-2">
-          <input
-            type="color"
-            value={String(value)}
-            onChange={(e) => set(e.target.value)}
-            className="h-11 w-14 shrink-0 cursor-pointer border border-edge bg-card p-1"
-            aria-label={f.label}
-          />
-          <TextInput value={String(value)} onChange={(e) => set(e.target.value)} />
+        <div>
+          <div className="flex items-center gap-2">
+            <input
+              type="color"
+              value={String(value)}
+              onChange={(e) => set(e.target.value)}
+              className="h-11 w-14 shrink-0 cursor-pointer border border-edge bg-card p-1"
+              aria-label={f.label}
+            />
+            <TextInput value={String(value)} onChange={(e) => set(e.target.value)} />
+          </div>
+          {f.fromImage && <LogoColors onPick={(hex) => set(hex)} />}
         </div>
       );
     case "toggle":
@@ -143,7 +148,7 @@ function FieldInput({ f, value, set }: { f: FieldDef; value: Values[string]; set
   }
 }
 
-function GeneratorTool({ def, slug }: { def: GeneratorDef; slug: string }) {
+function GeneratorTool({ def, slug, title }: { def: GeneratorDef; slug: string; title: string }) {
   const [start] = useState(() => initial(def, slug));
   const [v, setV] = useState<Values>(start.v);
   const [source, setSource] = useState(start.from);
@@ -184,7 +189,9 @@ function GeneratorTool({ def, slug }: { def: GeneratorDef; slug: string }) {
 
   return (
     <>
-      {def.live && <LivePanel spec={def.live} values={v} />}
+      {liveList(def.live).map((spec) => (
+        <LivePanel key={spec.kind + spec.title} spec={spec} values={v} />
+      ))}
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
         <div className="space-y-4 border border-edge bg-card p-5">
           <StepHead n={1} title="Fill in your details" sub={note} />
@@ -235,7 +242,8 @@ function GeneratorTool({ def, slug }: { def: GeneratorDef; slug: string }) {
         </div>
         <div className="min-w-0 space-y-4 lg:sticky lg:top-24 lg:self-start" aria-live="polite">
           <StepHead n={2} title="Your result" sub="Updates as you type. Copy one part, or everything at once." />
-          <ResultBar text={text} filename={`${slug}.txt`} shareUrl={shareUrl} />
+          <AiWriter slug={slug} values={v} fields={def.fields} />
+          <ResultBar text={text} filename={`${slug}.txt`} shareUrl={shareUrl} html={() => blocksToHtml(blocks, { title })} />
           {blocks.map((b, i) => (
             <BlockView key={i} b={b} />
           ))}
@@ -248,7 +256,7 @@ function GeneratorTool({ def, slug }: { def: GeneratorDef; slug: string }) {
   );
 }
 
-function ChecklistTool({ def, slug }: { def: ChecklistDef; slug: string }) {
+function ChecklistTool({ def, slug, title }: { def: ChecklistDef; slug: string; title: string }) {
   const [done, setDone] = useState<Record<string, boolean>>(() => {
     try {
       const saved: unknown = JSON.parse(store.get(`bwac:check:${slug}`) ?? "{}");
@@ -273,7 +281,9 @@ function ChecklistTool({ def, slug }: { def: ChecklistDef; slug: string }) {
 
   return (
     <>
-      {def.live && <LivePanel spec={def.live} values={{}} onChecks={(found) => setDone((prev) => ({ ...prev, ...found }))} />}
+      {liveList(def.live).map((spec) => (
+        <LivePanel key={spec.kind + spec.title} spec={spec} values={{}} onChecks={(found) => setDone((prev) => ({ ...prev, ...found }))} />
+      ))}
       <div className="grid gap-6 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
         <div className="space-y-5">
           <StepHead n={1} title="Check each item" sub="Your ticks are saved on this device." />
@@ -311,7 +321,19 @@ function ChecklistTool({ def, slug }: { def: ChecklistDef; slug: string }) {
         </div>
         <div className="min-w-0 space-y-4 lg:sticky lg:top-24 lg:self-start">
           <StepHead n={2} title="Your score and fix list" sub="Fix from the top: highest impact first." />
-          <ResultBar text={report} filename={`${slug}-fix-list.txt`} />
+          <ResultBar
+            text={report}
+            filename={`${slug}-fix-list.txt`}
+            html={() =>
+              blocksToHtml(
+                [
+                  { type: "stats", items: [{ label: "Score", value: `${pct}/100`, sub: grade }, { label: "Done", value: `${all.length - todo.length} of ${all.length}` }] },
+                  { type: "checks", title: "Checklist", items: all.map((c) => ({ ok: !!done[c.id], text: `${c.text} (${impact[c.weight].toLowerCase()} impact)`, fix: c.fix })) },
+                ],
+                { title },
+              )
+            }
+          />
           <div className="border border-edge bg-card p-5">
             <div className="flex items-baseline justify-between">
               <span className="font-mono text-[12px] font-bold text-muted">Your score</span>
@@ -339,6 +361,6 @@ function ChecklistTool({ def, slug }: { def: ChecklistDef; slug: string }) {
   );
 }
 
-export default function DefTool({ def, slug }: { def: ToolDef; slug: string }) {
-  return def.kind === "generator" ? <GeneratorTool def={def} slug={slug} /> : <ChecklistTool def={def} slug={slug} />;
+export default function DefTool({ def, slug, title }: { def: ToolDef; slug: string; title: string }) {
+  return def.kind === "generator" ? <GeneratorTool def={def} slug={slug} title={title} /> : <ChecklistTool def={def} slug={slug} title={title} />;
 }

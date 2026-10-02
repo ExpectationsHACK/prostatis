@@ -19,17 +19,17 @@ export const guides: Record<string, ToolGuide> = {
   // ---------- Web design ----------
   "color-palette-generator": {
     problem: "You picked colours you like, but the site looks messy and some text is hard to read on a phone.",
-    get: "A 9-colour palette with a readability score on every colour, plus CSS and Tailwind code to paste.",
+    get: "A palette whose text and link colours are adjusted until they pass readability rules, a live website preview with a colour-blind view, shade scales, and CSS and Tailwind code to paste.",
     minutes: 2,
-    steps: ["Pick the business's main colour (or paste its hex code from the logo).", "Choose a harmony: try each one and watch the swatches change.", "Check every swatch says AA or AAA, then copy the CSS or Tailwind block."],
-    next: ["Paste the code into your project (or send it to Claude: “use these colours”).", "Add the hex codes to the brand kit.", "Test your text colour on the WebAIM contrast checker if you change anything."],
+    steps: ["Tap “Pick from logo” and choose the business's main colour (or type its hex code).", "Choose a harmony and watch the website preview change; switch the colour-blind views to check buttons still stand out.", "Make sure every readability check passes, then copy the CSS or Tailwind block."],
+    next: ["Paste the code into your project (or tell your AI builder: “use these colours”).", "Add the hex codes to the brand kit.", "Test your text colour on the WebAIM contrast checker if you change anything."],
   },
   "wireframe-generator": {
     problem: "You start building and keep moving sections around, or the client wants changes after it's built.",
     get: "A section-by-section page plan and a ready prompt to build it with AI.",
     minutes: 3,
     steps: ["Choose the page type and type the business name.", "Tick any extra sections the business needs (pricing, booking, gallery…).", "Read the plan top to bottom: does it answer promise → proof → details → questions → action?"],
-    next: ["Send the wireframe to the client on WhatsApp and get a yes before building.", "Copy the build prompt into Claude Code.", "Write the words for each section with the Hero and Landing Page copy tools."],
+    next: ["Send the wireframe to the client on WhatsApp and get a yes before building.", "Copy the build prompt into your AI builder (Antigravity or Claude Code).", "Write the words for each section with the Hero and Landing Page copy tools."],
   },
   "hero-copy-generator": {
     problem: "Your headline says “Welcome to…” and visitors leave without understanding what the business offers.",
@@ -43,7 +43,7 @@ export const guides: Record<string, ToolGuide> = {
     get: "Three tested heading + body pairings for the mood, with live previews and the code.",
     minutes: 2,
     steps: ["Pick the mood that matches the brand's three voice words.", "Compare the live previews: read the body text as a customer would.", "Copy the pair you like into the brand kit."],
-    next: ["Ask Claude to load the fonts with next/font (only the weights you use).", "Keep body text at 16px or bigger.", "Add the fonts to your CLAUDE.md so every page uses them."],
+    next: ["Ask your AI builder to load only the font weights you use.", "Keep body text at 16px or bigger.", "Add the fonts to your project brief so every page uses them."],
   },
   "logo-concept-prompts": {
     problem: "The client needs a logo, you're not a designer, and random AI images all look generic.",
@@ -57,7 +57,7 @@ export const guides: Record<string, ToolGuide> = {
     get: "A one-page style guide: mission, audience, voice, colours, fonts, do's and don'ts, in Markdown.",
     minutes: 4,
     steps: ["Enter the name, mission and audience in one sentence each.", "Pick the voice words, paste the two colours and the two fonts.", "Check both colours pass the readability score, then copy the guide."],
-    next: ["Save it as the client's brand kit (Google Doc or Notion).", "Paste it into your project's CLAUDE.md so the AI follows it.", "Send it to the client with the website handover."],
+    next: ["Save it as the client's brand kit (Google Doc or Notion).", "Paste it into your project brief so the AI follows it.", "Send it to the client with the website handover."],
   },
   "design-brief-generator": {
     problem: "Projects drift because nobody wrote down the goal, the pages, the deadline or the budget.",
@@ -70,38 +70,38 @@ export const guides: Record<string, ToolGuide> = {
   // ---------- Web development ----------
   "tech-stack-picker": {
     problem: "You don't know what to build the project with, or what hosting it will cost the client.",
-    get: "A recommended stack with reasons, a realistic hosting cost, and a kick-off prompt for your AI.",
+    get: "A recommended stack built on free tools first (Cloudflare Pages, Web3Forms, Supabase, Paystack), the real monthly cost and who pays, and a kick-off prompt for your AI builder.",
     minutes: 2,
     steps: ["Pick the project type and your skill level.", "Answer whether the client edits content, how they take payment, and expected traffic.", "Read the “why” column: make sure every choice makes sense for this client."],
-    next: ["Put the costs into your proposal (hosting is the client's cost, in their name).", "Paste the kick-off prompt into Claude Code in a new project folder.", "Record the stack in CLAUDE.md."],
+    next: ["Put the costs into your proposal (hosting is free; the domain is the client's, in their name).", "Paste the kick-off prompt into your AI builder in a new project folder.", "Record the stack in your project brief."],
   },
   "claude-md-generator": {
-    problem: "Every new Claude Code session forgets your rules, colours, stack, “mobile-first”, and you repeat yourself.",
-    get: "A ready CLAUDE.md file your AI reads at the start of every session.",
+    problem: "Every new AI session forgets your rules, colours, stack and “mobile-first”, so you repeat yourself.",
+    get: "A ready project brief your AI builder reads at the start of every session: notes/brief.md for Antigravity, CLAUDE.md for Claude Code, or paste it first in a free chat.",
     minutes: 4,
     steps: ["Describe the project and the business in a sentence or two.", "Fill in the stack, the brand rules and the do's and don'ts.", "Download the file and save it in the root of your project folder."],
-    next: ["Start Claude Code in that folder, it reads the file automatically.", "Add a rule every time you catch yourself repeating an instruction.", "Commit CLAUDE.md with your project."],
+    next: ["Start every request with “Read the project brief first and follow it.” (Claude Code reads CLAUDE.md by itself).", "Add a rule every time you catch yourself repeating an instruction.", "Keep the brief with your project files."],
   },
   "component-prompt-library": {
     problem: "You ask AI for “a pricing section” and get something generic, broken on phones or inaccessible.",
     get: "Precise, copy-ready prompts for common components, with your stack and brand baked in.",
     minutes: 2,
     steps: ["Choose the component group (layout, content, commerce, forms…).", "Pick your stack and describe your brand style in one line.", "Copy the prompt for the component you need."],
-    next: ["Paste it into Claude Code and review the plan before approving.", "Check the result at 360px wide and with the keyboard.", "Commit once it works."],
+    next: ["Paste it into your AI builder and review the plan before approving.", "Check the result at 360px wide and with the keyboard.", "Commit once it works."],
   },
   "debug-prompt-template": {
     problem: "Something broke, you told the AI “it's not working”, and it made things worse.",
     get: "A structured debugging prompt with the error, context and what you've tried, plus quick hints.",
     minutes: 3,
     steps: ["Paste the exact error message (copy it: don't retype it).", "Say what you expected, what happened instead, and what you already tried.", "List the files involved, then copy the prompt."],
-    next: ["Paste it into Claude Code and let it explain the cause before changing code.", "Apply one fix at a time, then test.", "Commit once it works so you have a safe point."],
+    next: ["Paste it into your AI builder and let it explain the cause before changing code.", "Apply one fix at a time, then test.", "Commit once it works so you have a safe point."],
   },
   "website-speed-checklist": {
     problem: "The site feels slow on phones, visitors leave, and you don't know what to fix first.",
-    get: "A live speed scan of any link, a score, and a fix list ordered by impact.",
+    get: "A live speed scan of any link: what real visitors experienced (Google's Chrome data), Google's phone test, what each visit costs in mobile data, and a fix list ordered by impact.",
     minutes: 3,
     steps: ["Paste the website's link into the live check and run it.", "Tick anything else you've confirmed by hand.", "Copy the fix list: work from the top down."],
-    next: ["Fix images first (they're usually the biggest win).", "Run the check again and note the new score for the client.", "Run Google PageSpeed Insights for the official score."],
+    next: ["Fix images first (they're usually the biggest win).", "Run the check again and note the new score for the client.", "Print the report for the client (Save as PDF) before and after the fixes."],
   },
   "responsive-design-checklist": {
     problem: "The site looks great on your laptop but breaks on the client's phone.",
@@ -158,7 +158,7 @@ export const guides: Record<string, ToolGuide> = {
     problem: "Customers keep asking the same questions, and some leave to ask a competitor instead.",
     get: "A FAQ that answers price, time, trust, area and contact questions in the business's facts.",
     minutes: 4,
-    steps: ["Fill in the real facts: price range, turnaround time, proof, guarantee, area and hours.", "Pick the topics customers actually ask about.", "Edit any answer that doesn't sound like the business."],
+    steps: ["Fill in the real facts: what you sell, price range, turnaround time, proof, guarantee, area and hours.", "Press “Get real questions” to see what people ask Google, and add the ones you can answer honestly.", "Edit any answer that doesn't sound like the business."],
     next: ["Add the FAQ near the bottom of the service or landing page.", "Paste the same answers into the chatbot's knowledge base.", "Update it whenever a new question comes up twice."],
   },
   "testimonial-formatter": {
@@ -172,17 +172,17 @@ export const guides: Record<string, ToolGuide> = {
   // ---------- SEO ----------
   "keyword-research-prompts": {
     problem: "You don't know what customers type into Google, so the site doesn't show up for the right searches.",
-    get: "Starter keywords grouped by what the searcher wants (buy, compare, learn), plus an AI research prompt.",
+    get: "The real phrases people in Nigeria type into Google, sorted by what they want (hire nearby, compare prices, ask questions), with the job-seekers filtered out and a keyword map for the site.",
     minutes: 3,
-    steps: ["Enter the service, the city and who the customers are.", "Copy the research prompt into Claude to expand the list.", "Check your favourites against Google's autocomplete and “People also ask”."],
+    steps: ["Enter the service in the words customers use, and the city or area.", "Press “Get real searches” to pull live suggestions from Google Nigeria.", "Give each page one main phrase from the keyword map; use the questions for the FAQ and articles."],
     next: ["Make a keyword map: one main keyword per page.", "Write titles and descriptions with the Meta Tag Generator.", "Plan articles for the “learn” keywords with the Blog Topic tool."],
   },
   "meta-tag-generator": {
     problem: "The page shows up in Google with a boring or cut-off title, so nobody clicks.",
-    get: "Title and description options with length checks, a Google preview, and the code to paste.",
+    get: "Title and description options measured in pixels the way Google cuts them, a desktop and phone preview, and the code to paste.",
     minutes: 3,
-    steps: ["Optionally check the page's current tags with the live check.", "Enter the brand, the page's main keyword, the benefit and the call to action.", "Pick a title of about 50–60 characters and a description of about 140–158."],
-    next: ["Paste the tags into the page (or ask Claude to set them).", "Do this for every page, each needs its own.", "Re-check the live link to confirm the new tags are there."],
+    steps: ["Optionally check the page's current tags with the live check.", "Enter the brand, the page's main keyword, the benefit and the call to action.", "Pick a title that fits in 600 pixels and a description of 120–155 characters that isn't cut off."],
+    next: ["Paste the tags into the page (or ask your AI builder to set them).", "Do this for every page, each needs its own.", "Re-check the live link to confirm the new tags are there."],
   },
   "local-seo-checklist": {
     problem: "The business doesn't appear on Google Maps when people nearby search for what it sells.",
@@ -193,16 +193,16 @@ export const guides: Record<string, ToolGuide> = {
   },
   "on-page-seo-audit": {
     problem: "A page isn't ranking and you don't know which of the dozen on-page basics is missing.",
-    get: "A 16-point on-page audit with a score and a fix for every failed check.",
+    get: "A 16-point audit of any page, a whole-site check of up to 10 pages (duplicate titles, missing headings, broken links), and a printable report for the client.",
     minutes: 3,
-    steps: ["Enter the page's main keyword.", "Run the live check on its link, or paste the HTML if it isn't online yet.", "Fix the failed checks from the top down."],
-    next: ["Re-run the audit after fixing to confirm the score went up.", "Repeat for every important page.", "Use the results in an audit report for the client."],
+    steps: ["Enter the page's main keyword.", "Run the page audit on its link (or paste the HTML), then the whole-site check on the home page.", "Fix the failed checks from the top down, and print the report."],
+    next: ["Re-run the audit after fixing to confirm the score went up.", "Repeat for every important page.", "Send the printed report (Save as PDF) to the client with your quote."],
   },
   "blog-topic-generator": {
     problem: "You know content helps, but you have no idea what to write that brings in buyers.",
     get: "Blog topics grouped by type: cost, comparison, how-to, local, mistakes, checklists.",
     minutes: 2,
-    steps: ["Enter what the business does, who the customers are and where.", "Choose the topic types you want.", "Pick 3 topics: cost and checklist topics first."],
+    steps: ["Enter what the business does, who the customers are and where.", "Press “Get real questions” to see what people ask Google, then choose topic types.", "Pick 3 topics: cost and checklist topics first."],
     next: ["Make a content brief for each with the SEO Content Brief tool.", "Publish one a week, each linking to a service page.", "Track which ones bring enquiries in Search Console."],
   },
   "backlink-outreach-scripts": {
@@ -217,7 +217,7 @@ export const guides: Record<string, ToolGuide> = {
     get: "A complete brief: keyword, intent, title, description, outline, must-includes and tone.",
     minutes: 3,
     steps: ["Enter the main keyword, related keywords and the page type.", "Describe the reader and the target length.", "Check the outline answers what the reader really wants to know."],
-    next: ["Give the brief to Claude (or a writer) to draft the article.", "Edit, fact-check and add the owner's real experience.", "Publish with the suggested title and link it to a service page."],
+    next: ["Give the brief to your AI (or a writer) to draft the article.", "Edit, fact-check and add the owner's real experience.", "Publish with the suggested title and link it to a service page."],
   },
   "gbp-post-generator": {
     problem: "The business's Google profile looks abandoned, no updates in months.",
@@ -237,7 +237,7 @@ export const guides: Record<string, ToolGuide> = {
   },
   "zapier-make-scenario-planner": {
     problem: "You open Make or Zapier and get lost in modules, or build something that breaks the first week.",
-    get: "A module-by-module plan, the operations it will use each month, and a go-live checklist.",
+    get: "A module-by-module plan, the credits (Make) or tasks (Zapier) it will use each month against the free plan, and a go-live checklist.",
     minutes: 4,
     steps: ["Pick the platform and describe the trigger in one line.", "List each step on its own line, in order.", "Enter roughly how many times a month it will run."],
     next: ["Build it module by module in the tool, following the plan.", "Run 5 test records end to end.", "Turn on error alerts before switching it on for real."],
@@ -335,7 +335,7 @@ export const guides: Record<string, ToolGuide> = {
     get: "A complete system prompt: personality, can/can't rules, facts, handoff, plus test messages.",
     minutes: 5,
     steps: ["Name the assistant, the business and the channel.", "Tick what it may do, list what it must never do, and paste the real facts.", "Copy the system prompt and run the test messages."],
-    next: ["Paste it into a Claude Project (or your bot platform) with the knowledge base.", "Run a 20-question test script and fix failures.", "Re-test whenever prices or rules change."],
+    next: ["Paste it into your bot platform (or a Claude or Gemini project) with the knowledge base.", "Run a 20-question test script and fix failures.", "Re-test whenever prices or rules change."],
   },
   "customer-service-scripts": {
     problem: "Support replies are inconsistent: some polite, some not, some wrong.",
@@ -363,7 +363,7 @@ export const guides: Record<string, ToolGuide> = {
     get: "A clean knowledge base in Markdown and JSON, with missing answers flagged.",
     minutes: 3,
     steps: ["Paste the questions and answers in any rough format.", "Check the count of pairs found and any missing answers.", "Fill in missing answers with the owner, then copy."],
-    next: ["Upload the Markdown to a Claude Project or your bot platform.", "Agree who updates it and how often.", "Re-run the bot's test script after each update."],
+    next: ["Upload the Markdown to your bot platform (or a Claude or Gemini project).", "Agree who updates it and how often.", "Re-run the bot's test script after each update."],
   },
   "agent-monitoring-checklist": {
     problem: "The bot or automation breaks on a Saturday and the client finds out before you do.",

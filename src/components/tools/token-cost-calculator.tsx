@@ -3,6 +3,7 @@
 import { DEFAULT_NGN_PER_USD, modelPrices } from "@/lib/models";
 import { formatNgn, formatUsd } from "@/lib/site";
 import { AppToolLayout, useToolState } from "./kit/app-tool";
+import { RateHint } from "./kit/live-rate";
 import { Field, Select, TextInput } from "../tool-ui";
 
 const presets = [
@@ -81,6 +82,7 @@ List prices from claude.com/pricing (standard tier, before caching or batch disc
             </Field>
             <Field label="Exchange rate (₦ per $1)" hint="The rate your card or dollar account actually charges.">
               <TextInput inputMode="numeric" value={f.rate} onChange={(e) => patch({ rate: e.target.value })} />
+              <RateHint current={num(f.rate)} onUse={(r) => patch({ rate: String(r) })} />
             </Field>
             <Field label="Safety margin %" hint="Busy months cost more.">
               <TextInput inputMode="numeric" value={f.margin} onChange={(e) => patch({ margin: e.target.value })} />

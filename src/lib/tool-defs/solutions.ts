@@ -1,3 +1,4 @@
+import { renderSuggestions, type SuggestData } from "./suggest";
 import { arr, lines, n, naira, on, opts, or, s, type Block, type ToolDef } from "./types";
 
 const bizTypes = opts("Salon / barber", "Clinic / dentist", "Restaurant / food vendor", "Gym / fitness", "Hotel / shortlet", "Tutor / school", "Photographer / studio", "Consultant / coach", "Car wash / auto", "Event venue", "Fashion / boutique", "Real estate agent");
@@ -272,14 +273,23 @@ const faqBank: Record<string, [string, string][]> = {
 };
 const faqGen: ToolDef = {
   kind: "generator",
-  intro: "Fill in the real facts once. You get a FAQ that answers the doubts that stop people buying, for the website, the chatbot and WhatsApp quick replies.",
+  intro: "Fill in the real facts once. You get a FAQ that answers the doubts that stop people buying, for the website, the chatbot and WhatsApp quick replies. Press “Get real questions” to see what else people ask Google.",
+  live: {
+    kind: "suggest",
+    title: "What do people ask Google before buying this?",
+    button: "Get real questions",
+    note: "Uses “What you sell” and the area below. Answer the ones you can answer honestly.",
+    payload: (v) => ({ service: s(v, "service"), location: s(v, "area").split(/,| and /)[0]?.trim() ?? "", mode: "questions" }),
+    render: (d: SuggestData, v) => renderSuggestions(d, v),
+  },
   examples: [
-    { label: "Phone repairs", values: { business: "SwiftFix Phone Repairs", price: "Screen repairs start from ₦25,000", time: "Most repairs take 1–2 hours", proof: "Over 2,000 phones repaired since 2019", guarantee: "a 90-day warranty on every repair", area: "Ikeja, Yaba and Surulere", hours: "Mon–Sat, 9am–7pm", custom: "Do you use original parts? | Yes: original or top-grade parts, and we tell you which before we start." } },
-    { label: "Caterer", values: { business: "Kora Foods", price: "Party trays start from ₦45,000 for 20 guests", time: "Book at least 3 days ahead", proof: "We cater weddings, office events and birthdays every week", guarantee: "a full refund if we cancel", area: "Ikeja, Maryland and Ogba", hours: "Mon–Sun, 8am–8pm", custom: "Can I taste the food first? | Yes: tasting boxes are ₦5,000, deducted from your order." } },
-    { label: "Tutor", values: { business: "Bright Minds Tutoring", price: "Lessons are ₦8,000 per hour", time: "Lessons are 1 or 2 hours, once or twice a week", proof: "Students from JSS1 to SS3, WAEC and JAMB", guarantee: "a free first lesson", area: "Online, and in person in Lekki", hours: "Mon–Sat, 3pm–8pm", custom: "" } },
+    { label: "Phone repairs", values: { service: "phone screen repair", business: "SwiftFix Phone Repairs", price: "Screen repairs start from ₦25,000", time: "Most repairs take 1–2 hours", proof: "Over 2,000 phones repaired since 2019", guarantee: "a 90-day warranty on every repair", area: "Ikeja, Yaba and Surulere", hours: "Mon–Sat, 9am–7pm", custom: "Do you use original parts? | Yes: original or top-grade parts, and we tell you which before we start." } },
+    { label: "Caterer", values: { service: "event catering", business: "Kora Foods", price: "Party trays start from ₦45,000 for 20 guests", time: "Book at least 3 days ahead", proof: "We cater weddings, office events and birthdays every week", guarantee: "a full refund if we cancel", area: "Ikeja, Maryland and Ogba", hours: "Mon–Sun, 8am–8pm", custom: "Can I taste the food first? | Yes: tasting boxes are ₦5,000, deducted from your order." } },
+    { label: "Tutor", values: { service: "home tutor", business: "Bright Minds Tutoring", price: "Lessons are ₦8,000 per hour", time: "Lessons are 1 or 2 hours, once or twice a week", proof: "Students from JSS1 to SS3, WAEC and JAMB", guarantee: "a free first lesson", area: "Online, and in person in Lekki", hours: "Mon–Sat, 3pm–8pm", custom: "" } },
   ],
   fields: [
-    { key: "business", label: "Business", type: "text", default: "SwiftFix Phone Repairs" },
+    { key: "business", label: "Business", type: "text", default: "SwiftFix Phone Repairs", half: true },
+    { key: "service", label: "What you sell (customers' words)", type: "text", default: "phone screen repair", half: true },
     { key: "price", label: "Price answer", type: "text", default: "Screen repairs start from ₦25,000", half: true },
     { key: "time", label: "Time answer", type: "text", default: "Most repairs take 1–2 hours", half: true },
     { key: "proof", label: "Proof", type: "text", default: "Over 2,000 phones repaired since 2019" },

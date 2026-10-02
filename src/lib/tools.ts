@@ -20,7 +20,7 @@ const t = (pillar: Pillar, slug: string, title: string, description: string, use
 
 export const tools: ToolMeta[] = [
   // Web Design
-  t("web_design", "color-palette-generator", "Color Palette Generator", "Turn one brand colour into a full palette with contrast checks and ready CSS.", "Starting a new site or brand kit and need colours that work together.", "sand"),
+  t("web_design", "color-palette-generator", "Color Palette Generator", "Turn a brand colour (or a logo) into a palette that passes readability rules, with a live preview and colour-blind check.", "Starting a new site or brand kit and need colours that work together.", "sand"),
   t("web_design", "wireframe-generator", "Layout / Wireframe Generator", "Get a section-by-section wireframe for any page type, plus a build prompt.", "Planning a page before you build, or showing a client the structure.", "peach"),
   t("web_design", "hero-copy-generator", "Hero Section Copy Generator", "Headline, subhead and button combinations for the top of the page.", "Writing the first thing visitors read, the part that decides if they stay.", "orange"),
   t("web_design", "font-pairing-picker", "Font Pairing Picker", "Three tested Google Font pairings per mood, with live previews and CSS.", "Choosing fonts that match the brand without guessing.", "ink"),
@@ -29,10 +29,10 @@ export const tools: ToolMeta[] = [
   t("web_design", "design-brief-generator", "Website Design Brief Generator", "A client brief covering goals, pages, audience, look and sign-off.", "The first client call, so nothing gets missed.", "sand"),
   // Web Development
   t("web_dev", "tech-stack-picker", "Tech Stack Picker", "Answer five questions, get the right stack, hosting cost and kick-off prompt.", "Deciding what to build a project with before you start.", "indigo"),
-  t("web_dev", "claude-md-generator", "CLAUDE.md Generator", "A CLAUDE.md file that gives your AI permanent memory of the project.", "Starting any build with Claude Code so it follows your rules.", "ink"),
+  t("web_dev", "claude-md-generator", "AI Project Brief Generator", "One project brief your AI builder reads every session: notes/brief.md for Antigravity, CLAUDE.md for Claude Code.", "Starting any build so your AI follows your rules from the first prompt.", "ink"),
   t("web_dev", "component-prompt-library", "Component Prompt Library", "Precise prompts for headers, pricing tables, forms, carts and more.", "Getting AI to build a component right the first time.", "forest"),
   t("web_dev", "debug-prompt-template", "Bug / Error Debug Prompt Template", "Turns an error into a debugging prompt with everything the AI needs.", "Something broke and you need the AI to find the real cause.", "ink"),
-  t("web_dev", "website-speed-checklist", "Website Speed Checklist", "Score a site's speed on mobile data and get a prioritised fix list.", "Before launch, or when a client says the site is slow.", "orange"),
+  t("web_dev", "website-speed-checklist", "Website Speed Checklist", "Real-visitor speed from Google, what each visit costs in data, and a prioritised fix list.", "Before launch, or when a client says the site is slow.", "orange"),
   t("web_dev", "responsive-design-checklist", "Responsive Design Checklist", "Make sure the site works on every phone, tablet and laptop.", "QA before handing a site to a client.", "peach"),
   t("web_dev", "domain-name-generator", "Domain Name Idea Generator", "Short, brandable domain ideas with one-click availability searches.", "Naming a new business or project site.", "sand"),
   // Web Solutions
@@ -44,10 +44,10 @@ export const tools: ToolMeta[] = [
   t("web_solutions", "faq-generator", "FAQ Section Generator", "FAQ answers built from the business's real facts, for the website, the chatbot and quick replies.", "Answering the doubts that stop customers from buying.", "sand"),
   t("web_solutions", "testimonial-formatter", "Testimonial Formatter", "Turn raw WhatsApp praise into clean testimonials, with a permission request and website code.", "Turning happy-customer messages into social proof.", "peach"),
   // SEO
-  t("seo", "keyword-research-prompts", "Keyword Research Prompt Generator", "Keyword ideas grouped by search intent, plus a research prompt.", "Deciding which searches a business should rank for.", "indigo"),
-  t("seo", "meta-tag-generator", "Meta Title / Description Generator", "Title and description options with length checks and a Google preview.", "Every page you publish: it's the ad for your page in Google.", "sand"),
+  t("seo", "keyword-research-prompts", "Keyword Research Tool", "The real phrases people in Nigeria type into Google, live, sorted by what they want.", "Deciding which searches a business should rank for.", "indigo"),
+  t("seo", "meta-tag-generator", "Meta Title / Description Generator", "Titles and descriptions measured in pixels like Google does, with desktop and phone previews.", "Every page you publish: it's the ad for your page in Google.", "sand"),
   t("seo", "local-seo-checklist", "Local SEO Checklist (GBP)", "Score a business's local SEO and Google Business Profile.", "Getting a local business into the map pack.", "forest"),
-  t("seo", "on-page-seo-audit", "On-Page SEO Audit", "Audit any page by its link (or pasted HTML), a 16-point SEO check with a fix for each issue.", "Checking a client's page, or your own before launch.", "ink"),
+  t("seo", "on-page-seo-audit", "On-Page SEO Audit", "A 16-point audit of any page plus a 10-page whole-site check, with a printable client report.", "Checking a client's page, or your own before launch.", "ink"),
   t("seo", "blog-topic-generator", "Blog Topic Idea Generator", "Blog topics that match what customers search before they buy.", "Planning content that brings in buyers, not just readers.", "peach"),
   t("seo", "backlink-outreach-scripts", "Backlink Outreach Script Generator", "Short outreach emails for guest posts, resource pages and broken links.", "Earning links that lift a site's rankings.", "orange"),
   t("seo", "seo-content-brief", "SEO Content Brief Generator", "A complete brief: outline, keywords, links, for a page that ranks.", "Briefing a writer or your AI to write SEO content.", "indigo"),

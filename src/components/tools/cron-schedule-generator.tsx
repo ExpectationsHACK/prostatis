@@ -115,15 +115,22 @@ export default function CronScheduleGenerator() {
     d.toLocaleString("en-NG", { timeZone: "Africa/Lagos", weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
 
   const snippets = {
-    "Vercel (vercel.json)": `{\n  "crons": [\n    { "path": "/api/cron/my-job", "schedule": "${expr}" }\n  ]\n}`,
+    "Cloudflare Worker (wrangler.toml, free plan)": `[triggers]\ncrons = ["${expr}"]`,
     "GitHub Actions": `on:\n  schedule:\n    - cron: "${expr}"`,
     "Linux crontab": `${expr} /usr/bin/node /home/you/agent/run.js >> /home/you/agent/cron.log 2>&1`,
   };
 
   const frequent = freq === "minutes" || freq === "hourly";
+  // Free-plan limits worth knowing before you promise a client a schedule (checked Oct 2026).
+  const limits = [
+    "Cloudflare's free Workers plan includes 5 cron triggers per account, and runs them in UTC.",
+    "GitHub Actions schedules can't run more often than every 5 minutes and may start late when GitHub is busy.",
+    "Make's free plan runs scheduled scenarios at most every 15 minutes (set the schedule in the scenario, not with cron).",
+    ...(frequent ? ["Every run of a frequent job uses your free allowance: check the monthly limits before choosing every few minutes."] : []),
+  ];
   const text = `CRON: ${expr}\n${human}\n\nNext runs (Lagos time):\n${next.map((d) => "- " + fmt(d)).join("\n")}\n\n${Object.entries(snippets)
     .map(([k, v]) => `${k.toUpperCase()}\n${v}`)
-    .join("\n\n")}${frequent ? "\n\nNOTE: Vercel's free Hobby plan runs cron jobs at most once a day, use Pro or another scheduler for this." : ""}`;
+    .join("\n\n")}\n\nNOTES\n- ${limits.join("\n- ")}`;
 
   return (
     <AppToolLayout
@@ -159,12 +166,12 @@ export default function CronScheduleGenerator() {
               <TextInput inputMode="numeric" value={dom} onChange={(e) => setDom(e.target.value)} />
             </Field>
           )}
-          <Field label="Where will it run?" hint="Vercel, GitHub Actions and most servers run cron in UTC, one hour behind Lagos.">
+          <Field label="Where will it run?" hint="Cloudflare, GitHub Actions and most servers run cron in UTC, one hour behind Lagos.">
             <Select
               value={tz}
               onChange={(e) => setTz(e.target.value as "lagos" | "utc")}
               options={[
-                { value: "utc", label: "Server in UTC (Vercel, GitHub, most VPS)" },
+                { value: "utc", label: "Server in UTC (Cloudflare, GitHub, most VPS)" },
                 { value: "lagos", label: "Server set to Africa/Lagos" },
               ]}
             />
@@ -194,11 +201,14 @@ export default function CronScheduleGenerator() {
               ))}
             </ul>
           </div>
-          {frequent && (
-            <p className="border border-edge bg-danger/10 px-3 py-2.5 text-[14px] text-ink">
-              <strong>Heads-up:</strong> Vercel's free Hobby plan only runs cron jobs once a day (and not at an exact minute). For every-few-minutes or hourly jobs, use Vercel Pro, GitHub Actions, or your automation tool's own scheduler.
-            </p>
-          )}
+          <div className={"border border-edge px-3 py-2.5 text-[14px] text-ink " + (frequent ? "bg-danger/10" : "bg-brand-wash")}>
+            <strong>Free-plan limits:</strong>
+            <ul className="mt-1 list-disc space-y-0.5 pl-5">
+              {limits.map((l) => (
+                <li key={l}>{l}</li>
+              ))}
+            </ul>
+          </div>
           {Object.entries(snippets).map(([k, v]) => (
             <div key={k} className="overflow-hidden border border-edge bg-card">
               <div className="flex items-center justify-between border-b border-line bg-sunk px-4 py-2">

@@ -1,15 +1,26 @@
+import { renderCrawl, type CrawlData } from "./crawl";
 import { auditFromFacts, renderLocalCheck, renderMetaCheck, renderPageAudit, type PageData } from "./live";
 import { extractPage } from "./page-facts";
+import { SERP, textWidth, widthVerdict } from "./pixels";
+import { renderSuggestions, type SuggestData } from "./suggest";
 import { arr, lines, opts, or, s, slugify, type Block, type ToolDef } from "./types";
 
 const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 /** Shorten to a limit without cutting a word in half. */
 const clip = (x: string, max: number) => (x.length <= max ? x : x.slice(0, max).replace(/\s+\S*$/, ""));
 
-// ---------- Keyword Research Prompt Generator ----------
+// ---------- Keyword Research Tool ----------
 const keywordResearch: ToolDef = {
   kind: "generator",
-  intro: "Enter a service and a location. You get starter keywords grouped by what the searcher wants, a keyword map for the site, quick Google checks and an AI research prompt.",
+  intro: "Enter a service and a location, then press “Get real searches” above: you get the phrases people in Nigeria actually type into Google, sorted by what they want. Below: a starter keyword map and quick checks.",
+  live: {
+    kind: "suggest",
+    title: "See what people in Nigeria actually type into Google",
+    button: "Get real searches",
+    note: "Uses the service and location in the form below. Live from Google's search suggestions for Nigeria.",
+    payload: (v) => ({ service: s(v, "service"), location: s(v, "location"), mode: "all" }),
+    render: (d: SuggestData, v) => renderSuggestions(d, v),
+  },
   examples: [
     { label: "Web design, Lagos", values: { service: "web design", location: "Lagos", audience: "small businesses" } },
     { label: "Lash extensions, Lekki", values: { service: "lash extensions", location: "Lekki", audience: "working women" } },
@@ -89,16 +100,17 @@ const metaTags: ToolDef = {
       `Looking for ${kw}? ${b} delivers ${ben || "great results"}. ${cta}.`,
       `${cap(kw)} by ${b}: ${ben || "quality you can see"}. ${cta}, pay easily online.`,
     ];
-    const rate = (x: string, lo: number, hi: number) => (x.length < lo ? `${x.length} chars: a bit short` : x.length > hi ? `${x.length} chars: too long, may be cut off` : `${x.length} chars ✓`);
-    const bestT = titles.find((t) => t.length <= 60) ?? titles[0];
-    const bestD = descs.find((d) => d.length >= 120 && d.length <= 158) ?? descs[0];
+    const fitsT = (t: string) => textWidth(t, SERP.title.px) <= SERP.title.max;
+    const fitsD = (d: string) => d.length >= 110 && textWidth(d, SERP.description.px) <= SERP.description.max;
+    const bestT = titles.find(fitsT) ?? titles[0];
+    const bestD = descs.find(fitsD) ?? descs[0];
     const url = `https://${or(s(v, "domain"), "example.com")}${s(v, "path").startsWith("/") ? s(v, "path") : "/" + s(v, "path")}`;
     const q = (x: string) => x.replace(/"/g, "&quot;");
     const html = `<title>${bestT}</title>\n<meta name="description" content="${q(bestD)}" />\n<link rel="canonical" href="${url}" />\n<meta property="og:title" content="${q(bestT)}" />\n<meta property="og:description" content="${q(bestD)}" />\n<meta property="og:url" content="${url}" />\n<meta property="og:image" content="https://${or(s(v, "domain"), "example.com")}/og-image.jpg" /> <!-- 1200×630 photo: shows when shared on WhatsApp -->\n<meta name="twitter:card" content="summary_large_image" />`;
     return [
       { type: "serp", title: "Google preview", pageTitle: bestT, url: url.replace(/^https:\/\//, "").replace(/\//g, " › "), description: bestD },
-      { type: "table", title: "Title options (aim 50–60 chars)", columns: ["Title", "Length"], rows: titles.map((t) => [t, rate(t, 30, 60)]) },
-      { type: "table", title: "Description options (aim 120–158 chars)", columns: ["Description", "Length"], rows: descs.map((d) => [d, rate(d, 110, 158)]) },
+      { type: "table", title: `Title options (Google cuts titles at about ${SERP.title.max} pixels)`, columns: ["Title", "Width"], rows: titles.map((t) => [t, widthVerdict(t, "title", 30).text]) },
+      { type: "table", title: `Description options (about ${SERP.description.max}px on desktop, ${SERP.descriptionMobile.max}px on phones)`, columns: ["Description", "Width"], rows: descs.map((d) => [d, widthVerdict(d, "description", 110).text]) },
       { type: "text", title: "HTML to paste in <head>", text: html },
       { type: "text", title: "Or tell your AI (Next.js)", text: `Set this page's metadata: title "${bestT}", description "${bestD}", canonical ${url}, and an Open Graph image (1200×630). Use the Next.js metadata API.` },
       { type: "list", title: "Before you publish", items: ["Every page gets its own title and description, never copy them between pages.", "Use the live check above on the published page to confirm the tags are there.", "Google may rewrite descriptions; a clear, specific one is still your best advert."] },
@@ -147,14 +159,23 @@ const localSeo: ToolDef = {
 // ---------- On-Page SEO Audit ----------
 const onPageAudit: ToolDef = {
   kind: "generator",
-  intro: "Audit any page by its link (live check above), or paste HTML below to audit a page that isn't online yet.",
-  live: {
-    kind: "page",
-    title: "Audit a live page",
-    button: "Run SEO audit",
-    url: { placeholder: "yourwebsite.com/page", hint: "Uses the target keyword from the form below." },
-    render: (d: PageData, v) => renderPageAudit(d, v),
-  },
+  intro: "Audit one page by its link, check the whole site for problems that only show across pages, or paste HTML below to audit a page that isn't online yet. Every result prints as a clean report for your client.",
+  live: [
+    {
+      kind: "page",
+      title: "Audit a live page",
+      button: "Run SEO audit",
+      url: { placeholder: "yourwebsite.com/page", hint: "Uses the target keyword from the form below." },
+      render: (d: PageData, v) => renderPageAudit(d, v),
+    },
+    {
+      kind: "crawl",
+      title: "Check the whole site (up to 10 pages)",
+      button: "Check whole site",
+      url: { placeholder: "yourwebsite.com", hint: "Reads the sitemap (or the home page's links), then checks the pages together: duplicate titles, missing headings, thin pages and broken links." },
+      render: (d: CrawlData) => renderCrawl(d),
+    },
+  ],
   fields: [
     { key: "keyword", label: "Target keyword", type: "text", default: "web design lagos" },
     {
@@ -180,7 +201,15 @@ const onPageAudit: ToolDef = {
 // ---------- Blog Topic Idea Generator ----------
 const blogTopics: ToolDef = {
   kind: "generator",
-  intro: "Enter the business and audience. You get article topics that match what customers search before they buy, and which three to publish first.",
+  intro: "Enter the business and audience. Press “Get real questions” above for the questions people in Nigeria type into Google; below, article topics ordered by how close the reader is to buying.",
+  live: {
+    kind: "suggest",
+    title: "Find the questions people actually ask Google",
+    button: "Get real questions",
+    note: "Uses the business / service and location below. Every question is a ready article or FAQ idea.",
+    payload: (v) => ({ service: s(v, "business"), location: s(v, "location"), mode: "questions" }),
+    render: (d: SuggestData, v) => renderSuggestions(d, v),
+  },
   examples: [
     { label: "Solar, Abuja", values: { business: "solar installation", audience: "homeowners in Abuja", location: "Abuja", count: ["How-to", "Cost", "Comparison", "Local", "Mistakes", "Checklist"] } },
     { label: "Wedding cakes", values: { business: "wedding cakes", audience: "couples planning a wedding", location: "Lagos", count: ["Cost", "Checklist", "Mistakes", "Myths"] } },
@@ -254,7 +283,15 @@ const backlinkOutreach: ToolDef = {
 // ---------- SEO Content Brief Generator ----------
 const contentBrief: ToolDef = {
   kind: "generator",
-  intro: "Enter the keyword and page type. You get a complete brief, and a ready prompt so your AI writes the page properly.",
+  intro: "Enter the keyword and page type. You get a complete brief and a ready prompt so your AI writes the page properly. Press “Get real questions” to find what readers ask, for the FAQ section.",
+  live: {
+    kind: "suggest",
+    title: "Questions readers ask about this topic",
+    button: "Get real questions",
+    note: "Uses the primary keyword below (without the place name). Add the best ones to the brief's FAQ.",
+    payload: (v) => ({ service: s(v, "keyword").replace(/\s+(in|near|around)\s+.+$/i, ""), location: "", mode: "questions" }),
+    render: (d: SuggestData, v) => renderSuggestions(d, v),
+  },
   examples: [
     { label: "Solar cost article", values: { keyword: "cost of solar installation in Abuja", secondary: "solar panel price Abuja\ninverter and battery cost\nsolar installers Abuja", type: "Blog post", audience: "homeowners tired of generator costs", words: 1400, brand: "SunPower NG" } },
     { label: "Salon service page", values: { keyword: "lash extensions in Lekki", secondary: "classic lashes\nvolume lashes\nlash refill Lekki", type: "Service page", audience: "working women in Lekki and VI", words: 800, brand: "Glow Beauty Studio" } },

@@ -3,6 +3,7 @@
 import { Printer, X } from "lucide-react";
 import { btn, size } from "../ui";
 import { AppToolLayout, useToolState } from "./kit/app-tool";
+import { useLiveRate } from "./kit/live-rate";
 import { Field, Select, TextArea, TextInput } from "../tool-ui";
 
 type Item = { desc: string; qty: string; price: string };
@@ -49,6 +50,7 @@ export default function InvoiceGenerator() {
   const discount = num(f.discount);
   const tax = ((subtotal - discount) * num(f.tax)) / 100;
   const total = subtotal - discount + tax;
+  const live = useLiveRate();
 
   const plain = `PAYMENT REQUEST ${f.number}
 From: ${f.fromName}
@@ -91,6 +93,11 @@ ${f.notes}`;
           </Field>
           <Field label="Currency">
             <Select value={f.currency} onChange={set("currency")} options={Object.keys(symbols)} />
+            {f.currency === "USD" && live && total > 0 && (
+              <p className="mt-1.5 text-[12px] leading-snug text-muted">
+                ≈ <strong className="text-ink">₦{Math.round(total * live.rate).toLocaleString("en-NG")}</strong> at today&apos;s market rate (for you; not printed).
+              </p>
+            )}
           </Field>
           <Field label="Issue date">
             <TextInput type="date" value={f.date} onChange={set("date")} />

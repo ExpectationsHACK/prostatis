@@ -1,4 +1,4 @@
-import { bestInk, contrast, hexToRgb, hslToHex, normHex, ratioLabel, rgbToHsl } from "./color";
+import { bestInk, colorDistance, contrast, hexToRgb, hslToHex, normHex, ratioLabel, rgbToHsl, shadeScale, simulate, solveContrast } from "./color";
 import { lines, opts, or, s, arr, type ToolDef, type Block } from "./types";
 
 const industries = opts("Restaurant & food", "Beauty & salon", "Health & clinic", "Real estate", "Fashion & retail", "Education & school", "Church & NGO", "Finance & fintech", "Tech & SaaS", "Coaching & consulting", "Logistics", "Events & hospitality");
@@ -9,15 +9,15 @@ const words = (x: string) => x.split(/\s+/).filter(Boolean).length;
 // ---------- Color Palette Generator ----------
 const colorPalette: ToolDef = {
   kind: "generator",
-  intro: "Pick the brand's main colour and a harmony. You get a full palette with readability scores, a “which colour where” guide and ready code.",
+  intro: "Pick the brand's main colour (or take it straight from the logo) and a harmony. Text and link colours are adjusted until they pass readability rules, so the palette is safe to use as it is. You get a live website preview, a colour-blind check, shade scales and ready code.",
   examples: [
-    { label: "Food brand (warm orange)", values: { base: "#e8590c", harmony: "complementary", neutral: "warm" } },
-    { label: "Clinic (calm blue)", values: { base: "#1c6fb8", harmony: "analogous", neutral: "cool" } },
-    { label: "Beauty (rich plum)", values: { base: "#8e2c68", harmony: "split", neutral: "warm" } },
-    { label: "Fintech (trust green)", values: { base: "#0f7a55", harmony: "mono", neutral: "pure" } },
+    { label: "Food brand (warm orange)", values: { base: "#e8590c", harmony: "complementary", neutral: "warm", name: "Kora Foods" } },
+    { label: "Clinic (calm blue)", values: { base: "#1c6fb8", harmony: "analogous", neutral: "cool", name: "CarePoint Clinic" } },
+    { label: "Beauty (rich plum)", values: { base: "#8e2c68", harmony: "split", neutral: "warm", name: "Glow Beauty Studio" } },
+    { label: "Fintech (trust green)", values: { base: "#0f7a55", harmony: "mono", neutral: "pure", name: "Kudi Save" } },
   ],
   fields: [
-    { key: "base", label: "Brand colour", type: "color", default: "#ff6719", hint: "Take it from the logo if there is one." },
+    { key: "base", label: "Brand colour", type: "color", default: "#ff6719", hint: "Tap “Pick from logo” to take it from the business's logo (the image stays on your phone).", fromImage: true },
     { key: "harmony", label: "Harmony", type: "select", default: "complementary", options: [
       { value: "complementary", label: "Complementary (bold contrast)" },
       { value: "analogous", label: "Analogous (calm, related hues)" },
@@ -26,6 +26,7 @@ const colorPalette: ToolDef = {
       { value: "mono", label: "Monochrome (one hue)" },
     ] },
     { key: "neutral", label: "Neutral warmth", type: "select", default: "warm", options: opts("warm", "cool", "pure"), hint: "Warm suits food and beauty; cool suits health, finance and tech." },
+    { key: "name", label: "Business name (for the preview)", type: "text", default: "Kora Foods" },
   ],
   generate(v) {
     const base = normHex(s(v, "base"));
@@ -36,41 +37,56 @@ const colorPalette: ToolDef = {
     const accentS = harm === "mono" ? Math.max(sat - 30, 10) : Math.min(sat, 85);
     const nh = s(v, "neutral") === "cool" ? 220 : s(v, "neutral") === "warm" ? 30 : h;
     const ns = s(v, "neutral") === "pure" ? 0 : 12;
+    const background = hslToHex(nh, ns, 97);
+    // Colours used for text are solved, not guessed: the nearest shade that passes 4.5:1 on the background.
+    const link = solveContrast(h, sat, Math.min(l, 45), background, 4.5);
+    const muted = solveContrast(nh, ns, 45, background, 4.5);
+    const text = hslToHex(nh, ns + 5, 10);
+    const ink = bestInk(base);
+    // If neither dark nor white text is readable on the brand colour, buttons use the nearest shade that works with white text.
+    const button = ink.ratio >= 4.5 ? base : solveContrast(h, sat, l, "#ffffff", 4.5);
+    const buttonInk = button === base ? ink.ink : "#ffffff";
+    const accent = hslToHex(h + offsets[0], accentS, harm === "mono" ? Math.min(l + 15, 80) : 45);
     const raw: [string, string][] = [
       ["Primary", base],
-      ["Primary dark", hslToHex(h, sat, Math.max(l - 18, 8))],
+      ...(button !== base ? ([["Button", button]] as [string, string][]) : []),
+      ["Primary dark", link],
       ["Primary light", hslToHex(h, Math.min(sat, 90), Math.min(l + 35, 95))],
-      ["Accent", hslToHex(h + offsets[0], accentS, harm === "mono" ? Math.min(l + 15, 80) : 45)],
+      ["Accent", accent],
       ["Accent 2", hslToHex(h + offsets[1], accentS, harm === "mono" ? Math.max(l - 30, 15) : 35)],
-      ["Background", hslToHex(nh, ns, 97)],
+      ["Background", background],
       ["Surface", hslToHex(nh, ns, 92)],
-      ["Muted text", hslToHex(nh, ns, 40)],
-      ["Text", hslToHex(nh, ns + 5, 10)],
+      ["Muted text", muted],
+      ["Text", text],
     ];
     const colors = raw.map(([name, hex]) => {
       const b = bestInk(hex);
       return { name, hex, ink: b.ink, contrast: ratioLabel(b.ratio) };
     });
     const hex = (name: string) => colors.find((c) => c.name === name)!.hex;
-    const css = `:root {\n${colors.map((c) => `  --${c.name.toLowerCase().replace(/\s+/g, "-")}: ${c.hex};`).join("\n")}\n}`;
-    const tw = `/* Tailwind v4: paste into globals.css */\n@theme {\n${colors.map((c) => `  --color-${c.name.toLowerCase().replace(/\s+/g, "-")}: ${c.hex};`).join("\n")}\n}`;
-    const textOnBg = contrast(hex("Text"), hex("Background"));
-    const mutedOnBg = contrast(hex("Muted text"), hex("Background"));
-    // Links are usually the primary colour, as text, on the page background.
-    const linkOnBg = contrast(hex("Primary dark"), hex("Background"));
-    const primaryAsText = contrast(base, hex("Background"));
-    const btnInk = bestInk(base);
+    const token = (n: string) => n.toLowerCase().replace(/\s+/g, "-");
+    const scale = shadeScale(base);
+    const css = `:root {\n${colors.map((c) => `  --${token(c.name)}: ${c.hex};`).join("\n")}\n}`;
+    const tw = `/* Tailwind v4: paste into globals.css */\n@theme {\n${colors.map((c) => `  --color-${token(c.name)}: ${c.hex};`).join("\n")}\n  /* Brand shades */\n${scale.map((x) => `  --color-brand-${x.step}: ${x.hex};${x.base ? " /* your brand colour */" : ""}`).join("\n")}\n}`;
+    const textOnBg = contrast(text, background), mutedOnBg = contrast(muted, background), linkOnBg = contrast(link, background), primaryAsText = contrast(base, background);
+    const btnRatio = contrast(button, buttonInk);
+    // Red-green colour blindness is common in men: check the brand colour and accent stay distinct.
+    const cb = (["deuteranopia", "protanopia"] as const).map((x) => colorDistance(simulate(base, x), simulate(accent, x)));
+    const distinct = Math.min(...cb) > 120;
     const blocks: Block[] = [
+      { type: "preview", title: "Live preview: your palette on a real page", name: or(s(v, "name"), "Your business"), colors: { background, surface: hex("Surface"), text, muted, primary: button, primaryInk: buttonInk, link, accent, accentInk: bestInk(accent).ink } },
       { type: "swatches", title: "Your palette", colors },
+      ...(button !== base ? [{ type: "notice" as const, tone: "info" as const, text: `Your brand colour ${base} doesn't give readable button text, so buttons use the nearby “Button” shade ${button} with white text. Keep ${base} for the logo and decoration.` }] : []),
       {
         type: "checks",
         title: "Readability checks (WCAG: 4.5 : 1 for normal text)",
         items: [
           { ok: textOnBg >= 4.5, text: `Body text on background: ${ratioLabel(textOnBg)}`, fix: "Darken the Text colour." },
-          { ok: mutedOnBg >= 4.5, text: `Muted text on background: ${ratioLabel(mutedOnBg)}`, fix: "Use muted text only for large or unimportant text, or darken it." },
-          { ok: btnInk.ratio >= 4.5, text: `Button label on primary (use ${btnInk.ink === "#ffffff" ? "white" : "dark"} text), ${ratioLabel(btnInk.ratio)}`, fix: "Pick a darker or lighter primary so button text is readable." },
-          { ok: linkOnBg >= 4.5, text: `Links in “Primary dark” on background, ${ratioLabel(linkOnBg)}`, fix: "Use the Primary dark colour for links, or darken it further." },
-          { ok: primaryAsText >= 3, text: `Primary as large heading text, ${ratioLabel(primaryAsText)} (large text needs 3 : 1)`, fix: "Don't use the primary colour for headings; use Text or Primary dark." },
+          { ok: mutedOnBg >= 4.5, text: `Muted text on background: ${ratioLabel(mutedOnBg)}`, fix: "Darken the muted text." },
+          { ok: btnRatio >= 4.5, text: `Button label (${buttonInk === "#ffffff" ? "white" : "dark"} text) on ${button}: ${ratioLabel(btnRatio)}`, fix: "Pick a deeper brand colour for buttons." },
+          { ok: linkOnBg >= 4.5, text: `Links in “Primary dark” ${link} on background: ${ratioLabel(linkOnBg)}`, fix: "Use the Primary dark colour for links." },
+          { ok: primaryAsText >= 3, text: `Brand colour as large heading text: ${ratioLabel(primaryAsText)} (large text needs 3 : 1)`, fix: "Don't use the brand colour for headings; use Text or Primary dark." },
+          { ok: distinct, text: `Brand colour and accent ${distinct ? "stay distinct" : "look alike"} with red-green colour blindness`, fix: "Don't rely on colour alone: add icons or words (e.g. “Sold out”), or pick a harmony with more contrast." },
         ],
       },
       {
@@ -78,17 +94,18 @@ const colorPalette: ToolDef = {
         title: "Which colour goes where (the 60-30-10 rule)",
         columns: ["Share of the page", "Colour", "Use it for"],
         rows: [
-          ["60%", `Background ${hex("Background")} + Surface ${hex("Surface")}`, "Page background, cards, sections"],
-          ["30%", `Text ${hex("Text")} + Muted ${hex("Muted text")}`, "Headings, body text, borders"],
-          ["10%", `Primary ${base} (+ Accent ${hex("Accent")})`, "Buttons, links, badges: the things you want tapped"],
+          ["60%", `Background ${background} + Surface ${hex("Surface")}`, "Page background, cards, sections"],
+          ["30%", `Text ${text} + Muted ${muted}`, "Headings, body text, borders"],
+          ["10%", `Buttons ${button} (+ Accent ${accent})`, "Buttons, links, badges: the things you want tapped"],
         ],
       },
+      { type: "table", title: "Brand shade scale (for hovers, borders and soft backgrounds)", columns: ["Shade", "Hex", "Readable text on it"], rows: scale.map((x) => [`${x.step}${x.base ? " (your colour)" : ""}`, x.hex, `${bestInk(x.hex).ink === "#ffffff" ? "white" : "dark"} · ${ratioLabel(bestInk(x.hex).ratio)}`]) },
       { type: "text", title: "CSS variables", text: css, filename: "palette.css" },
       { type: "text", title: "Tailwind v4 theme", text: tw },
       {
         type: "text",
-        title: "Tell your AI (paste into Claude or CLAUDE.md)",
-        text: `Use this colour palette everywhere:\n${colors.map((c) => `- ${c.name}: ${c.hex}`).join("\n")}\nRules: page background ${hex("Background")}; body text ${hex("Text")}; buttons ${base} with ${btnInk.ink} text; links ${hex("Primary dark")}. Keep the primary colour to about 10% of the page. All text must pass 4.5:1 contrast.`,
+        title: "Tell your AI (paste into your project brief)",
+        text: `Use this colour palette everywhere:\n${colors.map((c) => `- ${c.name}: ${c.hex}`).join("\n")}\nRules: page background ${background}; body text ${text}; buttons ${button} with ${buttonInk} text; links ${link}. Keep the brand colour to about 10% of the page. All text must pass 4.5:1 contrast. Never show meaning by colour alone: pair colours with words or icons.`,
       },
     ];
     return blocks;
@@ -121,6 +138,61 @@ const sectionJobs: [RegExp, string][] = [
   [/contact|map|location|delivery/i, "Make it effortless to reach or find the business."],
   [/final call|footer/i, "Give one last clear action and the essential details."],
 ];
+const esc = (x: string) => x.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+/** A plain, phone-first HTML page with every planned section, ready for the real words. */
+function starterHtml(biz: string, secs: string[], job: (s: string) => string): string {
+  const name = esc(biz.split(",")[0]);
+  const body = secs
+    .map((sec) => {
+      const title = esc(sec.split("·")[0].trim());
+      const note = `<p class="note">${esc(job(sec))}</p>`;
+      if (/^header/i.test(sec)) return `  <header class="top">
+    <strong>${name}</strong>
+    <a class="btn" href="https://wa.me/234XXXXXXXXXX">Chat on WhatsApp</a>
+  </header>`;
+      if (/^footer/i.test(sec)) return `  <footer>
+    <p>${name} · [address] · [phone] · [hours]</p>
+  </footer>`;
+      if (/^hero/i.test(sec)) return `  <section class="hero">
+    <h1>[What you get, in under 10 words]</h1>
+    <p>[One sentence: who it's for and why it's better]</p>
+    <a class="btn" href="https://wa.me/234XXXXXXXXXX">[Main button]</a>
+    ${note}
+  </section>`;
+      return `  <section>
+    <h2>${title}</h2>
+    ${note}
+  </section>`;
+    })
+    .join("\n");
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${name}: [main keyword]</title>
+  <meta name="description" content="[110–155 characters: what you offer, where, and the next step]">
+  <style>
+    /* Phone first: everything stacks, then widens on bigger screens. Swap in your palette. */
+    :root { --bg: #fffaf5; --text: #1b1714; --muted: #5e564f; --brand: #c2410c; --ink-on-brand: #ffffff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 16px/1.6 system-ui, sans-serif; background: var(--bg); color: var(--text); }
+    header.top, section, footer { padding: 24px 16px; max-width: 960px; margin: 0 auto; }
+    header.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .hero { padding-top: 40px; padding-bottom: 40px; }
+    h1 { font-size: clamp(2rem, 6vw, 3rem); line-height: 1.15; margin: 0 0 12px; }
+    h2 { font-size: clamp(1.6rem, 4vw, 2.2rem); margin: 0 0 8px; }
+    .btn { display: inline-block; background: var(--brand); color: var(--ink-on-brand); padding: 12px 18px; border-radius: 8px; font-weight: 700; text-decoration: none; }
+    .note { color: var(--muted); font-style: italic; }
+    footer { color: var(--muted); font-size: 14px; }
+  </style>
+</head>
+<body>
+${body}
+</body>
+</html>`;
+}
+
 const wireframe: ToolDef = {
   kind: "generator",
   intro: "Choose the kind of page. You get a section-by-section plan, what each section must do, a build prompt, and a message to get the client's approval.",
@@ -146,6 +218,7 @@ const wireframe: ToolDef = {
       { type: "wireframe", title: `${s(v, "type")}: ${secs.length} sections`, sections: secs },
       { type: "table", title: "What each section must do", columns: ["Section", "Its job"], rows: secs.map((x) => [x, job(x)]) },
       { type: "text", title: "Build prompt for your AI", text: prompt },
+      { type: "text", title: "Starter page: save as index.html and open it in your browser", filename: "index.html", text: starterHtml(biz, secs, job) },
       {
         type: "text",
         title: "Send to the client for approval (WhatsApp)",
@@ -209,6 +282,14 @@ const heroCopy: ToolDef = {
 };
 
 // ---------- Font Pairing Picker ----------
+// [name, phone px, laptop px, CSS selector]: a gentle scale that stays readable at 360px wide.
+const typeScale: [string, number, number, string][] = [
+  ["H1 (page title)", 32, 48, "h1"],
+  ["H2 (section heading)", 26, 36, "h2"],
+  ["H3 (card title)", 20, 24, "h3"],
+  ["Body text", 16, 18, "body"],
+  ["Small print", 14, 14, "small"],
+];
 const fontPairs: Record<string, { heading: string; body: string; note: string }[]> = {
   "Bold & energetic": [{ heading: "Archivo Black", body: "Inter", note: "punchy, loud headlines" }, { heading: "Bricolage Grotesque", body: "Figtree", note: "modern, confident" }, { heading: "Anton", body: "Roboto", note: "poster-style" }],
   "Calm & trustworthy": [{ heading: "Merriweather", body: "Source Sans 3", note: "clinics, finance, schools" }, { heading: "Libre Franklin", body: "Libre Franklin", note: "clear and dependable" }, { heading: "Lora", body: "Nunito Sans", note: "warm authority" }],
@@ -243,8 +324,15 @@ const fontPairing: ToolDef = {
     return [
       { type: "fonts", title: `${s(v, "mood")} pairings`, pairs },
       { type: "text", title: `Next.js code: ${p.heading} + ${p.body}`, text: nf },
-      { type: "text", title: "Plain HTML (any website)", text: link },
-      { type: "notice", tone: "info", text: "Load only the weights you use (like 400 and 700) and keep body text at 16px or bigger, fast and readable on phones." },
+      { type: "text", title: "Plain HTML (any website): paste in <head>", text: link },
+      {
+        type: "table",
+        title: "Type scale: sizes that read well on phones and laptops",
+        columns: ["Text", "Phone", "Laptop", "Font"],
+        rows: typeScale.map(([name, ph, desk]) => [name, `${ph}px`, `${desk}px`, /^H/.test(name) ? p.heading : p.body]),
+      },
+      { type: "text", title: "Type scale CSS (grows smoothly between phone and laptop)", text: `${typeScale.map(([name, ph, desk, sel]) => `${sel} { font-size: ${ph === desk ? `${ph / 16}rem` : `clamp(${ph / 16}rem, ${(ph / 16 - ((desk - ph) / 16) * (360 / 920)).toFixed(3)}rem + ${(((desk - ph) / 920) * 100).toFixed(2)}vw, ${desk / 16}rem)`}; } /* ${name} */`).join("\n")}\nh1, h2, h3 { font-family: '${p.heading}', serif; line-height: 1.15; }\nbody { font-family: '${p.body}', sans-serif; line-height: 1.6; }` },
+      { type: "notice", tone: "info", text: `This pair loads ${same ? 2 : 3} font files (${same ? `${p.heading} 400 and 700` : `${p.heading} 700, ${p.body} 400 and 700`}); each is usually 15–50KB. Load only the weights you use and keep body text at 16px or bigger: fast and readable on phones.` },
     ];
   },
 };
@@ -367,7 +455,7 @@ Avoid: ${or(s(v, "avoid"), "jargon")}.
     return [
       { type: "swatches", title: "Brand colours", colors: [p, sc].map((hex, i) => ({ name: i ? "Secondary" : "Primary", hex, ink: bestInk(hex).ink, contrast: ratioLabel(bestInk(hex).ratio) })) },
       { type: "text", title: "Style guide (Markdown)", text: doc, filename: "style-guide.md" },
-      { type: "text", title: "Paste into CLAUDE.md so your AI stays on-brand", text: ai },
+      { type: "text", title: "Paste into your project brief so your AI stays on-brand", text: ai },
     ];
   },
 };

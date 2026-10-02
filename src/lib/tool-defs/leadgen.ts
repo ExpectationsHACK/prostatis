@@ -257,7 +257,7 @@ const landingChecklist: ToolDef = {
     { title: "Trust", checks: [
       { id: "testimonials", weight: 3, text: "Real testimonials with name, photo or business", fix: "Ask 3 happy clients for a two-line testimonial plus permission to use their name." },
       { id: "contact", weight: 2, text: "Real contact details (WhatsApp, email, location)", fix: "Show a WhatsApp number and a business email. Buyers check for a real person." },
-      { id: "https", weight: 2, text: "HTTPS padlock, own domain (not a free subdomain)", fix: "Put the page on your own domain with HTTPS. Vercel and Netlify do this for free." },
+      { id: "https", weight: 2, text: "HTTPS padlock, own domain (not a free subdomain)", fix: "Put the page on your own domain with HTTPS. Cloudflare Pages does this for free." },
       { id: "payment", weight: 1, text: "Trusted payment logos (Paystack, Flutterwave, Stripe)", fix: "Show the payment provider logos near the buy button." },
     ] },
     { title: "Mobile & speed", checks: [
@@ -270,7 +270,7 @@ const landingChecklist: ToolDef = {
       { id: "onegoal", weight: 2, text: "The page has one goal (no competing buttons)", fix: "Remove secondary links and menus that pull visitors away from the main action." },
       { id: "form", weight: 2, text: "Forms ask only for what you need", fix: "Cut the form to name + WhatsApp/email. Ask the rest on the call." },
       { id: "wa", weight: 2, text: "A click-to-WhatsApp link with a pre-filled message", fix: "Use https://wa.me/234XXXXXXXXXX?text=Hi%2C%20I%27d%20like%20a%20quote so the first message is already typed." },
-      { id: "analytics", weight: 1, text: "Analytics installed and tracking the main button", fix: "Add analytics (Vercel, Plausible or GA4) and track clicks on the main button." },
+      { id: "analytics", weight: 1, text: "Analytics installed and tracking the main button", fix: "Add analytics (Cloudflare Web Analytics is free; GA4 if you need click tracking) and track clicks on the main button." },
       { id: "thanks", weight: 1, text: "A thank-you page or message after conversion", fix: "Tell people what happens next and when, and give them a WhatsApp link." },
     ] },
   ],

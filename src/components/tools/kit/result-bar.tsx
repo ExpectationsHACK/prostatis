@@ -5,13 +5,24 @@ import { useState } from "react";
 
 const btn = "inline-flex items-center gap-1.5 border border-edge bg-card px-2.5 py-1.5 font-mono text-[11px] font-bold text-ink hover:bg-wash";
 
+/** Open a printable page in a new window and show the print dialog (Save as PDF works there). */
+export function printHtml(doc: string) {
+  const w = window.open("", "_blank", "width=820,height=900");
+  if (!w) return;
+  w.document.write(doc);
+  w.document.close();
+  w.focus();
+  // Let images (e.g. the phone screenshot) load before printing.
+  setTimeout(() => w.print(), 300);
+}
+
 function flash(set: (v: string) => void, key: string) {
   set(key);
   setTimeout(() => set(""), 1600);
 }
 
 /** One bar for the whole result: copy everything, download, print/PDF, and share a link. */
-export function ResultBar({ text, filename, shareUrl }: { text: string; filename: string; shareUrl?: () => string }) {
+export function ResultBar({ text, filename, shareUrl, html }: { text: string; filename: string; shareUrl?: () => string; html?: () => string }) {
   const [done, setDone] = useState("");
 
   const copy = async (value: string, key: string) => {
@@ -32,15 +43,12 @@ export function ResultBar({ text, filename, shareUrl }: { text: string; filename
   };
 
   const print = () => {
-    const w = window.open("", "_blank", "width=800,height=900");
-    if (!w) return;
     const esc = text.replace(/&/g, "&amp;").replace(/</g, "&lt;");
-    w.document.write(
-      `<!doctype html><meta charset="utf-8"><title>${filename}</title><style>body{font:14px/1.6 ui-monospace,Menlo,Consolas,monospace;margin:32px;color:#111}pre{white-space:pre-wrap;word-break:break-word}</style><pre>${esc}</pre>`,
+    printHtml(
+      html
+        ? html()
+        : `<!doctype html><meta charset="utf-8"><title>${filename}</title><style>body{font:14px/1.6 ui-monospace,Menlo,Consolas,monospace;margin:32px;color:#111}pre{white-space:pre-wrap;word-break:break-word}</style><pre>${esc}</pre>`,
     );
-    w.document.close();
-    w.focus();
-    w.print();
   };
 
   return (

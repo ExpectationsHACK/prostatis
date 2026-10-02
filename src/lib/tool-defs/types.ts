@@ -10,7 +10,7 @@ export type Field =
   | { key: string; label: string; type: "select"; default: string; options: { value: string; label: string }[]; hint?: string; half?: boolean }
   | { key: string; label: string; type: "multi"; default: string[]; options: { value: string; label: string }[]; hint?: string }
   | { key: string; label: string; type: "toggle"; default: boolean; hint?: string }
-  | { key: string; label: string; type: "color"; default: string; hint?: string; half?: boolean };
+  | { key: string; label: string; type: "color"; default: string; hint?: string; half?: boolean; fromImage?: boolean };
 
 export type Values = Record<string, string | number | boolean | string[]>;
 
@@ -26,15 +26,21 @@ export type Block =
   | { type: "flow"; title: string; steps: { label: string; detail?: string }[] }
   | { type: "checks"; title: string; items: { ok: boolean; text: string; fix?: string }[] }
   | { type: "notice"; tone: "info" | "warn" | "good"; text: string }
-  | { type: "image"; title: string; src: string; alt: string };
+  | { type: "image"; title: string; src: string; alt: string }
+  | { type: "preview"; title: string; name: string; colors: PreviewColors };
+
+/** The colours a mini website preview needs (from the palette tool). */
+export type PreviewColors = { background: string; surface: string; text: string; muted: string; primary: string; primaryInk: string; link: string; accent: string; accentInk: string };
 
 /** A live check that runs against a real website through /api/tools/analyze. */
 export type LiveSpec = {
-  kind: "page" | "speed" | "domain" | "uptime" | "scrape";
+  kind: "page" | "speed" | "domain" | "uptime" | "scrape" | "suggest" | "crawl";
   title: string;
   button: string;
   /** Show a URL box? (false when the payload comes from the form, e.g. domain names) */
   url?: { placeholder: string; hint?: string };
+  /** Shown under the button when there's no URL box (what the check uses). */
+  note?: string;
   payload?: (v: Values) => Record<string, unknown>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   render: (data: any, v: Values) => { blocks: Block[]; checks?: Record<string, boolean> };
@@ -46,17 +52,20 @@ export type GeneratorDef = {
   generate: (v: Values) => Block[];
   /** Short line shown above the form: what to do. */
   intro?: string;
-  live?: LiveSpec;
+  live?: LiveSpec | LiveSpec[];
   /** One-tap example inputs for different kinds of business; merged over the defaults. */
   examples?: { label: string; values: Values }[];
 };
+
+/** A tool's live checks as a list (most tools have one; the on-page audit has two). */
+export const liveList = (live?: LiveSpec | LiveSpec[]) => (live ? (Array.isArray(live) ? live : [live]) : []);
 
 export type ChecklistDef = {
   kind: "checklist";
   intro?: string;
   groups: { title: string; checks: { id: string; text: string; fix: string; weight: 1 | 2 | 3 }[] }[];
   grades: [number, string][]; // [minPct, label], highest first
-  live?: LiveSpec;
+  live?: LiveSpec | LiveSpec[];
 };
 
 export type ToolDef = GeneratorDef | ChecklistDef;

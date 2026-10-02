@@ -1,4 +1,5 @@
 import type { PageFacts } from "./page-facts";
+import { SERP, textWidth } from "./pixels";
 import type { Block, Values } from "./types";
 
 /**
@@ -27,6 +28,8 @@ export type SpeedData = {
     | null
     | { error: string }
     | {
+        field: FieldData | null;
+        totalBytes: number | null;
         scores: { performance: number; seo: number; accessibility: number; bestPractices: number };
         metrics: { fcp: string; lcp: string; tbt: string; cls: string; si: string };
         mobile: { viewport: boolean; fontSize: boolean; tapTargets: boolean };
@@ -34,9 +37,35 @@ export type SpeedData = {
         screenshot: string | null;
       };
 };
+/** Real-visitor speed from Chrome users (Google's Chrome UX Report), 75th percentile. */
+export type FieldData = {
+  scope: "page" | "site";
+  lcp: { p75: number; category: string } | null;
+  inp: { p75: number; category: string } | null;
+  cls: { p75: number; category: string } | null;
+  overall: string;
+};
 export type DomainData = { results: { domain: string; status: "available" | "taken" | "unknown" }[] };
 export type UptimeData = { url: string; https: boolean; runs: { status: number; ms: number }[] };
 export type ScrapeData = { url: string; status: number; matched: number; rows: string[][]; columns: string[] };
+
+/**
+ * What a page costs a visitor in mobile data. MTN's 2GB monthly bundle is ₦1,500 (checked
+ * Oct 2026), about ₦750 per GB; bigger bundles are cheaper per GB, daily ones dearer.
+ */
+export const NAIRA_PER_GB = 750;
+export const dataCost = (bytes: number) => (bytes / 1_000_000_000) * NAIRA_PER_GB;
+const nairaCost = (x: number) => (x < 10 ? `₦${x.toFixed(2)}` : `₦${Math.round(x).toLocaleString("en-NG")}`);
+const verdict = (c: string) => (c === "FAST" ? "good" : c === "AVERAGE" ? "needs work" : c === "SLOW" ? "poor" : "");
+
+export function fieldStats(f: FieldData): Block {
+  const items = [
+    f.lcp && { label: "Main content shows (LCP)", value: `${(f.lcp.p75 / 1000).toFixed(1)}s`, sub: `${verdict(f.lcp.category)} · good is under 2.5s` },
+    f.inp && { label: "Reacts to taps (INP)", value: `${Math.round(f.inp.p75)}ms`, sub: `${verdict(f.inp.category)} · good is under 200ms` },
+    f.cls && { label: "Page jumps (CLS)", value: f.cls.p75.toFixed(2), sub: `${verdict(f.cls.category)} · good is under 0.1` },
+  ].filter((x): x is { label: string; value: string; sub: string } => !!x);
+  return { type: "stats", items };
+}
 
 export const kb = (b: number) => (b >= 1_000_000 ? `${(b / 1_000_000).toFixed(1)}MB` : `${Math.round(b / 1000)}KB`);
 const secs = (s: string) => Number(s.replace(/[^\d.]/g, "")) || 0;
@@ -82,6 +111,7 @@ export function renderPageAudit(d: PageData, v: Values): LiveResult {
 export function renderMetaCheck(d: PageData): LiveResult {
   const f = d.facts;
   const t = f.title.length, ds = f.description.length;
+  const tw = Math.round(textWidth(f.title, SERP.title.px)), dw = Math.round(textWidth(f.description, SERP.description.px));
   return {
     blocks: [
       { type: "serp", title: "How this page looks in Google now", pageTitle: f.title || "(no title: Google will make one up)", url: shortUrl(d.url).replace(/\//g, " › "), description: f.description || "(no meta description: Google will pull random text from the page)" },
@@ -89,8 +119,8 @@ export function renderMetaCheck(d: PageData): LiveResult {
         type: "checks",
         title: "Current tags",
         items: [
-          { ok: t >= 30 && t <= 60, text: `Title: ${t} characters`, fix: t > 60 ? "Shorten it: Google cuts titles off around 60 characters." : "Make it more descriptive (30–60 characters)." },
-          { ok: ds >= 110 && ds <= 158, text: `Description: ${ds} characters`, fix: ds > 158 ? "Trim to under 158 characters." : "Write 110–158 characters that sell the click." },
+          { ok: t >= 30 && tw <= SERP.title.max, text: `Title: ${t} characters, ${tw} of ${SERP.title.max} pixels`, fix: tw > SERP.title.max ? "Shorten it: Google cuts titles off at about 600 pixels (roughly 55–60 characters)." : "Make it more descriptive (at least 30 characters)." },
+          { ok: ds >= 110 && dw <= SERP.description.max, text: `Description: ${ds} characters, ${dw} of ${SERP.description.max} pixels`, fix: dw > SERP.description.max ? "Trim it: Google cuts descriptions at about 920 pixels on desktop (less on phones)." : "Write 110–158 characters that sell the click." },
           { ok: f.og.title && f.og.image, text: "Social share tags (og:title + og:image)", fix: "Add them so WhatsApp and X show a proper preview card." },
           { ok: f.canonical, text: "Canonical tag", fix: "Add a canonical link to avoid duplicate-page issues." },
         ],
@@ -167,8 +197,22 @@ export function renderSpeed(d: SpeedData, mode: "speed" | "responsive" = "speed"
       ],
     });
   }
+  const bytes = lh?.totalBytes || total;
+  if (mode === "speed") {
+    blocks.push({
+      type: "notice",
+      tone: bytes > 3_000_000 ? "warn" : "info",
+      text: `Each visit costs a visitor about ${nairaCost(dataCost(bytes))} of mobile data (${kb(bytes)} at ₦${NAIRA_PER_GB} per GB, MTN's 2GB monthly bundle). 1,000 visits a month = ${nairaCost(dataCost(bytes) * 1000)} of your customers' data.`,
+    });
+  }
+  if (lh?.field) {
+    blocks.push({ type: "notice", tone: lh.field.overall === "FAST" ? "good" : lh.field.overall === "SLOW" ? "warn" : "info", text: `Real visitors: Chrome users on ${lh.field.scope === "page" ? "this page" : "this whole site"} over the last 28 days, measured by Google. This is what people actually experienced, so it matters more than the test score below.` });
+    blocks.push(fieldStats(lh.field));
+  } else if (lh) {
+    blocks.push({ type: "notice", tone: "info", text: "No real-visitor data yet: Google only reports it once enough Chrome users visit (common for small or new sites). The test below is a simulated slow phone, a fair stand-in." });
+  }
   if (lh) {
-    blocks.push({ type: "stats", items: [{ label: "Google mobile score", value: String(lh.scores.performance), sub: "Lighthouse performance" }, { label: "LCP", value: lh.metrics.lcp || "–", sub: "main content visible" }, { label: "CLS", value: lh.metrics.cls || "–", sub: "layout shift" }, { label: "TBT", value: lh.metrics.tbt || "–", sub: "blocking time" }] });
+    blocks.push({ type: "stats", items: [{ label: "Google mobile score", value: String(lh.scores.performance), sub: "Lighthouse test, simulated phone" }, { label: "LCP", value: lh.metrics.lcp || "–", sub: "main content visible" }, { label: "CLS", value: lh.metrics.cls || "–", sub: "layout shift" }, { label: "TBT", value: lh.metrics.tbt || "–", sub: "blocking time" }] });
     if (lh.screenshot) blocks.push({ type: "image", title: "How it loads on a phone (Google test)", src: lh.screenshot, alt: "Mobile screenshot of the page" });
     if (lh.opportunities.length) blocks.push({ type: "list", title: "Google's top fixes", items: lh.opportunities.map((o) => `${o.title}${o.saving ? ` - ${o.saving}` : ""}`) });
   } else if (d.lighthouse && "error" in d.lighthouse) {
@@ -179,7 +223,7 @@ export function renderSpeed(d: SpeedData, mode: "speed" | "responsive" = "speed"
   const findings = [
     { ok: d.https, text: "HTTPS", fix: "Serve the site over HTTPS." },
     { ok: !!d.compression, text: `Compression: ${d.compression || "none"}`, fix: "Enable gzip or brotli on the server/host." },
-    { ok: d.ttfbMs < 600, text: `Server response ${d.ttfbMs}ms`, fix: "Use static pages, caching or a faster host (Vercel, Netlify, Cloudflare)." },
+    { ok: d.ttfbMs < 600, text: `Server response ${d.ttfbMs}ms`, fix: "Use static pages and a host with a global network (Cloudflare Pages is free and allows business use)." },
     { ok: d.counts.images === 0 || d.counts.modernImages / d.counts.images >= 0.6, text: `Modern image formats: ${d.counts.modernImages}/${d.counts.images}`, fix: "Convert images to WebP/AVIF." },
     { ok: bigImages.length === 0, text: `Images over 300KB: ${bigImages.length}`, fix: `Compress: ${bigImages.slice(0, 2).map((a) => a.url.split("/").pop()?.slice(0, 40)).join(", ")}` },
     { ok: d.weights.scripts < 250_000, text: `JavaScript ${kb(d.weights.scripts)}`, fix: "Remove unused libraries, widgets and tracking scripts." },

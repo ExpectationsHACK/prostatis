@@ -1,10 +1,27 @@
 "use client";
 
-import { Globe, LoaderCircle } from "lucide-react";
+import { Check, Copy, Globe, LoaderCircle, Printer } from "lucide-react";
 import { useState } from "react";
+import { blocksToHtml, blocksToText } from "@/lib/tool-defs/text";
 import type { Block, LiveSpec, Values } from "@/lib/tool-defs/types";
 import { btn, input, size } from "../../ui";
 import { BlockView } from "./blocks";
+import { printHtml } from "./result-bar";
+
+const PREPARED_BY = "steinark:prepared-by";
+const waiting: Partial<Record<LiveSpec["kind"], string>> = {
+  speed: "Loading the page and weighing every image, script and stylesheet, and asking Google for its test and real-visitor data. This can take up to a minute.",
+  crawl: "Reading the sitemap, checking up to 10 pages and testing their links. This can take up to a minute.",
+  suggest: "Asking Google what people in Nigeria type…",
+};
+
+function readName() {
+  try {
+    return localStorage.getItem(PREPARED_BY) ?? "";
+  } catch {
+    return "";
+  }
+}
 
 /**
  * Runs a live check against a real website (via /api/tools/analyze) and shows the result.
@@ -15,6 +32,9 @@ export function LivePanel({ spec, values, onChecks }: { spec: LiveSpec; values: 
   const [state, setState] = useState<"idle" | "running" | "done" | "error">("idle");
   const [error, setError] = useState("");
   const [blocks, setBlocks] = useState<Block[]>([]);
+  const [checked, setChecked] = useState("");
+  const [by, setBy] = useState(readName);
+  const [copied, setCopied] = useState(false);
 
   async function run(e: React.FormEvent) {
     e.preventDefault();
@@ -30,6 +50,7 @@ export function LivePanel({ spec, values, onChecks }: { spec: LiveSpec; values: 
       if (!res.ok) throw new Error(data.error ?? "The check failed. Try again.");
       const out = spec.render(data, values);
       setBlocks(out.blocks);
+      setChecked(typeof data.url === "string" ? data.url : typeof data.start === "string" ? data.start : url);
       if (out.checks && onChecks) onChecks(out.checks);
       setState("done");
     } catch (err) {
@@ -37,6 +58,26 @@ export function LivePanel({ spec, values, onChecks }: { spec: LiveSpec; values: 
       setState("error");
     }
   }
+
+  const saveName = (x: string) => {
+    setBy(x);
+    try {
+      localStorage.setItem(PREPARED_BY, x);
+    } catch {
+      /* storage blocked */
+    }
+  };
+  const report = () => printHtml(blocksToHtml(blocks, { title: spec.title, subtitle: checked || undefined, preparedBy: by.trim() || undefined }));
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(blocksToText(blocks));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    } catch {
+      /* clipboard blocked */
+    }
+  };
+  const small = "inline-flex items-center gap-1.5 border border-edge bg-card px-2.5 py-1.5 font-mono text-[11px] font-bold text-ink hover:bg-wash";
 
   return (
     <section className="mb-8 border border-edge bg-brand-wash p-5">
@@ -69,8 +110,8 @@ export function LivePanel({ spec, values, onChecks }: { spec: LiveSpec; values: 
           )}
         </button>
       </form>
-      {spec.url?.hint && <p className="mt-2 font-mono text-[12px] text-muted">{spec.url.hint}</p>}
-      {state === "running" && spec.kind === "speed" && <p className="mt-3 font-mono text-[12px] text-muted">Loading the page and weighing every image, script and stylesheet, this can take up to a minute.</p>}
+      {(spec.url?.hint ?? spec.note) && <p className="mt-2 font-mono text-[12px] text-muted">{spec.url?.hint ?? spec.note}</p>}
+      {state === "running" && waiting[spec.kind] && <p className="mt-3 font-mono text-[12px] text-muted">{waiting[spec.kind]}</p>}
       {state === "error" && (
         <p className="mt-3 border border-edge bg-danger/10 px-3 py-2 text-[14px] text-danger" role="alert">
           {error}
@@ -78,6 +119,18 @@ export function LivePanel({ spec, values, onChecks }: { spec: LiveSpec; values: 
       )}
       {state === "done" && (
         <div className="mt-5 space-y-4" aria-live="polite">
+          <div className="flex flex-wrap items-end gap-2 border border-edge bg-sunk p-2">
+            <label className="min-w-[180px] flex-1">
+              <span className="block font-mono text-[11px] font-bold text-muted">Report prepared by (optional)</span>
+              <input value={by} onChange={(e) => saveName(e.target.value)} placeholder="Your name or business" className={`${input} mt-1 h-9 text-[14px]`} />
+            </label>
+            <button type="button" onClick={report} className={small}>
+              <Printer className="size-3.5" aria-hidden /> Print report / PDF
+            </button>
+            <button type="button" onClick={copy} className={small} aria-live="polite">
+              {copied ? <Check className="size-3.5 text-success" strokeWidth={3} aria-hidden /> : <Copy className="size-3.5" aria-hidden />} {copied ? "Copied" : "Copy results"}
+            </button>
+          </div>
           {blocks.map((b, i) => (
             <BlockView key={i} b={b} />
           ))}

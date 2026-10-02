@@ -98,7 +98,7 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
 
       {/* The tool itself */}
       <div className="mx-auto mt-8 max-w-6xl px-4">
-        <ToolRenderer slug={tool.slug} pillar={tool.pillar} />
+        <ToolRenderer slug={tool.slug} pillar={tool.pillar} title={tool.title} ai={!!process.env.ANTHROPIC_API_KEY} />
       </div>
 
       {/* What to do with the result */}

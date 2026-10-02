@@ -1,5 +1,6 @@
 "use client";
 
+import { AiWriter } from "./kit/ai-writer";
 import { AppToolLayout, useToolState } from "./kit/app-tool";
 import { Field, Output, Select, TextInput } from "../tool-ui";
 
@@ -126,6 +127,7 @@ ${words <= (email ? 120 : 70) ? "✓" : "✗"} Version A is ${words} words: aim 
       }
       output={
         <>
+          <AiWriter slug="cold-dm-script-generator" values={f} />
           {scripts.map((s) => (
             <Output key={s.title} title={s.title} text={s.text} />
           ))}

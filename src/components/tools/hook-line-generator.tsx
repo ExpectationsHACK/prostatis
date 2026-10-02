@@ -2,6 +2,7 @@
 
 import { RefreshCw } from "lucide-react";
 import { btn, size } from "../ui";
+import { AiWriter } from "./kit/ai-writer";
 import { AppToolLayout, useToolState } from "./kit/app-tool";
 import { CopyButton, Field, Output, Select, TextInput } from "../tool-ui";
 
@@ -132,6 +133,7 @@ export default function HookLineGenerator() {
       }
       output={
         <>
+          <AiWriter slug="hook-line-generator" values={f} />
           <p className="border border-edge bg-brand-wash px-3 py-2 text-sm text-ink">
             <strong>{f.platform}:</strong> {platformTip[f.platform]}
           </p>

@@ -84,6 +84,8 @@ Edit or add a file in `src/content/lessons/`, register new ones in `index.ts`, a
 | `src/app/dashboard/` | Member home (progress, next lesson), billing |
 | `src/app/learn/` | The course: track overview, lessons, final assessment, certificate |
 | `src/app/api/tools/analyze/` | Live website checks for the tools (SSRF-guarded fetch, optional PageSpeed via `PAGESPEED_API_KEY`) |
+| `src/app/api/tools/ai/`, `src/lib/server/ai.ts` | Optional “Write it with AI” for 20 text tools (Claude, structured output, per-visitor and daily limits, honesty check). Off unless `ANTHROPIC_API_KEY` is set |
+| `src/app/api/tools/fx/` | Today's USD→NGN rate for the money tools (cached 6 hours) |
 
 ### Tool experience
 

@@ -4,9 +4,10 @@ import { AppToolLayout, useToolState } from "./kit/app-tool";
 import { Field, Output, Select, TextArea, TextInput } from "../tool-ui";
 
 const stacks = [
+  "Plain HTML/CSS/JS on Cloudflare Pages",
+  "HTML + Cloudflare Pages Functions + Supabase",
   "Next.js + Tailwind",
   "React + Vite",
-  "Plain HTML/CSS/JS",
   "WordPress",
   "Python (FastAPI)",
   "Python (Django)",
@@ -19,11 +20,12 @@ const initial = {
   name: "Mama Nkechi's Kitchen site",
   purpose: "A website for a Lagos food vendor that takes orders via WhatsApp and Paystack.",
   audience: "Customers in Lekki and VI ordering lunch on their phones",
+  builder: "antigravity",
   stack: stacks[0],
   brand: "Colours: primary #d9480f, background #fff4e6, text #1b1714. Fonts: Fredoka (headings), Nunito (body).",
-  commands: "npm run dev\nnpm run build\nnpm run lint",
+  commands: "Preview: open site/index.html in Chrome\nPublish: push to GitHub (Cloudflare Pages updates the site)",
   style: "Mobile-first; test at 360px wide\nKeep pages under 1MB, many users are on 3G/4G data\nPrices in naira, formatted like ₦4,500",
-  rules: "Never commit API keys or .env files\nAsk before installing new packages\nAsk before deleting files",
+  rules: "Never put API keys or passwords in the code\nAsk before adding new tools or packages\nAsk before deleting files",
   skill: "beginner",
 };
 
@@ -35,9 +37,10 @@ const examples = [
       name: "Glow Beauty Studio website",
       purpose: "A booking website for a lash studio in Lekki, with a Cal.com booking page and a Paystack deposit link.",
       audience: "Working women in Lekki and VI booking on their phones",
+      builder: "antigravity",
       stack: stacks[0],
       brand: "Colours: primary #b8336a, background #f5e6d3, text #111111. Fonts: Playfair Display (headings), Lato (body).",
-      commands: "npm run dev\nnpm run build",
+      commands: "Preview: open site/index.html in Chrome\nPublish: push to GitHub (Cloudflare Pages updates the site)",
       style: "Mobile-first; test at 360px wide\nWarm, confident tone; short sentences\nReal photos only, no stock images of people",
       rules: "Never commit API keys\nNever change prices without asking me\nAsk before adding new packages",
       skill: "beginner",
@@ -49,11 +52,12 @@ const examples = [
       name: "Bright Stars parent portal",
       purpose: "A web app where parents sign in to see their children's results and fee balances.",
       audience: "Parents of Bright Stars Academy pupils, mostly on phones",
-      stack: stacks[0],
+      builder: "claude-code",
+      stack: stacks[1],
       brand: "Colours: primary #1c6fb8, background #ffffff, text #111111. Fonts: Merriweather (headings), Source Sans 3 (body).",
-      commands: "npm run dev\nnpm run build\nnpm run test",
+      commands: "Preview: npx wrangler pages dev site\nPublish: push to GitHub (Cloudflare Pages updates the site)",
       style: "Mobile-first\nPlain English for parents; no jargon",
-      rules: "Row Level Security on every Supabase table\nThe Supabase secret key is server-only, never in browser code\nAsk before changing the database schema",
+      rules: "Row Level Security on every Supabase table\nThe Supabase secret key lives in Cloudflare's Variables and Secrets, never in browser code\nAsk before changing the database tables",
       skill: "intermediate",
     },
   },
@@ -76,6 +80,12 @@ export default function ClaudeMdGenerator() {
         ? "I can read code but I am not an expert. Briefly explain non-obvious decisions."
         : "I am an experienced developer. Be concise; skip explanations of standard patterns.";
 
+  const where = {
+    antigravity: { file: "brief.md", title: "notes/brief.md", how: "Save this as brief.md inside a notes folder in your project. Antigravity doesn't load it by itself, so start every request with: “Read the project brief first and follow it.”" },
+    "claude-code": { file: "CLAUDE.md", title: "CLAUDE.md", how: "Save this as CLAUDE.md in the main project folder. Claude Code reads it at the start of every session by itself." },
+    chat: { file: "brief.md", title: "Project brief (paste first)", how: "Keep this file with your project. In a free AI chat, paste it as your first message in every new chat, then ask for what you need." },
+  }[f.builder === "claude-code" || f.builder === "chat" ? f.builder : "antigravity"];
+
   const out = `# ${f.name || "Project"}
 
 ## What this project is
@@ -89,8 +99,8 @@ ${f.purpose || "_Describe the project in one or two sentences._"}
 ## Brand
 ${f.brand || "_Add the colours (hex codes) and the two fonts from the brand kit._"}
 
-## Commands
-${lines(f.commands).map((c) => "- `" + c + "`").join("\n") || "- _Add your run/build/test commands._"}
+## Preview and publish
+${lines(f.commands).map((c) => "- " + c).join("\n") || "- _Add how you preview and publish the site._"}
 
 ## Style & conventions
 ${lines(f.style).map((s) => "- " + s).join("\n") || "- Follow the existing code style in each file."}
@@ -99,7 +109,7 @@ ${lines(f.style).map((s) => "- " + s).join("\n") || "- Follow the existing code 
 ${lines(f.rules).map((r) => "- " + r).join("\n") || "- Ask before deleting files."}
 - Read the relevant files before editing them.
 - Make the smallest change that solves the task.
-- Keep secrets in .env.local only.
+- Keep secrets out of the code: they go in the host's settings (Cloudflare Variables and Secrets).
 
 ## How to work with me
 ${skillNote}
@@ -129,13 +139,24 @@ When we make a decision that should outlast this session (a naming convention, a
           <Field label="Who is it for?">
             <TextInput value={f.audience} onChange={set("audience")} />
           </Field>
+          <Field label="Which AI builder?" hint="Antigravity is free and the course default.">
+            <Select
+              value={f.builder}
+              onChange={set("builder")}
+              options={[
+                { value: "antigravity", label: "Google Antigravity (free)" },
+                { value: "claude-code", label: "Claude Code (paid)" },
+                { value: "chat", label: "Free AI chat + VS Code" },
+              ]}
+            />
+          </Field>
           <Field label="Tech stack">
             <Select value={f.stack} onChange={set("stack")} options={stacks} />
           </Field>
           <Field label="Brand" hint="Paste the colours and fonts from your brand kit.">
             <TextArea value={f.brand} onChange={set("brand")} />
           </Field>
-          <Field label="Commands" hint="One per line.">
+          <Field label="How to preview and publish" hint="One per line.">
             <TextArea value={f.commands} onChange={set("commands")} />
           </Field>
           <Field label="Style notes" hint="One per line.">
@@ -159,10 +180,8 @@ When we make a decision that should outlast this session (a naming convention, a
       }
       output={
         <>
-          <Output title="CLAUDE.md" text={out} filename="CLAUDE.md" />
-          <p className="text-sm text-muted">
-            Save this as <code className="font-mono">CLAUDE.md</code> in the root of your project folder (next to package.json). Claude Code reads it at the start of every session, so it remembers your project without you repeating yourself.
-          </p>
+          <Output title={where.title} text={out} filename={where.file} />
+          <p className="text-sm text-muted">{where.how} Add a line every time you catch yourself repeating an instruction.</p>
         </>
       }
     />

@@ -41,7 +41,9 @@ Before calling work done: typecheck, lint, tests and build must pass, and anythi
 | `src/lib/tools.ts`, `src/lib/tool-defs/` | Free tool registry and pure tool logic (definition-driven tools) |
 | `src/lib/tool-guides.ts` | The app wrapper for every tool: problem, steps, result, next actions |
 | `src/components/tools/kit/` | Tool engine: autosave, share links (`?in=`), examples, result bar; `app-tool.tsx` gives hand-built tools the same features |
-| `src/app/api/tools/analyze/` | Live website checks (use `safeFetch` — never fetch user URLs directly) |
+| `src/app/api/tools/analyze/` | Live website checks (use `safeFetch` — never fetch user URLs directly): page, speed (+ Chrome real-visitor data), crawl (10 pages), Google suggestions for Nigeria, domains, uptime, scraper |
+| `src/app/api/tools/ai/`, `src/lib/tool-defs/ai.ts` | Optional AI writing: per-tool specs (the server builds every prompt), honesty rules, `flagClaims()`. Off without `ANTHROPIC_API_KEY` |
+| `docs/tools-audit.md` | Per-tool research, what each tool does better, and honest gaps |
 | `src/components/art/` | Coded illustrations on a fixed 320×200 `Artboard`; `live-site.tsx` holds the six animated website mock-ups (keyframes in `globals.css`) |
 | `src/components/legal.tsx`, `(site)/privacy`, `/terms`, `/refund-policy` | Legal pages; contact from `NEXT_PUBLIC_CONTACT_EMAIL` |
 | `src/app/admin/`, `src/lib/admin/` | Admin: overview, visitors, students, student affairs, payments, certificates, blog, waitlist, audit log, setup & health. Access = signed in + email confirmed + listed in `ADMIN_EMAILS` (checked server-side on every page and action). Every change is written to `admin_audit`. |

@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState, type ComponentType } from "react";
 import type { ToolDef } from "@/lib/tool-defs/types";
+import { AiEnabled } from "./kit/ai-writer";
 
 const loading = () => <div className="h-96 animate-pulse border border-edge bg-sunk" />;
 
@@ -32,7 +33,7 @@ const pillarLoaders: Record<string, () => Promise<{ defs: Record<string, ToolDef
 
 const DefTool = dynamic(() => import("./kit/def-tool"), { loading });
 
-function PillarTool({ slug, pillar }: { slug: string; pillar: string }) {
+function PillarTool({ slug, pillar, title }: { slug: string; pillar: string; title: string }) {
   const [def, setDef] = useState<ToolDef | null | undefined>(undefined);
   useEffect(() => {
     let live = true;
@@ -43,10 +44,10 @@ function PillarTool({ slug, pillar }: { slug: string; pillar: string }) {
   }, [slug, pillar]);
   if (def === undefined) return loading();
   if (def === null) return <p className="text-muted">This tool is coming soon.</p>;
-  return <DefTool def={def} slug={slug} />;
+  return <DefTool def={def} slug={slug} title={title} />;
 }
 
-export default function ToolRenderer({ slug, pillar }: { slug: string; pillar: string }) {
+export default function ToolRenderer({ slug, pillar, title, ai = false }: { slug: string; pillar: string; title: string; ai?: boolean }) {
   const Custom = custom[slug];
-  return Custom ? <Custom /> : <PillarTool slug={slug} pillar={pillar} />;
+  return <AiEnabled value={ai}>{Custom ? <Custom /> : <PillarTool slug={slug} pillar={pillar} title={title} />}</AiEnabled>;
 }

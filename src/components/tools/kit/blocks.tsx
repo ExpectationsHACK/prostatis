@@ -2,8 +2,10 @@
 
 import { ArrowDown, Check, CircleAlert, Info, X } from "lucide-react";
 import { useEffect } from "react";
+import { fitWidth, SERP } from "@/lib/tool-defs/pixels";
 import type { Block } from "@/lib/tool-defs/types";
 import { CopyButton, Output } from "../../tool-ui";
+import { PalettePreview } from "./palette-preview";
 
 const head = "flex items-center justify-between gap-2 border-b border-edge px-4 py-2.5";
 const headTitle = "font-mono text-[11px] font-bold text-muted";
@@ -20,6 +22,30 @@ function FontLoader({ families }: { families: string[] }) {
     document.head.appendChild(link);
   }, [families]);
   return null;
+}
+
+/** Google's result cut exactly where Google cuts it: by pixel width in Arial, desktop and phone. */
+function SerpPreview({ url, title, description }: { url: string; title: string; description: string }) {
+  const t = fitWidth(title, SERP.title.max, SERP.title.px);
+  const views = [
+    { name: "Desktop", d: fitWidth(description, SERP.description.max, SERP.description.px) },
+    { name: "Phone", d: fitWidth(description, SERP.descriptionMobile.max, SERP.descriptionMobile.px) },
+  ];
+  return (
+    <div className="divide-y divide-line bg-white">
+      {views.map((v) => (
+        <div key={v.name} className="p-4" style={{ fontFamily: "Arial, Helvetica, sans-serif" }}>
+          <p className="mb-1.5 font-mono text-[10.5px] font-bold text-muted">{v.name}</p>
+          <p className="truncate text-[13px] text-[#1f6f3f]">{url}</p>
+          <p className="mt-0.5 break-words text-[20px] leading-snug text-[#1a0dab]">{t.text}</p>
+          <p className="mt-1 break-words text-[14px] leading-snug text-[#4d5156]">{v.d.text}</p>
+        </div>
+      ))}
+      <p className="px-4 py-2 font-mono text-[11px] text-muted">
+        Title {Math.round(t.width)} of {SERP.title.max}px{t.cut ? ": cut off" : " ✓"} · description {Math.round(views[0].d.width)} of {SERP.description.max}px{views[0].d.cut ? ": cut off" : " ✓"}. Measured in pixels like Google does; Google changes its layout now and then, so treat these as close guides.
+      </p>
+    </div>
+  );
 }
 
 export function BlockView({ b }: { b: Block }) {
@@ -136,12 +162,7 @@ export function BlockView({ b }: { b: Block }) {
           <div className={head}>
             <span className={headTitle}>{b.title}</span>
           </div>
-          {/* Approximates a Google result: ~600px title width, ~155 char description. */}
-          <div className="bg-white p-4 font-sans">
-            <p className="truncate text-[13px] text-[#1f6f3f]">{b.url}</p>
-            <p className="mt-0.5 line-clamp-1 max-w-[600px] text-[19px] leading-snug text-[#1a0dab]">{b.pageTitle}</p>
-            <p className="mt-1 line-clamp-2 max-w-[600px] text-[14px] leading-snug text-[#4d5156]">{b.description}</p>
-          </div>
+          <SerpPreview url={b.url} title={b.pageTitle} description={b.description} />
         </div>
       );
 
@@ -233,6 +254,9 @@ export function BlockView({ b }: { b: Block }) {
           </div>
         </div>
       );
+
+    case "preview":
+      return <PalettePreview title={b.title} name={b.name} colors={b.colors} />;
 
     case "checks": {
       const passed = b.items.filter((x) => x.ok).length;

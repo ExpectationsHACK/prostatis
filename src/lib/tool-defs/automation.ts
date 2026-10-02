@@ -71,6 +71,7 @@ const scenarioPlanner: ToolDef = {
     const plat = s(v, "platform");
     const ops = n(v, "volume") * (steps.length + 1);
     const flow = [{ label: `Trigger: ${or(s(v, "trigger"), "…")}`, detail: "Test with one real sample record first." }, ...steps.map((x) => ({ label: x, detail: /if |when |only /i.test(x) ? `Use a ${plat === "Zapier" ? "Filter/Paths" : plat === "Make" ? "Router + filter" : "IF node"} step` : undefined }))];
+    // Free plans: Make 1,000 credits a month (Make now bills in credits, formerly operations), Zapier 100 tasks.
     const freeLimit = plat === "Make" ? 1000 : plat === "Zapier" ? 100 : Infinity;
     const all = `${s(v, "trigger")} ${steps.join(" ")}`;
     const warnings: string[] = [];
@@ -80,10 +81,10 @@ const scenarioPlanner: ToolDef = {
     const blocks: Block[] = [
       { type: "flow", title: `${plat} scenario (${steps.length + 1} modules)`, steps: flow },
       ...(Number.isFinite(freeLimit)
-        ? [{ type: "notice" as const, tone: (ops <= freeLimit ? "good" : "warn") as "good" | "warn", text: ops <= freeLimit ? `About ${ops.toLocaleString()} ${plat === "Zapier" ? "tasks" : "operations"} a month: likely within ${plat}'s free plan (check the current limit).` : `About ${ops.toLocaleString()} ${plat === "Zapier" ? "tasks" : "operations"} a month: more than ${plat}'s free plan usually allows. Budget for a paid plan, reduce steps, or consider self-hosted n8n.` }]
+        ? [{ type: "notice" as const, tone: (ops <= freeLimit ? "good" : "warn") as "good" | "warn", text: ops <= freeLimit ? `About ${ops.toLocaleString()} ${plat === "Zapier" ? "tasks" : plat === "Make" ? "credits" : "operations"} a month: likely within ${plat}'s free plan (check the current limit).` : `About ${ops.toLocaleString()} ${plat === "Zapier" ? "tasks" : plat === "Make" ? "credits" : "operations"} a month: more than ${plat}'s free plan usually allows. Budget for a paid plan, reduce steps, or consider self-hosted n8n.` }]
         : []),
       ...warnings.map((text) => ({ type: "notice" as const, tone: "warn" as const, text })),
-      { type: "stats", items: [{ label: plat === "Zapier" ? "Tasks / month" : plat === "Make" ? "Operations / month" : "Executions", value: ops.toLocaleString(), sub: plat === "n8n" ? "self-hosted: no per-run cost" : "check your plan's limit" }, { label: "Modules", value: String(steps.length + 1) }] },
+      { type: "stats", items: [{ label: plat === "Zapier" ? "Tasks / month" : plat === "Make" ? "Credits / month" : "Executions", value: ops.toLocaleString(), sub: plat === "n8n" ? "self-hosted: no per-run cost" : "check your plan's limit" }, { label: "Modules", value: String(steps.length + 1) }] },
       { type: "list", title: "Before you switch it on", items: [
         "Map every field explicitly (name, phone, amount, order ID), don't rely on defaults.",
         "Format phone numbers to +234… before sending WhatsApp messages.",

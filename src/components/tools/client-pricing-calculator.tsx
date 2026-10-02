@@ -1,6 +1,7 @@
 "use client";
 
 import { DEFAULT_NGN_PER_USD } from "@/lib/models";
+import { RateHint } from "./kit/live-rate";
 import { formatNgn, formatUsd } from "@/lib/site";
 import { AppToolLayout, useToolState } from "./kit/app-tool";
 import { Field, Output, TextInput } from "../tool-ui";
@@ -88,6 +89,7 @@ Based on: ${formatNgn(num(goal))}/month take-home goal, ${Math.round(billableHou
           </div>
           <Field label="Exchange rate (₦ per $1)">
             <TextInput inputMode="numeric" value={rate} onChange={(e) => setRate(e.target.value)} />
+            <RateHint current={num(rate)} onUse={(r) => setRate(String(r))} />
           </Field>
         </>
       }

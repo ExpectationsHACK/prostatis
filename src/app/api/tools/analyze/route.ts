@@ -1,5 +1,7 @@
 import * as cheerio from "cheerio";
+import { CRAWL_MAX, internalLinks, pickPages, sitemapUrls, type CrawlPage } from "@/lib/tool-defs/crawl";
 import { extractPage } from "@/lib/tool-defs/page-facts";
+import { suggestQueries, type SuggestMode } from "@/lib/tool-defs/suggest";
 import { FetchRejected, normaliseUrl, rateLimited, safeFetch } from "@/lib/server/safe-fetch";
 
 export const maxDuration = 60;
@@ -66,7 +68,11 @@ async function pagespeed(url: string) {
   for (const c of ["performance", "seo", "accessibility", "best-practices"]) api.searchParams.append("category", c);
   api.searchParams.set("key", key);
   const r = await fetch(api, { signal: AbortSignal.timeout(55_000) });
-  if (!r.ok) return { error: `Google PageSpeed returned ${r.status}` };
+  if (!r.ok) {
+    // Google explains failures (e.g. "Lighthouse returned error: NO_FCP"); show the useful part.
+    const msg = String((await r.json().catch(() => null))?.error?.message ?? "").replace(/\s+/g, " ").slice(0, 160);
+    return { error: msg ? `Google's test couldn't finish (${msg})` : `Google PageSpeed returned ${r.status}` };
+  }
   const j = await r.json();
   const lh = j.lighthouseResult;
   const a = lh?.audits ?? {};
@@ -76,7 +82,17 @@ async function pagespeed(url: string) {
     .sort((x, y) => (y.details?.overallSavingsMs ?? 0) - (x.details?.overallSavingsMs ?? 0))
     .slice(0, 6)
     .map((x) => ({ title: x.title, saving: x.displayValue ?? "" }));
+  // Real-visitor data (Chrome UX Report, last 28 days): the page's own if Google has enough, else the whole site's.
+  type Metric = { percentile?: number; category?: string };
+  const le = j.loadingExperience?.metrics ? j.loadingExperience : j.originLoadingExperience;
+  const m = (le?.metrics ?? {}) as Record<string, Metric>;
+  const pick = (k: string, scale = 1) => (m[k]?.percentile !== undefined ? { p75: m[k].percentile! / scale, category: m[k].category ?? "" } : null);
+  const field = le?.metrics
+    ? { scope: j.loadingExperience?.metrics && !j.loadingExperience?.origin_fallback ? ("page" as const) : ("site" as const), lcp: pick("LARGEST_CONTENTFUL_PAINT_MS"), inp: pick("INTERACTION_TO_NEXT_PAINT"), cls: pick("CUMULATIVE_LAYOUT_SHIFT_SCORE", 100), overall: String(le.overall_category ?? "") }
+    : null;
   return {
+    field,
+    totalBytes: Number(a["total-byte-weight"]?.numericValue) || null,
     scores: { performance: score("performance"), seo: score("seo"), accessibility: score("accessibility"), bestPractices: score("best-practices") },
     metrics: {
       fcp: a["first-contentful-paint"]?.displayValue ?? "",
@@ -131,6 +147,76 @@ async function speed(url: string) {
     lighthouse,
     lighthouseEnabled: !!process.env.PAGESPEED_API_KEY,
   };
+}
+
+// ---------- search suggestions: real phrases from Google's autocomplete for Nigeria ----------
+async function suggest(service: string, location: string, mode: SuggestMode) {
+  const queries = suggestQueries(service, location, mode);
+  if (!queries.length) throw new FetchRejected("Enter a service or product first.");
+  const results = await pool(queries, 4, async (q) => {
+    const api = new URL("https://suggestqueries.google.com/complete/search");
+    for (const [k, val] of Object.entries({ client: "firefox", hl: "en", gl: "ng", ie: "utf-8", oe: "utf-8", q })) api.searchParams.set(k, val);
+    try {
+      const r = await fetch(api, { signal: AbortSignal.timeout(6000), headers: { "User-Agent": "Mozilla/5.0 (compatible; STEINARK-Tools/1.0)" } });
+      const j = await r.json();
+      return { query: q, suggestions: Array.isArray(j?.[1]) ? (j[1] as unknown[]).filter((x): x is string => typeof x === "string").slice(0, 10) : [] };
+    } catch {
+      return { query: q, suggestions: [] };
+    }
+  });
+  if (results.every((r) => !r.suggestions.length)) throw new FetchRejected("Google's suggestions didn't load. Try again in a minute.");
+  return { seed: service.trim(), location: location.trim(), mode, results };
+}
+
+// ---------- crawl: up to 10 pages of a site, checked together ----------
+async function crawl(url: string) {
+  const home = await safeFetch(url);
+  let source: "sitemap" | "links" = "links";
+  let candidates: string[] = [];
+  try {
+    const sm = await safeFetch(new URL("/sitemap.xml", home.url).toString(), { maxBytes: 1_000_000 });
+    let locs = sm.status === 200 ? sitemapUrls(sm.body) : [];
+    // A sitemap index lists more sitemaps: read the first one.
+    if (locs.length && locs.every((l) => /\.xml($|\?)/i.test(l))) {
+      const child = await safeFetch(locs[0], { maxBytes: 1_000_000 });
+      locs = child.status === 200 ? sitemapUrls(child.body) : [];
+    }
+    if (locs.length) {
+      candidates = locs;
+      source = "sitemap";
+    }
+  } catch {
+    /* no sitemap: fall back to links */
+  }
+  if (!candidates.length) candidates = internalLinks(home.body, home.url);
+  const urls = pickPages(home.url, candidates, CRAWL_MAX);
+  const bodies = new Map<string, string>([[home.url, home.body]]);
+  const pages: CrawlPage[] = await pool(urls, 3, async (u) => {
+    try {
+      const r = u === home.url ? home : await safeFetch(u, { maxBytes: 2_000_000 });
+      bodies.set(u, r.body);
+      const f = extractPage(r.body, r.url);
+      return { url: u, status: r.status, ms: r.ms, title: f.title, description: f.description, h1: f.h1s.length, words: f.wordCount, noindex: f.noindex, canonical: f.canonical };
+    } catch (e) {
+      return { url: u, status: 0, ms: 0, title: "", description: "", h1: 0, words: 0, noindex: false, canonical: false, error: e instanceof FetchRejected ? e.message : "failed" };
+    }
+  });
+  // Links found on the crawled pages that we didn't crawl: check they still work.
+  const crawled = new Set(urls.map((u) => u.replace(/\/$/, "")));
+  const linkFrom = new Map<string, string>();
+  for (const [from, body] of bodies) for (const l of internalLinks(body, from)) if (!crawled.has(l.replace(/\/$/, "")) && !linkFrom.has(l)) linkFrom.set(l, from);
+  const toCheck = [...linkFrom.keys()].slice(0, 30);
+  const statuses = await pool(toCheck, 6, async (l) => {
+    try {
+      const r = await safeFetch(l, { method: "HEAD" });
+      // Some servers refuse HEAD: confirm with a small GET before calling it broken.
+      return r.status === 405 || r.status === 403 ? (await safeFetch(l, { maxBytes: 50_000 })).status : r.status;
+    } catch {
+      return 0;
+    }
+  });
+  const broken = toCheck.map((l, i) => ({ url: l, status: statuses[i], from: linkFrom.get(l)! })).filter((b) => b.status === 0 || b.status >= 400);
+  return { start: home.url, source, pages, broken, linksChecked: toCheck.length };
 }
 
 // ---------- domain availability via RDAP ----------
@@ -219,6 +305,10 @@ export async function POST(req: Request) {
         return Response.json(await domains(Array.isArray(body.names) ? (body.names as string[]) : []));
       case "uptime":
         return Response.json(await uptime(url));
+      case "suggest":
+        return Response.json(await cached(`suggest:${body.mode}:${body.service}:${body.location}`.toLowerCase(), () => suggest(String(body.service ?? ""), String(body.location ?? ""), body.mode === "questions" ? "questions" : "all")));
+      case "crawl":
+        return Response.json(await cached(`crawl:${url}`, () => crawl(url)));
       case "scrape":
         return Response.json(await scrape({ url, item: String(body.item ?? ""), fields: Array.isArray(body.fields) ? (body.fields as { name: string; selector: string; attr: string }[]) : [] }));
       default:

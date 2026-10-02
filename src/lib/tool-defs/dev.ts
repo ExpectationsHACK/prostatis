@@ -4,7 +4,7 @@ import { lines, n, opts, or, s, slugify, type Block, type ToolDef, type Values }
 // ---------- Tech Stack Picker ----------
 const techStack: ToolDef = {
   kind: "generator",
-  intro: "Answer six questions about the project. You get the stack, what it costs each month (and who pays), and a kick-off prompt for your AI.",
+  intro: "Answer six questions about the project. You get the stack (free tools first, the same ones the course teaches), what it costs each month and who pays, and a kick-off prompt for your AI builder.",
   examples: [
     { label: "Salon website (client)", values: { type: "Booking site", who: "A paying client", skill: "Beginner (AI writes the code)", edits: "Sometimes", payments: "Paystack", traffic: "Under 10k" } },
     { label: "My portfolio", values: { type: "Business website", who: "Me (practice / portfolio)", skill: "Beginner (AI writes the code)", edits: "No", payments: "None", traffic: "Under 10k" } },
@@ -25,34 +25,43 @@ const techStack: ToolDef = {
     const app = /app|dashboard|portal/i.test(type);
     const store = /store/i.test(type);
     const booking = /booking/i.test(type);
+    // Next.js only when someone can maintain it and the project has many logged-in screens; otherwise plain files.
+    const next = app && s(v, "skill") === "Comfortable coding";
     const rows: string[][] = [];
-    rows.push(["Framework", app || !beginner ? "Next.js (App Router) + TypeScript" : "Next.js (App Router)", "AI coding tools write it well; one project for pages and server code"]);
-    rows.push(["Styling", "Tailwind CSS", "Fast to build, easy for AI to edit, small CSS"]);
-    if (app) rows.push(["Logins + database", "Supabase", "Sign-in, a Postgres database and file storage; Row Level Security keeps each user's data private"]);
-    if (edits === "Yes, often") rows.push(["Content editing", beginner ? "A simple admin page (Supabase) or a hosted CMS such as Sanity" : "Sanity or Payload CMS", "The client updates text, prices and photos without calling you"]);
-    if (edits === "Sometimes") rows.push(["Content editing", "Content in simple files; you make changes on a care plan", "Cheapest and safest when changes are rare"]);
-    if (booking) rows.push(["Bookings", "Cal.com embed + a Paystack deposit link (custom build only if needed)", "Reliable in an hour; upgrade later if the business outgrows it"]);
-    if (store) rows.push(["Store", beginner ? "Next.js + Paystack checkout (up to ~50 products) or Paystack Storefront / Shopify (many products)" : "Next.js + Supabase products + Paystack", "Pick by product count and who manages stock"]);
-    if (pay !== "None") rows.push(["Payments", pay === "Both" ? "Paystack (naira) + Stripe (dollars)" : pay, pay === "Stripe" ? "Cards in USD and other currencies" : "Card, bank transfer and USSD in naira; verify every payment on the server"]);
-    rows.push(["Forms + email", "Formspree (simple) or Resend (from your own server)", "Contact forms that actually arrive in the inbox"]);
-    rows.push(["Hosting", client ? "Vercel Pro: or a host whose free plan allows business use" : "Vercel Hobby (free)", client ? "Vercel's free Hobby plan is for personal, non-commercial projects only" : "Free for personal and portfolio projects"]);
-    rows.push(["Domain", "Registered in the client's name: .com.ng / .ng from a NiRA-accredited registrar, .com from any registrar", "The domain is the client's asset"]);
-    rows.push(["Analytics", "Vercel Web Analytics or Plausible", "Privacy-friendly visitor counts for your monthly report"]);
+    rows.push(["Code", next ? "Next.js + TypeScript" : "Plain HTML, CSS and a little JavaScript", next ? "Many logged-in screens are easier to manage in a framework" : "Nothing to install or update; your AI builder (Antigravity, free) writes it and any host can serve it"]);
+    rows.push(["Styling", next ? "Tailwind CSS" : "One style.css file", next ? "Fast to build and easy for AI to edit" : "Simple, light on mobile data, and easy to change later"]);
+    if (app) rows.push(["Logins + database", "Supabase", "Sign-in, a database and file storage; Row Level Security keeps each user's data private"]);
+    if (app && !next) rows.push(["Server code", "Cloudflare Pages Functions", "Small server files beside the site for the jobs that must stay secret (keys, payment checks)"]);
+    if (edits === "Yes, often") rows.push(["Content editing", app ? "A simple admin page backed by Supabase" : "A Google Sheet the site reads, or a small Supabase admin page", "The client updates prices and photos without calling you"]);
+    if (edits === "Sometimes") rows.push(["Content editing", "You make the changes on a monthly care plan", "Cheapest and safest when changes are rare, and it's steady income for you"]);
+    if (booking) rows.push(["Bookings", "Cal.com (free plan) embed + a Paystack deposit link", "Reliable in an hour; a custom booking system only if the business outgrows it"]);
+    if (store) rows.push(["Store", "A few products: product pages with Paystack Payment Page links. Many products: Paystack Storefront", "Both are free to set up; Paystack only takes a fee per sale"]);
+    if (pay !== "None") rows.push(["Payments", pay === "Both" ? "Paystack (naira) + Stripe (dollars)" : pay, pay === "Stripe" ? "Cards in USD and other currencies (needs a supported business entity)" : "Card, bank transfer and USSD in naira. Use Payment Pages first; verify payments on the server once you build your own checkout"]);
+    rows.push(["Forms", "Web3Forms (free plan)", "Contact and quote forms that land in the owner's email, with no server to run"]);
+    rows.push(["Hosting", "Cloudflare Pages (free plan)", "Free for business sites too, fast across Nigeria, HTTPS included"]);
+    rows.push(["Domain", "In the client's name: .com.ng / .ng from a NiRA-accredited registrar, .com from any registrar", "The domain is the client's asset"]);
+    rows.push(["Analytics", "Cloudflare Web Analytics (free)", "Visitor counts for your monthly report without cookie banners"]);
 
     const costs: string[][] = [["Domain", "₦5,000–₦25,000 / year", "Client"]];
-    costs.push(["Hosting", client ? "Vercel Pro ≈ $20 / month per team member (or the chosen host's price)" : "$0 on Hobby", client ? "Client" : "You"]);
-    if (app) costs.push(["Supabase", client ? "Pro ≈ $25 / month (free projects pause after a quiet week)" : "Free tier", client ? "Client" : "You"]);
-    if (pay !== "None") costs.push(["Payments", "No monthly fee; Paystack takes a small fee per transaction (see paystack.com/pricing)", "Client"]);
-    if (edits === "Yes, often" && !beginner) costs.push(["CMS", "Free tier to start; check limits", "Client"]);
-    costs.push(["Your care plan", "Your monthly fee for updates and monitoring", "Client"]);
+    costs.push(["Hosting", "$0 on Cloudflare Pages' free plan", client ? "Client's account (free)" : "You (free)"]);
+    if (app) costs.push(["Supabase", "Free to start. Free projects pause after a week with no activity, so move to Pro (about $25 / month) once the business depends on it", client ? "Client" : "You"]);
+    if (pay !== "None") costs.push(["Payments", "No monthly fee; Paystack takes a fee per transaction (paystack.com/pricing)", "Client"]);
+    if (booking) costs.push(["Bookings", "$0 on Cal.com's free plan", "Client"]);
+    costs.push(["Forms", "$0 on Web3Forms' free plan (check its monthly limit)", "Client"]);
+    if (client) costs.push(["Your care plan", "Your monthly fee for updates and monitoring", "Client"]);
 
     const blocks: Block[] = [
       { type: "table", title: `Recommended stack: ${type}`, columns: ["Layer", "Pick", "Why"], rows },
       { type: "table", title: "Monthly running costs: put these in your proposal", columns: ["Item", "Cost (check current prices)", "Who pays"], rows: costs },
-      { type: "stats", items: [{ label: "First version with AI", value: app ? "1–2 weeks" : store ? "4–7 days" : booking ? "2–4 days" : "2–4 days", sub: beginner ? "at a beginner's pace" : "for a first version" }, { label: "Accounts owned by", value: client ? "The client" : "You", sub: client ? "add yourself as a team member" : "" }] },
-      { type: "text", title: "Kick-off prompt for your AI", text: `Create a new ${rows[0][1]} project for a ${type.toLowerCase()}. Use: ${rows.slice(1).map((r) => `${r[0]}: ${r[1]}`).join("; ")}. Start with the folder structure, a mobile-first layout, a CLAUDE.md with these decisions, and a README with setup steps. Keep secrets in .env.local only.` },
+      { type: "stats", items: [{ label: "First version with AI", value: app ? "1–2 weeks" : store ? "4–7 days" : "2–4 days", sub: beginner ? "at a beginner's pace" : "for a first version" }, { label: "Accounts owned by", value: client ? "The client" : "You", sub: client ? "you're added as a helper" : "" }] },
+      {
+        type: "text",
+        title: "Kick-off prompt for your AI builder",
+        text: `Read the project brief first and follow it.\nCreate a new ${type.toLowerCase()} project. Use: ${rows.map((r) => `${r[0]}: ${r[1]}`).join("; ")}.\nStart with the folder structure (site/ for the pages${app && !next ? ", functions/ beside it for server code" : ""}), a mobile-first layout, and a README with setup steps. Add these decisions to the project brief (notes/brief.md, or CLAUDE.md if you use Claude Code). Keep secrets out of the code: they go in Cloudflare's Variables and Secrets.`,
+      },
     ];
-    if (client) blocks.push({ type: "notice", tone: "warn", text: "Paid client work is commercial use. Don't host it on Vercel's free Hobby plan: use Pro, or a host whose free plan allows business sites (check its terms)." });
+    if (next) blocks.push({ type: "notice", tone: "info", text: "Next.js on Cloudflare needs its OpenNext adapter; Vercel is simpler for Next.js, but its free Hobby plan is for non-commercial use only, so paid client work there needs Pro." });
+    if (client) blocks.push({ type: "notice", tone: "good", text: "Cloudflare Pages' free plan allows business sites, so the client pays nothing for hosting. Create the accounts in the client's name (or hand them over at launch) and keep yourself as a helper." });
     return blocks;
   },
 };
@@ -124,7 +133,7 @@ const debugPrompt: ToolDef = {
   kind: "generator",
   intro: "Paste the exact error and what you were doing. You get a debugging prompt that gives the AI everything it needs, plus hints for common errors.",
   examples: [
-    { label: "Form won't send", values: { stack: "Next.js, Tailwind, Formspree", expected: "Contact form sends and shows 'Thanks!'", actual: "Button spins forever, nothing arrives", error: "Error: fetch failed\n  at POST (app/api/contact/route.ts:14:5)", tried: "Restarted the dev server", files: "app/api/contact/route.ts, components/ContactForm.tsx" } },
+    { label: "Form won't send", values: { stack: "HTML, CSS, Web3Forms, Cloudflare Pages", expected: "Contact form sends and shows 'Thanks!'", actual: "Button spins forever, nothing arrives", error: "Error: fetch failed\n  at POST (app/api/contact/route.ts:14:5)", tried: "Restarted the dev server", files: "app/api/contact/route.ts, components/ContactForm.tsx" } },
     { label: "Supabase insert blocked", values: { stack: "Next.js, Supabase", expected: "Saving a booking adds a row", actual: "Nothing is saved", error: "new row violates row-level security policy for table \"bookings\"", tried: "Checked the table exists", files: "app/book/actions.ts, supabase/migrations" } },
     { label: "Module not found", values: { stack: "Next.js, Tailwind", expected: "The site starts with npm run dev", actual: "The page shows an error", error: "Module not found: Can't resolve '@/components/Hero'", tried: "", files: "app/page.tsx" } },
   ],
@@ -178,7 +187,7 @@ Please:
     out.push(
       missing.length
         ? { type: "notice", tone: "warn", text: `Add ${missing.join(", ")}: the AI finds the real cause much faster with them.` }
-        : { type: "notice", tone: "good", text: "Good prompt: exact error, expected result and files. Paste it into Claude Code and let it explain the cause before it changes anything." },
+        : { type: "notice", tone: "good", text: "Good prompt: exact error, expected result and files. Paste it into your AI builder (Antigravity, Claude Code or a free chat) and let it explain the cause before it changes anything." },
     );
     out.push({ type: "list", title: "After the fix", items: ["Test the exact thing that was broken.", "Test one thing next to it (fixes sometimes break neighbours).", "Commit with a message like “fix: contact form sends”."] });
     return out;
@@ -206,10 +215,10 @@ const speedChecklist: ToolDef = {
       { id: "js", weight: 3, text: "Total JavaScript on the home page under 200KB", fix: "Remove unused libraries, sliders and popups; check the Coverage tab." },
       { id: "fonts", weight: 2, text: "Max 2 font families, only used weights, font-display: swap", fix: "Drop extra weights; self-host with next/font." },
       { id: "third", weight: 2, text: "No heavy third-party widgets above the fold", fix: "Load chat widgets and embeds after interaction or on idle." },
-      { id: "cache", weight: 1, text: "Static files cached with long cache headers", fix: "Vercel/Netlify do this automatically; check your host." },
+      { id: "cache", weight: 1, text: "Static files cached with long cache headers", fix: "Cloudflare Pages does this automatically; on other hosts, check the caching settings." },
     ] },
     { title: "Server & delivery", checks: [
-      { id: "cdn", weight: 2, text: "Served through a CDN (Vercel, Netlify, Cloudflare)", fix: "Put the site behind Cloudflare or host on Vercel/Netlify." },
+      { id: "cdn", weight: 2, text: "Served through a CDN (a worldwide network, e.g. Cloudflare)", fix: "Host on Cloudflare Pages (free, allows business sites) or put the site behind Cloudflare." },
       { id: "ttfb", weight: 2, text: "Server responds in under 600ms", fix: "Use static pages where possible; cache database queries." },
       { id: "https", weight: 1, text: "HTTPS with HTTP/2 or HTTP/3", fix: "Modern hosts enable this: confirm in the browser's network tab." },
     ] },

@@ -9,4 +9,5 @@ export const modelPrices = [
   { id: "claude-fable-5-1", name: "Claude Fable 5.1", input: 10, output: 50, note: "Most capable: reserve for the hardest problems" },
 ] as const;
 
-export const DEFAULT_NGN_PER_USD = 1550;
+// Used only until today's rate loads (the money tools fetch it live). Market rate 1 Oct 2026: about ₦1,329.
+export const DEFAULT_NGN_PER_USD = 1330;
