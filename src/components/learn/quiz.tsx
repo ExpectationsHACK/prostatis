@@ -2,7 +2,7 @@
 
 import { Check, Flame, RotateCcw, Sparkles, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { startTransition, useState } from "react";
 import { submitFinal, submitQuiz, type ActionResult } from "@/app/learn/actions";
 import { btn, size } from "@/components/ui";
 import { Celebrate } from "./celebrate";
@@ -35,20 +35,26 @@ export function Quiz({
   const [picked, setPicked] = useState<(number | null)[]>(() => questions.map(() => null));
   const [result, setResult] = useState<Extract<ActionResult, { ok: true }> | null>(null);
   const [error, setError] = useState("");
-  const [pending, start] = useTransition();
+  const [pending, setPending] = useState(false);
   const graded = result?.graded;
   const need = Math.ceil(questions.length * passMark);
   const answered = picked.filter((p) => p !== null).length;
 
-  function submit() {
+  async function submit() {
     setError("");
-    start(async () => {
+    setPending(true);
+    try {
       const answers = picked.map((p) => p ?? -1);
       const r = day === undefined ? await submitFinal(slug, answers) : await submitQuiz(slug, day, answers);
       if (!r.ok) return setError(r.error);
       setResult(r);
-      router.refresh();
-    });
+      // Show the marks straight away; the rest of the page catches up in the background.
+      startTransition(() => router.refresh());
+    } catch {
+      setError("Couldn't send your answers. Check your connection and try again: your choices are still here.");
+    } finally {
+      setPending(false);
+    }
   }
 
   function retry() {

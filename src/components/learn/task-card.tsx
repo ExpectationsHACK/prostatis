@@ -2,21 +2,42 @@
 
 import { Check, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { startTransition, useState } from "react";
 import { completeTask } from "@/app/learn/actions";
 import type { ActionResult } from "@/app/learn/actions";
 import { btn, size } from "@/components/ui";
 import { Celebrate } from "./celebrate";
 
 /** The practical task's done-checklist. Every box must be ticked before it can be confirmed. */
-export function TaskCheck({ slug, day, done: items, confirmed, celebrate }: { slug: string; day: number; done: string[]; confirmed: boolean; celebrate?: { title: string; proved: string } }) {
+export function TaskCheck({ slug, day, done: items, confirmed: savedBefore, celebrate }: { slug: string; day: number; done: string[]; confirmed: boolean; celebrate?: { title: string; proved: string } }) {
   const router = useRouter();
-  const [ticked, setTicked] = useState<boolean[]>(() => items.map(() => confirmed));
+  const [ticked, setTicked] = useState<boolean[]>(() => items.map(() => savedBefore));
   const [gained, setGained] = useState<number | null>(null);
   const [result, setResult] = useState<Extract<ActionResult, { ok: true }> | null>(null);
   const [error, setError] = useState("");
-  const [pending, start] = useTransition();
+  const [pending, setPending] = useState(false);
+  const [savedNow, setSavedNow] = useState(false);
+  const confirmed = savedBefore || savedNow;
   const all = ticked.every(Boolean);
+
+  async function confirm() {
+    setPending(true);
+    setError("");
+    try {
+      const r = await completeTask(slug, day);
+      if (!r.ok) return setError(r.error);
+      setGained(r.xpGained);
+      setResult(r);
+      setSavedNow(true);
+      // Refresh the rest of the page (progress, next steps) in the background: the button
+      // shows "confirmed" as soon as the save succeeds, even on a slow connection.
+      startTransition(() => router.refresh());
+    } catch {
+      setError("Couldn't save. Check your connection and try again: your ticks are still here.");
+    } finally {
+      setPending(false);
+    }
+  }
 
   return (
     <div>
@@ -47,16 +68,7 @@ export function TaskCheck({ slug, day, done: items, confirmed, celebrate }: { sl
           type="button"
           disabled={!all || pending}
           className={`${btn.accent} ${size.md} mt-4 disabled:opacity-50`}
-          onClick={() =>
-            start(async () => {
-              setError("");
-              const r = await completeTask(slug, day);
-              if (!r.ok) return setError(r.error);
-              setGained(r.xpGained);
-              setResult(r);
-              router.refresh();
-            })
-          }
+          onClick={confirm}
         >
           <Sparkles className="size-4" aria-hidden /> {pending ? "Saving…" : "I've done the task"}
         </button>
