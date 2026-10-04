@@ -5,7 +5,7 @@ import { site } from "@/lib/site";
 import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
 
 /**
- * STEINARK-branded account emails (confirm, reset, sign-in link). We ask Supabase for the
+ * Prostatis-branded account emails (confirm, reset, sign-in link). We ask Supabase for the
  * secure token with the secret key, then send our own email through Resend, so nothing says
  * "Supabase". Used once EMAIL_FROM is on a verified domain; until then the caller falls back
  * to Supabase's own mailer.

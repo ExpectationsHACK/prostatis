@@ -1,4 +1,4 @@
-// Branded STEINARK emails: one table-based layout that works in Gmail, Outlook and phone
+// Branded Prostatis emails: one table-based layout that works in Gmail, Outlook and phone
 // mail apps, plus the auth, welcome and newsletter messages built on it. Pure functions
 // (tested in email-templates.test.ts).
 import { site } from "./site";
@@ -22,8 +22,8 @@ export function layout(o: { preheader: string; heading: string; bodyHtml: string
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px">
 <tr><td style="padding:0 4px 18px">
   <table role="presentation" cellspacing="0" cellpadding="0"><tr>
-    <td style="background:${C.orange};border-radius:9px;width:34px;height:34px;text-align:center;font:700 15px ${FONT};color:${C.ink}">[✦]</td>
-    <td style="padding-left:10px;font:700 18px ${FONT};letter-spacing:.5px;color:${C.ink}">STEINARK</td>
+    <td style="width:36px;height:36px"><img src="${esc(site.url)}/brand/prostatis-mark-email.png" width="36" height="36" alt="" style="display:block;border:0"></td>
+    <td style="padding-left:10px;font:700 19px ${FONT};color:${C.ink}">${esc(site.name)}</td>
   </tr></table>
 </td></tr>
 <tr><td style="background:${C.card};border:2px solid ${C.ink};border-radius:16px;padding:30px 28px;box-shadow:4px 4px 0 ${C.ink}">
@@ -35,7 +35,7 @@ export function layout(o: { preheader: string; heading: string; bodyHtml: string
   </table>
 </td></tr>
 <tr><td style="padding:18px 6px 0;font:400 12.5px/1.6 ${FONT};color:${C.muted}">
-  ${o.footerHtml ?? ""}${o.footerHtml ? "<br>" : ""}STEINARK · Learn to build websites with AI and turn it into a source of income.<br><a href="${esc(site.url)}" style="color:${C.muted}">${esc(site.url.replace(/^https?:\/\//, ""))}</a>
+  ${o.footerHtml ?? ""}${o.footerHtml ? "<br>" : ""}${esc(site.byline)} · Learn to build websites with AI and turn it into a source of income.<br><a href="${esc(site.url)}" style="color:${C.muted}">${esc(site.url.replace(/^https?:\/\//, ""))}</a>
 </td></tr>
 </table></td></tr></table></body></html>`;
 }
@@ -49,24 +49,24 @@ export function authEmail(kind: AuthKind, link: string, name = ""): Email {
   const hi = name ? `Hi ${esc(name.split(" ")[0])},` : "Hi,";
   const copy = {
     signup: {
-      subject: "Confirm your email to start with STEINARK",
+      subject: `Confirm your email to start with ${site.name}`,
       heading: "Confirm your email",
       preheader: "One tap and your account is ready.",
-      body: p(hi) + p("Thanks for joining STEINARK. Tap the button below to confirm your email address and finish setting up your account."),
+      body: p(hi) + p(`Thanks for joining ${site.name}. Tap the button below to confirm your email address and finish setting up your account.`),
       cta: "Confirm my email",
       after: "Didn't create an account? You can ignore this email and nothing will happen.",
     },
     recovery: {
-      subject: "Reset your STEINARK password",
+      subject: `Reset your ${site.name} password`,
       heading: "Reset your password",
       preheader: "Choose a new password in a minute.",
-      body: p(hi) + p("Someone asked to reset the password for your STEINARK account. If that was you, tap the button below to choose a new one. The link works once."),
+      body: p(hi) + p(`Someone asked to reset the password for your ${site.name} account. If that was you, tap the button below to choose a new one. The link works once.`),
       cta: "Set a new password",
       after: "Didn't ask for this? Ignore this email and your password stays the same.",
     },
     magiclink: {
-      subject: "Your STEINARK sign-in link",
-      heading: "Sign in to STEINARK",
+      subject: `Your ${site.name} sign-in link`,
+      heading: `Sign in to ${site.name}`,
       preheader: "Tap to sign in, no password needed.",
       body: p(hi) + p("Tap the button below to sign in. The link works once and only on the device you open it on."),
       cta: "Sign me in",
@@ -74,7 +74,7 @@ export function authEmail(kind: AuthKind, link: string, name = ""): Email {
     },
   }[kind];
   const html = layout({ preheader: copy.preheader, heading: copy.heading, bodyHtml: copy.body, cta: { label: copy.cta, url: link }, afterHtml: `${copy.after}<br><br>Button not working? Paste this link into your browser:<br><a href="${esc(link)}" style="color:#5f5b53;word-break:break-all">${esc(link)}</a>` });
-  const text = `${copy.heading}\n\n${hi}\n\n${copy.body.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim()}\n\n${copy.cta}: ${link}\n\n${copy.after}\n\nSTEINARK`;
+  const text = `${copy.heading}\n\n${hi}\n\n${copy.body.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim()}\n\n${copy.cta}: ${link}\n\n${copy.after}\n\n${site.byline}`;
   return { subject: copy.subject, html, text };
 }
 
@@ -88,9 +88,9 @@ export function welcomeEmail(unsubscribeUrl: string): Email {
     p("Thanks for subscribing. You'll get one short email when we ship something worth your time: new free tools, practical guides on building and selling websites with AI, and the occasional course update.") +
     p("While you're here, the free tools are ready to use, no signup needed.");
   return {
-    subject: "You're subscribed to STEINARK",
+    subject: `You're subscribed to ${site.name}`,
     html: layout({ preheader: "Short, useful emails. No spam.", heading: "You're in.", bodyHtml: body, cta: { label: "Try the free tools", url: `${site.url}/tools` }, footerHtml: unsubscribeFooter(unsubscribeUrl) }),
-    text: `You're in.\n\nThanks for subscribing to STEINARK. You'll get one short email when we ship something worth your time.\n\nTry the free tools: ${site.url}/tools\n\nUnsubscribe: ${unsubscribeUrl}`,
+    text: `You're in.\n\nThanks for subscribing to ${site.name}. You'll get one short email when we ship something worth your time.\n\nTry the free tools: ${site.url}/tools\n\nUnsubscribe: ${unsubscribeUrl}`,
   };
 }
 

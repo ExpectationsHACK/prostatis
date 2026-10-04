@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { OgCard, ogSize } from "@/lib/og-card";
 
-export const alt = "STEINARK: Learn to build websites with AI and turn it into a source of income.";
+export const alt = "Prostatis by Stynark: Learn to build websites with AI and turn it into a source of income.";
 export const size = ogSize;
 export const contentType = "image/png";
 

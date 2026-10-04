@@ -21,9 +21,9 @@ describe("analytics", () => {
   });
 
   it("keeps only referrer hosts and treats our own site as direct", () => {
-    expect(referrerHost("https://www.google.com/search?q=x", "steinark.com")).toBe("Google");
+    expect(referrerHost("https://www.google.com/search?q=x", "prostatis.com")).toBe("Google");
     expect(referrerHost("https://l.facebook.com/l.php?u=x", "x.com")).toBe("Facebook");
-    expect(referrerHost("https://steinark.com/tools", "steinark.com")).toBeNull();
+    expect(referrerHost("https://prostatis.com/tools", "prostatis.com")).toBeNull();
     expect(referrerHost("https://blog.example.org/post?id=1", "x.com")).toBe("blog.example.org");
     expect(referrerHost("not a url", "x.com")).toBeNull();
   });

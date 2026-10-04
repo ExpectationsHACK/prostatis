@@ -18,7 +18,7 @@ const KINDS: Record<string, string> = {
 
 // Ready-made WhatsApp nudges, so following up takes seconds.
 const NUDGE: Record<string, (first: string) => string> = {
-  not_started: (n) => `Hi ${n}! Welcome to STEINARK. Your first lesson is waiting: it takes about an hour. Need help getting started?`,
+  not_started: (n) => `Hi ${n}! Welcome to Prostatis. Your first lesson is waiting: it takes about an hour. Need help getting started?`,
   inactive: (n) => `Hi ${n}! We noticed you've paused the course. Anything blocking you? Reply here and we'll help you get moving again.`,
   stuck_quiz: (n) => `Hi ${n}! That quiz can be tricky. Re-read the lesson's recap at the bottom, then try again. Want us to explain any question?`,
   task_pending: (n) => `Hi ${n}! You passed the quiz, nice! Confirm your mission to unlock the next lesson. Need a hand with it?`,

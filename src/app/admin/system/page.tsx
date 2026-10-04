@@ -36,7 +36,7 @@ export default async function SystemPage() {
             <Check ok={adminConfigured()} title="Supabase secret key (server only)" fix="Set SUPABASE_SECRET_KEY from Supabase → Project Settings → API Keys." />
             <Check ok={adminEmails().length > 0} title={`Admin emails: ${adminEmails().join(", ") || "none"}`} fix="Set ADMIN_EMAILS (comma-separated). Only these confirmed accounts can open /admin." />
             <Check ok={env("PAYSTACK_SECRET_KEY")} title="Paystack secret key" fix="Set PAYSTACK_SECRET_KEY (sk_test_… while testing, sk_live_… to take real payments)." />
-            <Check ok={emailConfigured()} title="Email sending (certificates)" fix="Create a free Resend account, verify your domain, then set RESEND_API_KEY and EMAIL_FROM (e.g. STEINARK <hello@yourdomain.com>)." />
+            <Check ok={emailConfigured()} title="Email sending (certificates)" fix="Create a free Resend account, verify your domain, then set RESEND_API_KEY and EMAIL_FROM (e.g. Prostatis <hello@yourdomain.com>)." />
             <Check ok={env("PAGESPEED_API_KEY")} title="Google PageSpeed key (speed tools)" fix="Set PAGESPEED_API_KEY. Without it the speed tools use their quick built-in check." />
             <Check ok={Boolean(site.whatsappInviteUrl)} title="WhatsApp community invite link" fix="Set NEXT_PUBLIC_WHATSAPP_INVITE_URL." />
             <Check ok={!site.url.includes("localhost") || process.env.NODE_ENV !== "production"} title={`Site URL: ${site.url}`} fix="Set NEXT_PUBLIC_SITE_URL to your real domain in production (used in emails, certificates and the sitemap)." />

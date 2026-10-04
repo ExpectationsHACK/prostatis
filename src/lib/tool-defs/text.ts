@@ -60,7 +60,7 @@ const esc = (x: string) => x.replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 
 /**
  * A clean printable report (Save as PDF from the print dialog) built from a result's blocks.
- * No STEINARK branding is forced on it: it's the user's report for their client.
+ * No Prostatis branding is forced on it: it's the user's report for their client.
  */
 export function blocksToHtml(blocks: Block[], meta: { title: string; subtitle?: string; preparedBy?: string; date?: string }): string {
   const sec = (title: string, inner: string) => `<section><h2>${esc(title)}</h2>${inner}</section>`;

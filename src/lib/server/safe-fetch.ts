@@ -88,7 +88,7 @@ export async function safeFetch(input: string, opts: { method?: "GET" | "HEAD"; 
         method: opts.method ?? "GET",
         redirect: "manual",
         signal: ctrl.signal,
-        headers: { "User-Agent": "Mozilla/5.0 (compatible; STEINARK-Tools/1.0)", Accept: "text/html,application/xhtml+xml,*/*;q=0.8", "Accept-Encoding": "gzip, deflate, br" },
+        headers: { "User-Agent": "Mozilla/5.0 (compatible; Prostatis-Tools/1.0)", Accept: "text/html,application/xhtml+xml,*/*;q=0.8", "Accept-Encoding": "gzip, deflate, br" },
       });
     } catch (e) {
       clearTimeout(timer);

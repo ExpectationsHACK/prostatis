@@ -1,5 +1,10 @@
 export const site = {
-  name: "STEINARK",
+  /** The product. */
+  name: "Prostatis",
+  /** The company that owns and runs it. */
+  company: "Stynark",
+  /** How the two appear together (footer, emails, certificates, legal pages). */
+  byline: "Prostatis by Stynark",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   tagline: "Learn to build websites with AI and turn it into a source of income.",
   subhead:

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { signOut } from "@/app/(site)/(auth)/actions";
-import { LogoTile } from "@/components/brand";
+import { LogoMark } from "@/components/brand";
 import { PreviewBanner } from "@/components/learn/stats";
 import { btn, size } from "@/components/ui";
 import { dashboardContext } from "@/lib/dashboard";
@@ -40,7 +40,7 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
     <div className="paper-grid flex min-h-screen">
       <aside className="sticky top-0 hidden h-screen w-[248px] shrink-0 flex-col border-r border-edge bg-card px-3 py-5 lg:flex print:hidden">
         <Link href="/" className="flex items-center gap-2.5 px-2" aria-label={`${site.name} home`}>
-          <LogoTile size={30} />
+          <LogoMark size={30} />
           <span className="display text-[17px] text-ink">{site.name}</span>
         </Link>
         <SideNav whatsapp={site.whatsappInviteUrl} active={active} />
@@ -65,7 +65,7 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
         {/* Mobile top bar */}
         <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-edge bg-paper/95 px-4 backdrop-blur-sm lg:hidden print:hidden">
           <Link href="/" className="flex items-center gap-2" aria-label={`${site.name} home`}>
-            <LogoTile size={28} />
+            <LogoMark size={28} />
             <span className="display text-[16px] text-ink">{site.name}</span>
           </Link>
           <form action={signOut}>

@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Privacy policy", description: `How $
 
 export default function PrivacyPage() {
   return (
-    <LegalPage title="Privacy policy" updated="1 October 2026" intro={`This explains what personal data ${site.name} collects, why, who helps us process it, and the rights you have under the Nigeria Data Protection Act 2023.`}>
+    <LegalPage title="Privacy policy" updated="4 October 2026" intro={`${site.name} is run by ${site.company} ("we", "us"), which is responsible for your personal data. This explains what we collect, why, who helps us process it, and the rights you have under the Nigeria Data Protection Act 2023.`}>
       <Section title="What we collect">
         <ul>
           <li><strong>Your account:</strong> your name, email address and, if you give it, your WhatsApp number.</li>
@@ -33,11 +33,17 @@ export default function PrivacyPage() {
       </Section>
 
       <Section title="The free tools">
-        <p>Most tools run in your browser, and what you type is saved in your browser only. Tools that check a website fetch the public page you enter; the speed check also sends that address to Google PageSpeed Insights.</p>
+        <p>Most tools run in your browser, and what you type is saved in your browser only. Some buttons send what you enter to a service to do their job, and only when you press them:</p>
+        <ul>
+          <li><strong>Website checks</strong> fetch the public page you enter; the speed check also sends that address to Google PageSpeed Insights.</li>
+          <li><strong>&ldquo;Get real searches&rdquo; and &ldquo;Get real questions&rdquo;</strong> send the service and area you typed to Google&apos;s search suggestions.</li>
+          <li><strong>&ldquo;Write it with AI&rdquo;</strong>, where it&apos;s switched on, sends that tool&apos;s inputs to Anthropic (the maker of Claude) to write the result. Don&apos;t put passwords, card numbers or other people&apos;s private details into a tool.</li>
+          <li>The money tools load today&apos;s exchange rate from ExchangeRate-API; nothing you type is sent.</li>
+        </ul>
       </Section>
 
       <Section title="Who helps us">
-        <p>We use trusted providers to run the site: Supabase (accounts and database), Paystack (payments), Resend (email), Vercel (hosting) and Google (speed checks). They process data only to provide their service to us. Some store data outside Nigeria; we use providers that protect it with appropriate safeguards.</p>
+        <p>We use trusted providers to run the site: Supabase (accounts and database), Paystack (payments), Resend (email), Vercel (hosting), Google (speed checks and search suggestions) and Anthropic (AI writing in the free tools). They process data only to provide their service to us. Some store data outside Nigeria; we use providers that protect it with appropriate safeguards.</p>
       </Section>
 
       <Section title="Cookies">

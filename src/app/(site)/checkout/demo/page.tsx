@@ -1,7 +1,7 @@
 import { FlaskConical } from "lucide-react";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { LogoTile } from "@/components/brand";
+import { LogoMark } from "@/components/brand";
 import { btn, size } from "@/components/ui";
 import { getPlan } from "@/lib/membership";
 import { paymentsMode } from "@/lib/paystack";
@@ -28,7 +28,7 @@ export default async function DemoCheckoutPage({ searchParams }: PageProps<"/che
       <div className="rounded-xl border border-line bg-card p-6 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.18)]">
         <div className="flex items-center justify-between gap-3 border-b border-line pb-4">
           <div className="flex items-center gap-2.5">
-            <LogoTile size={32} />
+            <LogoMark size={32} />
             <div className="min-w-0">
               <p className="truncate text-[13px] text-muted">{user.email}</p>
               <p className="text-[13px] font-semibold text-ink">{site.name}</p>

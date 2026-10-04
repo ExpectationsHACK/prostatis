@@ -1,7 +1,7 @@
 import { Check } from "lucide-react";
 import type { ReactNode } from "react";
 import { AuthArt, type AuthArtKind } from "@/components/art/auth-art";
-import { LogoTile } from "@/components/brand";
+import { LogoMark } from "@/components/brand";
 
 const panels: Record<AuthArtKind, { eyebrow: string; title: string; points: string[] }> = {
   signin: {
@@ -27,7 +27,7 @@ export function AuthShell({ title, subtitle, children, art = "signin" }: { title
   return (
     <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-12 sm:py-16 lg:grid-cols-[minmax(0,430px)_minmax(0,1fr)] lg:gap-16">
       <div className="mx-auto w-full max-w-[430px]">
-        <LogoTile size={44} />
+        <LogoMark size={44} />
         <h1 className="display mt-5 text-[36px] leading-tight text-ink sm:text-[40px]">{title}</h1>
         <p className="mt-2 text-[15.5px] leading-relaxed text-muted">{subtitle}</p>
         <div className="mt-8">{children}</div>

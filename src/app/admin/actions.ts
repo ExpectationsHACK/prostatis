@@ -13,6 +13,7 @@ import { starterPosts } from "@/content/blog-starters";
 import { previewMode } from "@/lib/learning/store";
 import { getPlan, newReference, recordSuccessfulPayment, type PlanId } from "@/lib/membership";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { site } from "@/lib/site";
 
 export type Result = { ok: boolean; msg: string } | null;
 
@@ -58,7 +59,7 @@ export async function savePostAction(_: Result, fd: FormData): Promise<Result> {
     seo_keywords: list(str(fd, "seo_keywords", 400)),
     canonical_url: url("canonical_url"),
     og_image: url("og_image"),
-    author_name: str(fd, "author_name", 80) || "STEINARK",
+    author_name: str(fd, "author_name", 80) || site.name,
     status,
     // Keep the original publish date on edits; allow a date to be set for scheduling.
     published_at: scheduled ? new Date(scheduled).toISOString() : (prev?.published_at ?? null),

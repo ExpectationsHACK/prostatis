@@ -25,11 +25,11 @@ describe("email templates", () => {
     expect(mdToText(md)).not.toMatch(/[#*>]/);
   });
 
-  it("brands account emails as STEINARK with the link in the button and as text", () => {
+  it("brands account emails as Prostatis with the link in the button and as text", () => {
     for (const kind of ["signup", "recovery", "magiclink"] as const) {
       const e = authEmail(kind, "https://example.com/auth/callback?token_hash=abc&type=email", "Ada Obi");
-      expect(e.subject).toContain("STEINARK");
-      expect(e.html).toContain("STEINARK");
+      expect(e.subject).toContain("Prostatis");
+      expect(e.html).toContain("Prostatis by Stynark");
       expect(e.html).not.toMatch(/supabase/i);
       expect(e.html).toContain("token_hash=abc&amp;type=email");
       expect(e.text).toContain("https://example.com/auth/callback?token_hash=abc&type=email");

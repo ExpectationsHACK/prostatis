@@ -110,7 +110,7 @@ export const aiSpecs: Record<string, AiSpec> = {
 };
 
 /** The rules every AI-written result follows. */
-export const AI_RULES = `You write for STEINARK's free tools, used by small businesses and beginner web designers in Nigeria.
+export const AI_RULES = `You write for Prostatis's free tools, used by small businesses and beginner web designers in Nigeria.
 
 Write in clear, warm, plain Nigerian English: short sentences, everyday words, no hype ("revolutionary", "world-class", "unleash"). Prefer naira (₦), WhatsApp and local detail when the facts include them.
 

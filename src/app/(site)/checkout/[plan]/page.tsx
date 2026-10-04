@@ -2,7 +2,7 @@ import { Check, CircleAlert, FlaskConical, Lock } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { LogoTile } from "@/components/brand";
+import { LogoMark } from "@/components/brand";
 import { btn, size } from "@/components/ui";
 import { getMySubscription, getPlan, hasAccess } from "@/lib/membership";
 import { isTestKey, paymentsMode } from "@/lib/paystack";
@@ -33,7 +33,7 @@ export default async function CheckoutPage({ params, searchParams }: PageProps<"
   if (hasAccess(sub)) {
     return (
       <div className="mx-auto flex max-w-[440px] flex-col items-center px-4 py-20 text-center">
-        <LogoTile size={48} />
+        <LogoMark size={48} />
         <h1 className="display mt-5 text-[40px] text-ink">You're already a member</h1>
         <p className="mt-2 text-muted">Your membership is active.</p>
         <Link href="/dashboard" className={`${btn.primary} ${size.lg} mt-6`}>
@@ -46,7 +46,7 @@ export default async function CheckoutPage({ params, searchParams }: PageProps<"
   return (
     <div className="mx-auto max-w-[480px] px-4 py-14">
       <div className="flex flex-col items-center text-center">
-        <LogoTile size={48} />
+        <LogoMark size={48} />
         <h1 className="display mt-5 text-[40px] text-ink">Enroll in the {plan.name}</h1>
         <p className="mt-1 text-[15px] text-muted">Signed in as {user.email}</p>
       </div>

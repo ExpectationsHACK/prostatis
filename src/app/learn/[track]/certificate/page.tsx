@@ -1,7 +1,7 @@
 import { ArrowLeft, BadgeCheck, Download } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { LogoTile } from "@/components/brand";
+import { LogoMark } from "@/components/brand";
 import { CopyLink } from "@/components/copy-link";
 import { PrintButton } from "@/components/learn/print-button";
 import { btn, size } from "@/components/ui";
@@ -48,12 +48,12 @@ export default async function CertificatePage({ params }: { params: Promise<{ tr
       <section className="mt-6 border-[3px] border-edge bg-card p-2 print:mt-0 print:shadow-none">
         <div className="field-grid border border-edge bg-paper px-6 py-10 text-center sm:px-14 sm:py-14">
           <div className="flex items-center justify-center gap-2.5">
-            <LogoTile size={40} />
+            <LogoMark size={40} />
             <span className="display text-[22px] text-ink">{site.name}</span>
           </div>
           <p className="label mt-8 text-brand-text">Certificate of completion</p>
           <p className="mt-6 font-mono text-[14px] text-muted">This certifies that</p>
-          <p className="display mt-2 text-balance text-[40px] leading-tight text-ink sm:text-[56px]">{cert.name || "STEINARK member"}</p>
+          <p className="display mt-2 text-balance text-[40px] leading-tight text-ink sm:text-[56px]">{cert.name || `${site.name} member`}</p>
           <p className="mx-auto mt-4 max-w-lg font-mono text-[14px] leading-relaxed text-ink">
             completed all {track.modules.length} lessons, practical tasks and assessments of the <strong>{track.name}</strong> ({track.length}) and passed the final assessment with {final.best}/{final.total}.
           </p>

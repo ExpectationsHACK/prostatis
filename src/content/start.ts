@@ -43,7 +43,7 @@ export const startHere: Pick<Lesson, "id" | "sections"> = {
       heading: "XP, levels, streaks and badges",
       blocks: [
         { t: "table", columns: ["You do this", "You earn"], rows: [["Pass a lesson assessment", "10 XP per correct answer (first pass)"], ["Get 5 out of 5", "+25 XP bonus"], ["Confirm your mission", "+50 XP"], ["Complete the lesson", "+100 XP and that lesson's own milestone badge"], ["Pass the final assessment", "+300 XP and your certificate"]] },
-        { t: "list", items: ["**Milestone badges**: every lesson has its own, named after what you achieved: “Live on the internet”, “Safe checkout”, “On the map”…", "**Milestone moments**: when you hit a real accomplishment inside a lesson (your first page goes live, your first test payment arrives), an orange card marks it and tells you what you just proved you can do.", "**Levels** go from Newcomer to STEINARK Legend as your XP grows.", "**Streak** = days in a row (Lagos time) on which you passed a quiz or confirmed a mission."] },
+        { t: "list", items: ["**Milestone badges**: every lesson has its own, named after what you achieved: “Live on the internet”, “Safe checkout”, “On the map”…", "**Milestone moments**: when you hit a real accomplishment inside a lesson (your first page goes live, your first test payment arrives), an orange card marks it and tells you what you just proved you can do.", "**Levels** go from Newcomer to Prostatis Legend as your XP grows.", "**Streak** = days in a row (Lagos time) on which you passed a quiz or confirmed a mission."] },
         { t: "tip", text: "XP is only given out by our server after your work is checked, so everyone's XP means the same thing. There's no way to buy or skip it." },
       ],
     },

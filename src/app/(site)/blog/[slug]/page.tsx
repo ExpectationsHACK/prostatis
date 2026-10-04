@@ -103,7 +103,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             {post.author_name} · <time dateTime={post.published_at ?? undefined}>{postDate(post.published_at)}</time>
             {updated && <> · Updated <time dateTime={post.updated_at}>{postDate(post.updated_at)}</time></>} · {readingMinutes(post.content_md)} min read
           </p>
-          <SharePills title={post.title} kind="read on STEINARK" />
+          <SharePills title={post.title} kind={`read on ${site.name}`} />
         </div>
       </header>
 

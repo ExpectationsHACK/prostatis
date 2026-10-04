@@ -17,7 +17,7 @@ export const starterPosts: Omit<PostInput, "status" | "published_at">[] = [
     og_image: null,
     cover_image: null,
     cover_alt: null,
-    author_name: "STEINARK",
+    author_name: "Prostatis",
     content_md: `If you can describe what you want in plain English, you can build a website with AI. You don't need a computer science degree. You need a clear idea, the right tools, and a way of checking the result.
 
 This guide walks through the whole path, in order.
@@ -79,7 +79,7 @@ Your first site is the hardest. The second is faster, and by the third you'll be
     og_image: null,
     cover_image: null,
     cover_alt: null,
-    author_name: "STEINARK",
+    author_name: "Prostatis",
     content_md: `Clients often ask for "a website" when what they need is a landing page, and the other way round. Knowing the difference helps you sell the right thing, finish faster and get better results for the client.
 
 ## The short answer
@@ -136,7 +136,7 @@ Landing pages and full websites are both covered step by step in the [Fast Track
     og_image: null,
     cover_image: null,
     cover_alt: null,
-    author_name: "STEINARK",
+    author_name: "Prostatis",
     content_md: `Your first client is the hardest to get, because you have no past clients to point to. The good news: small businesses around you need websites, and most of them are not being asked properly.
 
 Here is a plan that works without ads or a big following.

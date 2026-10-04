@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BlogIndex } from "@/components/blog/blog-index";
 import { listPublished, tagSlug } from "@/lib/blog";
+import { site } from "@/lib/site";
 
 export const revalidate = 300;
 
@@ -16,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ tag: stri
   const { tag } = await params;
   const { name } = await load(tag);
   if (!name) return {};
-  return { title: `${name}: articles`, description: `Guides about ${name.toLowerCase()} from the STEINARK blog.`, alternates: { canonical: `/blog/tag/${tag}` } };
+  return { title: `${name}: articles`, description: `Guides about ${name.toLowerCase()} from the ${site.name} blog.`, alternates: { canonical: `/blog/tag/${tag}` } };
 }
 
 export default async function TagPage({ params }: { params: Promise<{ tag: string }> }) {

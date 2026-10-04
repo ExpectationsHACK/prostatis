@@ -4,6 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { btn, size } from "@/components/ui";
 import { unsubscribeByToken } from "@/lib/newsletter";
+import { site } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Unsubscribe", robots: { index: false } };
 
@@ -26,7 +27,7 @@ export default async function UnsubscribePage({ searchParams }: { searchParams: 
             <CircleCheck className="mx-auto size-10 text-success" aria-hidden />
             <h1 className="display mt-4 text-[28px] text-ink">You&apos;re unsubscribed</h1>
             <p className="mt-2 text-[15px] leading-relaxed text-muted">You won&apos;t get our newsletter any more. Changed your mind? Subscribe again from any page.</p>
-            <Link href="/" className={`${btn.secondary} ${size.md} mt-6`}>Back to STEINARK</Link>
+            <Link href="/" className={`${btn.secondary} ${size.md} mt-6`}>Back to {site.name}</Link>
           </>
         ) : sp.error || !sp.t ? (
           <>
@@ -39,7 +40,7 @@ export default async function UnsubscribePage({ searchParams }: { searchParams: 
             <input type="hidden" name="t" value={sp.t} />
             <MailX className="mx-auto size-10 text-brand-text" aria-hidden />
             <h1 className="display mt-4 text-[28px] text-ink">Unsubscribe from our emails?</h1>
-            <p className="mt-2 text-[15px] leading-relaxed text-muted">You&apos;ll stop getting the STEINARK newsletter. Course emails about your account still arrive.</p>
+            <p className="mt-2 text-[15px] leading-relaxed text-muted">You&apos;ll stop getting the {site.name} newsletter. Course emails about your account still arrive.</p>
             <button className={`${btn.primary} ${size.lg} mt-6 w-full`}>Yes, unsubscribe me</button>
           </form>
         )}

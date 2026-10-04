@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/supabase/server";
 import { AuthShell, nextParam } from "../auth-shell";
 import { LoginForm } from "../auth-form";
 import { OAuthButtons } from "../oauth-buttons";
+import { site } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Log in", robots: { index: false } };
 
@@ -19,7 +20,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
   if (await getCurrentUser()) redirect(next);
   const error = errors[String(sp.error ?? "")];
   return (
-    <AuthShell title="Sign in to STEINARK" subtitle="Welcome back. Pick up where you left off.">
+    <AuthShell title={`Sign in to ${site.name}`} subtitle="Welcome back. Pick up where you left off.">
       <OAuthButtons providers={await oauthProviders()} next={next} from="login" />
       <LoginForm next={next} initialError={error} />
     </AuthShell>

@@ -2,7 +2,7 @@ import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { LogoTile } from "@/components/brand";
+import { LogoMark } from "@/components/brand";
 import { btn, size } from "@/components/ui";
 import { longDate, money, myPayment } from "@/lib/billing";
 import { dashboardContext } from "@/lib/dashboard";
@@ -33,7 +33,7 @@ export default async function ReceiptPage({ params }: { params: Promise<{ refere
       <article className="ink-block bg-card p-6 sm:p-8 print:border-0 print:shadow-none">
         <header className="flex flex-wrap items-start justify-between gap-4 border-b border-edge pb-5">
           <div className="flex items-center gap-2.5">
-            <LogoTile size={34} />
+            <LogoMark size={34} />
             <span className="display text-[20px] text-ink">{site.name}</span>
           </div>
           <div className="text-right">

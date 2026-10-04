@@ -2,10 +2,11 @@ import { Bell, ChevronDown, Globe, Settings } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { signOut } from "@/app/(site)/(auth)/actions";
-import { LogoTile } from "@/components/brand";
+import { LogoMark } from "@/components/brand";
 import { Avatar } from "@/components/admin/blocks";
 import { requireAdmin } from "@/lib/admin/auth";
 import { AdminSidebar, MobileNav } from "./admin-nav";
+import { site } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Admin", robots: { index: false, follow: false } };
 
@@ -18,8 +19,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <div className="admin-ui flex min-h-screen">
       <aside className="sticky top-0 hidden h-screen w-[250px] shrink-0 flex-col overflow-y-auto border-r-2 border-[#151515] bg-[var(--a-side)] px-4 py-6 lg:flex">
         <Link href="/admin" className="mb-9 flex items-center gap-2.5 px-2">
-          <LogoTile size={32} />
-          <span className="display text-[18px] text-[#151515]">STEINARK</span>
+          <LogoMark size={32} />
+          <span className="display text-[18px] text-[#151515]">{site.name}</span>
           <span className="rounded-full border-2 border-[#151515] bg-[var(--a-accent)] px-2 py-[1px] text-[11px] font-semibold text-[#151515]">Admin</span>
         </Link>
         <AdminSidebar preview={admin.preview} signOut={signOut} />

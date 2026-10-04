@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LessonThumb } from "@/components/art/lesson-thumb";
 import { ToolThumb } from "@/components/art/tool-thumb";
-import { LogoTile } from "@/components/brand";
+import { LogoMark } from "@/components/brand";
 import { SharePills } from "@/components/share-pills";
 import { ToolCard } from "@/components/tool-card";
 import ToolRenderer from "@/components/tools/tool-renderer";
@@ -69,7 +69,7 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
             </p>
             <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <LogoTile size={32} />
+                <LogoMark size={32} />
                 <p className={byline}>Free · no signup · runs in your browser</p>
               </div>
               <SharePills title={tool.title} />

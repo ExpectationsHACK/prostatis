@@ -41,7 +41,7 @@ Research and rebuild: October 2026. Covers all 56 free tools (50 core + 6 bonus)
    - It's free to visitors, with per-person and daily limits.
    - The templates keep working without it.
 4. **Nigeria-first defaults:** naira, WhatsApp, Paystack, NiRA domains, the cost of a page in mobile data, Nigerian place names.
-5. **Hand-over:** every result prints as a clean report (Save as PDF) with an optional "Prepared by" name, and no STEINARK branding forced on it.
+5. **Hand-over:** every result prints as a clean report (Save as PDF) with an optional "Prepared by" name, and no Prostatis branding forced on it.
 
 ## Shared infrastructure
 

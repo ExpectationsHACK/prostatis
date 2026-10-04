@@ -380,7 +380,7 @@ Days 1–11 share the Fast Track's problems. Additionally:
 - **(d)** None required; upgrades listed for the client to pay once the system earns.
 - **(e)** Good.
 - **(f)** Sketches: (1) the whole system: shop (site) → bell (automation) → robot (agent) → notebook (CRM) → owner.
-- **(g)** Completion: **STEINARK graduate** moment (in addition to the certificate).
+- **(g)** Completion: **Prostatis graduate** moment (in addition to the certificate).
 
 ---
 

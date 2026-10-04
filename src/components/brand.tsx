@@ -1,27 +1,31 @@
 import Link from "next/link";
+import { LOGO } from "@/lib/logo";
+import { site } from "@/lib/site";
 
-/** Our mark: an orange tile with a bracketed spark, "build" + "AI". */
-export function LogoTile({ size = 36, className = "" }: { size?: number; className?: string }) {
+/**
+ * The Prostatis mark on a transparent background. It takes the text colour (ink by
+ * default), so it works on light pages, the orange footer and dark panels alike.
+ */
+export function LogoMark({ size = 36, className = "text-ink" }: { size?: number; className?: string }) {
   return (
-    <span className={"inline-grid shrink-0 place-items-center rounded-[22%] bg-brand text-brand-ink " + className} style={{ width: size, height: size }} aria-hidden>
-      <svg viewBox="0 0 24 24" width={size * 0.62} height={size * 0.62} fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
-        <path d="M7 5H4.5v14H7" />
-        <path d="M17 5h2.5v14H17" />
-        <path d="M12 7.5l1.2 3.3 3.3 1.2-3.3 1.2L12 16.5l-1.2-3.3L7.5 12l3.3-1.2z" fill="currentColor" strokeWidth={1.2} />
-      </svg>
-    </span>
+    <svg viewBox={LOGO.viewBox} height={size} width={(size * 62) / 71} className={"shrink-0 " + className} aria-hidden focusable="false">
+      <path d={LOGO.outline} fill="none" stroke="currentColor" strokeWidth={LOGO.stroke} strokeLinecap="round" strokeLinejoin="round" />
+      {LOGO.dashes.map((d) => (
+        <path key={d} d={d} fill="currentColor" />
+      ))}
+    </svg>
   );
 }
 
-/** The name in the headline face, as it has always appeared next to the tile. */
+/** The product name in the headline face. */
 export function Wordmark({ className = "" }: { className?: string }) {
-  return <span className={"display text-ink " + className}>STEINARK</span>;
+  return <span className={"display text-ink " + className}>{site.name}</span>;
 }
 
 export function Brand({ size = 32, name = true }: { size?: number; name?: boolean }) {
   return (
-    <Link href="/" className="flex items-center gap-2.5" aria-label="STEINARK home">
-      <LogoTile size={size} />
+    <Link href="/" className="flex items-center gap-2.5" aria-label={`${site.name} home`}>
+      <LogoMark size={size} />
       {name && <Wordmark className="text-[17px] sm:text-[20px]" />}
     </Link>
   );

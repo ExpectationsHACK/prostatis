@@ -5,6 +5,7 @@ import { PreviewBanner } from "@/components/learn/stats";
 import { btn, size } from "@/components/ui";
 import { startHere } from "@/content/start";
 import { requireLearner } from "@/lib/learning/access";
+import { site } from "@/lib/site";
 
 export default async function StartHere() {
   const learner = await requireLearner("/learn/start");
@@ -17,7 +18,7 @@ export default async function StartHere() {
           <ArrowLeft className="size-3.5" aria-hidden /> My tracks
         </Link>
         <p className="label mt-5 flex items-center gap-1.5 text-brand-text"><Compass className="size-3.5" aria-hidden /> Start here · 10 min</p>
-        <h1 className="display mt-2 text-[36px] leading-[1.05] text-ink sm:text-[48px]">Welcome to STEINARK</h1>
+        <h1 className="display mt-2 text-[36px] leading-[1.05] text-ink sm:text-[48px]">Welcome to {site.name}</h1>
         <p className="mt-4 text-[17px] leading-[1.75] text-ink/90">
           You don&apos;t need to know anything about code to succeed here. You need a laptop, a little time each day, and the habit of trying things as you read. This page explains how the course works, what it costs, and how to get unstuck, read it once, then begin Day 1.
         </p>

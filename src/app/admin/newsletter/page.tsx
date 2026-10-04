@@ -23,7 +23,7 @@ export default async function NewsletterPage() {
 
       {!canEmailAnyone() && (
         <p className="rounded-[12px] border-2 border-[#151515] bg-[#fff8e6] px-4 py-3 text-[13.5px] leading-relaxed">
-          <strong>Sending is on hold until your domain is verified.</strong> Add your domain in Resend (resend.com → Domains), then set <code>EMAIL_FROM</code> to an address on it, e.g. <code>STEINARK &lt;hello@yourdomain.com&gt;</code>. Until then emails only reach the Resend account owner, so you can still send yourself tests.
+          <strong>Sending is on hold until your domain is verified.</strong> Add your domain in Resend (resend.com → Domains), then set <code>EMAIL_FROM</code> to an address on it, e.g. <code>Prostatis &lt;hello@yourdomain.com&gt;</code>. Until then emails only reach the Resend account owner, so you can still send yourself tests.
         </p>
       )}
 

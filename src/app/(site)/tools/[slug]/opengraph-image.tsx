@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { OgCard, ogSize } from "@/lib/og-card";
 import { getTool, liveTools } from "@/lib/tools";
 
-export const alt = "Free tool from STEINARK";
+export const alt = "Free tool from Prostatis";
 export const size = ogSize;
 export const contentType = "image/png";
 

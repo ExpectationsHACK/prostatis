@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "Terms", description: `The terms for 
 
 export default function TermsPage() {
   return (
-    <LegalPage title="Terms" updated="1 October 2026" intro={`These terms apply when you use ${site.name}, its free tools and its courses. By creating an account or paying for a track, you agree to them.`}>
+    <LegalPage title="Terms" updated="4 October 2026" intro={`${site.name} is a product of ${site.company}, which owns and runs it ("we", "us"). These terms apply when you use ${site.name}, its free tools and its courses. By creating an account or paying for a track, you agree to them.`}>
       <Section title="Your access">
         <ul>
           {plans.map((p) => (
@@ -24,7 +24,7 @@ export default function TermsPage() {
       </Section>
 
       <Section title="What you build is yours">
-        <p>The websites, pages and projects you build during the course belong to you or your clients. The course lessons, quizzes, videos and materials belong to {site.name}; you may use what you learn, but not copy or resell the materials.</p>
+        <p>The websites, pages and projects you build during the course belong to you or your clients. The course lessons, quizzes, videos and materials belong to {site.company}; you may use what you learn, but not copy or resell the materials.</p>
       </Section>
 
       <Section title="No income guarantee">
@@ -32,7 +32,7 @@ export default function TermsPage() {
       </Section>
 
       <Section title="Third-party tools">
-        <p>The course uses tools from other companies (for example Claude, Vercel, Supabase and Paystack). Their own terms and prices apply, and some have free plans with limits. We show you how to start free wherever we can.</p>
+        <p>The course uses tools from other companies (for example Google Antigravity, Cloudflare, Supabase and Paystack). Their own terms and prices apply, and some have free plans with limits. We show you how to start free wherever we can.</p>
       </Section>
 
       <Section title="Certificates">

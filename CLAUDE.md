@@ -1,8 +1,8 @@
 @AGENTS.md
 
-# STEINARK — project guide for Claude
+# Prostatis — project guide for Claude
 
-Nigeria-first platform that teaches people to build and sell websites with AI. Two one-time paid tracks (Fast Track: 14 days, ₦15,000 · Main Track: 26 lessons over 1 month, ₦30,000), a written in-app course with assessments, XP and streaks, 50 free public tools (+6 bonus), Paystack payments and a WhatsApp community.
+**Prostatis** (the product) **by Stynark** (the company that owns it): a Nigeria-first platform that teaches people to build and sell websites with AI. Two one-time paid tracks (Fast Track: 14 days, ₦15,000 · Main Track: 26 lessons over 1 month, ₦30,000), a written in-app course with assessments, XP and streaks, 50 free public tools (+6 bonus), Paystack payments and a WhatsApp community.
 
 Read before changing things: `PRODUCT.md` (who it's for, principles, honesty rules), `DESIGN.md` (visual system — follow it), `README.md` (setup, payments, course architecture).
 
@@ -53,7 +53,7 @@ Before calling work done: typecheck, lint, tests and build must pass, and anythi
 | `src/app/(site)/(auth)/` | Sign in / sign up / forgot + reset password. Social buttons appear only for providers enabled in Supabase (`src/lib/auth-providers.ts` reads the public auth settings). A sign-in with an unknown email goes to sign up (email carried in a short-lived cookie, never the URL) via the service-only `email_registered` SQL function. |
 | `src/lib/dashboard.ts` | Member dashboard context (a preview learner in local preview) |
 | `src/app/dashboard/billing/`, `src/lib/billing.ts` | Billing for one-time tracks: access and days left, Main Track upgrade, add-time, payment history, printable receipts (`receipt/[reference]`, own payments only via RLS), refund help |
-| `src/lib/email-templates.ts`, `src/lib/auth-email.ts` | Branded STEINARK emails (one table-based layout). Account emails (confirm, reset, sign-in link) are sent by us via Supabase `generateLink` + Resend once `EMAIL_FROM` is on a verified domain (`canEmailAnyone()`); before that Supabase's mailer is used. Matching templates to paste into Supabase live in `supabase/email-templates/`. |
+| `src/lib/email-templates.ts`, `src/lib/auth-email.ts` | Branded Prostatis emails (one table-based layout). Account emails (confirm, reset, sign-in link) are sent by us via Supabase `generateLink` + Resend once `EMAIL_FROM` is on a verified domain (`canEmailAnyone()`); before that Supabase's mailer is used. Matching templates to paste into Supabase live in `supabase/email-templates/`. |
 | `src/lib/newsletter.ts`, `/admin/newsletter`, `/unsubscribe` | Newsletter: subscribers are the `waitlist` table (status + private token), issues in `newsletter_issues`. Welcome email on signup, one-click unsubscribe (link + `List-Unsubscribe` headers), batch sending through Resend, claim-before-send so an issue can't go out twice. |
 | `src/lib/data/local.ts` | `.data/` JSON tables used only in local preview mode |
 | `supabase/migrations/` | SQL, run in order |

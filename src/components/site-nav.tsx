@@ -4,9 +4,10 @@ import { ChevronDown, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { LogoTile, Wordmark } from "./brand";
+import { LogoMark, Wordmark } from "./brand";
 import { HeaderAuth } from "./header-auth";
 import { navMenus, personas } from "./nav-data";
+import { site } from "@/lib/site";
 
 type Item = { href: string; label: string; note: string };
 
@@ -76,8 +77,8 @@ export function SiteNav() {
   return (
     <header className="sticky top-0 z-50 px-3 pt-3" ref={ref}>
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 rounded-full border-2 border-edge bg-paper pl-3 pr-2 shadow-[5px_5px_0_var(--edge)]">
-        <Link href="/" className="flex items-center gap-2.5" aria-label="STEINARK home">
-          <LogoTile size={38} />
+        <Link href="/" className="flex items-center gap-2.5" aria-label={`${site.name} home`}>
+          <LogoMark size={38} />
           <Wordmark className="text-[17px] sm:text-[20px]" />
         </Link>
 

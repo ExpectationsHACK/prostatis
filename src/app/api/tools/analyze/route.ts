@@ -157,7 +157,7 @@ async function suggest(service: string, location: string, mode: SuggestMode) {
     const api = new URL("https://suggestqueries.google.com/complete/search");
     for (const [k, val] of Object.entries({ client: "firefox", hl: "en", gl: "ng", ie: "utf-8", oe: "utf-8", q })) api.searchParams.set(k, val);
     try {
-      const r = await fetch(api, { signal: AbortSignal.timeout(6000), headers: { "User-Agent": "Mozilla/5.0 (compatible; STEINARK-Tools/1.0)" } });
+      const r = await fetch(api, { signal: AbortSignal.timeout(6000), headers: { "User-Agent": "Mozilla/5.0 (compatible; Prostatis-Tools/1.0)" } });
       const j = await r.json();
       return { query: q, suggestions: Array.isArray(j?.[1]) ? (j[1] as unknown[]).filter((x): x is string => typeof x === "string").slice(0, 10) : [] };
     } catch {

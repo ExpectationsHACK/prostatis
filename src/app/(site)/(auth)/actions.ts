@@ -60,7 +60,7 @@ export async function signUp(_: AuthState, form: FormData): Promise<AuthState> {
   if (!name) return { error: "Please enter your name." };
   if (password.length < 8) return { error: "Password must be at least 8 characters." };
 
-  // Branded STEINARK email once the sending domain is verified; Supabase's mailer otherwise.
+  // Branded Prostatis email once the sending domain is verified; Supabase's mailer otherwise.
   if (brandedAuthEmails()) {
     const sent = await sendAuthEmail("signup", { email, password, next, name, data: { name, whatsapp } });
     if (!sent.ok && sent.reason === "exists") return { error: "An account with this email already exists. Sign in instead, or reset your password." };

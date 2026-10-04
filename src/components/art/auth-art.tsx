@@ -9,7 +9,7 @@ const scenes: Record<AuthArtKind, () => React.ReactNode> = {
   // Welcome back: the streak ticks up, XP fills, the next lesson unlocks.
   signin: () => (
     <Stage d={9}>
-      <Win title="steinark.com/dashboard" className="relative w-[272px]" bodyClass="p-2.5">
+      <Win title="Prostatis · Dashboard" className="relative w-[272px]" bodyClass="p-2.5">
         <p className={"text-[13px] font-bold tracking-[-0.01em] " + m("type")} style={at(0.2)}>Welcome back, Ada</p>
         <div className="mt-2 grid grid-cols-2 gap-1.5">
           <Box className="flex items-center gap-1.5 p-1.5">
@@ -74,7 +74,7 @@ const scenes: Record<AuthArtKind, () => React.ReactNode> = {
         <div className={"flex items-start gap-1.5 " + m("left")} style={at(0.3)}>
           <span className="grid size-[18px] shrink-0 place-items-center rounded-[5px] bg-[#eb5e28] text-[#151515]"><Mail className="size-3" /></span>
           <span className="min-w-0">
-            <span className={`block ${t.sm} font-bold`}>STEINARK</span>
+            <span className={`block ${t.sm} font-bold`}>Prostatis</span>
             <span className={`block ${t.xs} truncate text-[#6b675f]`}>Reset your password</span>
           </span>
         </div>

@@ -22,7 +22,7 @@ export function verifyUrl(id: string) {
 export function certificateImage(c: Certificate) {
   const track = trackOf(c.track);
   const skills = [...new Set(track.modules.map((m) => getPillar(m.pillar).title))];
-  const name = c.name || "STEINARK member";
+  const name = c.name || `${site.name} member`;
   const host = verifyUrl(c.id).replace(/^https?:\/\//, "");
 
   return new ImageResponse(
@@ -30,10 +30,11 @@ export function certificateImage(c: Certificate) {
       <div style={{ width: "100%", height: "100%", display: "flex", background: og.paper, padding: 36 }}>
         <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", background: "#ffffff", border: `2px solid ${og.line}`, borderRadius: 24, padding: "64px 96px 44px", color: og.ink }}>
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <div style={{ display: "flex", width: 60, height: 60, alignItems: "center", justifyContent: "center", background: og.orange, borderRadius: 16 }}>
-              <Mark size={40} />
+            <Mark size={64} />
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <div style={{ display: "flex", fontSize: 36, fontWeight: 700, letterSpacing: -0.5 }}>{site.name}</div>
+              <div style={{ display: "flex", fontSize: 18, color: og.muted }}>by {site.company}</div>
             </div>
-            <div style={{ display: "flex", fontSize: 32, fontWeight: 600, letterSpacing: 5 }}>STEINARK</div>
           </div>
           <div style={{ display: "flex", marginTop: 56, fontSize: 22, letterSpacing: 6, color: og.label, fontWeight: 600 }}>CERTIFICATE OF COMPLETION</div>
           <div style={{ display: "flex", marginTop: 30, fontSize: 26, color: og.muted }}>This certifies that</div>
@@ -51,7 +52,7 @@ export function certificateImage(c: Certificate) {
           </div>
           <div style={{ display: "flex", width: "100%", marginTop: "auto", alignItems: "flex-end", justifyContent: "space-between" }}>
             <div style={{ display: "flex", flexDirection: "column", width: 400 }}>
-              <div style={{ display: "flex", fontSize: 28, fontWeight: 600, paddingBottom: 10, borderBottom: `2px solid ${og.ink}` }}>{site.name}</div>
+              <div style={{ display: "flex", fontSize: 28, fontWeight: 600, paddingBottom: 10, borderBottom: `2px solid ${og.ink}` }}>{site.byline}</div>
               <div style={{ display: "flex", fontSize: 17, letterSpacing: 3, color: og.muted, marginTop: 10 }}>ISSUED BY</div>
             </div>
             <div style={{ display: "flex", width: 150, height: 150, borderRadius: 999, background: og.orange, alignItems: "center", justifyContent: "center", flexDirection: "column" }}>

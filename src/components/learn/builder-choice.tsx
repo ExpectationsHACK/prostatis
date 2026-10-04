@@ -8,7 +8,7 @@ import { Rich } from "./rich";
 export type Builder = "antigravity" | "claude-code" | "chat";
 type Step = { title: string; detail: string };
 
-const KEY = "steinark:builder";
+const KEY = "prostatis:builder";
 const listeners = new Set<() => void>();
 
 function read(): Builder {

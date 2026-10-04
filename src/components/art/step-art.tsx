@@ -10,7 +10,7 @@ const scenes: Record<Step, () => React.ReactNode> = {
   enroll: () => (
     <Stage d={8} className="gap-3">
       <Box className="w-[138px] p-2.5">
-        <p className={`${t.xs} text-[#8a857b]`}>STEINARK · Fast Track</p>
+        <p className={`${t.xs} text-[#8a857b]`}>Prostatis · Fast Track</p>
         <p className="mt-0.5 text-[18px] font-bold">₦15,000</p>
         <div className="mt-1.5 space-y-1">
           {["Card", "Bank transfer", "USSD"].map((x, i) => (

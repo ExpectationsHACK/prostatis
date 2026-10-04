@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export type LiveRate = { rate: number; updated: string; source: string; sourceUrl: string };
 
-const KEY = "steinark:fx";
+const KEY = "prostatis:fx";
 let pending: Promise<LiveRate | null> | null = null;
 
 /** Fetch today's USD→NGN rate once per browser session (it changes daily, not by the minute). */
