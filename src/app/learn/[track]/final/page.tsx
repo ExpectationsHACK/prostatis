@@ -29,7 +29,7 @@ export default async function FinalPage({ params }: { params: Promise<{ track: s
           <ArrowLeft className="size-3.5" aria-hidden /> {track.name}
         </Link>
         <p className="label mt-5 text-brand-text">Final assessment</p>
-        <h1 className="display mt-2 text-[36px] text-ink sm:text-[48px]">{track.name}: the final</h1>
+        <h1 className="display mt-2 text-[30px] text-ink sm:text-[48px]">{track.name}: the final</h1>
 
         {!prog.allDone ? (
           <div className="ink-block mt-8 bg-card p-6 text-center">

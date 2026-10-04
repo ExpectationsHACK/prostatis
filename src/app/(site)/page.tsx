@@ -60,7 +60,7 @@ function Heading({ eyebrow, children, sub, light = false }: { eyebrow?: string; 
   return (
     <div className="mx-auto max-w-3xl text-center">
       {eyebrow && <p className={"label " + (light ? "text-brand" : "text-brand-text")}>{eyebrow}</p>}
-      <h2 className={"display mt-3 text-balance text-[36px] sm:text-[52px] " + (light ? "text-white" : "text-ink")}>{children}</h2>
+      <h2 className={"display mt-3 text-balance text-[30px] sm:text-[52px] " + (light ? "text-white" : "text-ink")}>{children}</h2>
       {sub && <p className={"mx-auto mt-4 max-w-2xl text-pretty text-[16.5px] leading-relaxed " + (light ? "text-white/70" : "text-muted")}>{sub}</p>}
     </div>
   );
@@ -70,13 +70,13 @@ function TrackSection({ track, dark = false, eyebrow, title, sub }: { track: Tra
   const plan = plans.find((p) => p.id === track.id)!;
   const slug = track.id === "main_track" ? "main-track" : "fast-track";
   return (
-    <section id={slug} className={"scroll-mt-24 px-4 py-20 sm:py-28 " + (dark ? "relative overflow-clip bg-night [&_.ink-block]:shadow-[5px_5px_0_var(--brand)]!" : "")}>
+    <section id={slug} className={"scroll-mt-24 px-4 py-14 sm:py-28 " + (dark ? "relative overflow-clip bg-night [&_.ink-block]:shadow-[5px_5px_0_var(--brand)]!" : "")}>
       {dark && <div className="pointer-events-none absolute -top-48 left-1/2 size-[640px] -translate-x-1/2 rounded-full bg-brand/20 blur-3xl" aria-hidden />}
       <div className="relative mx-auto max-w-6xl">
         <Heading eyebrow={eyebrow} sub={sub} light={dark}>
           {title}
         </Heading>
-        <div className="mt-14 grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[370px_minmax(0,1fr)] lg:items-start">
+        <div className="mt-10 sm:mt-14 grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[370px_minmax(0,1fr)] lg:items-start">
           <div className="lg:sticky lg:top-28">
             <PlanCard plan={plan} show={5} />
           </div>
@@ -103,19 +103,19 @@ export default function Home() {
       <Hero />
 
       {/* What you'll build and sell */}
-      <section id="inside" className="scroll-mt-24 px-4 py-20 sm:py-28">
+      <section id="inside" className="scroll-mt-24 px-4 py-14 sm:py-28">
         <div className="mx-auto max-w-6xl">
           <Heading eyebrow="What you'll build" sub="Six kinds of websites, each one a real project in the course. Build it with AI, put it live, then sell it to businesses around you.">
             Websites businesses <span className="scribble">pay for</span>
           </Heading>
-          <div className="mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 sm:mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
             {websiteKinds.map((w) => (
               <article key={w.kind} className="ink-block block-press flex flex-col bg-card">
                 <div className="border-b-2 border-ink bg-sunk">
                   <LiveSite kind={w.kind} />
                 </div>
                 <div className="flex flex-1 flex-col p-5">
-                  <h3 className="display text-[22px] text-ink">{w.title}</h3>
+                  <h3 className="display text-[20px] sm:text-[22px] text-ink">{w.title}</h3>
                   <p className="mt-1.5 flex-1 text-[15px] leading-relaxed text-muted">{w.body}</p>
                   <p className="mt-4 inline-flex w-fit items-center gap-1.5 rounded-full bg-brand-wash px-2.5 py-1 text-[12.5px] font-semibold text-brand-text">
                     Built on Day {w.day} of the Fast Track
@@ -128,12 +128,12 @@ export default function Home() {
       </section>
 
       {/* How it works */}
-      <section className="border-y-2 border-ink bg-sunk px-4 py-20 sm:py-28">
+      <section className="border-y-2 border-ink bg-sunk px-4 py-14 sm:py-28">
         <div className="mx-auto max-w-6xl">
           <Heading eyebrow="How it works" sub="No coding background, no expensive laptop, no guesswork. Here's exactly what happens after you enroll.">
             From first lesson to first paid website
           </Heading>
-          <ol className="mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
+          <ol className="mt-10 sm:mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s, i) => (
               <li key={s.step} className="ink-block flex flex-col bg-card">
                 <div className="relative border-b-2 border-ink">
@@ -141,7 +141,7 @@ export default function Home() {
                   <span className="absolute left-3 top-3 grid size-9 place-items-center rounded-full border-2 border-ink bg-brand text-[15px] font-bold text-ink shadow-[2px_2px_0_var(--ink)]">{i + 1}</span>
                 </div>
                 <div className="p-5">
-                  <h3 className="display text-[20px] leading-tight text-ink">{s.title}</h3>
+                  <h3 className="display text-[18px] sm:text-[20px] leading-tight text-ink">{s.title}</h3>
                   <p className="mt-2 text-[14.5px] leading-relaxed text-muted">{s.body}</p>
                 </div>
               </li>
@@ -174,16 +174,16 @@ export default function Home() {
       />
 
       {/* Who it's for */}
-      <section id="who" className="scroll-mt-24 px-4 py-20 sm:py-28">
+      <section id="who" className="scroll-mt-24 px-4 py-14 sm:py-28">
         <div className="mx-auto max-w-6xl">
           <Heading eyebrow="Who it's for" sub="You don't need a tech background. You need a laptop, a few hours a day and the will to pitch real businesses.">
             Built for people who want to earn with a real skill
           </Heading>
-          <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 sm:mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {personas.map((p, i) => (
               <div key={p.id} id={p.id} className="ink-block scroll-mt-28 bg-card p-6">
                 <span className="grid size-10 place-items-center rounded-[12px] border-2 border-ink bg-brand-wash text-[15px] font-bold text-brand-text">{String(i + 1).padStart(2, "0")}</span>
-                <h3 className="display mt-4 text-[21px] text-ink">{p.label}</h3>
+                <h3 className="display mt-4 text-[19px] sm:text-[21px] text-ink">{p.label}</h3>
                 <p className="mt-2 text-[15px] leading-relaxed text-muted">{p.blurb}</p>
               </div>
             ))}
@@ -192,12 +192,12 @@ export default function Home() {
       </section>
 
       {/* Free tools */}
-      <section className="border-y-2 border-ink bg-sunk px-4 py-20 sm:py-28">
+      <section className="border-y-2 border-ink bg-sunk px-4 py-14 sm:py-28">
         <div className="mx-auto max-w-6xl">
           <Heading eyebrow="Free, no signup" sub="Check a website's speed and SEO, work out your price, write the proposal and the cold message, then send the invoice. Use them today, even before you enroll.">
             {coreTools.length} free tools that do the work for you
           </Heading>
-          <div className="mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 sm:mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
             {featured.map((t) => (
               <ToolCard key={t.slug} tool={t} />
             ))}
@@ -211,7 +211,7 @@ export default function Home() {
       </section>
 
       {/* Compare */}
-      <section id="compare" className="scroll-mt-24 px-4 py-20 sm:py-28">
+      <section id="compare" className="scroll-mt-24 px-4 py-14 sm:py-28">
         <div className="mx-auto max-w-4xl">
           <Heading eyebrow="Compare" sub="Start with the Fast Track to build and sell websites. Choose the Main Track to sell monthly services on top.">
             Fast Track or Main Track?
@@ -264,7 +264,7 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section className="border-t-2 border-ink bg-sunk px-4 py-20 sm:py-24">
+      <section className="border-t-2 border-ink bg-sunk px-4 py-14 sm:py-24">
         <div className="mx-auto max-w-3xl">
           <Heading eyebrow="FAQ">Questions, answered</Heading>
           <div className="mt-12 space-y-3">

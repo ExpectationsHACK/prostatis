@@ -84,7 +84,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   ];
 
   return (
-    <article className="paper-grid pb-20">
+    <article className="paper-grid pb-14 sm:pb-20">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <header className="mx-auto max-w-3xl px-4 pt-10 sm:pt-14">
         <nav className="label flex flex-wrap items-center gap-1.5 text-muted" aria-label="Breadcrumb">
@@ -96,7 +96,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             </>
           )}
         </nav>
-        <h1 className="display mt-4 text-balance text-[36px] leading-[1.08] text-ink sm:text-[52px]">{post.title}</h1>
+        <h1 className="display mt-4 text-balance text-[30px] leading-[1.08] text-ink sm:text-[52px]">{post.title}</h1>
         {post.excerpt && <p className="mt-4 text-pretty font-mono text-[15px] leading-relaxed text-muted">{post.excerpt}</p>}
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-y border-edge py-3">
           <p className={byline}>
@@ -143,7 +143,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
         <aside className="mt-12 rounded-[16px] bg-night p-6 text-white sm:p-8">
           <p className="text-[13px] font-semibold text-brand">Learn it properly</p>
-          <p className="display mt-2 text-balance text-[26px] leading-tight text-white sm:text-[30px]">Build websites with AI and turn it into income.</p>
+          <p className="display mt-2 text-balance text-[22px] leading-tight text-white sm:text-[30px]">Build websites with AI and turn it into income.</p>
           <p className="mt-2 text-[15px] leading-relaxed text-white/70">
             Step-by-step lessons, real client projects and a verified certificate when you finish. From {from}, paid once.
           </p>
@@ -157,8 +157,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       </div>
 
       {related.length > 0 && (
-        <section className="mx-auto mt-16 max-w-6xl px-4" aria-labelledby="related">
-          <h2 id="related" className="display text-[28px] text-ink">Keep reading</h2>
+        <section className="mx-auto mt-12 sm:mt-16 max-w-6xl px-4" aria-labelledby="related">
+          <h2 id="related" className="display text-[24px] sm:text-[28px] text-ink">Keep reading</h2>
           <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((p) => (
               <PostCard key={p.id} post={p} />

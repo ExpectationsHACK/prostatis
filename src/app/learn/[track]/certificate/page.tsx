@@ -52,11 +52,11 @@ export default async function CertificatePage({ params }: { params: Promise<{ tr
         <div className="field-grid border border-edge bg-paper px-6 py-10 text-center sm:px-14 sm:py-14">
           <div className="flex items-center justify-center gap-2.5">
             <LogoMark size={40} />
-            <span className="display text-[22px] text-ink">{site.name}</span>
+            <span className="display text-[20px] sm:text-[22px] text-ink">{site.name}</span>
           </div>
           <p className="label mt-8 text-brand-text">Certificate of completion</p>
           <p className="mt-6 font-mono text-[14px] text-muted">This certifies that</p>
-          <p className="display mt-2 text-balance text-[40px] leading-tight text-ink sm:text-[56px]">{cert.name || `${site.name} member`}</p>
+          <p className="display mt-2 text-balance text-[32px] leading-tight text-ink sm:text-[56px]">{cert.name || `${site.name} member`}</p>
           <p className="mx-auto mt-4 max-w-lg font-mono text-[14px] leading-relaxed text-ink">
             completed all {track.modules.length} lessons, practical tasks and assessments of the <strong>{track.name}</strong> ({track.length}) and passed the final assessment with {final.best}/{final.total}.
           </p>

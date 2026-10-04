@@ -20,20 +20,20 @@ export default async function WelcomePage() {
   const first = (user.name || "").split(" ")[0];
 
   return (
-    <div className="mx-auto max-w-[480px] px-4 py-16">
+    <div className="mx-auto max-w-[480px] px-4 py-12 sm:py-16">
       <div className="flex flex-col items-center text-center">
         <span className="grid size-14 place-items-center rounded-full bg-brand-wash">
           <CircleCheck className="size-8 text-brand" aria-hidden />
         </span>
-        <h1 className="display mt-5 text-[44px] text-ink">
+        <h1 className="display mt-5 text-[34px] sm:text-[44px] text-ink">
           You&apos;re in{first ? `, ${first}` : ""}
         </h1>
-        <p className="mt-2 text-[17px] text-muted">Payment confirmed. Welcome to {site.name}.</p>
+        <p className="mt-2 text-[16px] sm:text-[17px] text-muted">Payment confirmed. Welcome to {site.name}.</p>
       </div>
 
       <ol className="mt-10 divide-y divide-line border-y border-line">
         <li className="py-6">
-          <p className="flex items-center gap-2 text-[17px] font-semibold text-ink">
+          <p className="flex items-center gap-2 text-[16px] sm:text-[17px] font-semibold text-ink">
             <MessageCircle className="size-5 text-muted" aria-hidden /> Join the community
           </p>
           <p className="mb-4 mt-1 text-[15px] text-muted">Say hello, share what you're building and get unstuck.</p>
@@ -46,7 +46,7 @@ export default async function WelcomePage() {
           )}
         </li>
         <li className="py-6">
-          <p className="flex items-center gap-2 text-[17px] font-semibold text-ink">
+          <p className="flex items-center gap-2 text-[16px] sm:text-[17px] font-semibold text-ink">
             <BookOpen className="size-5 text-muted" aria-hidden /> Start your first lesson
           </p>
           <p className="mb-4 mt-1 text-[15px] text-muted">It takes about an hour and ends with your first piece of real work. Your progress saves as you go.</p>

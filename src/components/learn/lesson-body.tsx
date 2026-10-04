@@ -128,7 +128,7 @@ function Block({ b, i, lessonId, track }: { b: LessonBlock; i: number; lessonId:
             <BookA className="size-3.5" aria-hidden /> Jargon buster
           </p>
           <div className="px-4 py-3">
-            <p className="display text-[19px] text-ink">{b.term}</p>
+            <p className="display text-[17px] sm:text-[19px] text-ink">{b.term}</p>
             <p className="mt-1.5 border-l-4 border-brand pl-3 text-[15.5px] leading-relaxed text-ink">
               <span className="font-semibold">Think of it like </span>
               <Rich text={b.like} />
@@ -144,7 +144,7 @@ function Block({ b, i, lessonId, track }: { b: LessonBlock; i: number; lessonId:
       return (
         <div className="my-6 border border-edge bg-[#fff8ec] p-4">
           <p className="label flex items-center gap-1.5 text-brand-text"><MapPin className="size-3.5" aria-hidden /> Real-life scenario</p>
-          <p className="display mt-1.5 text-[18px] text-ink">{b.title}</p>
+          <p className="display mt-1.5 text-[16.5px] sm:text-[18px] text-ink">{b.title}</p>
           <p className="mt-1.5 text-[15.5px] leading-relaxed text-ink/90"><Rich text={b.text} /></p>
         </div>
       );
@@ -176,7 +176,7 @@ function Block({ b, i, lessonId, track }: { b: LessonBlock; i: number; lessonId:
           </div>
           <div className="min-w-0 flex-1">
             <p className="label flex items-center gap-1.5 text-brand-text"><Wrench className="size-3.5" aria-hidden /> Free tool</p>
-            <p className="display mt-1 text-[17px] text-ink">{tool.title}</p>
+            <p className="display mt-1 text-[16px] sm:text-[17px] text-ink">{tool.title}</p>
             <p className="mt-1 font-mono text-[12.5px] leading-snug text-muted">{b.why}</p>
           </div>
           <ArrowUpRight className="size-5 shrink-0 text-ink" aria-hidden />
@@ -194,7 +194,7 @@ function Block({ b, i, lessonId, track }: { b: LessonBlock; i: number; lessonId:
             <SketchIcon draw="trophy" className="size-20" />
           </span>
           <p className="label">Milestone</p>
-          <p className="display mt-1 max-w-[30rem] pr-14 text-[24px] leading-tight">{b.title}</p>
+          <p className="display mt-1 max-w-[30rem] pr-14 text-[21px] sm:text-[24px] leading-tight">{b.title}</p>
           <p className="mt-2 text-[15.5px] leading-relaxed"><span className="font-bold">You just proved: </span><Rich text={b.proved} /></p>
           <p className="label mt-3 inline-block border border-edge bg-paper px-2 py-1 normal-case tracking-normal"><Rich text={b.cue} /></p>
         </div>
@@ -257,7 +257,7 @@ export function LessonBody({ lesson, track }: { lesson: Pick<Lesson, "id" | "sec
     <>
       {lesson.sections.map((s, n) => (
         <section key={s.heading} id={`s${n + 1}`} className="scroll-mt-24 border-t border-dashed border-line pt-8 first:border-0 first:pt-0 [&+section]:mt-10">
-          <h2 className="display text-[26px] text-ink sm:text-[30px]">{s.heading}</h2>
+          <h2 className="display text-[22px] text-ink sm:text-[30px]">{s.heading}</h2>
           {s.blocks.map((b, i) => (
             <Block key={i} b={b} i={figureNo.get(b) ?? n * 100 + i} lessonId={lesson.id} track={track} />
           ))}

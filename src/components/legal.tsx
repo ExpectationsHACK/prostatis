@@ -7,8 +7,8 @@ export function LegalPage({ title, updated, intro, children }: { title: string; 
     <article className="px-4 py-14 sm:py-20">
       <div className="mx-auto max-w-2xl">
         <p className="text-[13px] font-medium text-muted">Last updated {updated}</p>
-        <h1 className="display mt-2 text-[36px] text-ink sm:text-[44px]">{title}</h1>
-        <p className="mt-4 text-[17px] leading-relaxed text-muted">{intro}</p>
+        <h1 className="display mt-2 text-[30px] text-ink sm:text-[44px]">{title}</h1>
+        <p className="mt-4 text-[16px] sm:text-[17px] leading-relaxed text-muted">{intro}</p>
         <div className="mt-10 space-y-9 text-[16px] leading-[1.75] text-ink [&_h2]:text-[20px] [&_h2]:font-semibold [&_li]:mt-1.5 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-5 [&_p+p]:mt-3">{children}</div>
       </div>
     </article>

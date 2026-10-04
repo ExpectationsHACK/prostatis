@@ -115,9 +115,9 @@ export function Markdown({ md }: { md: string }) {
       const id = headingId(plain(text));
       out.push(
         h[1].length === 3 ? (
-          <h3 key={key} id={id} className="display mt-8 scroll-mt-24 text-[21px] text-ink">{inline(text, key)}</h3>
+          <h3 key={key} id={id} className="display mt-8 scroll-mt-24 text-[19px] sm:text-[21px] text-ink">{inline(text, key)}</h3>
         ) : (
-          <h2 key={key} id={id} className="display mt-11 scroll-mt-24 text-[27px] leading-tight text-ink">{inline(text, key)}</h2>
+          <h2 key={key} id={id} className="display mt-11 scroll-mt-24 text-[23px] sm:text-[27px] leading-tight text-ink">{inline(text, key)}</h2>
         ),
       );
       i++;
@@ -149,7 +149,7 @@ export function Markdown({ md }: { md: string }) {
       const body: string[] = [];
       while (i < lines.length && lines[i].startsWith(">")) body.push(lines[i++].replace(/^>\s?/, ""));
       out.push(
-        <blockquote key={key} className="my-6 border-l-4 border-brand bg-card px-5 py-3 text-[17px] italic leading-relaxed text-ink">
+        <blockquote key={key} className="my-6 border-l-4 border-brand bg-card px-5 py-3 text-[16px] sm:text-[17px] italic leading-relaxed text-ink">
           {inline(body.join(" "), key)}
         </blockquote>,
       );
@@ -161,7 +161,7 @@ export function Markdown({ md }: { md: string }) {
       const items: string[] = [];
       const re = ordered ? /^\d+\.\s+/ : /^[-*]\s+/;
       while (i < lines.length && re.test(lines[i])) items.push(lines[i++].replace(re, ""));
-      const cls = "my-5 space-y-2 pl-6 text-[17px] leading-[1.75] text-ink marker:text-brand-text " + (ordered ? "list-decimal marker:font-bold" : "list-disc");
+      const cls = "my-5 space-y-2 pl-6 text-[16px] sm:text-[17px] leading-[1.75] text-ink marker:text-brand-text " + (ordered ? "list-decimal marker:font-bold" : "list-disc");
       const lis = items.map((t, j) => <li key={j}>{inline(t, `${key}-${j}`)}</li>);
       out.push(ordered ? <ol key={key} className={cls}>{lis}</ol> : <ul key={key} className={cls}>{lis}</ul>);
       continue;
@@ -194,7 +194,7 @@ export function Markdown({ md }: { md: string }) {
     // Paragraph: consecutive plain lines.
     const para: string[] = [];
     while (i < lines.length && lines[i].trim() && !(para.length && isBlockStart(lines[i]))) para.push(lines[i++].trim());
-    out.push(<p key={key} className="my-5 text-[17px] leading-[1.8] text-ink">{inline(para.join(" "), key)}</p>);
+    out.push(<p key={key} className="my-5 text-[16px] sm:text-[17px] leading-[1.8] text-ink">{inline(para.join(" "), key)}</p>);
   }
 
   return <>{out}</>;

@@ -23,7 +23,7 @@ export function PostCover({ post, eager = false }: { post: Pick<Post, "slug" | "
       <span className="font-mono text-[11px] font-bold" style={{ color: t.dim }}>
         {post.tags[0] ?? "Blog"}
       </span>
-      <span className="display line-clamp-3 text-balance text-[22px] leading-tight sm:text-[26px]">{post.title}</span>
+      <span className="display line-clamp-3 text-balance text-[20px] leading-tight sm:text-[26px]">{post.title}</span>
     </div>
   );
 }
@@ -36,7 +36,7 @@ export function PostCard({ post, big = false }: { post: Post; big?: boolean }) {
       </div>
       <div className="flex flex-1 flex-col p-5">
         {post.tags[0] && <p className="label text-brand-text">{post.tags[0]}</p>}
-        <h2 className={"display mt-2 text-balance leading-tight text-ink group-hover:underline " + (big ? "text-[28px] sm:text-[34px]" : "text-[21px]")}>{post.title}</h2>
+        <h2 className={"display mt-2 text-balance leading-tight text-ink group-hover:underline " + (big ? "text-[24px] sm:text-[34px]" : "text-[19px] sm:text-[21px]")}>{post.title}</h2>
         <p className={"mt-2 font-mono leading-relaxed text-muted " + (big ? "text-[14px]" : "line-clamp-3 text-[13px]")}>{post.excerpt}</p>
         <p className={`mt-auto pt-4 ${byline}`}>
           {postDate(post.published_at)} · {readingMinutes(post.content_md)} min read

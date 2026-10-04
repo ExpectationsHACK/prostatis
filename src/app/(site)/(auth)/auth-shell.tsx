@@ -28,14 +28,14 @@ export function AuthShell({ title, subtitle, children, art = "signin" }: { title
     <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-12 sm:py-16 lg:grid-cols-[minmax(0,430px)_minmax(0,1fr)] lg:gap-16">
       <div className="mx-auto w-full max-w-[430px]">
         <LogoMark size={44} />
-        <h1 className="display mt-5 text-[36px] leading-tight text-ink sm:text-[40px]">{title}</h1>
+        <h1 className="display mt-5 text-[30px] leading-tight text-ink sm:text-[40px]">{title}</h1>
         <p className="mt-2 text-[15.5px] leading-relaxed text-muted">{subtitle}</p>
         <div className="mt-8">{children}</div>
       </div>
 
       <aside className="ink-block relative mx-auto w-full max-w-[560px] bg-brand p-5 sm:p-8">
         <p className="label text-ink/75">{p.eyebrow}</p>
-        <p className="display mt-2 text-balance text-[26px] leading-tight text-ink sm:text-[32px]">{p.title}</p>
+        <p className="display mt-2 text-balance text-[22px] leading-tight text-ink sm:text-[32px]">{p.title}</p>
         <div className="mt-6 overflow-hidden rounded-[14px] border-2 border-ink bg-card shadow-[4px_4px_0_var(--ink)]">
           <AuthArt kind={art} />
         </div>

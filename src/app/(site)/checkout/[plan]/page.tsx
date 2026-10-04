@@ -49,7 +49,7 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
     <div className="mx-auto max-w-[480px] px-4 py-12 sm:py-14">
       <div className="flex flex-col items-center text-center">
         <LogoMark size={44} />
-        <h1 className="display mt-5 text-[34px] leading-tight text-ink sm:text-[40px]">{current?.id === plan.id ? `Add time to the ${plan.name}` : current && plan.id === "main_track" ? "Upgrade to the Main Track" : `Enroll in the ${plan.name}`}</h1>
+        <h1 className="display mt-5 text-[28px] leading-tight text-ink sm:text-[40px]">{current?.id === plan.id ? `Add time to the ${plan.name}` : current && plan.id === "main_track" ? "Upgrade to the Main Track" : `Enroll in the ${plan.name}`}</h1>
         <p className="mt-1 break-all font-mono text-[13px] text-muted">Signed in as {user.email}</p>
       </div>
 
@@ -83,9 +83,9 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
 
       <div className="ink-block mt-4 bg-card p-5 sm:p-6">
         <div className="flex items-baseline justify-between gap-3">
-          <span className="display text-[24px] text-ink">{plan.name}</span>
+          <span className="display text-[21px] sm:text-[24px] text-ink">{plan.name}</span>
           <span className="tabular text-right">
-            <span className="display text-[28px] text-ink">{formatNgn(plan.priceNgn)}</span>
+            <span className="display text-[24px] sm:text-[28px] text-ink">{formatNgn(plan.priceNgn)}</span>
             <span className="block font-mono text-[12px] text-muted">one payment · {plan.period}</span>
           </span>
         </div>

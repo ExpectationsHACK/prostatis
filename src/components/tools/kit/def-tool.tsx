@@ -337,7 +337,7 @@ function ChecklistTool({ def, slug, title }: { def: ChecklistDef; slug: string; 
           <div className="border border-edge bg-card p-5">
             <div className="flex items-baseline justify-between">
               <span className="font-mono text-[12px] font-bold text-muted">Your score</span>
-              <span className="display tabular text-[44px] text-ink">{pct}</span>
+              <span className="display tabular text-[34px] sm:text-[44px] text-ink">{pct}</span>
             </div>
             <div className="mt-2 h-3 border border-edge bg-wash">
               <div className="h-full bg-brand transition-all duration-300" style={{ width: pct + "%" }} />

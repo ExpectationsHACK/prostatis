@@ -76,7 +76,7 @@ export function StepHead({ n, title, sub }: { n: number; title: string; sub?: st
     <div className="flex items-start gap-3">
       <span className="display grid size-8 shrink-0 place-items-center border border-edge bg-brand text-[15px] text-ink">{n}</span>
       <div>
-        <p className="display text-[20px] leading-tight text-ink">{title}</p>
+        <p className="display text-[18px] sm:text-[20px] leading-tight text-ink">{title}</p>
         {sub && <p className="mt-0.5 font-mono text-[12px] text-muted">{sub}</p>}
       </div>
     </div>

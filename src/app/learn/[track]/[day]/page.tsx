@@ -39,9 +39,9 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
 
   if (status === "locked") {
     return (
-      <div className="mx-auto max-w-xl px-4 py-20 text-center">
+      <div className="mx-auto max-w-xl px-4 py-14 sm:py-20 text-center">
         <Lock className="mx-auto size-10 text-ink" aria-hidden />
-        <h1 className="display mt-4 text-[32px] text-ink">Day {day} is locked</h1>
+        <h1 className="display mt-4 text-[26px] sm:text-[32px] text-ink">Day {day} is locked</h1>
         <p className="mt-2 font-mono text-[14px] text-muted">Lessons open in order so each one builds on the last. Finish Day {prog.next?.day} first.</p>
         {prog.next && (
           <Link href={`/learn/${slug}/${prog.next.day}`} className={`${btn.primary} ${size.lg} mt-6`}>
@@ -75,7 +75,7 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
           <p className="label text-brand-text">
             Day {day} of {track.modules.length} · {getPillar(mod.pillar).title}
           </p>
-          <h1 className="display mt-2 text-balance text-[36px] leading-[1.05] text-ink sm:text-[48px]">{lesson.title}</h1>
+          <h1 className="display mt-2 text-balance text-[30px] leading-[1.05] text-ink sm:text-[48px]">{lesson.title}</h1>
           <div className="mt-4 flex flex-wrap gap-2">
             <span className="label inline-flex items-center gap-1.5 border border-edge bg-card px-2 py-1 text-ink"><Clock className="size-3.5" aria-hidden /> {lesson.minutes} min</span>
             <span className="label inline-flex items-center gap-1.5 border border-edge bg-[#f2c230] px-2 py-1 text-ink"><Sparkles className="size-3.5" aria-hidden /> Up to {maxXp} XP</span>
@@ -85,7 +85,7 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
 
         <div className="ink-block mt-6 bg-brand p-5">
           <p className="label flex items-center gap-1.5 text-ink"><Target className="size-3.5" aria-hidden /> By the end of today you&apos;ll have</p>
-          <p className="mt-1.5 text-[17px] font-bold leading-snug text-ink">{lesson.outcome}</p>
+          <p className="mt-1.5 text-[16px] sm:text-[17px] font-bold leading-snug text-ink">{lesson.outcome}</p>
         </div>
 
         <ol className="mt-5 grid grid-cols-3 border border-edge bg-card" aria-label="Lesson checklist">
@@ -97,7 +97,7 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
           ))}
         </ol>
 
-        <p className="mt-8 text-[17px] leading-[1.75] text-ink/90"><Rich text={lesson.intro} /></p>
+        <p className="mt-8 text-[16px] sm:text-[17px] leading-[1.75] text-ink/90"><Rich text={lesson.intro} /></p>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <div className="border border-edge bg-card p-4">
@@ -141,7 +141,7 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
 
         <section id="task" className="ink-block mt-12 scroll-mt-24 bg-card p-5 sm:p-7">
           <p className="label flex items-center justify-between gap-2 text-brand-text"><span>Your mission · do it for real</span><span className="bg-[#f2c230] px-1.5 py-0.5 text-ink">+{XP.task} XP</span></p>
-          <h2 className="display mt-1 text-[26px] text-ink">{lesson.task.title}</h2>
+          <h2 className="display mt-1 text-[22px] sm:text-[26px] text-ink">{lesson.task.title}</h2>
           <ol className="mt-4 space-y-2">
             {lesson.task.steps.map((s, i) => (
               <li key={s} className="flex gap-3 text-[15px] leading-relaxed text-ink">
@@ -156,7 +156,7 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
         </section>
 
         <section id="resources" className="mt-12 scroll-mt-24">
-          <h2 className="display text-[26px] text-ink">Go deeper</h2>
+          <h2 className="display text-[22px] sm:text-[26px] text-ink">Go deeper</h2>
           <p className="mt-1 font-mono text-[13px] text-muted">Everything you need is on this page. These trusted free resources are here if you want more.</p>
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
             {lesson.resources.map((r) => (
@@ -192,13 +192,13 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
 
         <section id="assessment" className="mt-12 scroll-mt-24 border-t border-edge pt-8">
           <p className="label text-brand-text">Assessment</p>
-          <h2 className="display mt-1 text-[30px] text-ink">Check what you learned</h2>
+          <h2 className="display mt-1 text-[25px] sm:text-[30px] text-ink">Check what you learned</h2>
           <div className="mt-4">
             <Quiz slug={slug} day={day} questions={publicQuestions(lesson.quiz)} passMark={PASS_MARK} passed={Boolean(row?.quiz_passed_at)} best={row?.quiz_best ?? 0} celebrate={lesson.celebrate} />
           </div>
         </section>
 
-        <nav className="mt-14 flex items-center justify-between gap-3 border-t border-edge pt-6" aria-label="Lesson navigation">
+        <nav className="mt-10 sm:mt-14 flex items-center justify-between gap-3 border-t border-edge pt-6" aria-label="Lesson navigation">
           {prev ? (
             <Link href={`/learn/${slug}/${prev.day}`} className={`${btn.secondary} ${size.md}`}>
               <ArrowLeft className="size-4" aria-hidden /> Day {prev.day}

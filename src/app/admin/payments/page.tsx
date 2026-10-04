@@ -28,7 +28,7 @@ export default async function PaymentsPage({ searchParams }: { searchParams: Pro
         <Stat icon={Wallet} label="Last 7 days" value={ngn(sum(7))} tone="accent" />
         <Stat icon={CalendarDays} label="Last 30 days" value={ngn(sum(30))} />
         <Stat icon={PiggyBank} label="All time" value={ngn(sum(36500))} sub={`${real.length} payments`} />
-        <Stat icon={Scale} label="Fast / Main (all time)" value={<span className="text-[20px]">{ngn(sum(36500, "fast_track"))} / {ngn(sum(36500, "main_track"))}</span>} />
+        <Stat icon={Scale} label="Fast / Main (all time)" value={<span className="text-[18px] sm:text-[20px]">{ngn(sum(36500, "fast_track"))} / {ngn(sum(36500, "main_track"))}</span>} />
       </div>
       <Table head={["Date", "Student", "Track", "Amount", "Method", "Reference"]} empty={!payments.length} footer={<Pagination p={pg} noun="payments" href={(n) => withParams("/admin/payments", sp, { page: n })} />}>
         {pg.rows.map((p) => (

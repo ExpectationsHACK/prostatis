@@ -41,7 +41,7 @@ export function PageHead({ title, sub, crumbs = [], children }: { title: string;
   return (
     <div className="flex flex-wrap items-end justify-between gap-4">
       <div className="min-w-0">
-        <h1 className="display text-[26px] text-[#151515] sm:text-[30px]">{title}</h1>
+        <h1 className="display text-[22px] text-[#151515] sm:text-[30px]">{title}</h1>
         {title !== "Dashboard" && (
           <nav className="mt-1 flex flex-wrap items-center gap-1.5 text-[12.5px] text-[var(--a-muted)]" aria-label="Breadcrumb">
             {trail.map((c, i) => {
@@ -101,7 +101,7 @@ export function Stat({ label, value, sub, href, icon: Icon, delta, tone = "plain
         )}
       </div>
       <p className={"mt-4 text-[12.5px] " + (accent ? "text-[#151515]/80" : "text-[var(--a-muted)]")}>{label}</p>
-      <p className="tabular mt-0.5 text-[26px] font-semibold leading-tight tracking-tight">{value}</p>
+      <p className="tabular mt-0.5 text-[22px] sm:text-[26px] font-semibold leading-tight tracking-tight">{value}</p>
       {sub && <p className={"mt-1 text-[12px] " + (accent ? "text-[#151515]/75" : "text-[var(--a-muted)]")}>{sub}</p>}
     </>
   );

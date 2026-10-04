@@ -26,7 +26,7 @@ export function Brand({ size = 32, name = true }: { size?: number; name?: boolea
   return (
     <Link href="/" className="flex items-center gap-2.5" aria-label={`${site.name} home`}>
       <LogoMark size={size} />
-      {name && <Wordmark className="text-[17px] sm:text-[20px]" />}
+      {name && <Wordmark className="text-[16px] sm:text-[20px]" />}
     </Link>
   );
 }

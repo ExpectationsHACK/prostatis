@@ -122,7 +122,7 @@ export function BlockView({ b }: { b: Block }) {
           {b.items.map((it) => (
             <div key={it.label} className="border border-edge bg-card p-4">
               <p className={headTitle}>{it.label}</p>
-              <p className="display tabular mt-1 text-[28px] text-ink">{it.value}</p>
+              <p className="display tabular mt-1 text-[24px] sm:text-[28px] text-ink">{it.value}</p>
               {it.sub && <p className="mt-0.5 text-[12px] text-muted">{it.sub}</p>}
             </div>
           ))}
@@ -197,7 +197,7 @@ export function BlockView({ b }: { b: Block }) {
           <div className="divide-y divide-line">
             {b.pairs.map((p) => (
               <div key={p.heading + p.body} className="p-4">
-                <p className="text-[28px] leading-tight text-ink" style={{ fontFamily: `'${p.heading}', serif`, fontWeight: 700 }}>
+                <p className="text-[24px] sm:text-[28px] leading-tight text-ink" style={{ fontFamily: `'${p.heading}', serif`, fontWeight: 700 }}>
                   Build your business online
                 </p>
                 <p className="mt-1.5 text-[15px] leading-relaxed text-muted" style={{ fontFamily: `'${p.body}', sans-serif` }}>

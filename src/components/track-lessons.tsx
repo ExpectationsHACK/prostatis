@@ -12,7 +12,7 @@ export function LessonCard({ m, i, href }: { m: Module; i: number; href?: string
       </div>
       <div className="flex flex-1 flex-col p-4">
         <p className="label text-brand-text">{getPillar(m.pillar).title}</p>
-        <h4 className="display mt-1.5 text-[19px] text-ink">{m.title}</h4>
+        <h4 className="display mt-1.5 text-[17px] sm:text-[19px] text-ink">{m.title}</h4>
         <p className="mt-1.5 font-mono text-[12.5px] leading-relaxed text-muted">{m.summary}</p>
         <ul className="mt-3 space-y-1 border-t border-dashed border-line pt-3">
           {m.outcomes.map((o) => (
@@ -40,10 +40,10 @@ export function TrackLessons({ track, hrefFor, compact = false }: { track: Track
   return (
     <>
       {track.weeks.map((w) => (
-        <div key={w.week} className={"mx-auto max-w-6xl " + (compact ? "mt-10" : "mt-14")}>
+        <div key={w.week} className={"mx-auto max-w-6xl " + (compact ? "mt-10" : "mt-10 sm:mt-14")}>
           <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-edge pb-3">
             <span className="label bg-ink px-2 py-1 text-paper">Week {w.week}</span>
-            <h3 className={"display text-ink " + (compact ? "text-[22px] sm:text-[26px]" : "text-[26px] sm:text-[32px]")}>{w.title}</h3>
+            <h3 className={"display text-ink " + (compact ? "text-[20px] sm:text-[26px]" : "text-[22px] sm:text-[32px]")}>{w.title}</h3>
             <p className="w-full font-mono text-[13px] text-muted sm:w-auto">{w.blurb}</p>
           </div>
           <div className="mt-6">

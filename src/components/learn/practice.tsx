@@ -37,7 +37,7 @@ export function TryIt({ id, title, minutes, steps }: { id: string; title: string
         </p>
         {done && <span className="label bg-success px-1.5 py-0.5 text-paper">Practised ✓</span>}
       </div>
-      <p className="display mt-2 text-[19px] text-ink">{title}</p>
+      <p className="display mt-2 text-[17px] sm:text-[19px] text-ink">{title}</p>
       <ol className="mt-2 space-y-1.5">
         {steps.map((s, i) => (
           <li key={i} className="flex gap-2.5 text-[15px] leading-relaxed text-ink">

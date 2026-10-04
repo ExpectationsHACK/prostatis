@@ -12,7 +12,7 @@ export default function LearnLayout({ children }: { children: React.ReactNode })
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4">
           <Link href="/learn" className="flex items-center gap-2" aria-label={`${site.name}: my learning`}>
             <LogoMark size={30} />
-            <span className="display hidden text-[17px] text-ink sm:inline">{site.name}</span>
+            <span className="display hidden text-[16px] sm:text-[17px] text-ink sm:inline">{site.name}</span>
             <span className="label border border-edge bg-brand px-1.5 py-0.5 text-ink">Learn</span>
           </Link>
           <nav className="flex items-center gap-1 font-mono text-[12px] font-bold" aria-label="Learning">

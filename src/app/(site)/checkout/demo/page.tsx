@@ -21,7 +21,7 @@ export default async function DemoCheckoutPage({ searchParams }: PageProps<"/che
   if (!user) redirect("/login");
 
   return (
-    <div className="mx-auto max-w-[400px] px-4 py-14">
+    <div className="mx-auto max-w-[400px] px-4 py-10 sm:py-14">
       <p className="mb-4 flex items-center justify-center gap-2 rounded-lg bg-brand-wash px-3 py-2 text-[13px] font-semibold text-ink">
         <FlaskConical className="size-4 text-brand-text" aria-hidden /> Demo checkout: simulates Paystack. No real payment.
       </p>

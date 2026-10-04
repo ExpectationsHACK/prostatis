@@ -15,10 +15,10 @@ export function BlogIndex({ posts, allForTags, activeTag, tagName }: { posts: Po
   const [first, ...rest] = posts;
 
   return (
-    <div className="pb-20">
+    <div className="pb-14 sm:pb-20">
       <header className="border-b border-line bg-card px-4 py-12 text-center sm:py-16">
         <p className="text-[13px] font-semibold text-brand-text">{tagName ? "Topic" : "The blog"}</p>
-        <h1 className="display mx-auto mt-3 max-w-3xl text-balance text-[42px] text-ink sm:text-[62px]">{tagName ?? "Build it. Sell it. Get paid."}</h1>
+        <h1 className="display mx-auto mt-3 max-w-3xl text-balance text-[34px] text-ink sm:text-[62px]">{tagName ?? "Build it. Sell it. Get paid."}</h1>
         <p className="mx-auto mt-4 max-w-xl text-[16.5px] leading-relaxed text-muted">
           Practical guides on building websites with AI, finding clients, pricing, SEO and getting paid, written for Nigeria.
         </p>
@@ -43,7 +43,7 @@ export function BlogIndex({ posts, allForTags, activeTag, tagName }: { posts: Po
 
         {!first ? (
           <div className="ink-block mx-auto mt-12 max-w-xl bg-card p-8 text-center">
-            <h2 className="display text-[26px] text-ink">First articles are on the way</h2>
+            <h2 className="display text-[22px] sm:text-[26px] text-ink">First articles are on the way</h2>
             <p className="mt-2 font-mono text-[13px] leading-relaxed text-muted">Meanwhile, the free tools are ready to use, no signup.</p>
             <Link href="/tools" className={`${btn.primary} ${size.md} mt-5`}>
               Try the free tools

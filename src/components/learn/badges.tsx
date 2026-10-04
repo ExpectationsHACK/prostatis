@@ -9,7 +9,7 @@ export function BadgeShelf({ list }: { list: Badge[] }) {
   return (
     <section className="mt-10">
       <h2 className="flex items-baseline justify-between gap-3 border-b border-edge pb-2">
-        <span className="display text-[24px] text-ink">Badges</span>
+        <span className="display text-[21px] sm:text-[24px] text-ink">Badges</span>
         <span className="label text-muted">{got}/{list.length} earned</span>
       </h2>
       <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">

@@ -39,7 +39,7 @@ export default async function BillingPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:py-8">
-      <h1 className="display text-[32px] leading-tight text-ink sm:text-[40px]">Billing</h1>
+      <h1 className="display text-[26px] leading-tight text-ink sm:text-[40px]">Billing</h1>
       <p className="mt-1 max-w-xl font-mono text-[13px] leading-relaxed text-muted">
         You pay once per track. There&apos;s no subscription, so nothing renews and your card is never charged again.
       </p>
@@ -50,7 +50,7 @@ export default async function BillingPage() {
           <div className="grid gap-5 sm:grid-cols-[1fr_auto] sm:items-end">
             <div>
               <p className="flex flex-wrap items-center gap-2">
-                <span className="display text-[26px] leading-tight text-ink">{plan.name}</span>
+                <span className="display text-[22px] sm:text-[26px] leading-tight text-ink">{plan.name}</span>
                 <span className={"label border border-edge px-2 py-0.5 " + (active ? "bg-[#e3f5e9] text-ink" : "bg-danger/10 text-danger")}>{active ? "Active" : "Ended"}</span>
               </p>
               <p className="mt-1 font-mono text-[13px] text-muted">
@@ -81,7 +81,7 @@ export default async function BillingPage() {
           </div>
         ) : (
           <div>
-            <p className="display text-[24px] leading-tight text-ink">You haven&apos;t joined a track yet</p>
+            <p className="display text-[21px] sm:text-[24px] leading-tight text-ink">You haven&apos;t joined a track yet</p>
             <p className="mt-1 text-[15px] text-muted">Pick one below. One payment, no subscription.</p>
           </div>
         )}
@@ -122,9 +122,9 @@ export default async function BillingPage() {
           {plans.map((p) => (
             <div key={p.id} className="ink-block flex flex-col bg-card p-5">
               <p className="label text-brand-text">{p.period}</p>
-              <p className="display mt-1 text-[24px] text-ink">{p.name}</p>
+              <p className="display mt-1 text-[21px] sm:text-[24px] text-ink">{p.name}</p>
               <p className="mt-1 text-[14px] leading-snug text-muted">{p.blurb}</p>
-              <p className="display mt-3 text-[28px] text-ink">{formatNgn(p.priceNgn)}</p>
+              <p className="display mt-3 text-[24px] sm:text-[28px] text-ink">{formatNgn(p.priceNgn)}</p>
               <p className="font-mono text-[12px] text-muted">one payment · {p.accessDays} days of access</p>
               <Link href={`/checkout/${p.id}`} className={`${btn.primary} ${size.md} mt-4`}>
                 {sub ? "Buy again" : "Enroll Now"}

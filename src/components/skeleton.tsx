@@ -64,7 +64,7 @@ export function PageSkeleton({ cards = 6 }: { cards?: number }) {
 /** A single free tool: header, "how to use it", then the form and result columns. */
 export function ToolSkeleton() {
   return (
-    <Loading label="Loading tool" className="pb-16">
+    <Loading label="Loading tool" className="pb-12 sm:pb-16">
       <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-10 md:grid-cols-[1.3fr_1fr] md:py-14">
         <div>
           <Bone className="h-3.5 w-32" />

@@ -26,7 +26,7 @@ export function Celebrate({ title, proved, xp, levelUp, badges }: { title: strin
         ))}
       </div>
       <p className="label flex items-center gap-1.5"><Sparkles className="size-4" aria-hidden /> Nice work!</p>
-      <p className="display mt-1 text-[28px] leading-tight">{title}</p>
+      <p className="display mt-1 text-[24px] sm:text-[28px] leading-tight">{title}</p>
       {proved && <p className="mt-2 max-w-[36rem] text-[15.5px] leading-relaxed"><span className="font-bold">What you just proved: </span>{proved}</p>}
       <div className="mt-3 flex flex-wrap gap-2">
         {xp > 0 && <span className="label border border-edge bg-paper px-2 py-1">+{xp} XP</span>}

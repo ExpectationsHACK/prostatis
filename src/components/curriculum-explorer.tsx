@@ -116,7 +116,7 @@ export function CurriculumExplorer({ track, dark = false }: { track: Track; dark
             <p className="label text-brand-text">
               Day {mod.day} of {track.modules.length} · {getPillar(mod.pillar).title}
             </p>
-            <h3 className="display mt-1.5 text-[24px] leading-tight text-ink">{mod.title}</h3>
+            <h3 className="display mt-1.5 text-[21px] sm:text-[24px] leading-tight text-ink">{mod.title}</h3>
             <p className="mt-2 text-[15px] leading-relaxed text-muted">{mod.summary}</p>
             <p className="label mt-4 text-ink">By the end of the day you&apos;ll have</p>
             <ul className="mt-2 flex flex-wrap gap-2">

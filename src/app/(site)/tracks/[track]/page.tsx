@@ -36,7 +36,7 @@ export default async function TrackPage({ params }: { params: Promise<{ track: s
             <p className="text-[13px] font-semibold text-brand-text">
               {track.length} · {track.modules.length} lessons · {track.weeks.length} weeks
             </p>
-            <h1 className="display mt-3 text-[44px] text-ink sm:text-[60px]">The {track.name}</h1>
+            <h1 className="display mt-3 text-[34px] text-ink sm:text-[60px]">The {track.name}</h1>
             <p className="mt-4 max-w-xl text-[16.5px] leading-relaxed text-muted">{track.blurb}</p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link href={`/checkout/${track.id}`} className={`${btn.primary} ${size.lg}`}>
@@ -72,7 +72,7 @@ export default async function TrackPage({ params }: { params: Promise<{ track: s
                 <c.icon className="size-5 text-ink" aria-hidden />
               </span>
               <div>
-                <h2 className="display text-[19px] text-ink">{c.title}</h2>
+                <h2 className="display text-[17px] sm:text-[19px] text-ink">{c.title}</h2>
                 <p className="mt-1 font-mono text-[12.5px] leading-relaxed text-muted">{c.body}</p>
               </div>
             </div>
@@ -80,11 +80,11 @@ export default async function TrackPage({ params }: { params: Promise<{ track: s
         </div>
       </section>
 
-      <section className="px-4 pb-20">
+      <section className="px-4 pb-14 sm:pb-20">
         <TrackLessons track={track} />
-        <div className="ink-block mx-auto mt-16 max-w-3xl bg-card p-6 text-center">
+        <div className="ink-block mx-auto mt-12 sm:mt-16 max-w-3xl bg-card p-6 text-center">
           <p className="label text-brand-text">Final assessment</p>
-          <h2 className="display mt-2 text-[26px] text-ink">Finish with a capstone and a verified certificate</h2>
+          <h2 className="display mt-2 text-[22px] sm:text-[26px] text-ink">Finish with a capstone and a verified certificate</h2>
           <p className="mt-2 font-mono text-[13px] leading-relaxed text-muted">
             A final exam drawn from every lesson, plus a project checklist that proves you can deliver what the track promises. Pass it and your certificate is ready to download, emailed to you, and backed by a public proof page with a unique ID that clients can check.
           </p>

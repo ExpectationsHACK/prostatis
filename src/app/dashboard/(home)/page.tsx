@@ -68,7 +68,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="label text-muted">{new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "Africa/Lagos" })}</p>
-          <h1 className="display mt-1 text-[32px] leading-tight text-ink sm:text-[40px]">Welcome back{first ? `, ${first}` : ""}</h1>
+          <h1 className="display mt-1 text-[26px] leading-tight text-ink sm:text-[40px]">Welcome back{first ? `, ${first}` : ""}</h1>
         </div>
         <p className="label border border-edge bg-card px-2.5 py-1.5 text-ink">
           {track.name} · {prog.completed}/{prog.total} lessons
@@ -86,7 +86,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
               <p className="label text-brand-text">
                 {prog.completed ? "Up next" : "Start here"} · Day {next.day} of {prog.total} · {getPillar(next.pillar).title}
               </p>
-              <h2 className="display mt-1.5 text-balance text-[26px] leading-tight text-ink sm:text-[32px]">{next.title}</h2>
+              <h2 className="display mt-1.5 text-balance text-[22px] leading-tight text-ink sm:text-[32px]">{next.title}</h2>
               <p className="mt-2 line-clamp-2 font-mono text-[13px] leading-relaxed text-muted">{next.summary}</p>
               <div className="mt-4 max-w-md">
                 <Bar pct={prog.pct} />
@@ -100,7 +100,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
         ) : (
           <div className="md:col-span-2">
             <p className="label text-brand-text">All {prog.total} lessons complete</p>
-            <h2 className="display mt-1.5 text-[30px] text-ink">{final?.passed_at ? "You're certified. Well done!" : "One step left: the final assessment"}</h2>
+            <h2 className="display mt-1.5 text-[25px] sm:text-[30px] text-ink">{final?.passed_at ? "You're certified. Well done!" : "One step left: the final assessment"}</h2>
             <Link href={final?.passed_at ? `/learn/${slug}/certificate` : `/learn/${slug}/final`} className={`${btn.primary} ${size.lg} mt-5`}>
               <Award className="size-5" aria-hidden /> {final?.passed_at ? "View your certificate" : "Take the final assessment"}
             </Link>
@@ -112,24 +112,24 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
       <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
         <div className="ink-block bg-card p-4">
           <p className="label flex items-center gap-1.5 text-muted"><Sparkles className="size-3.5 text-brand-text" aria-hidden /> Level {lvl.level}</p>
-          <p className="display mt-1 text-[28px] text-ink">{state.xp.toLocaleString("en-NG")} XP</p>
+          <p className="display mt-1 text-[24px] sm:text-[28px] text-ink">{state.xp.toLocaleString("en-NG")} XP</p>
           <div className="mt-2"><Bar pct={lvl.progress * 100} /></div>
           <p className="mt-1.5 font-mono text-[11.5px] text-muted">{lvl.name}{lvl.next ? ` · ${lvl.next - state.xp} XP to next` : ""}</p>
         </div>
         <div className="ink-block bg-card p-4">
           <p className="label flex items-center gap-1.5 text-muted"><Flame className="size-3.5 text-brand-text" aria-hidden /> Streak</p>
-          <p className="display mt-1 text-[28px] text-ink">{st.current} {st.current === 1 ? "day" : "days"}</p>
+          <p className="display mt-1 text-[24px] sm:text-[28px] text-ink">{st.current} {st.current === 1 ? "day" : "days"}</p>
           <p className="mt-2 font-mono text-[11.5px] leading-snug text-muted">{st.activeToday ? "Done for today. Come back tomorrow." : "Pass a quiz or finish a task today."} Best {st.longest}.</p>
         </div>
         <div className="ink-block bg-card p-4">
           <p className="label flex items-center gap-1.5 text-muted"><Trophy className="size-3.5 text-brand-text" aria-hidden /> Lessons</p>
-          <p className="display mt-1 text-[28px] text-ink">{prog.completed}/{prog.total}</p>
+          <p className="display mt-1 text-[24px] sm:text-[28px] text-ink">{prog.completed}/{prog.total}</p>
           <div className="mt-2"><Bar pct={prog.pct} tone="bg-success" /></div>
           <p className="mt-1.5 font-mono text-[11.5px] text-muted">{prog.pct}% complete</p>
         </div>
         <div className="ink-block bg-card p-4">
           <p className="label flex items-center gap-1.5 text-muted"><CalendarClock className="size-3.5 text-brand-text" aria-hidden /> Access</p>
-          <p className="display mt-1 text-[28px] text-ink">{daysLeft} days</p>
+          <p className="display mt-1 text-[24px] sm:text-[28px] text-ink">{daysLeft} days</p>
           <div className="mt-2"><Bar pct={(daysLeft / accessDays) * 100} tone={daysLeft <= 5 ? "bg-danger" : "bg-accent"} /></div>
           <p className="mt-1.5 font-mono text-[11.5px] text-muted">left · until {end.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</p>
         </div>
@@ -140,7 +140,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
         <div className="min-w-0 space-y-6">
           <section className="ink-block bg-card">
             <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-edge px-5 py-3">
-              <h2 className="display text-[20px] text-ink">
+              <h2 className="display text-[18px] sm:text-[20px] text-ink">
                 <span className="label mr-2 bg-ink px-2 py-0.5 align-middle text-paper">Week {week.week}</span>
                 {week.title}
               </h2>
@@ -166,7 +166,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
           </section>
 
           <section>
-            <h2 className="display text-[22px] text-ink">All weeks</h2>
+            <h2 className="display text-[20px] sm:text-[22px] text-ink">All weeks</h2>
             <div className="mt-3 space-y-3">
               {track.weeks.map((w) => {
                 const days = prog.days.filter((d) => d.module.week === w.week);

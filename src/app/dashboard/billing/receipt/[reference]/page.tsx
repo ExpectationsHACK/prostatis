@@ -34,10 +34,10 @@ export default async function ReceiptPage({ params }: { params: Promise<{ refere
         <header className="flex flex-wrap items-start justify-between gap-4 border-b border-edge pb-5">
           <div className="flex items-center gap-2.5">
             <LogoMark size={34} />
-            <span className="display text-[20px] text-ink">{site.name}</span>
+            <span className="display text-[18px] sm:text-[20px] text-ink">{site.name}</span>
           </div>
           <div className="text-right">
-            <p className="display text-[26px] leading-none text-ink">RECEIPT</p>
+            <p className="display text-[22px] sm:text-[26px] leading-none text-ink">RECEIPT</p>
             <p className="mt-1 font-mono text-[12px] text-muted">{longDate(p.created_at)}</p>
           </div>
         </header>
@@ -86,7 +86,7 @@ export default async function ReceiptPage({ params }: { params: Promise<{ refere
           <tfoot>
             <tr>
               <td className="pt-3 font-bold text-ink">Total paid</td>
-              <td className="pt-3 text-right text-[18px] font-bold text-ink">
+              <td className="pt-3 text-right text-[16.5px] sm:text-[18px] font-bold text-ink">
                 {money(p.amount_kobo, p.currency)} {p.currency}
               </td>
             </tr>

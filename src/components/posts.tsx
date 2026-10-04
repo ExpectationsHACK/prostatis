@@ -24,7 +24,7 @@ export function PostRow({
   const body = (
     <>
       <div className="min-w-0 flex-1">
-        <h3 className="font-display text-[19px] font-semibold leading-[1.35] text-ink group-hover:underline decoration-1">{title}</h3>
+        <h3 className="font-display text-[17px] sm:text-[19px] font-semibold leading-[1.35] text-ink group-hover:underline decoration-1">{title}</h3>
         <p className="mt-1 line-clamp-2 text-[15px] leading-snug text-muted">{dek}</p>
         <p className={`mt-2 ${byline}`}>{meta}</p>
         {children}
@@ -61,7 +61,7 @@ export function PostCard({
   const body = (
     <>
       <Cover {...cover} className="rounded-md" />
-      <h3 className="mt-3 font-display text-[19px] font-semibold leading-[1.35] text-ink group-hover:underline decoration-1">{title}</h3>
+      <h3 className="mt-3 font-display text-[17px] sm:text-[19px] font-semibold leading-[1.35] text-ink group-hover:underline decoration-1">{title}</h3>
       <p className="mt-1 line-clamp-2 text-[15px] leading-snug text-muted">{dek}</p>
       <p className={`mt-2 ${byline}`}>{meta}</p>
     </>

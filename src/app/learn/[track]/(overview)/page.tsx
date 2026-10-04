@@ -33,7 +33,7 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <p className="label text-brand-text">{track.length} · {track.modules.length} lessons</p>
-            <h1 className="display mt-2 text-[40px] text-ink sm:text-[56px]">{track.name}</h1>
+            <h1 className="display mt-2 text-[32px] text-ink sm:text-[56px]">{track.name}</h1>
             <p className="mt-2 max-w-xl font-mono text-[14px] leading-relaxed text-muted">
               {learner.name && !learner.preview ? `Welcome back, ${learner.name}. ` : ""}Each lesson opens when you finish the one before it: pass its quiz (70%+) and confirm its practical task.
             </p>
@@ -53,7 +53,7 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
           <Link href="/learn/start" className="ink-block block-press mt-8 flex items-center justify-between gap-4 bg-accent p-4 text-accent-ink">
             <span>
               <span className="label block text-brand">New here? Read this first · 10 min</span>
-              <span className="display mt-1 block text-[20px]">Start here: how the course works, what you&apos;ll need, and how to pay for AI tools from Nigeria</span>
+              <span className="display mt-1 block text-[18px] sm:text-[20px]">Start here: how the course works, what you&apos;ll need, and how to pay for AI tools from Nigeria</span>
             </span>
             <ArrowRight className="size-5 shrink-0" aria-hidden />
           </Link>
@@ -69,7 +69,7 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
           <section key={w.week} className="mt-12">
             <h2 className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-edge pb-2">
               <span className="label bg-ink px-2 py-0.5 text-paper">Week {w.week}</span>
-              <span className="display text-[24px] text-ink">{w.title}</span>
+              <span className="display text-[21px] sm:text-[24px] text-ink">{w.title}</span>
             </h2>
             <ol className="mt-5 grid gap-4 md:grid-cols-2">
               {prog.days
@@ -87,7 +87,7 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="label text-brand-text">Day {m.day} · {getPillar(m.pillar).short}</p>
-                        <h3 className="display mt-1 text-[17px] leading-tight text-ink">{m.title}</h3>
+                        <h3 className="display mt-1 text-[16px] sm:text-[17px] leading-tight text-ink">{m.title}</h3>
                         <p className="mt-1 font-mono text-[12px] text-muted">{lesson?.minutes ?? 60} min</p>
                         <p className="mt-2">
                           {status === "done" ? (
@@ -119,7 +119,7 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
 
         <section className={"mt-12 border border-edge p-6 sm:p-8 " + (prog.allDone ? "ink-block bg-brand" : "bg-card")}>
           <p className="label text-ink">Final assessment</p>
-          <h2 className="display mt-2 text-[28px] text-ink">{final?.passed_at ? "Passed: your certificate is ready" : "One question from every lesson"}</h2>
+          <h2 className="display mt-2 text-[24px] sm:text-[28px] text-ink">{final?.passed_at ? "Passed: your certificate is ready" : "One question from every lesson"}</h2>
           <p className="mt-2 max-w-2xl font-mono text-[13px] leading-relaxed text-ink/80">
             {track.modules.length} questions, pass mark 75%. Pass to earn {XP.final} XP and your certificate of completion.
             {!prog.allDone && ` Unlocks after all ${track.modules.length} lessons are complete (${prog.completed} so far).`}

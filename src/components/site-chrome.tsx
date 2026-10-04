@@ -32,12 +32,12 @@ const link = "text-[15px] font-medium text-ink/85 underline-offset-4 transition-
 export function SiteFooter() {
   return (
     <footer className="mt-auto border-t-2 border-ink bg-brand text-ink">
-      <div className="mx-auto grid max-w-6xl gap-12 px-4 py-14 md:grid-cols-[1.5fr_1fr_1fr] md:gap-10">
+      <div className="mx-auto grid max-w-6xl gap-12 px-4 py-10 sm:py-14 md:grid-cols-[1.5fr_1fr_1fr] md:gap-10">
         <div className="min-w-0">
           <Link href="/" className="flex items-center gap-2.5" aria-label={`${site.name} home`}>
             <LogoMark size={36} />
             <span className="flex flex-col leading-none">
-              <Wordmark className="text-[22px]" />
+              <Wordmark className="text-[20px] sm:text-[22px]" />
               <span className="mt-1 font-mono text-[11.5px] font-bold text-ink/75">by {site.company}</span>
             </span>
           </Link>

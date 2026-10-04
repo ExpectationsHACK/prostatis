@@ -33,7 +33,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
 
       <div className="flex flex-wrap items-start justify-between gap-4 border-b-2 border-edge pb-5">
         <div className="min-w-0">
-          <h1 className="display text-[30px] text-ink sm:text-[36px]">{s.name || "(no name)"}</h1>
+          <h1 className="display text-[25px] text-ink sm:text-[36px]">{s.name || "(no name)"}</h1>
           <p className="mt-1 break-all font-mono text-[13px] text-muted">{s.email}</p>
           <div className="mt-2 flex flex-wrap gap-1.5">
             <Pill tone={s.plan ? "brand" : "muted"}>{planName(s.plan)}</Pill>
@@ -69,7 +69,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <Stat icon={Sparkles} label="XP" value={s.state.xp} sub={`Level ${lvl.level}: ${lvl.name}`} />
         <Stat icon={Flame} label="Streak" value={`${st.current} days`} sub={`best ${st.longest}`} />
-        <Stat icon={Clock} label="Last active" value={<span className="text-[20px]">{fmtDate(s.lastActive)}</span>} sub={`${s.state.days.length} active days`} />
+        <Stat icon={Clock} label="Last active" value={<span className="text-[18px] sm:text-[20px]">{fmtDate(s.lastActive)}</span>} sub={`${s.state.days.length} active days`} />
         <Stat icon={Wallet} label="Paid" value={ngn(s.paidKobo)} sub={`${payments.length} payment${payments.length === 1 ? "" : "s"}`} />
       </div>
 

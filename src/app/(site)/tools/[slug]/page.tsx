@@ -41,14 +41,14 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
   const guide = guides[tool.slug];
 
   return (
-    <article className="paper-grid pb-16">
+    <article className="paper-grid pb-12 sm:pb-16">
       <header className="border-b border-edge">
         <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-10 md:grid-cols-[1.3fr_1fr] md:py-14">
           <div>
             <Link href={`/tools#${tool.pillar}`} className="label text-brand-text hover:underline">
               {pillar.title} tools
             </Link>
-            <h1 className="display mt-3 text-balance text-[40px] text-ink sm:text-[56px]">{tool.title}</h1>
+            <h1 className="display mt-3 text-balance text-[32px] text-ink sm:text-[56px]">{tool.title}</h1>
             <p className="mt-3 text-pretty font-mono text-[15px] leading-relaxed text-muted">{tool.description}</p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
               <p className="flex items-start gap-2 border border-edge bg-card px-3 py-2.5 text-[14px] leading-snug text-ink">
@@ -104,13 +104,13 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
       {/* What to do with the result */}
       <section className="mx-auto mt-12 max-w-6xl px-4">
         <div className="ink-block bg-accent p-5 text-accent-ink sm:p-7">
-          <h2 className="display flex items-center gap-2 text-[26px]">
+          <h2 className="display flex items-center gap-2 text-[22px] sm:text-[26px]">
             <Rocket className="size-6" aria-hidden /> Now put it to work
           </h2>
           <ol className="mt-4 grid gap-3 md:grid-cols-3">
             {guide.next.map((step, i) => (
               <li key={i} className="flex gap-3 border border-paper/40 p-3.5">
-                <span className="display text-[18px] text-brand">{i + 1}</span>
+                <span className="display text-[16.5px] sm:text-[18px] text-brand">{i + 1}</span>
                 <span className="text-[14.5px] leading-snug">{step}</span>
               </li>
             ))}
@@ -120,7 +120,7 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
 
       {/* Next tool in the workflow */}
       {next && (
-        <section className="mx-auto mt-14 max-w-4xl px-4">
+        <section className="mx-auto mt-10 sm:mt-14 max-w-4xl px-4">
           <p className="label text-muted">Next tool in your workflow</p>
           <Link href={`/tools/${next.slug}`} className="ink-block block-press group mt-3 grid overflow-hidden bg-card sm:grid-cols-[1fr_1.3fr]">
             <div className="border-b border-edge sm:border-b-0 sm:border-r">
@@ -128,7 +128,7 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
             </div>
             <div className="flex flex-col justify-center p-5">
               <p className="label text-brand-text">{getPillar(next.pillar).title}</p>
-              <p className="display mt-1 flex items-center gap-2 text-[24px] text-ink">
+              <p className="display mt-1 flex items-center gap-2 text-[21px] sm:text-[24px] text-ink">
                 {next.title} <ArrowRight className="size-5 text-brand-text transition-transform group-hover:translate-x-1" aria-hidden />
               </p>
               <p className="mt-1.5 font-mono text-[13px] leading-relaxed text-muted">{next.description}</p>
@@ -138,8 +138,8 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
       )}
 
       {/* Where it's taught */}
-      <section className="mx-auto mt-14 max-w-6xl px-4">
-        <h2 className="display border-b border-edge pb-3 text-[28px] text-ink">Learn it properly</h2>
+      <section className="mx-auto mt-10 sm:mt-14 max-w-6xl px-4">
+        <h2 className="display border-b border-edge pb-3 text-[24px] sm:text-[28px] text-ink">Learn it properly</h2>
         <div className={`mt-6 grid gap-6 ${lessons.length > 1 ? "md:grid-cols-2" : "max-w-xl"}`}>
           {lessons.map(({ track, module: m }, i) => (
             <div key={track.id} className="ink-block flex flex-col overflow-hidden bg-card">
@@ -150,7 +150,7 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
                 <p className="label text-brand-text">
                   {track.name} · Day {m.day} · Week {m.week}
                 </p>
-                <h3 className="display mt-2 text-[22px] text-ink">{m.title}</h3>
+                <h3 className="display mt-2 text-[20px] sm:text-[22px] text-ink">{m.title}</h3>
                 <p className="mt-1.5 flex-1 font-mono text-[13px] leading-relaxed text-muted">{m.summary}</p>
                 <Link href={`/checkout/${track.id}`} className={`${btn.primary} ${size.md} mt-5 w-full`}>
                   Enroll Now <ArrowRight className="size-4" aria-hidden />
@@ -162,9 +162,9 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
       </section>
 
       {/* Subscribe */}
-      <section className="mx-auto mt-14 max-w-2xl px-4">
+      <section className="mx-auto mt-10 sm:mt-14 max-w-2xl px-4">
         <div className="border border-dashed border-edge/50 bg-card px-6 py-8 text-center">
-          <p className="display text-[22px] text-ink">Found this useful?</p>
+          <p className="display text-[20px] sm:text-[22px] text-ink">Found this useful?</p>
           <p className="mt-1 font-mono text-[13px] text-muted">Get new free tools by email from {site.name}.</p>
           <div className="mx-auto mt-5 max-w-[420px]">
             <SubscribeForm source={`tool-${tool.slug}`} />
@@ -173,8 +173,8 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
       </section>
 
       {related.length > 0 && (
-        <section className="mx-auto mt-16 max-w-6xl px-4">
-          <h2 className="display border-b border-edge pb-3 text-[28px] text-ink">More {pillar.title} tools</h2>
+        <section className="mx-auto mt-12 sm:mt-16 max-w-6xl px-4">
+          <h2 className="display border-b border-edge pb-3 text-[24px] sm:text-[28px] text-ink">More {pillar.title} tools</h2>
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((t) => (
               <ToolCard key={t.slug} tool={t} />

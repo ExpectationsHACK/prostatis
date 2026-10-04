@@ -126,7 +126,7 @@ export function Quiz({
         </div>
       ) : (
         <div role="status" className={"mt-6 border border-edge p-5 " + (graded.passed ? "bg-[#e3f5e9]" : "bg-[#fff4d6]")}>
-          <p className="display text-[26px] text-ink">
+          <p className="display text-[22px] sm:text-[26px] text-ink">
             {graded.score}/{graded.total}: {graded.passed ? "passed!" : "not yet"}
           </p>
           <p className="mt-1 font-mono text-[13px] text-ink/80">

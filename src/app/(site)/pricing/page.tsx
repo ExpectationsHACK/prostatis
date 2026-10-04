@@ -23,21 +23,21 @@ export default function PricingPage() {
 
   return (
     <div>
-      <header className="border-b-2 border-ink bg-card px-4 py-14 text-center sm:py-20">
+      <header className="border-b-2 border-ink bg-card px-4 py-10 text-center sm:py-20">
         <p className="label text-brand-text">Pricing</p>
-        <h1 className="display mx-auto mt-3 max-w-3xl text-balance text-[40px] text-ink sm:text-[60px]">Pay once. Keep everything you build.</h1>
+        <h1 className="display mx-auto mt-3 max-w-3xl text-balance text-[32px] text-ink sm:text-[60px]">Pay once. Keep everything you build.</h1>
         <p className="mx-auto mt-4 max-w-xl text-[16.5px] leading-relaxed text-muted">
           Start with the Fast Track to build and sell websites in 14 days. Choose the Main Track to sell SEO, automation and AI agents on top.
         </p>
       </header>
 
-      <div className="mx-auto grid max-w-5xl gap-8 px-4 py-14 md:grid-cols-2">
+      <div className="mx-auto grid max-w-5xl gap-8 px-4 py-10 sm:py-14 md:grid-cols-2">
         {ordered.map((p) => (
           <PlanCard key={p.id} plan={p} badge={p.highlight ? "Start here" : "Everything"} />
         ))}
       </div>
 
-      <div className="mx-auto max-w-4xl px-4 pb-20">
+      <div className="mx-auto max-w-4xl px-4 pb-14 sm:pb-20">
         <p className="ink-block bg-brand-wash px-5 py-4 text-center text-[15px] text-ink">
           Not ready yet? All 50 tools are free, no signup.{" "}
           <Link href="/tools" className="font-semibold underline">

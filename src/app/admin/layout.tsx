@@ -20,7 +20,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <aside className="sticky top-0 hidden h-screen w-[250px] shrink-0 flex-col overflow-y-auto border-r-2 border-[#151515] bg-[var(--a-side)] px-4 py-6 lg:flex">
         <Link href="/admin" className="mb-9 flex items-center gap-2.5 px-2">
           <LogoMark size={32} />
-          <span className="display text-[18px] text-[#151515]">{site.name}</span>
+          <span className="display text-[16.5px] sm:text-[18px] text-[#151515]">{site.name}</span>
           <span className="rounded-full border-2 border-[#151515] bg-[var(--a-accent)] px-2 py-[1px] text-[11px] font-semibold text-[#151515]">Admin</span>
         </Link>
         <AdminSidebar preview={admin.preview} signOut={signOut} />

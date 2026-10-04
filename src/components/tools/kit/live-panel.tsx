@@ -84,7 +84,7 @@ export function LivePanel({ spec, values, onChecks }: { spec: LiveSpec; values: 
       <p className="flex items-center gap-2 font-mono text-[12px] font-bold text-brand-text">
         <Globe className="size-4" aria-hidden /> Live check
       </p>
-      <h2 className="display mt-1 text-[22px] text-ink">{spec.title}</h2>
+      <h2 className="display mt-1 text-[20px] sm:text-[22px] text-ink">{spec.title}</h2>
       <form onSubmit={run} className="mt-4 flex flex-col gap-3 sm:flex-row">
         {spec.url && (
           <label className="flex-1">

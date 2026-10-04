@@ -41,7 +41,7 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
       <aside className="sticky top-0 hidden h-screen w-[248px] shrink-0 flex-col border-r border-edge bg-card px-3 py-5 lg:flex print:hidden">
         <Link href="/" className="flex items-center gap-2.5 px-2" aria-label={`${site.name} home`}>
           <LogoMark size={30} />
-          <span className="display text-[17px] text-ink">{site.name}</span>
+          <span className="display text-[16px] sm:text-[17px] text-ink">{site.name}</span>
         </Link>
         <SideNav whatsapp={site.whatsappInviteUrl} active={active} />
         <Link href={active ? "/learn" : "/pricing"} className={`${btn.primary} ${size.md} mx-1 mt-5`}>

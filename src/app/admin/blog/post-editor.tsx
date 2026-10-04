@@ -126,7 +126,7 @@ export function PostEditor({ post, siteUrl, onDelete }: { post: Post | null; sit
         <div className="space-y-4">
           <label className="block">
             <span className={label}>Title (the H1 on the page)</span>
-            <input name="title" value={f.title} onChange={set("title")} className={afield + " text-[20px] font-semibold"} required placeholder="How to find your first website client" />
+            <input name="title" value={f.title} onChange={set("title")} className={afield + " text-[18px] sm:text-[20px] font-semibold"} required placeholder="How to find your first website client" />
           </label>
           <label className="block">
             <span className={label}>URL slug</span>

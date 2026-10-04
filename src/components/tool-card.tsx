@@ -16,7 +16,7 @@ export function ToolCard({ tool }: { tool: ToolMeta }) {
           {getPillar(tool.pillar).title}
           {tool.bonus ? " · Bonus" : ""}
         </p>
-        <h3 className="display mt-1.5 flex items-start justify-between gap-2 text-[19px] text-ink">
+        <h3 className="display mt-1.5 flex items-start justify-between gap-2 text-[17px] sm:text-[19px] text-ink">
           {tool.title}
           <ArrowRight className="mt-1 size-4 shrink-0 text-brand-text transition-transform group-hover:translate-x-1" aria-hidden />
         </h3>

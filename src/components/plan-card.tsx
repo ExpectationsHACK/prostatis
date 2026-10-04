@@ -22,7 +22,7 @@ export function PlanCard({ plan, show, badge }: { plan: Plan; show?: number; bad
       {/* Header band */}
       <div className={"flex items-start justify-between gap-3 border-b-2 border-ink px-6 py-5 " + (hi ? "bg-brand" : "bg-sunk")}>
         <div>
-          <h3 className="display text-[28px] text-ink">{plan.name}</h3>
+          <h3 className="display text-[24px] sm:text-[28px] text-ink">{plan.name}</h3>
           <p className="mt-1 text-[14.5px] font-medium leading-snug text-ink/80">{plan.blurb}</p>
         </div>
         {(badge ?? (hi ? "Start here" : "")) && (
@@ -33,7 +33,7 @@ export function PlanCard({ plan, show, badge }: { plan: Plan; show?: number; bad
       {/* Price and key facts */}
       <div className="px-6 pt-6">
         <p className="flex flex-wrap items-baseline gap-x-2">
-          <span className="display tabular text-[48px] leading-none text-ink">{formatNgn(plan.priceNgn)}</span>
+          <span className="display tabular text-[40px] sm:text-[48px] leading-none text-ink">{formatNgn(plan.priceNgn)}</span>
           <span className="text-[14px] font-medium text-muted">one-time payment</span>
         </p>
         <dl className="mt-5 grid grid-cols-3 divide-x-2 divide-line rounded-[12px] border-2 border-line text-center">

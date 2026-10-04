@@ -79,7 +79,7 @@ export function SiteNav() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 rounded-full border-2 border-edge bg-paper pl-3 pr-2 shadow-[5px_5px_0_var(--edge)]">
         <Link href="/" className="flex items-center gap-2.5" aria-label={`${site.name} home`}>
           <LogoMark size={38} />
-          <Wordmark className="text-[17px] sm:text-[20px]" />
+          <Wordmark className="text-[16px] sm:text-[20px]" />
         </Link>
 
         <nav className="hidden items-center lg:flex" aria-label="Main">
