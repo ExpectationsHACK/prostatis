@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ArrowLeft, Compass } from "lucide-react";
 import Link from "next/link";
 import { LessonBody } from "@/components/learn/lesson-body";
@@ -6,6 +7,8 @@ import { btn, size } from "@/components/ui";
 import { startHere } from "@/content/start";
 import { requireLearner } from "@/lib/learning/access";
 import { site } from "@/lib/site";
+
+export const metadata: Metadata = { title: "Start here" };
 
 export default async function StartHere() {
   const learner = await requireLearner("/learn/start");

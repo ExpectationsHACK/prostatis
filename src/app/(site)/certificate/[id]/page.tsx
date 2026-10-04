@@ -29,7 +29,7 @@ export default async function VerifyCertificatePage({ params }: { params: Promis
   Object.entries({
     startTask: "CERTIFICATION_NAME",
     name: `${track.name}: Building Websites with AI`,
-    organizationName: site.name,
+    organizationName: site.byline,
     issueYear: String(issued.getUTCFullYear()),
     issueMonth: String(issued.getUTCMonth() + 1),
     certUrl: verifyUrl(cert.id),

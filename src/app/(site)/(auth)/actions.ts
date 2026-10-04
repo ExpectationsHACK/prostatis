@@ -54,7 +54,7 @@ const notConfigured = { error: "Sign-in isn't set up yet (Supabase keys missing)
 
 export async function signUp(_: AuthState, form: FormData): Promise<AuthState> {
   if (!supabaseConfigured) return notConfigured;
-  const name = String(form.get("name") ?? "").trim();
+  const name = String(form.get("name") ?? "").replace(/\s+/g, " ").trim().slice(0, 80);
   const email = String(form.get("email") ?? "").trim().toLowerCase();
   const password = String(form.get("password") ?? "");
   const whatsapp = normaliseWhatsapp(String(form.get("whatsapp") ?? ""));

@@ -2,23 +2,29 @@
 
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
-import { supabaseConfigured } from "@/lib/supabase/env";
+import { useSyncExternalStore } from "react";
 import { btn, size } from "./ui";
 
-// Client-side so public pages stay statically rendered. Display only: the server
-// re-checks auth on every protected page.
-export function HeaderAuth({ stacked = false }: { stacked?: boolean }) {
-  const [signedIn, setSignedIn] = useState<boolean | null>(null);
+// Supabase keeps the session in an "sb-<project>-auth-token" cookie (split into .0, .1… when long).
+const SESSION_COOKIE = /(?:^|;\s*)sb-[^=;]+-auth-token(?:\.\d+)?=/;
 
-  useEffect(() => {
-    if (!supabaseConfigured) return;
-    const supabase = createClient();
-    supabase.auth.getSession().then(({ data }) => setSignedIn(Boolean(data.session)));
-    const { data } = supabase.auth.onAuthStateChange((_, session) => setSignedIn(Boolean(session)));
-    return () => data.subscription.unsubscribe();
-  }, []);
+function subscribe(cb: () => void) {
+  // Re-check when the tab comes back into view (e.g. after signing in in another tab).
+  window.addEventListener("focus", cb);
+  document.addEventListener("visibilitychange", cb);
+  return () => {
+    window.removeEventListener("focus", cb);
+    document.removeEventListener("visibilitychange", cb);
+  };
+}
+
+/**
+ * Sign in / Enroll, or "My dashboard" when there's a session. Reads the session cookie instead
+ * of loading the Supabase library, which kept ~70KB of JavaScript off every public page.
+ * Display only: the server checks auth again on every protected page.
+ */
+export function HeaderAuth({ stacked = false }: { stacked?: boolean }) {
+  const signedIn = useSyncExternalStore(subscribe, () => SESSION_COOKIE.test(document.cookie), () => false);
 
   const wide = stacked ? "w-full" : "";
   if (signedIn) {

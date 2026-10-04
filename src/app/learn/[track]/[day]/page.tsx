@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ArrowLeft, ArrowRight, BookA, BookOpen, CheckCircle2, Clock, ExternalLink, KeyRound, Lock, Package, Sparkles, Target } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -9,9 +10,16 @@ import { TaskCheck } from "@/components/learn/task-card";
 import { btn, size } from "@/components/ui";
 import { getLesson } from "@/content/lessons";
 import { getPillar } from "@/lib/curriculum";
-import { learnerTrack, requireLearner } from "@/lib/learning/access";
+import { learnerTrack, requireLearner, trackSlugs } from "@/lib/learning/access";
 import { PASS_MARK, publicQuestions, trackProgress, XP } from "@/lib/learning/engine";
 import { getStore } from "@/lib/learning/store";
+
+export async function generateMetadata({ params }: { params: Promise<{ track: string; day: string }> }): Promise<Metadata> {
+  const { track: slug, day } = await params;
+  const mod = trackSlugs[slug]?.modules.find((m) => m.day === Number(day));
+  const lesson = mod && getLesson(mod.lesson);
+  return { title: lesson ? `Day ${mod.day}: ${lesson.title}` : "Lesson" };
+}
 
 export default async function LessonPage({ params }: { params: Promise<{ track: string; day: string }> }) {
   const { track: slug, day: dayParam } = await params;

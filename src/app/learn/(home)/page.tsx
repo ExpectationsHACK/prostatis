@@ -1,5 +1,8 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { requireLearner } from "@/lib/learning/access";
+
+export const metadata: Metadata = { title: "My tracks" };
 
 export default async function LearnHome() {
   const learner = await requireLearner("/learn");

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ArrowLeft, Award, Lock } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -8,6 +9,8 @@ import { getLesson } from "@/content/lessons";
 import { learnerTrack, requireLearner } from "@/lib/learning/access";
 import { FINAL_PASS_MARK, FINAL_RETRY_MINUTES, finalQuestions, publicQuestions, trackProgress, XP } from "@/lib/learning/engine";
 import { getStore } from "@/lib/learning/store";
+
+export const metadata: Metadata = { title: "Final assessment" };
 
 export default async function FinalPage({ params }: { params: Promise<{ track: string }> }) {
   const { track: slug } = await params;

@@ -1,6 +1,10 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { createHmac } from "node:crypto";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { isValidWebhookSignature } from "./paystack";
 import { safeNext } from "./safe-next";
 import { clientIp, rateLimited, resetRateLimits } from "./server/rate-limit";
+
+vi.mock("server-only", () => ({}));
 
 describe("safeNext: where sign-in may send you", () => {
   it("keeps paths on this site, with their query", () => {
@@ -42,5 +46,22 @@ describe("rate limiter", () => {
     expect(clientIp(new Headers({ "x-forwarded-for": "102.89.1.2, 10.0.0.1" }))).toBe("102.89.1.2");
     expect(clientIp(new Headers({ "x-real-ip": "41.58.0.1" }))).toBe("41.58.0.1");
     expect(clientIp(new Headers())).toBe("unknown");
+  });
+});
+
+describe("Paystack webhook signature", () => {
+  const body = JSON.stringify({ event: "charge.success", data: { reference: "pst_abc" } });
+  it("accepts only Paystack's HMAC of the exact body", () => {
+    process.env.PAYSTACK_SECRET_KEY = "sk_test_unit";
+    const sig = createHmac("sha512", "sk_test_unit").update(body).digest("hex");
+    expect(isValidWebhookSignature(body, sig)).toBe(true);
+    expect(isValidWebhookSignature(body.replace("pst_abc", "pst_xyz"), sig)).toBe(false); // tampered body
+    expect(isValidWebhookSignature(body, createHmac("sha512", "wrong").update(body).digest("hex"))).toBe(false);
+    expect(isValidWebhookSignature(body, null)).toBe(false);
+    expect(isValidWebhookSignature(body, "short")).toBe(false);
+  });
+  it("rejects everything when no secret key is set", () => {
+    delete process.env.PAYSTACK_SECRET_KEY;
+    expect(isValidWebhookSignature(body, createHmac("sha512", "").update(body).digest("hex"))).toBe(false);
   });
 });

@@ -58,8 +58,9 @@ export function SignupForm({ next, email, notice }: { next: string; email?: stri
     <form action={action} className="space-y-4">
       <input type="hidden" name="next" value={next} />
       <div>
-        <Label htmlFor="su-name">First name</Label>
-        <input id="su-name" name="name" required autoComplete="given-name" className={input} />
+        <Label htmlFor="su-name">Full name</Label>
+        <input id="su-name" name="name" required maxLength={80} autoComplete="name" aria-describedby="su-name-hint" className={input} />
+        <p id="su-name-hint" className="mt-1 font-mono text-[12px] text-muted">As you want it on your certificate.</p>
       </div>
       <div>
         <Label htmlFor="su-email">Email</Label>

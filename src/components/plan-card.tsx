@@ -69,7 +69,7 @@ export function PlanCard({ plan, show, badge }: { plan: Plan; show?: number; bad
           ))}
         </ul>
         {hidden > 0 && (
-          <Link href={`/tracks/${slug}`} className="mt-3 inline-block text-[13.5px] font-semibold text-brand-text underline">
+          <Link href={`/tracks/${slug}`} className="mt-1.5 inline-flex min-h-[44px] items-center text-[13.5px] font-semibold text-brand-text underline">
             + {hidden} more on the full curriculum
           </Link>
         )}

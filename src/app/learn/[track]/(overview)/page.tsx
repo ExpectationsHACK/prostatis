@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ArrowRight, Award, Check, Lock, PlayCircle } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -10,6 +11,10 @@ import { getPillar } from "@/lib/curriculum";
 import { learnerTrack, requireLearner, slugOf, trackSlugs } from "@/lib/learning/access";
 import { badges, trackProgress, XP } from "@/lib/learning/engine";
 import { getStore } from "@/lib/learning/store";
+
+export async function generateMetadata({ params }: { params: Promise<{ track: string }> }): Promise<Metadata> {
+  return { title: trackSlugs[(await params).track]?.name ?? "Track" };
+}
 
 export default async function TrackHome({ params }: { params: Promise<{ track: string }> }) {
   const { track: slug } = await params;

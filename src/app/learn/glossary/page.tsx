@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ArrowLeft, BookA } from "lucide-react";
 import Link from "next/link";
 import { Rich, slugTerm } from "@/components/learn/lesson-body";
@@ -5,6 +6,8 @@ import { PreviewBanner } from "@/components/learn/stats";
 import { lessons } from "@/content/lessons";
 import { tracks } from "@/lib/curriculum";
 import { requireLearner, slugOf } from "@/lib/learning/access";
+
+export const metadata: Metadata = { title: "Glossary" };
 
 /** Every Jargon buster from every lesson, A–Z, linked back to where it's taught. */
 export default async function Glossary() {

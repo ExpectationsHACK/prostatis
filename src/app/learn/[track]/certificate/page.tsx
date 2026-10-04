@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ArrowLeft, BadgeCheck, Download } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -11,6 +12,8 @@ import { getPillar } from "@/lib/curriculum";
 import { learnerTrack, requireLearner } from "@/lib/learning/access";
 import { getStore } from "@/lib/learning/store";
 import { site } from "@/lib/site";
+
+export const metadata: Metadata = { title: "Your certificate" };
 
 export default async function CertificatePage({ params }: { params: Promise<{ track: string }> }) {
   const { track: slug } = await params;
