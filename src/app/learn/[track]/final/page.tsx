@@ -6,7 +6,7 @@ import { PreviewBanner } from "@/components/learn/stats";
 import { btn, size } from "@/components/ui";
 import { getLesson } from "@/content/lessons";
 import { learnerTrack, requireLearner } from "@/lib/learning/access";
-import { FINAL_PASS_MARK, finalQuestions, publicQuestions, trackProgress, XP } from "@/lib/learning/engine";
+import { FINAL_PASS_MARK, FINAL_RETRY_MINUTES, finalQuestions, publicQuestions, trackProgress, XP } from "@/lib/learning/engine";
 import { getStore } from "@/lib/learning/store";
 
 export default async function FinalPage({ params }: { params: Promise<{ track: string }> }) {
@@ -43,7 +43,7 @@ export default async function FinalPage({ params }: { params: Promise<{ track: s
         ) : (
           <>
             <p className="mt-3 max-w-2xl font-mono text-[14px] leading-relaxed text-muted">
-              One question from each lesson, {prog.total} in all. Score 75% or more to pass, earn {XP.final} XP and your certificate. You can retake it as often as you like.
+              One question from each lesson, {prog.total} in all. Score 75% or more to pass, earn {XP.final} XP and your certificate. If you don&apos;t pass, you&apos;ll see your score (not which answers were wrong) and can try again after {FINAL_RETRY_MINUTES} minutes.
             </p>
             {final?.passed_at && (
               <Link href={`/learn/${slug}/certificate`} className={`${btn.primary} ${size.md} mt-5`}>

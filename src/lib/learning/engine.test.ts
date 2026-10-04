@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Question } from "@/content/types";
 import { fastTrack } from "@/lib/curriculum";
-import { certificateId, emptyState, grade, lagosDay, levelFor, publicQuestions, streaks, trackProgress } from "./engine";
+import { certificateId, emptyState, FINAL_PASS_MARK, FINAL_RETRY_MINUTES, finalRetryAt, grade, lagosDay, levelFor, publicQuestions, streaks, trackProgress } from "./engine";
 
 const qs: Question[] = Array.from({ length: 5 }, (_, i) => ({ q: `Q${i}`, options: ["a", "b", "c", "d"], answer: i % 4, why: `because ${i}` }));
 const right = qs.map((q) => q.answer);
@@ -90,6 +90,32 @@ describe("trackProgress", () => {
 describe("certificateId", () => {
   it("is readable and track-specific", () => {
     const id = certificateId("3f2a9c1e-aaaa-bbbb", "main_track", new Date("2026-10-01T10:00:00Z"));
-    expect(id).toMatch(/^STK-MT-2026-3F2A9C[A-Z0-9]{4}$/);
+    expect(id).toMatch(/^PRS-MT-2026-3F2A9C[A-Z0-9]{4}$/);
+  });
+});
+
+describe("final assessment integrity", () => {
+  const qs: Question[] = [0, 1, 2, 3, 0, 1, 2, 3].map((answer, i) => ({ q: `Q${i}`, options: ["a", "b", "c", "d"], answer, why: "because", from: 0, aim: "core" }));
+  const right = qs.map((q) => q.answer);
+  it("a failed final reveals only the score, never which answers were wrong", () => {
+    const failed = grade(qs, [...right.slice(0, 4), 3, 3, 3, 0], FINAL_PASS_MARK, { feedback: "on-pass" });
+    expect(failed.passed).toBe(false);
+    expect(failed.score).toBe(4);
+    expect(failed.results).toEqual([]);
+    // Lesson quizzes still say which ones were wrong (that's how learners learn).
+    expect(grade(qs, [...right.slice(0, 4), 3, 3, 3, 0]).results.map((r) => r.correct)).toEqual([true, true, true, true, false, false, false, false]);
+  });
+  it("a passed final shows the answers", () => {
+    const passed = grade(qs, right, FINAL_PASS_MARK, { feedback: "on-pass" });
+    expect(passed.results).toHaveLength(qs.length);
+    expect(passed.results[0]).toMatchObject({ correct: true, answer: 0, why: "because" });
+  });
+  it("makes learners wait between failed attempts, but not after passing", () => {
+    const now = new Date("2026-10-04T12:00:00Z");
+    const recent = { passed_at: null, updated_at: "2026-10-04T11:55:00Z" };
+    expect(finalRetryAt(recent, now)?.toISOString()).toBe(new Date(Date.parse(recent.updated_at) + FINAL_RETRY_MINUTES * 60_000).toISOString());
+    expect(finalRetryAt({ passed_at: null, updated_at: "2026-10-04T11:40:00Z" }, now)).toBeNull();
+    expect(finalRetryAt({ passed_at: "2026-10-04T11:58:00Z", updated_at: "2026-10-04T11:58:00Z" }, now)).toBeNull();
+    expect(finalRetryAt(undefined, now)).toBeNull();
   });
 });

@@ -111,5 +111,5 @@ export async function recordSuccessfulPayment(p: {
 }
 
 export function newReference(userId: string) {
-  return `stk_${userId.slice(0, 8)}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+  return `pst_${userId.slice(0, 8)}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
 }

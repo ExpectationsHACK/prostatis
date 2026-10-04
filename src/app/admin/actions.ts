@@ -39,7 +39,7 @@ export async function savePostAction(_: Result, fd: FormData): Promise<Result> {
   const status = fd.get("status") === "published" ? "published" : "draft";
   const url = (k: string) => {
     const v = str(fd, k, 1000);
-    return v && (/^https?:\/\//.test(v) || v.startsWith("/")) ? v : null;
+    return v && (/^https?:\/\//.test(v) || (v.startsWith("/") && !v.startsWith("//"))) ? v : null;
   };
   const scheduled = str(fd, "published_at", 40);
   const id = str(fd, "id", 60) || undefined;

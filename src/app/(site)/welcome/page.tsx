@@ -10,11 +10,14 @@ import { WhatsAppRedirect } from "./whatsapp-redirect";
 
 export const metadata: Metadata = { title: "Welcome", robots: { index: false } };
 
-// Substack's post-subscribe page: a confirmation, then numbered next steps.
+// After payment: a confirmation, then the two next steps.
 export default async function WelcomePage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login?next=/welcome");
-  if (!hasAccess(await getMySubscription())) redirect("/pricing");
+  const sub = await getMySubscription();
+  if (!hasAccess(sub)) redirect("/pricing");
+  const track = sub!.plan === "main_track" ? "main-track" : "fast-track";
+  const first = (user.name || "").split(" ")[0];
 
   return (
     <div className="mx-auto max-w-[480px] px-4 py-16">
@@ -23,7 +26,7 @@ export default async function WelcomePage() {
           <CircleCheck className="size-8 text-brand" aria-hidden />
         </span>
         <h1 className="display mt-5 text-[44px] text-ink">
-          You're in{user.name ? `, ${user.name}` : ""}
+          You&apos;re in{first ? `, ${first}` : ""}
         </h1>
         <p className="mt-2 text-[17px] text-muted">Payment confirmed. Welcome to {site.name}.</p>
       </div>
@@ -44,11 +47,11 @@ export default async function WelcomePage() {
         </li>
         <li className="py-6">
           <p className="flex items-center gap-2 text-[17px] font-semibold text-ink">
-            <BookOpen className="size-5 text-muted" aria-hidden /> Start Stage 1
+            <BookOpen className="size-5 text-muted" aria-hidden /> Start your first lesson
           </p>
-          <p className="mb-4 mt-1 text-[15px] text-muted">Foundations: memory, pages that convert, and keeping AI costs low.</p>
-          <Link href="/dashboard" className={`${btn.secondary} ${size.lg} w-full`}>
-            Go to my dashboard
+          <p className="mb-4 mt-1 text-[15px] text-muted">It takes about an hour and ends with your first piece of real work. Your progress saves as you go.</p>
+          <Link href={`/learn/${track}`} className={`${btn.primary} ${size.lg} w-full`}>
+            Start Learning
           </Link>
         </li>
       </ol>

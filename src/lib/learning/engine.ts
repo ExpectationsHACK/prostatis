@@ -12,6 +12,8 @@ export const XP = {
 
 export const PASS_MARK = 0.7;
 export const FINAL_PASS_MARK = 0.75;
+/** Minutes between failed final attempts, so the certificate can't be won by trial and error. */
+export const FINAL_RETRY_MINUTES = 10;
 
 export const levels = [
   { at: 0, name: "Newcomer" },
@@ -45,11 +47,15 @@ export type Graded = {
   score: number;
   total: number;
   passed: boolean;
-  /** Per question: was it right. Explanations are only revealed once the quiz is passed. */
+  /**
+   * Per question: was it right. Answers and explanations are only revealed once passed. With
+   * `feedback: "on-pass"` (the final) a failed attempt gets no per-question detail at all, only
+   * the score, so retaking can't find the answers by elimination.
+   */
   results: { correct: boolean; answer?: number; why?: string }[];
 };
 
-export function grade(questions: Question[], answers: unknown, mark = PASS_MARK): Graded {
+export function grade(questions: Question[], answers: unknown, mark = PASS_MARK, { feedback = "always" }: { feedback?: "always" | "on-pass" } = {}): Graded {
   const picked = Array.isArray(answers) ? answers : [];
   const correct = questions.map((q, i) => Number.isInteger(picked[i]) && picked[i] === q.answer);
   const score = correct.filter(Boolean).length;
@@ -58,8 +64,15 @@ export function grade(questions: Question[], answers: unknown, mark = PASS_MARK)
     score,
     total: questions.length,
     passed,
-    results: questions.map((q, i) => (passed ? { correct: correct[i], answer: q.answer, why: q.why } : { correct: correct[i] })),
+    results: passed ? questions.map((q, i) => ({ correct: correct[i], answer: q.answer, why: q.why })) : feedback === "on-pass" ? [] : correct.map((c) => ({ correct: c })),
   };
+}
+
+/** When the learner may next attempt the final, or null if they may now (passed, or waited). */
+export function finalRetryAt(prev: Pick<FinalRow, "passed_at" | "updated_at"> | undefined, now = new Date()): Date | null {
+  if (!prev || prev.passed_at || !prev.updated_at) return null;
+  const at = new Date(new Date(prev.updated_at).getTime() + FINAL_RETRY_MINUTES * 60_000);
+  return at > now ? at : null;
 }
 
 /** Questions as sent to the browser: no answers, no explanations. */
@@ -114,6 +127,8 @@ export type FinalRow = {
   total: number;
   passed_at: string | null;
   certificate_id: string | null;
+  /** When the last attempt was made (the database's updated_at). */
+  updated_at?: string | null;
 };
 
 export type LearnerState = {
@@ -164,7 +179,7 @@ export function finalQuestions(track: Track, quizOf: (lessonId: string) => Quest
 export function certificateId(userId: string, track: Track["id"], at: Date) {
   const code = track === "main_track" ? "MT" : "FT";
   const u = userId.replace(/-/g, "").slice(0, 6).toUpperCase();
-  return `STK-${code}-${at.getUTCFullYear()}-${u}${at.getTime().toString(36).slice(-4).toUpperCase()}`;
+  return `PRS-${code}-${at.getUTCFullYear()}-${u}${at.getTime().toString(36).slice(-4).toUpperCase()}`;
 }
 
 /* ---------- Badges ---------- */

@@ -1,5 +1,6 @@
 import { after } from "next/server";
 import { afterSubscribe } from "@/lib/newsletter";
+import { clientIp, rateLimited } from "@/lib/server/rate-limit";
 import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
 import { appendFile, mkdir } from "node:fs/promises";
 import path from "node:path";
@@ -19,6 +20,11 @@ function normaliseWhatsapp(raw: string) {
 }
 
 export async function POST(req: Request) {
+  // Each signup can send an email, so cap it per visitor: stops scripts mailing strangers.
+  const ip = clientIp(req.headers);
+  if (rateLimited(`waitlist:${ip}`, 5, 600_000) || rateLimited("global:waitlist", 300, 3_600_000)) {
+    return Response.json({ error: "Too many signups from here just now. Please try again in a few minutes." }, { status: 429 });
+  }
   let body: Record<string, unknown>;
   try {
     body = await req.json();
@@ -37,15 +43,18 @@ export async function POST(req: Request) {
 
   if (adminConfigured()) {
     // Duplicate emails are ignored rather than erroring.
-    const { error } = await createAdminClient()
+    const { data: inserted, error } = await createAdminClient()
       .from("waitlist")
-      .upsert(entry, { onConflict: "email", ignoreDuplicates: true });
+      .upsert(entry, { onConflict: "email", ignoreDuplicates: true })
+      .select("email");
     if (error) {
       console.error("waitlist insert failed", error);
       return Response.json({ error: "Couldn't save your details. Please try again." }, { status: 502 });
     }
-    // Re-subscribe anyone who had left, and send the welcome email, after responding.
-    after(() => afterSubscribe(entry.email).catch((e) => console.error("after subscribe", e)));
+    // Welcome new subscribers (or ask a returning one to confirm), after responding. The answer
+    // is the same either way, so the form can't be used to check who is subscribed.
+    const isNew = Boolean(inserted?.length);
+    after(() => afterSubscribe(entry.email, isNew).catch((e) => console.error("after subscribe", e)));
     return Response.json({ ok: true });
   }
 

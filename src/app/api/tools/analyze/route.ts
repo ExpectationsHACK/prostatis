@@ -2,7 +2,8 @@ import * as cheerio from "cheerio";
 import { CRAWL_MAX, internalLinks, pickPages, sitemapUrls, type CrawlPage } from "@/lib/tool-defs/crawl";
 import { extractPage } from "@/lib/tool-defs/page-facts";
 import { suggestQueries, type SuggestMode } from "@/lib/tool-defs/suggest";
-import { FetchRejected, normaliseUrl, rateLimited, safeFetch } from "@/lib/server/safe-fetch";
+import { clientIp, rateLimited } from "@/lib/server/rate-limit";
+import { FetchRejected, normaliseUrl, safeFetch } from "@/lib/server/safe-fetch";
 
 export const maxDuration = 60;
 
@@ -286,8 +287,8 @@ async function scrape(body: { url: string; item: string; fields: { name: string;
 }
 
 export async function POST(req: Request) {
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
-  if (rateLimited(ip)) return Response.json({ error: "Too many checks in a minute, wait a moment and try again." }, { status: 429 });
+  const ip = clientIp(req.headers);
+  if (rateLimited(`analyze:${ip}`)) return Response.json({ error: "Too many checks in a minute, wait a moment and try again." }, { status: 429 });
   let body: Record<string, unknown>;
   try {
     body = await req.json();

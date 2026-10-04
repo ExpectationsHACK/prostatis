@@ -25,7 +25,7 @@ const supabaseStore: Store = {
     const db = createAdminClient();
     const [lessons, finals, xp, days] = await Promise.all([
       db.from("lesson_progress").select("lesson_id, quiz_best, quiz_total, quiz_passed_at, task_done_at, completed_at").eq("user_id", userId),
-      db.from("final_exams").select("track, best, total, passed_at, certificate_id").eq("user_id", userId),
+      db.from("final_exams").select("track, best, total, passed_at, certificate_id, updated_at").eq("user_id", userId),
       db.from("xp_events").select("xp").eq("user_id", userId),
       db.from("activity_days").select("day").eq("user_id", userId).order("day", { ascending: false }).limit(400),
     ]);

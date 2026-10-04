@@ -136,7 +136,9 @@ export function Quiz({
                 : day === undefined
                   ? "You passed the final assessment."
                   : "Now confirm the practical task below to complete the lesson."
-              : `You need ${need}. The questions marked red point to what to re-read.`}
+              : day === undefined
+                ? `You need ${need}. Re-read the lessons you weren't sure about, then try again in a few minutes.`
+                : `You need ${need}. The questions marked red point to what to re-read.`}
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {result.xpGained > 0 && (

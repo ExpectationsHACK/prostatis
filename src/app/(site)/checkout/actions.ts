@@ -46,7 +46,7 @@ export async function completeDemoPayment(form: FormData) {
   const plan = getPlan(String(form.get("plan")));
   const reference = String(form.get("reference") ?? "");
   const outcome = String(form.get("outcome"));
-  if (!plan || !/^(stk|bwac)_/.test(reference)) redirect("/pricing");
+  if (!plan || !/^(pst|stk|bwac)_/.test(reference)) redirect("/pricing");
 
   const user = await getCurrentUser();
   if (!user) redirect("/login");

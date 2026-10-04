@@ -1,13 +1,13 @@
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
+import { safeNext } from "@/lib/safe-next";
 import { createClient } from "@/lib/supabase/server";
 
 // Handles email-confirmation and magic-link redirects from Supabase Auth.
 // Supports both the PKCE `code` flow and `token_hash` email templates.
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl;
-  const raw = searchParams.get("next") ?? "/dashboard";
-  const next = raw.startsWith("/") && !raw.startsWith("//") && !raw.startsWith("/\\") ? raw : "/dashboard";
+  const next = safeNext(searchParams.get("next"));
 
   const supabase = await createClient();
   const code = searchParams.get("code");

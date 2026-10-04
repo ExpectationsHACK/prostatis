@@ -3,7 +3,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { readTable, writeTable } from "@/lib/data/local";
 import { canEmailAnyone, sendBatch, sendEmail } from "@/lib/email";
-import { newsletterEmail, welcomeEmail } from "@/lib/email-templates";
+import { newsletterEmail, rejoinEmail, welcomeEmail } from "@/lib/email-templates";
 import { previewMode } from "@/lib/learning/store";
 import { site } from "@/lib/site";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -19,6 +19,7 @@ export type Issue = { id: string; subject: string; preheader: string; body_md: s
 
 export const unsubscribeUrl = (token: string) => `${site.url}/unsubscribe?t=${token}`;
 const oneClickUrl = (token: string) => `${site.url}/api/unsubscribe?t=${token}`;
+export const rejoinUrl = (token: string) => `${site.url}/unsubscribe?t=${token}&rejoin=1`;
 
 /* ---------- Subscribers ---------- */
 export async function listSubscribers(): Promise<Subscriber[]> {
@@ -68,16 +69,27 @@ export async function unsubscribeByToken(token: string): Promise<string | null> 
   return `${user.slice(0, 2)}${"•".repeat(Math.max(1, user.length - 2))}@${domain}`;
 }
 
-/** After someone subscribes: switch them back on if they had left, then send the welcome email. */
-export async function afterSubscribe(email: string) {
-  const db = createAdminClient();
-  const { data } = await db.from("waitlist").select("status, token").eq("email", email).maybeSingle();
-  if (!data) return;
-  if (data.status === "unsubscribed") await db.from("waitlist").update({ status: "subscribed", unsubscribed_at: null }).eq("email", email);
-  if (!canEmailAnyone() || !data.token) return;
-  const mail = welcomeEmail(unsubscribeUrl(data.token));
-  const res = await sendEmail({ to: email, ...mail, headers: { "List-Unsubscribe": `<${oneClickUrl(data.token)}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" } });
-  if (!res.ok) console.error("welcome email", res.error);
+/** Rejoin from the link in the rejoin email. Returns true when the address is subscribed again. */
+export async function resubscribeByToken(token: string): Promise<boolean> {
+  if (!/^[0-9a-f-]{36}$/i.test(token) || previewMode) return false;
+  const { data, error } = await createAdminClient().from("waitlist").update({ status: "subscribed", unsubscribed_at: null }).eq("token", token).select("email").maybeSingle();
+  return !error && Boolean(data);
+}
+
+/**
+ * After a signup box is submitted. A brand-new address gets the welcome email, once. An
+ * address that unsubscribed is NOT switched back on (anyone can type anyone's email); it gets
+ * a confirmation link instead, so only its owner can rejoin. Already subscribed: nothing.
+ */
+export async function afterSubscribe(email: string, isNew: boolean) {
+  if (!canEmailAnyone()) return;
+  const { data } = await createAdminClient().from("waitlist").select("status, token").eq("email", email).maybeSingle();
+  if (!data?.token) return;
+  const list = { "List-Unsubscribe": `<${oneClickUrl(data.token)}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" };
+  const mail = isNew ? welcomeEmail(unsubscribeUrl(data.token)) : data.status === "unsubscribed" ? rejoinEmail(rejoinUrl(data.token)) : null;
+  if (!mail) return;
+  const res = await sendEmail({ to: email, ...mail, ...(isNew ? { headers: list } : {}) });
+  if (!res.ok) console.error("subscribe email", res.error);
 }
 
 /* ---------- Issues ---------- */

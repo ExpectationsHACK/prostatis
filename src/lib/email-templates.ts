@@ -94,6 +94,18 @@ export function welcomeEmail(unsubscribeUrl: string): Email {
   };
 }
 
+/** Sent when an address that unsubscribed is entered again: only its owner can rejoin. */
+export function rejoinEmail(rejoinUrl: string): Email {
+  const body =
+    p("Someone (hopefully you) entered this address to get our emails again. You unsubscribed earlier, so we won't add you back unless you confirm.") +
+    p("If that wasn't you, ignore this email and nothing changes.");
+  return {
+    subject: `Confirm you want ${site.name} emails again`,
+    html: layout({ preheader: "Tap to rejoin. Ignore this to stay unsubscribed.", heading: "Rejoin the newsletter?", bodyHtml: body, cta: { label: "Yes, send me emails again", url: rejoinUrl } }),
+    text: `Rejoin the newsletter?\n\nSomeone (hopefully you) entered this address to get our emails again. You unsubscribed earlier, so we won't add you back unless you confirm.\n\nRejoin: ${rejoinUrl}\n\nIf that wasn't you, ignore this email and nothing changes.`,
+  };
+}
+
 export function newsletterEmail(issue: { subject: string; preheader: string; body_md: string }, unsubscribeUrl: string): Email {
   return {
     subject: issue.subject,

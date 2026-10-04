@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { recordView, visitorId } from "@/lib/analytics";
 import { cleanPath, deviceOf, isBot, lagosDate, referrerHost } from "@/lib/analytics-shared";
+import { clientIp, rateLimited } from "@/lib/server/rate-limit";
 import { getCurrentUser } from "@/lib/supabase/server";
 
 /** Page-view beacon from <Analytics />. Always answers 204 so it never affects the page. */
@@ -9,6 +10,8 @@ export async function POST(request: NextRequest) {
   try {
     const ua = request.headers.get("user-agent") ?? "";
     if (isBot(ua)) return done;
+    // A real visitor views a few pages a minute; more than that is a script padding the numbers.
+    if (rateLimited(`track:${clientIp(request.headers)}`, 30, 60_000)) return done;
     const body = (await request.json().catch(() => null)) as { p?: unknown; r?: unknown; u?: unknown } | null;
     const path = cleanPath(body?.p);
     if (!path) return done;

@@ -72,10 +72,6 @@ export function verifyTransaction(reference: string) {
   return paystack<PaystackTransaction>(`/transaction/verify/${encodeURIComponent(reference)}`);
 }
 
-export function getManageLink(subscriptionCode: string) {
-  return paystack<{ link: string }>(`/subscription/${encodeURIComponent(subscriptionCode)}/manage/link`);
-}
-
 export function isValidWebhookSignature(rawBody: string, signature: string | null) {
   const key = process.env.PAYSTACK_SECRET_KEY;
   if (!key || !signature) return false;

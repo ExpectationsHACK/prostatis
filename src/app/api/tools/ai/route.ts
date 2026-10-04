@@ -1,7 +1,7 @@
 import { aiPrompt, aiSpecs, factsText, flagClaims } from "@/lib/tool-defs/ai";
 import type { Field, ToolDef, Values } from "@/lib/tool-defs/types";
 import { AiUnavailable, aiEnabled, dailyCap, writeWithAi } from "@/lib/server/ai";
-import { rateLimited } from "@/lib/server/safe-fetch";
+import { clientIp, rateLimited } from "@/lib/server/rate-limit";
 
 export const maxDuration = 60;
 
@@ -33,10 +33,9 @@ function clean(raw: unknown): Values {
 
 export async function POST(req: Request) {
   if (!aiEnabled()) return Response.json({ error: "AI writing isn't switched on for this site." }, { status: 503 });
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
+  const ip = clientIp(req.headers);
   if (rateLimited(`ai:${ip}`, 4, 60_000)) return Response.json({ error: "That's a lot of AI requests in a minute. Wait a moment and try again." }, { status: 429 });
   if (rateLimited(`ai-day:${ip}`, 25, 86_400_000)) return Response.json({ error: "You've used today's free AI writes. The templates still work, and the AI is back tomorrow." }, { status: 429 });
-  if (rateLimited("ai-day:all", dailyCap(), 86_400_000)) return Response.json({ error: "Today's free AI writing has all been used. The templates still work, and the AI is back tomorrow." }, { status: 429 });
 
   let body: { slug?: unknown; values?: unknown };
   try {
@@ -50,6 +49,8 @@ export async function POST(req: Request) {
 
   const facts = factsText(clean(body.values), await fieldsFor(slug), spec.labels, spec.omit);
   if (facts.length < 20) return Response.json({ error: "Fill in a few details first, so the AI has something real to work from." }, { status: 400 });
+  // The site-wide daily budget is only spent on requests that will actually reach the AI.
+  if (rateLimited("global:ai-day", dailyCap(), 86_400_000)) return Response.json({ error: "Today's free AI writing has all been used. The templates still work, and the AI is back tomorrow." }, { status: 429 });
 
   try {
     const result = await writeWithAi(aiPrompt(spec, facts));

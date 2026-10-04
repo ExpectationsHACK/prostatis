@@ -1,40 +1,43 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { brandedAuthEmails, sendAuthEmail } from "@/lib/auth-email";
 import { oauthProviders, PREFILL_COOKIE, type SocialProvider } from "@/lib/auth-providers";
+import { safeNext as safePath } from "@/lib/safe-next";
+import { clientIp, rateLimited } from "@/lib/server/rate-limit";
 import { site } from "@/lib/site";
 import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { supabaseConfigured } from "@/lib/supabase/env";
 
 /**
- * Whether an account exists for this email. Uses the service-only `email_registered` SQL
- * function, falling back to listing users if that migration hasn't been run yet.
- * Returns null when it can't tell (then we show the generic message).
+ * Whether an account exists for this email, via the service-only `email_registered` SQL
+ * function. Returns null when it can't tell (migration not run): then we show the generic
+ * message rather than listing every user, which would be slow and easy to abuse.
  */
 async function emailRegistered(email: string): Promise<boolean | null> {
   if (!adminConfigured()) return null;
-  const db = createAdminClient();
-  const rpc = await db.rpc("email_registered", { p_email: email });
-  if (!rpc.error) return Boolean(rpc.data);
-  for (let page = 1; page <= 10; page++) {
-    const { data, error } = await db.auth.admin.listUsers({ page, perPage: 1000 });
-    if (error) return null;
-    if (data.users.some((u) => u.email?.toLowerCase() === email)) return true;
-    if (data.users.length < 1000) return false;
-  }
-  return null;
+  const rpc = await createAdminClient().rpc("email_registered", { p_email: email });
+  return rpc.error ? null : Boolean(rpc.data);
+}
+
+/**
+ * Slow down password guessing and email-sending abuse: per visitor IP and, for sign-in,
+ * per email address too. Returns an error state when over the limit.
+ */
+async function throttled(kind: "signin" | "signup" | "email", email = ""): Promise<AuthState | null> {
+  const ip = clientIp(await headers());
+  const limits = { signin: [10, 600_000], signup: [5, 600_000], email: [5, 600_000] } as const;
+  const [max, ms] = limits[kind];
+  const busy = rateLimited(`auth:${kind}:${ip}`, max, ms) || (kind === "signin" && email && rateLimited(`auth:signin:${email}`, 10, 900_000));
+  return busy ? { error: "Too many attempts. Please wait a few minutes and try again." } : null;
 }
 
 export type AuthState = { error?: string; message?: string } | undefined;
 
-/** Only allow same-site relative paths as post-login destinations. */
-function safeNext(v: FormDataEntryValue | null) {
-  const s = typeof v === "string" ? v : "";
-  return s.startsWith("/") && !s.startsWith("//") && !s.startsWith("/\\") ? s : "/dashboard";
-}
+/** Only allow paths on this site as post-login destinations. */
+const safeNext = (v: FormDataEntryValue | null) => safePath(v);
 
 function normaliseWhatsapp(raw: string) {
   const digits = raw.replace(/[^\d+]/g, "");
@@ -56,8 +59,11 @@ export async function signUp(_: AuthState, form: FormData): Promise<AuthState> {
   const password = String(form.get("password") ?? "");
   const whatsapp = normaliseWhatsapp(String(form.get("whatsapp") ?? ""));
   const next = safeNext(form.get("next"));
+  const limited = await throttled("signup");
+  if (limited) return limited;
 
   if (!name) return { error: "Please enter your name." };
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: "Enter a valid email address." };
   if (password.length < 8) return { error: "Password must be at least 8 characters." };
 
   // Branded Prostatis email once the sending domain is verified; Supabase's mailer otherwise.
@@ -90,6 +96,8 @@ export async function signIn(_: AuthState, form: FormData): Promise<AuthState> {
   const email = String(form.get("email") ?? "").trim().toLowerCase();
   const password = String(form.get("password") ?? "");
   const next = safeNext(form.get("next"));
+  const limited = await throttled("signin", email);
+  if (limited) return limited;
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -110,6 +118,8 @@ export async function sendMagicLink(_: AuthState, form: FormData): Promise<AuthS
   const email = String(form.get("email") ?? "").trim().toLowerCase();
   const next = safeNext(form.get("next"));
   if (!email) return { error: "Enter your email first." };
+  const limited = await throttled("email");
+  if (limited) return limited;
 
   if (brandedAuthEmails()) {
     // Only for existing accounts: generating a link would otherwise create one.
@@ -146,6 +156,8 @@ export async function requestPasswordReset(_: AuthState, form: FormData): Promis
   if (!supabaseConfigured) return notConfigured;
   const email = String(form.get("email") ?? "").trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: "Enter a valid email address." };
+  const limited = await throttled("email");
+  if (limited) return limited;
   if (brandedAuthEmails()) {
     const sent = await sendAuthEmail("recovery", { email, next: "/reset-password" });
     if (!sent.ok && sent.reason === "failed") console.error("reset email", sent.error);

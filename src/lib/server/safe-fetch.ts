@@ -123,13 +123,4 @@ export async function safeFetch(input: string, opts: { method?: "GET" | "HEAD"; 
   throw new FetchRejected("Too many redirects.");
 }
 
-/** Best-effort per-IP limiter (per server instance). */
-const hits = new Map<string, number[]>();
-export function rateLimited(key: string, max = 20, windowMs = 60_000) {
-  const now = Date.now();
-  const list = (hits.get(key) ?? []).filter((t) => now - t < windowMs);
-  list.push(now);
-  hits.set(key, list);
-  if (hits.size > 5000) hits.clear();
-  return list.length > max;
-}
+export { rateLimited } from "./rate-limit";

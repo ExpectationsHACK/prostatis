@@ -8,7 +8,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
   if (!cert || cert.revoked_at) return new Response("Certificate not found", { status: 404 });
   const img = certificateImage(cert);
   const headers = new Headers(img.headers);
-  headers.set("Cache-Control", "private, max-age=300");
+  // Public by design (anyone can verify a certificate) and costly to draw, so let the CDN keep
+  // it for an hour; a revoked certificate disappears within the hour.
+  headers.set("Cache-Control", "public, max-age=300, s-maxage=3600");
   if (new URL(request.url).searchParams.has("download")) headers.set("Content-Disposition", `attachment; filename="${cert.id}.png"`);
   return new Response(img.body, { status: 200, headers });
 }

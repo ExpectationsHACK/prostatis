@@ -10,6 +10,7 @@ import {
   badges,
   certificateId,
   FINAL_PASS_MARK,
+  finalRetryAt,
   finalQuestions,
   grade,
   lagosDay,
@@ -127,16 +128,22 @@ export async function submitFinal(slug: string, answers: number[]): Promise<Acti
   const state = await store.load(learner.id);
   if (!trackProgress(track, state).allDone) return { ok: false, error: "Finish every lesson to unlock the final assessment." };
 
-  const questions = finalQuestions(track, (id) => getLesson(id)?.quiz ?? []);
-  const g = grade(questions, Array.isArray(answers) ? answers.slice(0, questions.length) : [], FINAL_PASS_MARK);
   const prev = state.finals[track.id];
   const now = new Date();
+  const wait = finalRetryAt(prev, now);
+  if (wait) {
+    const at = wait.toLocaleTimeString("en-NG", { hour: "numeric", minute: "2-digit", timeZone: "Africa/Lagos" });
+    return { ok: false, error: `You can retake the final at ${at}. Use the time to re-read the lessons you weren't sure about.` };
+  }
+  const questions = finalQuestions(track, (id) => getLesson(id)?.quiz ?? []);
+  const g = grade(questions, Array.isArray(answers) ? answers.slice(0, questions.length) : [], FINAL_PASS_MARK, { feedback: "on-pass" });
   const row = {
     track: track.id,
     best: Math.max(prev?.best ?? 0, g.score),
     total: g.total,
     passed_at: prev?.passed_at ?? (g.passed ? now.toISOString() : null),
     certificate_id: prev?.certificate_id ?? (g.passed ? certificateId(learner.id, track.id, now) : null),
+    updated_at: now.toISOString(),
   };
   await store.saveFinal(learner.id, row);
   await store.touchDay(learner.id, lagosDay());
