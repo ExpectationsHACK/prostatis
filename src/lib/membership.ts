@@ -43,6 +43,11 @@ const emailConfirmed = cache(async (userId: string, email: string) => {
 
 const PERMANENT_END = "9999-12-31T00:00:00.000Z";
 
+/** An access row that never ends (an admin or the owner set its end date to 9999-12-31). */
+export function isPermanentEnd(periodEnd: string) {
+  return new Date(periodEnd).getUTCFullYear() >= 9999;
+}
+
 // Grace period so a renewal that lands a little late doesn't lock members out.
 const GRACE_MS = 3 * 86400_000;
 
@@ -70,7 +75,8 @@ export const getMySubscription = cache(async (): Promise<Subscription | null> =>
     .from("subscriptions")
     .select("status, plan, current_period_end, paystack_subscription_code")
     .maybeSingle();
-  return (data as Subscription | null) ?? null;
+  const row = data as Subscription | null;
+  return row ? { ...row, permanent: isPermanentEnd(row.current_period_end) } : null;
 });
 
 function addAccess(from: Date, plan: PlanId) {
@@ -123,7 +129,8 @@ export async function recordSuccessfulPayment(p: {
   // (or buying the Main Track after the Fast Track) never shortens access.
   const stillActive = existing && new Date(existing.current_period_end) > new Date();
   const base = stillActive ? new Date(existing.current_period_end) : new Date();
-  const periodEnd = addAccess(base, p.plan);
+  // A permanent account keeps its "never ends" date (adding days would overflow year 9999).
+  const periodEnd = existing && isPermanentEnd(existing.current_period_end) ? new Date(existing.current_period_end) : addAccess(base, p.plan);
   const plan = stillActive && (rank[existing.plan] ?? 0) > (rank[p.plan] ?? 0) ? (existing.plan as PlanId) : p.plan;
 
   const { error: subErr } = await db.from("subscriptions").upsert(

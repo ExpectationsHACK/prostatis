@@ -89,3 +89,12 @@ describe("account setup rules", async () => {
     expect(pickName("", "", "1234@x.ng")).toBe("Student");
   });
 });
+
+describe("permanent access rows", async () => {
+  const { isPermanentEnd, hasAccess } = await import("./membership");
+  it("treats a 9999-12-31 end date as never ending", () => {
+    expect(isPermanentEnd("9999-12-31T00:00:00.000Z")).toBe(true);
+    expect(isPermanentEnd("2026-12-31T00:00:00.000Z")).toBe(false);
+    expect(hasAccess({ status: "active", plan: "main_track", current_period_end: "9999-12-31T00:00:00.000Z", paystack_subscription_code: null })).toBe(true);
+  });
+});
