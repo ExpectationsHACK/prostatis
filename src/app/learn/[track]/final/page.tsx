@@ -3,7 +3,6 @@ import { ArrowLeft, Award, Lock } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Quiz } from "@/components/learn/quiz";
-import { PreviewBanner } from "@/components/learn/stats";
 import { btn, size } from "@/components/ui";
 import { getLesson } from "@/content/lessons";
 import { learnerTrack, requireLearner } from "@/lib/learning/access";
@@ -23,7 +22,6 @@ export default async function FinalPage({ params }: { params: Promise<{ track: s
 
   return (
     <>
-      {learner.preview && <PreviewBanner />}
       <div className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
         <Link href={`/learn/${slug}`} className="label inline-flex items-center gap-1.5 text-muted hover:text-ink">
           <ArrowLeft className="size-3.5" aria-hidden /> {track.name}

@@ -65,3 +65,27 @@ describe("Paystack webhook signature", () => {
     expect(isValidWebhookSignature(body, createHmac("sha512", "").update(body).digest("hex"))).toBe(false);
   });
 });
+
+describe("account setup rules", async () => {
+  const { emailSender } = await import("./email");
+  const { permanentStudentEmails } = await import("./membership");
+  const { pickName } = await import("./dashboard");
+  it("only accepts a real sender address in EMAIL_FROM", () => {
+    expect(emailSender("STEINARK")).toBeNull();
+    expect(emailSender("")).toBeNull();
+    expect(emailSender("Prostatis <hello@prostatis.com>")).toEqual({ name: "Prostatis", address: "hello@prostatis.com" });
+    expect(emailSender("hello@prostatis.com")?.address).toBe("hello@prostatis.com");
+  });
+  it("reads permanent student emails case-insensitively", () => {
+    process.env.PERMANENT_STUDENT_EMAILS = " Tester@Example.com , other@x.ng,, ";
+    expect(permanentStudentEmails()).toEqual(["tester@example.com", "other@x.ng"]);
+    delete process.env.PERMANENT_STUDENT_EMAILS;
+    expect(permanentStudentEmails()).toEqual([]);
+  });
+  it("always shows a student's name: profile, then sign-up name, then email", () => {
+    expect(pickName("Ada Okafor", "Ada", "ada@x.ng")).toBe("Ada Okafor");
+    expect(pickName("", "Tunde Bello", "tester@example.com")).toBe("Tunde Bello");
+    expect(pickName(null, "  ", "ada.obi_okafor99@example.com")).toBe("Ada Obi Okafor");
+    expect(pickName("", "", "1234@x.ng")).toBe("Student");
+  });
+});

@@ -3,18 +3,14 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 
 const API = "https://api.paystack.co";
 
-export type PaymentsMode = "paystack" | "demo" | "disabled";
+export type PaymentsMode = "paystack" | "disabled";
 
 /**
- * paystack: real Paystack checkout (use sk_test_… keys for test mode).
- * demo    : no Paystack key; a built-in simulator stands in for checkout. Development only
- *            unless PAYMENTS_DEMO=true is set explicitly.
- * disabled: production without a key.
+ * paystack: real Paystack checkout (sk_live_… takes real money; sk_test_… is Paystack's test mode).
+ * disabled: no key set, so checkout says payments aren't open. There is no simulated checkout.
  */
 export function paymentsMode(): PaymentsMode {
-  if (process.env.PAYSTACK_SECRET_KEY) return "paystack";
-  if (process.env.NODE_ENV !== "production" || process.env.PAYMENTS_DEMO === "true") return "demo";
-  return "disabled";
+  return process.env.PAYSTACK_SECRET_KEY ? "paystack" : "disabled";
 }
 
 export function isTestKey() {

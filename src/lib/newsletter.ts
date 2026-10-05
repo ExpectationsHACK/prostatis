@@ -1,10 +1,6 @@
 import "server-only";
-import { promises as fs } from "node:fs";
-import path from "node:path";
-import { readTable, writeTable } from "@/lib/data/local";
 import { canEmailAnyone, sendBatch, sendEmail } from "@/lib/email";
 import { newsletterEmail, rejoinEmail, welcomeEmail } from "@/lib/email-templates";
-import { previewMode } from "@/lib/learning/store";
 import { site } from "@/lib/site";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -23,18 +19,6 @@ export const rejoinUrl = (token: string) => `${site.url}/unsubscribe?t=${token}&
 
 /* ---------- Subscribers ---------- */
 export async function listSubscribers(): Promise<Subscriber[]> {
-  if (previewMode) {
-    try {
-      const txt = await fs.readFile(path.join(process.cwd(), ".data", "waitlist.jsonl"), "utf8");
-      return txt
-        .split("\n")
-        .filter(Boolean)
-        .map((l) => ({ status: "subscribed", token: null, unsubscribed_at: null, ...JSON.parse(l) }) as Subscriber)
-        .reverse();
-    } catch {
-      return [];
-    }
-  }
   const db = createAdminClient();
   const out: Subscriber[] = [];
   for (let from = 0; from < 200_000; from += 1000) {
@@ -47,7 +31,6 @@ export async function listSubscribers(): Promise<Subscriber[]> {
 }
 
 export async function setSubscription(email: string, status: Subscriber["status"]) {
-  if (previewMode) throw new Error("Subscriber changes need Supabase (not available in local preview).");
   const { error } = await createAdminClient()
     .from("waitlist")
     .update({ status, unsubscribed_at: status === "unsubscribed" ? new Date().toISOString() : null })
@@ -57,7 +40,7 @@ export async function setSubscription(email: string, status: Subscriber["status"
 
 /** Unsubscribe from a link. Returns the (partly hidden) email, or null if the link is unknown. */
 export async function unsubscribeByToken(token: string): Promise<string | null> {
-  if (!/^[0-9a-f-]{36}$/i.test(token) || previewMode) return null;
+  if (!/^[0-9a-f-]{36}$/i.test(token)) return null;
   const { data, error } = await createAdminClient()
     .from("waitlist")
     .update({ status: "unsubscribed", unsubscribed_at: new Date().toISOString() })
@@ -71,7 +54,7 @@ export async function unsubscribeByToken(token: string): Promise<string | null> 
 
 /** Rejoin from the link in the rejoin email. Returns true when the address is subscribed again. */
 export async function resubscribeByToken(token: string): Promise<boolean> {
-  if (!/^[0-9a-f-]{36}$/i.test(token) || previewMode) return false;
+  if (!/^[0-9a-f-]{36}$/i.test(token)) return false;
   const { data, error } = await createAdminClient().from("waitlist").update({ status: "subscribed", unsubscribed_at: null }).eq("token", token).select("email").maybeSingle();
   return !error && Boolean(data);
 }
@@ -96,32 +79,18 @@ export async function afterSubscribe(email: string, isNew: boolean) {
 const T = "newsletter_issues";
 
 export async function listIssues(): Promise<Issue[]> {
-  if (previewMode) return (await readTable<Issue>(T)).sort((a, b) => b.updated_at.localeCompare(a.updated_at));
   const { data, error } = await createAdminClient().from(T).select("*").order("updated_at", { ascending: false }).limit(500);
   if (error) throw new Error(/does not exist|schema cache/i.test(error.message) ? "Run the newsletter migration (20261001130000_newsletter.sql) in Supabase first." : error.message);
   return (data ?? []) as Issue[];
 }
 
 export async function getIssue(id: string): Promise<Issue | null> {
-  if (previewMode) return (await readTable<Issue>(T)).find((i) => i.id === id) ?? null;
   const { data } = await createAdminClient().from(T).select("*").eq("id", id).maybeSingle();
   return (data as Issue | null) ?? null;
 }
 
 export async function saveIssue(input: { id?: string; subject: string; preheader: string; body_md: string }): Promise<Issue> {
   const now = new Date().toISOString();
-  if (previewMode) {
-    return writeTable<Issue, Issue>(T, (rows) => {
-      const found = input.id ? rows.find((r) => r.id === input.id) : undefined;
-      if (found) {
-        if (found.status !== "draft") throw new Error("This issue has already been sent.");
-        return Object.assign(found, input, { updated_at: now });
-      }
-      const row: Issue = { ...input, id: crypto.randomUUID(), status: "draft", recipients: 0, sent_at: null, sent_by: null, created_at: now, updated_at: now };
-      rows.push(row);
-      return row;
-    });
-  }
   const db = createAdminClient();
   const fields = { subject: input.subject, preheader: input.preheader, body_md: input.body_md, updated_at: now };
   const q = input.id ? db.from(T).update(fields).eq("id", input.id).eq("status", "draft") : db.from(T).insert(fields);
@@ -131,13 +100,6 @@ export async function saveIssue(input: { id?: string; subject: string; preheader
 }
 
 export async function deleteIssue(id: string) {
-  if (previewMode) {
-    await writeTable<Issue>(T, (rows) => {
-      const i = rows.findIndex((r) => r.id === id && r.status === "draft");
-      if (i >= 0) rows.splice(i, 1);
-    });
-    return;
-  }
   const { error } = await createAdminClient().from(T).delete().eq("id", id).eq("status", "draft");
   if (error) throw error;
 }
@@ -153,7 +115,6 @@ export async function sendTest(issue: Issue, to: string) {
  * before anything goes out, so a double click can't send twice.
  */
 export async function sendIssue(id: string, actor: string): Promise<{ sent: number; failed: number; error?: string }> {
-  if (previewMode) throw new Error("Sending needs Supabase (not available in local preview).");
   if (!canEmailAnyone()) throw new Error("Verify your domain in Resend and set EMAIL_FROM to an address on it first. Until then emails only reach the Resend account owner.");
   const db = createAdminClient();
   const { data: claimed, error } = await db.from(T).update({ status: "sending", updated_at: new Date().toISOString() }).eq("id", id).eq("status", "draft").select("*").maybeSingle();

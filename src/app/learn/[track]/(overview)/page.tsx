@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LessonThumb } from "@/components/art/lesson-thumb";
 import { BadgeShelf } from "@/components/learn/badges";
-import { LearnerStats, PreviewBanner } from "@/components/learn/stats";
+import { LearnerStats } from "@/components/learn/stats";
 import { btn, size } from "@/components/ui";
 import { getLesson, milestones } from "@/content/lessons";
 import { getPillar } from "@/lib/curriculum";
@@ -22,20 +22,19 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
   const track = learnerTrack(learner, slug);
   if (!track) notFound();
   const state = await getStore().load(learner.id);
-  const prog = trackProgress(track, state, { unlockAll: learner.preview });
+  const prog = trackProgress(track, state);
   const final = state.finals[track.id];
   const others = Object.values(trackSlugs).filter((t) => t.id !== track.id && learner.tracks.includes(t.id));
 
   return (
     <>
-      {learner.preview && <PreviewBanner />}
       <div className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <p className="label text-brand-text">{track.length} · {track.modules.length} lessons</p>
             <h1 className="display mt-2 text-[32px] text-ink sm:text-[56px]">{track.name}</h1>
             <p className="mt-2 max-w-xl font-mono text-[14px] leading-relaxed text-muted">
-              {learner.name && !learner.preview ? `Welcome back, ${learner.name}. ` : ""}Each lesson opens when you finish the one before it: pass its quiz (70%+) and confirm its practical task.
+              {`Welcome back, ${learner.name.split(" ")[0]}. `}Each lesson opens when you finish the one before it: pass its quiz (70%+) and confirm its practical task.
             </p>
           </div>
           {prog.next ? (

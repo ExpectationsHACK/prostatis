@@ -9,24 +9,10 @@ export type PaymentRow = {
   provider: string;
   status: string;
   created_at: string;
-  /** Local preview only: a clearly labelled example, never a real payment. */
-  sample?: boolean;
-};
-
-const PREVIEW_SAMPLE: PaymentRow = {
-  reference: "preview_sample",
-  plan: "main_track",
-  amount_kobo: 3_000_000,
-  currency: "NGN",
-  provider: "demo",
-  status: "success",
-  created_at: new Date(Date.now() - 20 * 86400_000).toISOString(),
-  sample: true,
 };
 
 /** The signed-in member's payments, newest first (RLS limits the rows to their own). */
-export async function myPayments(preview: boolean, limit = 50): Promise<PaymentRow[]> {
-  if (preview) return [PREVIEW_SAMPLE];
+export async function myPayments(limit = 50): Promise<PaymentRow[]> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("payments")
@@ -37,8 +23,7 @@ export async function myPayments(preview: boolean, limit = 50): Promise<PaymentR
 }
 
 /** One of the member's own payments, for a receipt. */
-export async function myPayment(preview: boolean, reference: string): Promise<PaymentRow | null> {
-  if (preview) return reference === PREVIEW_SAMPLE.reference ? PREVIEW_SAMPLE : null;
+export async function myPayment(reference: string): Promise<PaymentRow | null> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("payments")

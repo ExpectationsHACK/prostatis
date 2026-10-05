@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { ArrowLeft, Compass } from "lucide-react";
 import Link from "next/link";
 import { LessonBody } from "@/components/learn/lesson-body";
-import { PreviewBanner } from "@/components/learn/stats";
 import { btn, size } from "@/components/ui";
 import { startHere } from "@/content/start";
 import { requireLearner } from "@/lib/learning/access";
@@ -15,7 +14,6 @@ export default async function StartHere() {
   const first = learner.tracks.includes("main_track") ? "/learn/main-track/1" : "/learn/fast-track/1";
   return (
     <>
-      {learner.preview && <PreviewBanner />}
       <article className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
         <Link href="/learn" className="label inline-flex items-center gap-1.5 text-muted hover:text-ink">
           <ArrowLeft className="size-3.5" aria-hidden /> My tracks

@@ -18,7 +18,7 @@ export default async function EditIssuePage({ params }: { params: Promise<{ id: 
       <PageHead title={issue.subject} crumbs={[{ label: "Content" }, { label: "Newsletter", href: "/admin/newsletter" }]} />
       <IssueEditor
         issue={issue}
-        adminEmail={admin.preview ? "" : admin.email}
+        adminEmail={admin.email}
         subscribers={subs.data?.filter((s) => s.status === "subscribed").length ?? 0}
         canSend={canEmailAnyone()}
         onDelete={deleteIssueAction.bind(null, issue.id)}

@@ -1,11 +1,10 @@
 import "server-only";
 import { notFound, redirect } from "next/navigation";
 import { connection } from "next/server";
-import { previewMode } from "@/lib/learning/store";
 import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentUser } from "@/lib/supabase/server";
 
-export type Admin = { id: string; email: string; name: string; preview: boolean };
+export type Admin = { id: string; email: string; name: string };
 
 /** Comma-separated ADMIN_EMAILS, lower-cased. Nobody is an admin when it's empty. */
 export function adminEmails(): string[] {
@@ -22,16 +21,13 @@ export function adminEmails(): string[] {
  */
 export async function requireAdmin(next = "/admin"): Promise<Admin> {
   await connection();
-  // Local development preview only: explore the admin without signing in.
-  if (previewMode) return { id: "preview-admin", email: "preview@localhost", name: "Preview admin", preview: true };
-
   const user = await getCurrentUser();
   if (!user) redirect(`/login?next=${encodeURIComponent(next)}`);
   if (!adminConfigured() || !adminEmails().includes(user.email.toLowerCase())) notFound();
 
   const { data, error } = await createAdminClient().auth.admin.getUserById(user.id);
   if (error || !data.user?.email_confirmed_at || data.user.email?.toLowerCase() !== user.email.toLowerCase()) notFound();
-  return { id: user.id, email: user.email, name: user.name, preview: false };
+  return { id: user.id, email: user.email, name: user.name };
 }
 
 /** For links in the site header: true only for a listed admin (no DB round trip). */

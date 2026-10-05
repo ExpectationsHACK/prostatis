@@ -28,9 +28,7 @@ export async function proxy(request: NextRequest) {
 
   // Optimistic redirect only: pages still check auth and membership themselves.
   const { pathname, search } = request.nextUrl;
-  // Local preview (development only) lets /learn, /admin and /dashboard through without signing in.
-  const coursePreview = process.env.NODE_ENV === "development" && process.env.COURSE_PREVIEW === "true" && /^\/(learn|admin|dashboard)(\/|$)/.test(pathname);
-  if (!signedIn && !coursePreview && MEMBER_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"))) {
+  if (!signedIn && MEMBER_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"))) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.search = `?next=${encodeURIComponent(pathname + search)}`;

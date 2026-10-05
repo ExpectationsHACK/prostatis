@@ -2,8 +2,6 @@ import { after } from "next/server";
 import { afterSubscribe } from "@/lib/newsletter";
 import { clientIp, rateLimited } from "@/lib/server/rate-limit";
 import { adminConfigured, createAdminClient } from "@/lib/supabase/admin";
-import { appendFile, mkdir } from "node:fs/promises";
-import path from "node:path";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -55,14 +53,6 @@ export async function POST(req: Request) {
     // is the same either way, so the form can't be used to check who is subscribed.
     const isNew = Boolean(inserted?.length);
     after(() => afterSubscribe(entry.email, isNew).catch((e) => console.error("after subscribe", e)));
-    return Response.json({ ok: true });
-  }
-
-  // No database configured: keep a local file in development so the flow is testable.
-  if (process.env.NODE_ENV !== "production") {
-    const dir = path.join(process.cwd(), ".data");
-    await mkdir(dir, { recursive: true });
-    await appendFile(path.join(dir, "waitlist.jsonl"), JSON.stringify({ ...entry, created_at: new Date().toISOString() }) + "\n");
     return Response.json({ ok: true });
   }
 

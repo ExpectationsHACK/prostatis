@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import { LessonBody, Rich, slugTerm } from "@/components/learn/lesson-body";
 import { ReadingProgress } from "@/components/learn/reading-progress";
 import { Quiz } from "@/components/learn/quiz";
-import { PreviewBanner } from "@/components/learn/stats";
 import { TaskCheck } from "@/components/learn/task-card";
 import { btn, size } from "@/components/ui";
 import { getLesson } from "@/content/lessons";
@@ -31,7 +30,7 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
   if (!track || !mod || !lesson) notFound();
 
   const state = await getStore().load(learner.id);
-  const prog = trackProgress(track, state, { unlockAll: learner.preview });
+  const prog = trackProgress(track, state);
   const status = prog.days.find((d) => d.module.day === day)!.status;
   const prev = track.modules.find((m) => m.day === day - 1);
   const next = track.modules.find((m) => m.day === day + 1);
@@ -64,7 +63,6 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
 
   return (
     <>
-      {learner.preview && <PreviewBanner />}
       <ReadingProgress day={day} total={track.modules.length} title={lesson.title} doneLessons={prog.completed} steps={[steps[0], steps[1], steps[2]]} />
       <article className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
         <Link href={`/learn/${slug}`} className="label inline-flex items-center gap-1.5 text-muted hover:text-ink">
@@ -205,7 +203,7 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
             </Link>
           ) : <span />}
           {next ? (
-            done || learner.preview ? (
+            done ? (
               <Link href={`/learn/${slug}/${next.day}`} className={`${btn.primary} ${size.md}`}>
                 Day {next.day} <ArrowRight className="size-4" aria-hidden />
               </Link>

@@ -39,7 +39,7 @@ export async function getCurrentUser() {
     id: c.sub,
     email: (c.email as string | undefined) ?? "",
     // Display-only fields from signup; never use these for authorization.
-    name: typeof meta.name === "string" ? meta.name : "",
+    name: typeof meta.name === "string" && meta.name.trim() ? meta.name : typeof meta.full_name === "string" ? meta.full_name : "",
     whatsapp: typeof meta.whatsapp === "string" ? meta.whatsapp : "",
   };
 }

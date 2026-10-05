@@ -5,8 +5,18 @@ import "server-only";
  * EMAIL_FROM (an address on a domain verified in Resend). Without them, sending is skipped
  * and the caller is told so, which the admin shows as "not emailed yet".
  */
+/**
+ * EMAIL_FROM parsed as "Name <address@domain>" or a bare address, or null when it isn't a real
+ * address (e.g. just a brand name). An invalid sender would make Resend reject every email.
+ */
+export function emailSender(raw = process.env.EMAIL_FROM ?? ""): { name: string; address: string } | null {
+  const m = /^\s*(?:"?([^"<]*?)"?\s*<\s*([^\s<>@]+@[^\s<>@]+\.[^\s<>@]+)\s*>|([^\s<>@]+@[^\s<>@]+\.[^\s<>@]+))\s*$/.exec(raw);
+  if (!m) return null;
+  return { name: (m[1] ?? "").trim(), address: (m[2] ?? m[3]).trim() };
+}
+
 export function emailConfigured() {
-  return Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM);
+  return Boolean(process.env.RESEND_API_KEY && emailSender());
 }
 
 /**
@@ -15,7 +25,7 @@ export function emailConfigured() {
  * students and subscribers wait until this is true.
  */
 export function canEmailAnyone() {
-  return emailConfigured() && !/@resend\.dev>?\s*$/i.test(process.env.EMAIL_FROM ?? "");
+  return emailConfigured() && !/@resend\.dev$/i.test(emailSender()!.address);
 }
 
 export type Attachment = { filename: string; content: ArrayBuffer };

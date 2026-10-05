@@ -2,12 +2,13 @@ import { CircleCheck, CircleX } from "lucide-react";
 import { PageHead, Panel, Pill } from "@/components/admin/blocks";
 import { adminEmails, requireAdmin } from "@/lib/admin/auth";
 import { tableStatus } from "@/lib/admin/data";
-import { emailConfigured } from "@/lib/email";
+import { permanentStudentEmails } from "@/lib/membership";
+import { checkEmail, checkPaystack } from "@/lib/service-checks";
 import { adminConfigured } from "@/lib/supabase/admin";
 import { supabaseConfigured } from "@/lib/supabase/env";
 import { site } from "@/lib/site";
 
-const MIGRATIONS = ["20260927000000_waitlist.sql", "20260927120000_membership.sql", "20260929120000_learning.sql", "20260930120000_admin_blog_analytics.sql"];
+const MIGRATIONS = ["20260927000000_waitlist.sql", "20260927120000_membership.sql", "20260929120000_learning.sql", "20260930120000_admin_blog_analytics.sql", "20261001120000_auth_helpers.sql", "20261001130000_newsletter.sql", "20261004120000_rebrand_prostatis.sql"];
 
 function Check({ ok, title, fix }: { ok: boolean; title: string; fix: string }) {
   return (
@@ -25,6 +26,8 @@ export default async function SystemPage() {
   await requireAdmin("/admin/system");
   const tables = await tableStatus().catch((e: Error) => [{ table: "all", ok: false, rows: null, error: e.message }]);
   const env = (k: string) => Boolean(process.env[k]);
+  const [paystack, email] = await Promise.all([checkPaystack(), checkEmail()]);
+  const permanent = permanentStudentEmails();
 
   return (
     <div className="space-y-6">
@@ -35,12 +38,15 @@ export default async function SystemPage() {
             <Check ok={supabaseConfigured} title="Supabase URL and publishable key" fix="Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY." />
             <Check ok={adminConfigured()} title="Supabase secret key (server only)" fix="Set SUPABASE_SECRET_KEY from Supabase → Project Settings → API Keys." />
             <Check ok={adminEmails().length > 0} title={`Admin emails: ${adminEmails().join(", ") || "none"}`} fix="Set ADMIN_EMAILS (comma-separated). Only these confirmed accounts can open /admin." />
-            <Check ok={env("PAYSTACK_SECRET_KEY")} title="Paystack secret key" fix="Set PAYSTACK_SECRET_KEY (sk_test_… while testing, sk_live_… to take real payments)." />
-            <Check ok={emailConfigured()} title="Email sending (certificates)" fix="Create a free Resend account, verify your domain, then set RESEND_API_KEY and EMAIL_FROM (e.g. Prostatis <hello@yourdomain.com>)." />
+            <Check ok={paystack.ok} title={paystack.title} fix={paystack.detail} />
+            <li className="py-2.5 font-mono text-[12.5px] leading-relaxed text-muted">
+              Paystack webhook (Paystack → Settings → API Keys &amp; Webhooks → Webhook URL): <code className="break-all text-ink">{site.url}/api/webhooks/paystack</code>
+            </li>
+            <Check ok={email.ok} title={email.title} fix={email.detail} />
+            <Check ok title={`Permanent student accounts: ${permanent.join(", ") || "none"}`} fix="" />
             <Check ok={env("PAGESPEED_API_KEY")} title="Google PageSpeed key (speed tools)" fix="Set PAGESPEED_API_KEY. Without it the speed tools use their quick built-in check." />
             <Check ok={Boolean(site.whatsappInviteUrl)} title="WhatsApp community invite link" fix="Set NEXT_PUBLIC_WHATSAPP_INVITE_URL." />
             <Check ok={!site.url.includes("localhost") || process.env.NODE_ENV !== "production"} title={`Site URL: ${site.url}`} fix="Set NEXT_PUBLIC_SITE_URL to your real domain in production (used in emails, certificates and the sitemap)." />
-            <Check ok={!env("PAYMENTS_DEMO") || process.env.NODE_ENV !== "production"} title="Demo payments off in production" fix="Remove PAYMENTS_DEMO in production." />
           </ul>
         </Panel>
 

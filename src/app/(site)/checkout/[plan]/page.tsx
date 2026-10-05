@@ -39,6 +39,8 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
   // end date (see recordSuccessfulPayment), so it's never wasted, but say exactly what happens.
   const note = !current
     ? null
+    : sub?.permanent
+      ? { icon: CalendarPlus, title: "This is a permanent account", text: "It already has the Main Track for good. Paying here would charge your card for real and change nothing, so to test payments use a different account." }
     : current.id === plan.id
       ? { icon: CalendarPlus, title: `You already have the ${plan.name}`, text: `Your access runs until ${longDate(end!)}. Paying again adds ${plan.accessDays} days to that date.` }
       : plan.id === "main_track"
@@ -117,18 +119,12 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
         )}
         <p className="mt-3 text-center text-[13px] text-muted">Card, bank transfer or USSD. One payment · {plan.accessDays} days of access · nothing renews.</p>
 
-        {(mode === "demo" || (mode === "paystack" && isTestKey())) && (
+        {mode === "paystack" && isTestKey() && (
           <p className="mt-5 flex items-start gap-2 border border-edge bg-brand-wash px-3 py-2.5 text-[13px] text-ink">
             <FlaskConical className="mt-0.5 size-4 shrink-0 text-brand-text" aria-hidden />
-            {mode === "demo" ? (
-              <span>
-                <strong>Demo mode.</strong> No Paystack key is set, so a simulated checkout is used. No money moves.
-              </span>
-            ) : (
-              <span>
-                <strong>Paystack test mode.</strong> Use test card 4084 0840 8408 4081, any future expiry, CVV 408.
-              </span>
-            )}
+            <span>
+              <strong>Paystack test mode.</strong> Use test card 4084 0840 8408 4081, any future expiry, CVV 408.
+            </span>
           </p>
         )}
       </div>

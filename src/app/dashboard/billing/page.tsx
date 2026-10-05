@@ -24,12 +24,12 @@ function Section({ title, icon: Icon, children, className = "" }: { title: strin
 }
 
 export default async function BillingPage() {
-  const { user, sub, preview } = await dashboardContext();
+  const { user, sub } = await dashboardContext();
   if (!user) redirect("/login?next=/dashboard/billing");
 
   const active = hasAccess(sub);
   const plan = sub ? getPlan(sub.plan) : undefined;
-  const payments = await myPayments(preview);
+  const payments = await myPayments();
   const paid = payments.filter((p) => p.status === "success");
   const end = sub ? new Date(sub.current_period_end) : null;
   const daysLeft = end ? Math.max(0, Math.ceil((end.getTime() - new Date().getTime()) / DAY)) : 0;
@@ -54,12 +54,16 @@ export default async function BillingPage() {
                 <span className={"label border border-edge px-2 py-0.5 " + (active ? "bg-[#e3f5e9] text-ink" : "bg-danger/10 text-danger")}>{active ? "Active" : "Ended"}</span>
               </p>
               <p className="mt-1 font-mono text-[13px] text-muted">
-                Paid once{lastPaid ? `: ${money(lastPaid.amount_kobo, lastPaid.currency)} on ${longDate(lastPaid.created_at)}` : `: ${formatNgn(plan.priceNgn)}`}
+                {sub.permanent ? "Permanent account: no payment needed" : `Paid once${lastPaid ? `: ${money(lastPaid.amount_kobo, lastPaid.currency)} on ${longDate(lastPaid.created_at)}` : `: ${formatNgn(plan.priceNgn)}`}`}
                 {plan.id === "main_track" && " · includes the Fast Track"}
               </p>
               <p className="mt-4 flex items-center gap-2 text-[15px] text-ink">
                 <CalendarClock className="size-4 shrink-0 text-brand-text" aria-hidden />
-                {active ? (
+                {sub.permanent ? (
+                  <span>
+                    <strong>Permanent access.</strong> This account never expires.
+                  </span>
+                ) : active ? (
                   <span>
                     Access until <strong>{longDate(end!.toISOString())}</strong> · {daysLeft} day{daysLeft === 1 ? "" : "s"} left
                   </span>
@@ -67,7 +71,7 @@ export default async function BillingPage() {
                   <span>Access ended on {longDate(end!.toISOString())}. Your progress is saved: buy again to pick up where you stopped.</span>
                 )}
               </p>
-              {active && (
+              {active && !sub.permanent && (
                 <div className="mt-3 h-2.5 max-w-md border border-edge bg-paper" role="progressbar" aria-label="Access time left" aria-valuenow={daysLeft} aria-valuemin={0} aria-valuemax={plan.accessDays}>
                   <div className={"h-full " + (daysLeft <= 7 ? "bg-danger" : "bg-brand")} style={{ width: `${Math.min(100, (daysLeft / plan.accessDays) * 100)}%` }} />
                 </div>
@@ -106,7 +110,7 @@ export default async function BillingPage() {
         </Section>
       )}
 
-      {active && !onFast && daysLeft <= 14 && (
+      {active && !sub?.permanent && !onFast && daysLeft <= 14 && (
         <Section title="Need more time?" icon={RotateCcw} className="mt-5">
           <p className="text-[15px] text-ink">
             Buying the track again adds {plan?.accessDays} days to your current end date, so you never lose days you&apos;ve paid for.
@@ -142,8 +146,6 @@ export default async function BillingPage() {
               <li key={p.reference} className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-4 py-3">
                 <div className="min-w-0">
                   <p className="text-[15px] font-semibold text-ink">{getPlan(p.plan)?.name ?? p.plan}</p>
-                  {p.sample && <p className="label mt-1 w-fit border border-edge bg-brand-wash px-1.5 py-0.5 text-brand-text">Preview sample · not a real payment</p>}
-                  {!p.sample && p.provider === "demo" && <p className="label mt-1 w-fit border border-edge bg-brand-wash px-1.5 py-0.5 text-brand-text">Demo payment</p>}
                   <p className="mt-1 font-mono text-[12px] text-muted">{longDate(p.created_at)}</p>
                   <p className="break-all font-mono text-[11.5px] text-muted">Ref {p.reference}</p>
                 </div>

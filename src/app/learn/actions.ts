@@ -49,7 +49,7 @@ async function open(slug: unknown, day: unknown) {
   if (!track || !mod || !lesson) return null;
   const store = getStore();
   const state = await store.load(learner.id);
-  if (statusOf(track, state, mod.day, { unlockAll: learner.preview }) === "locked") return null;
+  if (statusOf(track, state, mod.day) === "locked") return null;
   return { learner, track, mod, lesson, store, state };
 }
 

@@ -20,7 +20,7 @@ Repo: https://github.com/ExpectationsHACK/buildwithitaiclub
 ## Commands
 
 ```bash
-npm run dev      # http://localhost:3000 — course runs in preview mode without Supabase
+npm run dev      # http://localhost:3000 — needs Supabase keys in .env.local; sign in with a real account
 npm test         # 340+ tests: tools, live renderers, SSRF guard, course content, XP/streak engine
 npx tsc --noEmit
 npm run lint
@@ -36,7 +36,7 @@ Before calling work done: typecheck, lint, tests and build must pass, and anythi
 | `src/lib/site.ts` | Name, copy, the two plans (price, access days, results list) |
 | `src/lib/curriculum.ts` | Pillars and both tracks; each day's `lesson` id points into `src/content/lessons/` |
 | `src/content/lessons/*.ts` | One file per written lesson (typed by `src/content/types.ts`), registered in `index.ts` |
-| `src/lib/learning/` | `engine.ts` (grading, XP, levels, streaks, unlocks — pure), `store.ts` (Supabase or `.data/` file), `access.ts` |
+| `src/lib/learning/` | `engine.ts` (grading, XP, levels, streaks, unlocks — pure), `store.ts` (Supabase), `access.ts` |
 | `src/app/learn/` | Course UI + server actions that grade quizzes and award XP |
 | `src/lib/tools.ts`, `src/lib/tool-defs/` | Free tool registry and pure tool logic (definition-driven tools) |
 | `src/lib/tool-guides.ts` | The app wrapper for every tool: problem, steps, result, next actions |
@@ -51,11 +51,12 @@ Before calling work done: typecheck, lint, tests and build must pass, and anythi
 | `src/lib/analytics*.ts`, `/api/track` | Cookieless visitor analytics: daily-rotating salted hash, no IPs stored; country/city from Vercel headers |
 | `src/lib/certificates.ts`, `certificate-*.ts` | Certificates: issued on passing a final, PNG via `/api/certificate/[id]`, public proof page `/certificate/[id]`, emailed through Resend (`RESEND_API_KEY`, `EMAIL_FROM`) |
 | `src/app/(site)/(auth)/` | Sign in / sign up / forgot + reset password. Social buttons appear only for providers enabled in Supabase (`src/lib/auth-providers.ts` reads the public auth settings). A sign-in with an unknown email goes to sign up (email carried in a short-lived cookie, never the URL) via the service-only `email_registered` SQL function. |
-| `src/lib/dashboard.ts` | Member dashboard context (a preview learner in local preview) |
+| `src/lib/dashboard.ts` | Member dashboard context and `studentName()` (profile name → sign-up/Google name → email) |
+| `src/lib/membership.ts` | Access: `getMySubscription()` (cached per request), `PERMANENT_STUDENT_EMAILS` accounts (confirmed email) get the Main Track with no end date |
+| `src/lib/service-checks.ts` | Live read-only Paystack and Resend checks shown on /admin/system |
 | `src/app/dashboard/billing/`, `src/lib/billing.ts` | Billing for one-time tracks: access and days left, Main Track upgrade, add-time, payment history, printable receipts (`receipt/[reference]`, own payments only via RLS), refund help |
 | `src/lib/email-templates.ts`, `src/lib/auth-email.ts` | Branded Prostatis emails (one table-based layout). Account emails (confirm, reset, sign-in link) are sent by us via Supabase `generateLink` + Resend once `EMAIL_FROM` is on a verified domain (`canEmailAnyone()`); before that Supabase's mailer is used. Matching templates to paste into Supabase live in `supabase/email-templates/`. |
 | `src/lib/newsletter.ts`, `/admin/newsletter`, `/unsubscribe` | Newsletter: subscribers are the `waitlist` table (status + private token), issues in `newsletter_issues`. Welcome email on signup, one-click unsubscribe (link + `List-Unsubscribe` headers), batch sending through Resend, claim-before-send so an issue can't go out twice. |
-| `src/lib/data/local.ts` | `.data/` JSON tables used only in local preview mode |
 | `supabase/migrations/` | SQL, run in order |
 
 ## Rules

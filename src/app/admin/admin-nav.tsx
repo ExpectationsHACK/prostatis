@@ -82,34 +82,32 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
-function Footer({ preview, signOut, onNavigate }: { preview: boolean; signOut: () => Promise<void>; onNavigate?: () => void }) {
+function Footer({ signOut, onNavigate }: { signOut: () => Promise<void>; onNavigate?: () => void }) {
   const cls = "flex h-10 w-full items-center gap-3 rounded-[10px] px-3 text-[14px] text-[#3a3a44] hover:bg-white";
   return (
     <div className="space-y-1">
       <Link href="/admin/system" onClick={onNavigate} className={cls}><CircleHelp className="size-[18px]" aria-hidden /> Setup & health</Link>
       <Link href="/" className={cls}><ExternalLink className="size-[18px]" aria-hidden /> View site</Link>
-      {!preview && (
-        <form action={signOut}>
-          <button className={cls}><LogOut className="size-[18px]" aria-hidden /> Logout</button>
-        </form>
-      )}
+      <form action={signOut}>
+        <button className={cls}><LogOut className="size-[18px]" aria-hidden /> Logout</button>
+      </form>
     </div>
   );
 }
 
-export function AdminSidebar({ preview, signOut }: { preview: boolean; signOut: () => Promise<void> }) {
+export function AdminSidebar({ signOut }: { signOut: () => Promise<void> }) {
   return (
     <>
       <NavList />
       <div className="mt-8">
-        <Footer preview={preview} signOut={signOut} />
+        <Footer signOut={signOut} />
       </div>
     </>
   );
 }
 
 /** Phone and tablet: a menu button that opens the same navigation as a sheet. */
-export function MobileNav({ preview, signOut }: { preview: boolean; signOut: () => Promise<void> }) {
+export function MobileNav({ signOut }: { signOut: () => Promise<void> }) {
   const path = usePathname();
   // Remember which page the menu was opened on, so navigating closes it without an effect.
   const [openAt, setOpenAt] = useState<string | null>(null);
@@ -129,7 +127,7 @@ export function MobileNav({ preview, signOut }: { preview: boolean; signOut: () 
             </button>
             <NavList onNavigate={() => setOpen(false)} />
             <div className="mt-8">
-              <Footer preview={preview} signOut={signOut} onNavigate={() => setOpen(false)} />
+              <Footer signOut={signOut} onNavigate={() => setOpen(false)} />
             </div>
           </div>
         </div>

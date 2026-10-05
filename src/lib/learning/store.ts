@@ -1,14 +1,10 @@
 import "server-only";
-import { promises as fs } from "node:fs";
-import path from "node:path";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { supabaseConfigured } from "@/lib/supabase/env";
 import { emptyState, type FinalRow, type LearnerState, type LessonRow } from "./engine";
 
 /**
- * Where learning progress lives. In production it's Supabase (written only with the secret
- * key, after the server has graded the work). In local development without Supabase it's a
- * JSON file in .data/ so the course can be tried end to end.
+ * Where learning progress lives: Supabase, written only with the secret key after the server
+ * has graded the work.
  */
 export type Store = {
   load(userId: string): Promise<LearnerState>;
@@ -65,55 +61,6 @@ const supabaseStore: Store = {
   },
 };
 
-/* ---------- Local file (development preview only) ---------- */
-type FileDb = Record<string, LearnerState & { events: string[] }>;
-const file = path.join(process.cwd(), ".data", "learning.json");
-let queue: Promise<unknown> = Promise.resolve();
-
-async function readDb(): Promise<FileDb> {
-  try {
-    return JSON.parse(await fs.readFile(file, "utf8")) as FileDb;
-  } catch {
-    return {};
-  }
-}
-
-/** Serialise read-modify-write so concurrent actions don't clobber each other. */
-function mutate<T>(userId: string, fn: (s: LearnerState & { events: string[] }) => T): Promise<T> {
-  const run = queue.then(async () => {
-    const db = await readDb();
-    const s = (db[userId] ??= { ...emptyState(), events: [] });
-    const out = fn(s);
-    await fs.mkdir(path.dirname(file), { recursive: true });
-    await fs.writeFile(file, JSON.stringify(db, null, 2));
-    return out;
-  });
-  queue = run.catch(() => undefined);
-  return run;
-}
-
-const fileStore: Store = {
-  async load(userId) {
-    await queue;
-    const s = (await readDb())[userId];
-    return s ? { lessons: s.lessons, finals: s.finals, xp: s.xp, days: s.days } : emptyState();
-  },
-  saveLesson: (userId, row) => mutate(userId, (s) => void (s.lessons[row.lesson_id] = row)),
-  saveFinal: (userId, row) => mutate(userId, (s) => void (s.finals[row.track] = row)),
-  award: (userId, kind, ref, xp) =>
-    mutate(userId, (s) => {
-      const key = `${kind}:${ref}`;
-      if (s.events.includes(key)) return false;
-      s.events.push(key);
-      s.xp += xp;
-      return true;
-    }),
-  touchDay: (userId, day) => mutate(userId, (s) => void (s.days.includes(day) || s.days.push(day))),
-};
-
-// Local development only: no Supabase yet, or COURSE_PREVIEW=true to read the course without signing in.
-export const previewMode = process.env.NODE_ENV === "development" && (!supabaseConfigured || process.env.COURSE_PREVIEW === "true");
-
 export function getStore(): Store {
-  return previewMode ? fileStore : supabaseStore;
+  return supabaseStore;
 }

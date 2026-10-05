@@ -1,11 +1,8 @@
 import "server-only";
-import { promises as fs } from "node:fs";
-import path from "node:path";
 import { listCertificates } from "@/lib/certificates";
 import type { Track } from "@/lib/curriculum";
-import { readTable, writeTable } from "@/lib/data/local";
 import { emptyState, type FinalRow, type LearnerState, type LessonRow, levelFor, streaks, trackProgress } from "@/lib/learning/engine";
-import { getStore, previewMode } from "@/lib/learning/store";
+import { getStore } from "@/lib/learning/store";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { type AffairsInput, flagsFor, lastActive, tracksFor } from "./affairs";
 
@@ -46,17 +43,6 @@ export type Student = AuthUser & {
 /* ---------- Everyone, joined up ---------- */
 
 async function usersAndData() {
-  if (previewMode) {
-    let learning: Record<string, LearnerState> = {};
-    try {
-      learning = JSON.parse(await fs.readFile(path.join(process.cwd(), ".data", "learning.json"), "utf8"));
-    } catch {}
-    const now = new Date().toISOString();
-    const users: AuthUser[] = Object.keys(learning).map((id) => ({ id, email: `${id}@localhost`, name: id === "preview" ? "Preview learner" : id, whatsapp: null, joined: now, lastSignIn: now, confirmed: true }));
-    const subs: Sub[] = users.map((u) => ({ user_id: u.id, status: "active", plan: "main_track", current_period_end: new Date(Date.now() + 40 * 86400_000).toISOString(), created_at: now }));
-    const states = new Map(Object.entries(learning).map(([id, s]) => [id, { lessons: s.lessons, finals: s.finals, xp: s.xp, days: s.days }]));
-    return { users, subs, payments: [] as Payment[], states };
-  }
 
   const db = createAdminClient();
   const users: AuthUser[] = [];
@@ -162,10 +148,6 @@ export function affairsQueue(students: Student[]) {
 export type Note = { id: number; user_id: string; author: string; body: string; created_at: string };
 
 export async function listNotes(userId?: string, limit = 200): Promise<Note[]> {
-  if (previewMode) {
-    const rows = await readTable<Note>("student_notes");
-    return rows.filter((r) => !userId || r.user_id === userId).sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, limit);
-  }
   let q = createAdminClient().from("student_notes").select("*").order("created_at", { ascending: false }).limit(limit);
   if (userId) q = q.eq("user_id", userId);
   const { data, error } = await q;
@@ -175,10 +157,6 @@ export async function listNotes(userId?: string, limit = 200): Promise<Note[]> {
 
 export async function addNote(userId: string, author: string, body: string) {
   const row = { user_id: userId, author, body, created_at: new Date().toISOString() };
-  if (previewMode) {
-    await writeTable<Note>("student_notes", (rows) => void rows.push({ id: Date.now(), ...row }));
-    return;
-  }
   const { error } = await createAdminClient().from("student_notes").insert(row);
   if (error) throw error;
 }
@@ -188,15 +166,13 @@ export type AuditRow = { id: number; actor: string; action: string; target: stri
 export async function audit(actor: string, action: string, target?: string, detail?: unknown) {
   const row = { actor, action, target: target ?? null, detail: detail ?? null, created_at: new Date().toISOString() };
   try {
-    if (previewMode) await writeTable<AuditRow>("admin_audit", (rows) => void rows.push({ id: Date.now(), ...row }));
-    else await createAdminClient().from("admin_audit").insert(row);
+    await createAdminClient().from("admin_audit").insert(row);
   } catch (e) {
     console.error("audit", e);
   }
 }
 
 export async function listAudit(limit = 300): Promise<AuditRow[]> {
-  if (previewMode) return (await readTable<AuditRow>("admin_audit")).reverse().slice(0, limit);
   const { data, error } = await createAdminClient().from("admin_audit").select("*").order("created_at", { ascending: false }).limit(limit);
   if (error) throw error;
   return (data ?? []) as AuditRow[];
@@ -206,20 +182,11 @@ export async function listAudit(limit = 300): Promise<AuditRow[]> {
 export type WaitRow = { email: string; name: string; whatsapp: string | null; source: string; created_at: string };
 
 export async function listWaitlist(): Promise<WaitRow[]> {
-  if (previewMode) {
-    try {
-      const txt = await fs.readFile(path.join(process.cwd(), ".data", "waitlist.jsonl"), "utf8");
-      return txt.split("\n").filter(Boolean).map((l) => JSON.parse(l) as WaitRow).reverse();
-    } catch {
-      return [];
-    }
-  }
   return (await all<WaitRow>("waitlist", "email, name, whatsapp, source, created_at")).sort((a, b) => b.created_at.localeCompare(a.created_at));
 }
 
 /* ---------- Membership changes ---------- */
 export async function setAccess(userId: string, plan: Track["id"], periodEnd: Date) {
-  if (previewMode) throw new Error("Membership changes need Supabase (not available in local preview).");
   const { error } = await createAdminClient()
     .from("subscriptions")
     .upsert({ user_id: userId, status: "active", plan, current_period_end: periodEnd.toISOString(), updated_at: new Date().toISOString() }, { onConflict: "user_id" });
@@ -227,7 +194,6 @@ export async function setAccess(userId: string, plan: Track["id"], periodEnd: Da
 }
 
 export async function endAccess(userId: string) {
-  if (previewMode) throw new Error("Membership changes need Supabase (not available in local preview).");
   const { error } = await createAdminClient()
     .from("subscriptions")
     .update({ status: "cancelled", current_period_end: new Date().toISOString(), updated_at: new Date().toISOString() })
@@ -236,7 +202,6 @@ export async function endAccess(userId: string) {
 }
 
 export async function updateProfile(userId: string, name: string, whatsapp: string | null) {
-  if (previewMode) throw new Error("Profile edits need Supabase (not available in local preview).");
   const { error } = await createAdminClient().from("profiles").upsert({ id: userId, name, whatsapp_number: whatsapp }, { onConflict: "id" });
   if (error) throw error;
 }
@@ -245,7 +210,6 @@ export async function updateProfile(userId: string, name: string, whatsapp: stri
 export const TABLES = ["waitlist", "profiles", "subscriptions", "payments", "lesson_progress", "xp_events", "activity_days", "final_exams", "page_views", "posts", "certificates", "student_notes", "admin_audit"];
 
 export async function tableStatus(): Promise<{ table: string; ok: boolean; rows: number | null; error?: string }[]> {
-  if (previewMode) return TABLES.map((t) => ({ table: t, ok: false, rows: null, error: "Local preview: using .data/ files" }));
   const db = createAdminClient();
   return Promise.all(
     TABLES.map(async (t) => {

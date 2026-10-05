@@ -33,11 +33,3 @@ export function LearnerStats({ state, done, total }: { state: LearnerState; done
     </div>
   );
 }
-
-export function PreviewBanner() {
-  return (
-    <p className="border-b border-edge bg-[#fff4d6] px-4 py-2 text-center font-mono text-[12px] text-ink">
-      Local preview mode (development only), no sign-in needed; progress is saved to <code>.data/learning.json</code> on this computer.
-    </p>
-  );
-}

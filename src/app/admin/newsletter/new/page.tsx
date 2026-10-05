@@ -11,7 +11,7 @@ export default async function NewIssuePage() {
   return (
     <div className="space-y-6">
       <PageHead title="New issue" crumbs={[{ label: "Content" }, { label: "Newsletter", href: "/admin/newsletter" }]} />
-      <IssueEditor issue={null} adminEmail={admin.preview ? "" : admin.email} subscribers={subs.data?.filter((s) => s.status === "subscribed").length ?? 0} canSend={canEmailAnyone()} />
+      <IssueEditor issue={null} adminEmail={admin.email} subscribers={subs.data?.filter((s) => s.status === "subscribed").length ?? 0} canSend={canEmailAnyone()} />
     </div>
   );
 }

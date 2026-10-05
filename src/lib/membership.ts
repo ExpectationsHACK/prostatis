@@ -1,8 +1,9 @@
 import "server-only";
+import { cache } from "react";
 import { plans } from "./site";
-import { createAdminClient } from "./supabase/admin";
+import { adminConfigured, createAdminClient } from "./supabase/admin";
 import { supabaseConfigured } from "./supabase/env";
-import { createClient } from "./supabase/server";
+import { createClient, getCurrentUser } from "./supabase/server";
 
 export type PlanId = (typeof plans)[number]["id"];
 
@@ -18,7 +19,29 @@ export type Subscription = {
   plan: PlanId;
   current_period_end: string;
   paystack_subscription_code: string | null;
+  /** Set for permanent student accounts (PERMANENT_STUDENT_EMAILS): access never ends. */
+  permanent?: boolean;
 };
+
+/**
+ * Accounts that always have the Main Track without paying, e.g. the owner's production test
+ * account. Comma-separated PERMANENT_STUDENT_EMAILS; the address must also be confirmed.
+ */
+export function permanentStudentEmails(): string[] {
+  return (process.env.PERMANENT_STUDENT_EMAILS ?? "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+/** True only when Supabase says this account's email is confirmed (checked with the secret key). */
+const emailConfirmed = cache(async (userId: string, email: string) => {
+  if (!adminConfigured()) return false;
+  const { data, error } = await createAdminClient().auth.admin.getUserById(userId);
+  return !error && Boolean(data.user?.email_confirmed_at) && data.user?.email?.toLowerCase() === email.toLowerCase();
+});
+
+const PERMANENT_END = "9999-12-31T00:00:00.000Z";
 
 // Grace period so a renewal that lands a little late doesn't lock members out.
 const GRACE_MS = 3 * 86400_000;
@@ -30,16 +53,25 @@ export function hasAccess(sub: Subscription | null) {
   return new Date(sub.current_period_end).getTime() + GRACE_MS > Date.now();
 }
 
-/** The current member's subscription, read through RLS as that user. */
-export async function getMySubscription(): Promise<Subscription | null> {
+/**
+ * The current member's access, read through RLS as that user. A confirmed permanent student
+ * gets the Main Track with no end date. Cached per request (several components ask).
+ */
+export const getMySubscription = cache(async (): Promise<Subscription | null> => {
   if (!supabaseConfigured) return null;
+  const user = await getCurrentUser();
+  if (!user) return null;
+  // Matching the email isn't enough (anyone could sign up with it first): it must be confirmed.
+  if (permanentStudentEmails().includes(user.email.toLowerCase()) && (await emailConfirmed(user.id, user.email))) {
+    return { status: "active", plan: "main_track", current_period_end: PERMANENT_END, paystack_subscription_code: null, permanent: true };
+  }
   const supabase = await createClient();
   const { data } = await supabase
     .from("subscriptions")
     .select("status, plan, current_period_end, paystack_subscription_code")
     .maybeSingle();
   return (data as Subscription | null) ?? null;
-}
+});
 
 function addAccess(from: Date, plan: PlanId) {
   const days = getPlan(plan)?.accessDays ?? 30;
@@ -56,7 +88,7 @@ export async function recordSuccessfulPayment(p: {
   reference: string;
   amountKobo: number;
   currency: string;
-  provider: "paystack" | "demo" | "manual";
+  provider: "paystack" | "manual";
   customerCode?: string | null;
   raw?: unknown;
 }) {

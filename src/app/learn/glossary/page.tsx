@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { ArrowLeft, BookA } from "lucide-react";
 import Link from "next/link";
 import { Rich, slugTerm } from "@/components/learn/lesson-body";
-import { PreviewBanner } from "@/components/learn/stats";
 import { lessons } from "@/content/lessons";
 import { tracks } from "@/lib/curriculum";
 import { requireLearner, slugOf } from "@/lib/learning/access";
@@ -28,7 +27,6 @@ export default async function Glossary() {
 
   return (
     <>
-      {learner.preview && <PreviewBanner />}
       <div className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
         <Link href="/learn" className="label inline-flex items-center gap-1.5 text-muted hover:text-ink">
           <ArrowLeft className="size-3.5" aria-hidden /> My tracks

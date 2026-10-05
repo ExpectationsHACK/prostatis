@@ -12,11 +12,9 @@ cp .env.example .env.local   # optional in dev
 npm run dev
 ```
 
-Without Supabase env vars, in development:
-- waitlist signups are appended to `.data/waitlist.jsonl`;
-- the course runs in **preview mode** at `/learn` — no sign-in, both tracks open, progress saved to `.data/learning.json` (delete it to start over).
-
-In production nothing falls back: the waitlist returns 503 and `/learn` requires a signed-in member until Supabase is configured.
+Everything runs on Supabase, in development too: there is no preview or demo mode. Sign in with a
+real account; to test the course without paying, add your account's email to
+`PERMANENT_STUDENT_EMAILS` (it must be confirmed) and it gets the Main Track with no end date.
 
 ## Supabase setup
 
@@ -29,13 +27,14 @@ In production nothing falls back: the waitlist returns 503 and `/learn` requires
 
 ## Payments
 
-Three modes, picked automatically (`src/lib/paystack.ts`):
+Two modes, picked automatically (`src/lib/paystack.ts`):
 
 | Mode | When | What happens |
 |---|---|---|
-| demo | No `PAYSTACK_SECRET_KEY`, in development (or `PAYMENTS_DEMO=true`) | Built-in simulated checkout at `/checkout/demo`. No money moves. |
-| paystack | `PAYSTACK_SECRET_KEY` set | Real Paystack checkout. With an `sk_test_…` key it's Paystack test mode (test card 4084 0840 8408 4081, CVV 408). |
-| disabled | Production with no key | Pay button disabled. |
+| paystack | `PAYSTACK_SECRET_KEY` set | Real Paystack checkout. `sk_live_…` takes real money; with an `sk_test_…` key it's Paystack test mode (test card 4084 0840 8408 4081, CVV 408). |
+| disabled | No key | Checkout says payments aren't open. |
+
+/admin/system checks the key live (read-only) and shows the webhook URL to paste into Paystack.
 
 Flow: `/pricing` → `/checkout/[plan]` (sign-up/login first if needed) → Paystack → `/api/paystack/callback`
 (re-verifies the transaction server-side, checks amount/currency) → `/welcome` (WhatsApp invite, auto-opens) → `/dashboard`.

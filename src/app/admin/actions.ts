@@ -1,7 +1,5 @@
 "use server";
 
-import { promises as fs } from "node:fs";
-import path from "node:path";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/admin/auth";
@@ -10,7 +8,6 @@ import { deletePost, getPostById, listAllPosts, type PostInput, savePost, slugif
 import { emailCertificate } from "@/lib/certificate-delivery";
 import { getCertificate, updateCertificate } from "@/lib/certificates";
 import { starterPosts } from "@/content/blog-starters";
-import { previewMode } from "@/lib/learning/store";
 import { getPlan, newReference, recordSuccessfulPayment, type PlanId } from "@/lib/membership";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { site } from "@/lib/site";
@@ -111,18 +108,10 @@ export async function uploadImageAction(_: unknown, fd: FormData): Promise<{ ok:
   const name = `${new Date().toISOString().slice(0, 10)}-${crypto.randomUUID().slice(0, 8)}.${ext}`;
   const bytes = Buffer.from(await file.arrayBuffer());
   try {
-    let url: string;
-    if (previewMode) {
-      const dir = path.join(process.cwd(), "public", "uploads", "blog");
-      await fs.mkdir(dir, { recursive: true });
-      await fs.writeFile(path.join(dir, name), bytes);
-      url = `/uploads/blog/${name}`;
-    } else {
-      const db = createAdminClient();
-      const { error } = await db.storage.from("blog").upload(name, bytes, { contentType: file.type, cacheControl: "31536000" });
-      if (error) throw error;
-      url = db.storage.from("blog").getPublicUrl(name).data.publicUrl;
-    }
+    const db = createAdminClient();
+    const { error } = await db.storage.from("blog").upload(name, bytes, { contentType: file.type, cacheControl: "31536000" });
+    if (error) throw error;
+    const url = db.storage.from("blog").getPublicUrl(name).data.publicUrl;
     await audit(admin.email, "image.upload", url);
     return { ok: true, msg: "Uploaded.", url };
   } catch (e) {
@@ -172,7 +161,6 @@ export async function grantTrackAction(userId: string, _: Result, fd: FormData):
   const p = getPlan(plan);
   if (!p) return { ok: false, msg: "Pick a track." };
   const amount = Math.max(0, Math.round(Number(fd.get("amount") || 0)));
-  if (previewMode) return { ok: false, msg: "Granting tracks needs Supabase (not available in local preview)." };
   try {
     await recordSuccessfulPayment({ userId, plan, reference: `manual_${newReference(userId)}`, amountKobo: amount * 100, currency: "NGN", provider: "manual", raw: { by: admin.email, note: str(fd, "note", 300) } });
     await audit(admin.email, "student.grant", userId, { plan, amount });

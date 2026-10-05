@@ -129,9 +129,19 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
         </div>
         <div className="ink-block bg-card p-4">
           <p className="label flex items-center gap-1.5 text-muted"><CalendarClock className="size-3.5 text-brand-text" aria-hidden /> Access</p>
-          <p className="display mt-1 text-[24px] sm:text-[28px] text-ink">{daysLeft} days</p>
-          <div className="mt-2"><Bar pct={(daysLeft / accessDays) * 100} tone={daysLeft <= 5 ? "bg-danger" : "bg-accent"} /></div>
-          <p className="mt-1.5 font-mono text-[11.5px] text-muted">left · until {end.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</p>
+          {sub!.permanent ? (
+            <>
+              <p className="display mt-1 text-[24px] sm:text-[28px] text-ink">Permanent</p>
+              <div className="mt-2"><Bar pct={100} tone="bg-accent" /></div>
+              <p className="mt-1.5 font-mono text-[11.5px] text-muted">access never ends on this account</p>
+            </>
+          ) : (
+            <>
+              <p className="display mt-1 text-[24px] sm:text-[28px] text-ink">{daysLeft} days</p>
+              <div className="mt-2"><Bar pct={(daysLeft / accessDays) * 100} tone={daysLeft <= 5 ? "bg-danger" : "bg-accent"} /></div>
+              <p className="mt-1.5 font-mono text-[11.5px] text-muted">left · until {end.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</p>
+            </>
+          )}
         </div>
       </div>
 
@@ -236,7 +246,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
 
           <Card title="Your membership" icon={CalendarClock}>
             <p className="font-bold text-ink">{getPlan(sub!.plan)?.name}</p>
-            <p className="font-mono text-[12.5px] text-muted">Access until {end.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</p>
+            <p className="font-mono text-[12.5px] text-muted">{sub!.permanent ? "Permanent access" : `Access until ${end.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}`}</p>
             <Link href="/dashboard/billing" className={`${btn.secondary} ${size.sm} mt-3`}>Billing</Link>
           </Card>
 

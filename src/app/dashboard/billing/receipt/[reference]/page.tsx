@@ -13,11 +13,11 @@ import { PrintButton } from "./print-button";
 export const metadata: Metadata = { title: "Receipt", robots: { index: false } };
 
 export default async function ReceiptPage({ params }: { params: Promise<{ reference: string }> }) {
-  const { user, preview } = await dashboardContext();
+  const { user } = await dashboardContext();
   const { reference } = await params;
   if (!user) redirect("/login?next=/dashboard/billing");
   // RLS returns only the member's own payments, so another person's reference is simply not found.
-  const p = await myPayment(preview, decodeURIComponent(reference));
+  const p = await myPayment(decodeURIComponent(reference));
   if (!p || p.status !== "success") notFound();
   const plan = getPlan(p.plan);
 
@@ -42,8 +42,6 @@ export default async function ReceiptPage({ params }: { params: Promise<{ refere
           </div>
         </header>
 
-        {p.sample && <p className="mt-4 border border-edge bg-brand-wash px-3 py-2 font-mono text-[12px] text-ink">Preview sample: not a real payment.</p>}
-
         <dl className="mt-5 grid gap-x-6 gap-y-3 text-[14px] sm:grid-cols-2">
           <div>
             <dt className="label text-muted">Paid by</dt>
@@ -59,7 +57,7 @@ export default async function ReceiptPage({ params }: { params: Promise<{ refere
           </div>
           <div>
             <dt className="label text-muted">Paid with</dt>
-            <dd className="mt-0.5 text-ink">{p.provider === "paystack" ? "Paystack" : p.provider === "demo" ? "Demo checkout (no real money)" : "Manual payment"}</dd>
+            <dd className="mt-0.5 text-ink">{p.provider === "paystack" ? "Paystack" : "Recorded by Prostatis (bank transfer or other)"}</dd>
           </div>
           <div>
             <dt className="label text-muted">Status</dt>

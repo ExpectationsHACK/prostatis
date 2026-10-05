@@ -4,7 +4,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { signOut } from "@/app/(site)/(auth)/actions";
 import { LogoMark } from "@/components/brand";
-import { PreviewBanner } from "@/components/learn/stats";
 import { btn, size } from "@/components/ui";
 import { dashboardContext } from "@/lib/dashboard";
 import { hasAccess } from "@/lib/membership";
@@ -24,14 +23,12 @@ function Avatar({ name, email }: { name: string; email: string }) {
 }
 
 export default async function DashboardLayout({ children }: LayoutProps<"/dashboard">) {
-  const { user, sub, preview } = await dashboardContext();
+  const { user, sub } = await dashboardContext();
   if (!user) redirect("/login?next=/dashboard");
 
-  if (!preview) {
-    // Create the profile row on first visit (no-op afterwards).
-    const supabase = await createClient();
-    await supabase.from("profiles").upsert({ id: user.id, name: user.name, whatsapp_number: user.whatsapp || null }, { onConflict: "id", ignoreDuplicates: true });
-  }
+  // Create the profile row on first visit (no-op afterwards).
+  const supabase = await createClient();
+  await supabase.from("profiles").upsert({ id: user.id, name: user.name, whatsapp_number: user.whatsapp || null }, { onConflict: "id", ignoreDuplicates: true });
 
   // Billing stays reachable without an active membership so members can renew.
   const active = hasAccess(sub);
@@ -74,11 +71,6 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
             </button>
           </form>
         </header>
-        {preview && (
-          <div className="print:hidden">
-            <PreviewBanner />
-          </div>
-        )}
         {children}
       </div>
 
