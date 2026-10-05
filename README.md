@@ -101,3 +101,22 @@ Every tool page wraps the tool in an app flow: the problem → how to use it (3 
 ```bash
 npm test
 ```
+
+## Deploying to Cloudflare
+
+The site runs on Cloudflare Workers through the OpenNext adapter (`wrangler.jsonc`, `open-next.config.ts`).
+Cloudflare's free plan allows commercial sites.
+
+**Recommended: let Cloudflare build from GitHub** (Workers & Pages → Create → Import a repository):
+
+- Build command: `npx opennextjs-cloudflare build`
+- Deploy command: `npx wrangler deploy`
+- Environment variables: everything from `.env.example`. Set `NEXT_PUBLIC_*` values as **build** variables
+  (they're baked into the pages at build time), and the secret keys as runtime **secrets**.
+
+From your own machine instead (Linux, macOS or WSL; OpenNext isn't reliable on plain Windows):
+`npx wrangler login`, then `npm run deploy`.
+
+After the first deploy: set `NEXT_PUBLIC_SITE_URL` to the live address, add `<address>/auth/callback` to
+Supabase → Authentication → URL Configuration, and set Paystack's webhook to `<address>/api/webhooks/paystack`.
+Then open `/admin/system` on the live site to check every service.

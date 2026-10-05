@@ -49,3 +49,8 @@ next-env.d.ts
 
 # local blog uploads (development preview)
 /public/uploads
+
+# Cloudflare (OpenNext build output, local secrets)
+.open-next
+.dev.vars
+.wrangler
