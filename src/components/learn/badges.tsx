@@ -16,7 +16,7 @@ export function BadgeShelf({ list }: { list: Badge[] }) {
         {list.map((b) => {
           const Icon = b.earned ? icons[b.icon] : Lock;
           return (
-            <li key={b.id} className={"flex flex-col items-center border p-3 text-center " + (b.earned ? "border-edge bg-card" : "border-dashed border-line bg-paper/60")}>
+            <li key={b.id} className={"flex flex-col items-center rounded-[12px] p-3 text-center " + (b.earned ? "border-2 border-edge bg-card" : "border border-dashed border-faint bg-paper/60")}>
               <span className={"grid size-12 place-items-center rounded-full border " + (b.earned ? "border-edge bg-[#f2c230]" : "border-line bg-wash")}>
                 <Icon className={"size-5 " + (b.earned ? "text-ink" : "text-muted")} aria-hidden />
               </span>

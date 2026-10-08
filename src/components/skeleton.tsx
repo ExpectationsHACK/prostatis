@@ -157,26 +157,46 @@ export function FormSkeleton() {
 /** Member dashboard home. */
 export function DashboardSkeleton() {
   return (
-    <Loading label="Loading your dashboard" className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:py-8">
-      <Bone className="h-3.5 w-40" />
-      <Bone className="mt-3 h-9 w-72 max-w-full" />
-      <div className="mt-6 grid gap-5 border border-edge bg-card p-5 md:grid-cols-[260px_1fr] md:items-center">
-        <Bone className="h-40 w-full" />
+    <Loading label="Loading your dashboard" className="mx-auto max-w-6xl px-4 py-5 sm:px-6 lg:py-8">
+      {/* Hero: greeting and chips beside the activity card */}
+      <div className="grid gap-5 rounded-[16px] border-2 border-edge bg-card p-5 sm:p-7 lg:grid-cols-[1fr_400px] lg:items-center">
         <div>
-          <Bone className="h-3.5 w-28" />
-          <Bone className="mt-3 h-7 w-3/4" />
-          <Lines n={2} className="mt-3" />
-          <Bone className="mt-5 h-11 w-44" />
-        </div>
-      </div>
-      <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {Array.from({ length: 3 }, (_, i) => (
-          <div key={i} className="border border-edge bg-card p-5">
-            <Bone className="h-3.5 w-24" />
-            <Bone className="mt-4 h-8 w-20" />
-            <Bone className="mt-4 h-2.5 w-full" />
+          <Bone className="h-3.5 w-40" />
+          <Bone className="mt-3 h-10 w-80 max-w-full" />
+          <Lines n={1} className="mt-3 max-w-md" />
+          <div className="mt-5 flex flex-wrap gap-2">
+            {Array.from({ length: 3 }, (_, i) => <Bone key={i} className="h-9 w-32 rounded-full" />)}
           </div>
-        ))}
+        </div>
+        <Bone className="h-44 w-full" />
+      </div>
+      <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_320px]">
+        <div className="space-y-6">
+          <div className="grid gap-5 rounded-[16px] border-2 border-edge bg-card p-5 md:grid-cols-[230px_1fr] md:items-center">
+            <Bone className="h-36 w-full" />
+            <div>
+              <Bone className="h-3.5 w-28" />
+              <Bone className="mt-3 h-7 w-3/4" />
+              <Lines n={2} className="mt-3" />
+              <Bone className="mt-5 h-12 w-48" />
+            </div>
+          </div>
+          <div>
+            <Bone className="h-6 w-28" />
+            <div className="mt-3 space-y-px rounded-[16px] border-2 border-edge bg-card p-4">
+              <Lines n={3} />
+            </div>
+          </div>
+        </div>
+        <div className="hidden space-y-4 lg:block">
+          {Array.from({ length: 3 }, (_, i) => (
+            <div key={i} className="rounded-[16px] border-2 border-edge bg-card p-5">
+              <Bone className="h-3.5 w-24" />
+              <Bone className="mt-4 h-6 w-32" />
+              <Bone className="mt-4 h-2.5 w-full" />
+            </div>
+          ))}
+        </div>
       </div>
     </Loading>
   );

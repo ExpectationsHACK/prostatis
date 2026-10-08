@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cleanPath, deviceOf, isBot, referrerHost, summarize, type View } from "@/lib/analytics-shared";
+import { cleanPath, deviceOf, geoFrom, isBot, referrerHost, summarize, type View } from "@/lib/analytics-shared";
 import { relatedPosts, seoChecks, slugify, type Post } from "@/lib/blog-shared";
 import { safeUrl, headingsOf } from "@/components/markdown";
 import { fastTrack } from "@/lib/curriculum";
@@ -10,6 +10,14 @@ const now = new Date("2026-09-30T12:00:00Z");
 const view = (o: Partial<View>): View => ({ created_at: now.toISOString(), path: "/", referrer: null, utm_source: null, country: "NG", region: null, city: "Lagos", device: "mobile", visitor: "a", user_id: null, ...o });
 
 describe("analytics", () => {
+  it("reads the visitor's location from Netlify, Vercel or Cloudflare headers", () => {
+    const nf = Buffer.from(JSON.stringify({ city: "Ìbàdàn", country: { code: "NG", name: "Nigeria" }, subdivision: { code: "OY" } })).toString("base64");
+    expect(geoFrom(new Headers({ "x-nf-geo": nf }))).toEqual({ country: "NG", region: "OY", city: "Ìbàdàn" });
+    expect(geoFrom(new Headers({ "x-vercel-ip-country": "NG", "x-vercel-ip-city": "Port%20Harcourt" }))).toEqual({ country: "NG", region: null, city: "Port Harcourt" });
+    expect(geoFrom(new Headers({ "cf-ipcountry": "GH" }))).toEqual({ country: "GH", region: null, city: null });
+    expect(geoFrom(new Headers({ "x-nf-geo": "not-json", "x-country": "NG" }))).toEqual({ country: "NG", region: null, city: null });
+    expect(geoFrom(new Headers())).toEqual({ country: null, region: null, city: null });
+  });
   it("filters bots and classifies devices", () => {
     expect(isBot("Mozilla/5.0 (compatible; Googlebot/2.1)")).toBe(true);
     expect(isBot("WhatsApp/2.23")).toBe(true);

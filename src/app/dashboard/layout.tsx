@@ -4,8 +4,13 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { signOut } from "@/app/(site)/(auth)/actions";
 import { LogoMark } from "@/components/brand";
+import { MemberIdentity, SignOutForm } from "@/components/member-identity";
 import { btn, size } from "@/components/ui";
+import { fastTrack, mainTrack } from "@/lib/curriculum";
 import { dashboardContext } from "@/lib/dashboard";
+import { slugOf } from "@/lib/learning/access";
+import { trackProgress } from "@/lib/learning/engine";
+import { loadLearnerState } from "@/lib/learning/store";
 import { hasAccess } from "@/lib/membership";
 import { site } from "@/lib/site";
 import { createClient } from "@/lib/supabase/server";
@@ -32,6 +37,13 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
 
   // Billing stays reachable without an active membership so members can renew.
   const active = hasAccess(sub);
+  // The Main Track includes the Fast Track. Progress is read once per request (shared with the page).
+  const owned = !active ? [] : sub!.plan === "main_track" ? [mainTrack, fastTrack] : [fastTrack];
+  const state = owned.length ? await loadLearnerState(user.id) : null;
+  const tracks = owned.map((t) => {
+    const p = trackProgress(t, state!);
+    return { href: `/learn/${slugOf(t)}`, name: t.name, done: p.completed, total: p.total };
+  });
 
   return (
     <div className="paper-grid flex min-h-screen">
@@ -41,7 +53,24 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
           <span className="display text-[16px] sm:text-[17px] text-ink">{site.name}</span>
         </Link>
         <SideNav whatsapp={site.whatsappInviteUrl} active={active} />
-        <Link href={active ? "/learn" : "/pricing"} className={`${btn.primary} ${size.md} mx-1 mt-5`}>
+        {tracks.length > 0 && (
+          <div className="mt-5 border-t border-line px-1 pt-4">
+            <p className="label px-2 text-muted">Your tracks</p>
+            <ul className="mt-2 space-y-0.5">
+              {tracks.map((t) => (
+                <li key={t.href}>
+                  <Link href={t.href} className="flex h-10 items-center gap-2.5 rounded-[10px] px-2 text-[13.5px] font-semibold text-ink hover:bg-wash">
+                    <span className={"size-2.5 shrink-0 rounded-full border border-edge " + (t.done === t.total ? "bg-success" : "bg-brand")} aria-hidden />
+                    <span className="min-w-0 flex-1 truncate">{t.name}</span>
+                    <span className="tabular-nums text-[12px] text-muted">{t.done}/{t.total}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {/* Dark when the page below already has the orange action; orange only to enroll. */}
+        <Link href={active ? "/learn" : "/pricing"} className={`${active ? btn.accent : btn.primary} ${size.md} mx-1 mt-5`}>
           {active ? "Start Learning" : "Enroll Now"}
         </Link>
         <div className="mt-auto flex items-center gap-2.5 border-t border-edge px-1 pt-4">
@@ -50,11 +79,11 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
             <p className="truncate text-[14px] font-bold text-ink">{user.name || "Member"}</p>
             <p className="truncate font-mono text-[11.5px] text-muted">{user.email}</p>
           </div>
-          <form action={signOut}>
-            <button className="grid size-9 place-items-center text-muted hover:bg-wash hover:text-ink" aria-label="Sign out" title="Sign out">
+          <SignOutForm action={signOut}>
+            <button className="grid size-9 place-items-center rounded-[8px] text-muted hover:bg-wash hover:text-ink" aria-label="Sign out" title="Sign out">
               <LogOut className="size-4" />
             </button>
-          </form>
+          </SignOutForm>
         </div>
       </aside>
 
@@ -65,16 +94,17 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
             <LogoMark size={28} />
             <span className="display text-[16px] text-ink">{site.name}</span>
           </Link>
-          <form action={signOut}>
+          <SignOutForm action={signOut}>
             <button className={`${btn.ghost} ${size.sm}`}>
               <LogOut className="size-4" aria-hidden /> Sign out
             </button>
-          </form>
+          </SignOutForm>
         </header>
         {children}
       </div>
 
       <BottomNav whatsapp={site.whatsappInviteUrl} active={active} />
+      <MemberIdentity id={user.id} plan={active ? sub!.plan : "none"} />
     </div>
   );
 }

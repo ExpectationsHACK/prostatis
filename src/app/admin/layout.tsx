@@ -4,6 +4,7 @@ import Link from "next/link";
 import { signOut } from "@/app/(site)/(auth)/actions";
 import { LogoMark } from "@/components/brand";
 import { Avatar } from "@/components/admin/blocks";
+import { SignOutForm } from "@/components/member-identity";
 import { requireAdmin } from "@/lib/admin/auth";
 import { AdminSidebar, MobileNav } from "./admin-nav";
 import { site } from "@/lib/site";
@@ -47,9 +48,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               <div className="absolute right-0 mt-2 w-60 rounded-xl border border-[var(--a-border)] bg-white p-2 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.18)]">
                 <p className="px-3 pt-2 text-[14px] font-semibold text-[#1c1c22]">{admin.name || "Admin"}</p>
                 <p className="truncate px-3 pb-2 text-[12.5px] text-[var(--a-muted)]">{admin.email}</p>
-                <form action={signOut} className="border-t border-[var(--a-border)] pt-1">
+                <SignOutForm action={signOut} className="border-t border-[var(--a-border)] pt-1">
                   <button className="w-full rounded-lg px-3 py-2 text-left text-[13.5px] text-[#1c1c22] hover:bg-[var(--a-head)]">Sign out</button>
-                </form>
+                </SignOutForm>
               </div>
             </details>
           </div>

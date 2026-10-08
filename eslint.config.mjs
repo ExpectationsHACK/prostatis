@@ -10,6 +10,9 @@ const eslintConfig = defineConfig([
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",
+    // Build output of the Cloudflare adapter and Netlify.
+    ".open-next/**",
+    ".netlify/**",
     "out/**",
     "build/**",
     "next-env.d.ts",

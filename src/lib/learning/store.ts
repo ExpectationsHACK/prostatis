@@ -1,6 +1,8 @@
 import "server-only";
+import { cache } from "react";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { emptyState, type FinalRow, type LearnerState, type LessonRow } from "./engine";
+import type { XpEvent } from "./insights";
 
 /**
  * Where learning progress lives: Supabase, written only with the secret key after the server
@@ -13,6 +15,8 @@ export type Store = {
   /** Idempotent per (kind, ref). Returns true only the first time. */
   award(userId: string, kind: string, ref: string, xp: number): Promise<boolean>;
   touchDay(userId: string, day: string): Promise<void>;
+  /** XP events since a moment, newest first (the dashboard's heatmap and activity feed). */
+  events(userId: string, sinceIso: string): Promise<XpEvent[]>;
 };
 
 /* ---------- Supabase ---------- */
@@ -59,8 +63,22 @@ const supabaseStore: Store = {
       .upsert({ user_id: userId, day }, { onConflict: "user_id,day", ignoreDuplicates: true });
     if (error) throw error;
   },
+  async events(userId, sinceIso) {
+    const { data, error } = await createAdminClient()
+      .from("xp_events")
+      .select("kind, ref, xp, created_at")
+      .eq("user_id", userId)
+      .gte("created_at", sinceIso)
+      .order("created_at", { ascending: false })
+      .limit(500);
+    if (error) throw error;
+    return (data ?? []) as XpEvent[];
+  },
 };
 
 export function getStore(): Store {
   return supabaseStore;
 }
+
+/** A member's progress, read once per request however many components ask for it. */
+export const loadLearnerState = cache((userId: string) => supabaseStore.load(userId));

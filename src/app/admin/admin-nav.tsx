@@ -4,6 +4,7 @@ import { BarChart3, ChevronDown, CircleHelp, CreditCard, ExternalLink, FileText,
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { SignOutForm } from "@/components/member-identity";
 
 type Leaf = { href: string; label: string };
 type Item = { label: string; icon: LucideIcon; href?: string; children?: Leaf[] };
@@ -88,9 +89,9 @@ function Footer({ signOut, onNavigate }: { signOut: () => Promise<void>; onNavig
     <div className="space-y-1">
       <Link href="/admin/system" onClick={onNavigate} className={cls}><CircleHelp className="size-[18px]" aria-hidden /> Setup & health</Link>
       <Link href="/" className={cls}><ExternalLink className="size-[18px]" aria-hidden /> View site</Link>
-      <form action={signOut}>
+      <SignOutForm action={signOut}>
         <button className={cls}><LogOut className="size-[18px]" aria-hidden /> Logout</button>
-      </form>
+      </SignOutForm>
     </div>
   );
 }

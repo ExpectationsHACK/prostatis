@@ -1,0 +1,14 @@
+# Netlify hosting. Netlify detects Next.js and builds it with its OpenNext adapter
+# automatically (server pages and actions become Netlify Functions, src/proxy.ts an Edge
+# Function), so there is no plugin to install or pin. Environment variables are set in the
+# Netlify dashboard, never here. See "Deploying to Netlify" in README.md.
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  # Next.js 16 and Sentry need Node 20.19+.
+  NODE_VERSION = "22"
+  # Telemetry off in the build logs.
+  NEXT_TELEMETRY_DISABLED = "1"

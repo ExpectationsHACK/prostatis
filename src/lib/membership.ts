@@ -1,5 +1,6 @@
 import "server-only";
 import { cache } from "react";
+import { productEvent } from "./server/product-events";
 import { plans } from "./site";
 import { adminConfigured, createAdminClient } from "./supabase/admin";
 import { supabaseConfigured } from "./supabase/env";
@@ -146,6 +147,7 @@ export async function recordSuccessfulPayment(p: {
     { onConflict: "user_id" },
   );
   if (subErr) throw new Error(`Payment ${p.reference} recorded but access wasn't updated: ${subErr.message}`);
+  productEvent(p.userId, "payment_succeeded", { plan: p.plan, amount_ngn: p.amountKobo / 100, currency: p.currency, provider: p.provider });
   return { alreadyProcessed: false };
 }
 

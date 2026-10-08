@@ -59,6 +59,27 @@ export const COUNTRY_NAMES: Record<string, string> = {
 };
 export const countryName = (c: string | null) => (c ? (COUNTRY_NAMES[c] ?? c) : "Unknown");
 
+/**
+ * The visitor's approximate location from the host's edge headers: Vercel's, Netlify's
+ * (`x-nf-geo`, base64 JSON) or Cloudflare's (country only). Nulls when running locally.
+ */
+export function geoFrom(h: Headers): { country: string | null; region: string | null; city: string | null } {
+  const vercelCity = h.get("x-vercel-ip-city");
+  if (h.get("x-vercel-ip-country")) {
+    return { country: h.get("x-vercel-ip-country"), region: h.get("x-vercel-ip-country-region") || null, city: vercelCity ? decodeURIComponent(vercelCity) : null };
+  }
+  const nf = h.get("x-nf-geo");
+  if (nf) {
+    try {
+      const g = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(nf), (c) => c.charCodeAt(0)))) as { city?: string; country?: { code?: string }; subdivision?: { code?: string } };
+      return { country: g.country?.code || null, region: g.subdivision?.code || null, city: g.city || null };
+    } catch {
+      // Malformed header: fall through to the country-only headers.
+    }
+  }
+  return { country: h.get("x-country") || h.get("cf-ipcountry") || null, region: null, city: null };
+}
+
 export function lagosDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-CA", { timeZone: "Africa/Lagos" });
 }

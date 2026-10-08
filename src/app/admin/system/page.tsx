@@ -44,6 +44,8 @@ export default async function SystemPage() {
             </li>
             <Check ok={email.ok} title={email.title} fix={email.detail} />
             <Check ok title={`Permanent student accounts: ${permanent.join(", ") || "none"}`} fix="" />
+            <Check ok={env("NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN")} title="PostHog product analytics" fix="Optional. Set NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN (and NEXT_PUBLIC_POSTHOG_HOST for the EU region), then redeploy: it is read at build time." />
+            <Check ok={env("NEXT_PUBLIC_SENTRY_DSN")} title={`Sentry error tracking${env("NEXT_PUBLIC_SENTRY_DSN") && !env("SENTRY_AUTH_TOKEN") ? " (no source maps: stack traces stay minified)" : ""}`} fix="Optional. Set NEXT_PUBLIC_SENTRY_DSN, then redeploy. Add SENTRY_AUTH_TOKEN, SENTRY_ORG and SENTRY_PROJECT for readable stack traces." />
             <Check ok={env("PAGESPEED_API_KEY")} title="Google PageSpeed key (speed tools)" fix="Set PAGESPEED_API_KEY. Without it the speed tools use their quick built-in check." />
             <Check ok={Boolean(site.whatsappInviteUrl)} title="WhatsApp community invite link" fix="Set NEXT_PUBLIC_WHATSAPP_INVITE_URL." />
             <Check ok={!site.url.includes("localhost") || process.env.NODE_ENV !== "production"} title={`Site URL: ${site.url}`} fix="Set NEXT_PUBLIC_SITE_URL to your real domain in production (used in emails, certificates and the sitemap)." />

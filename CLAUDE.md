@@ -52,6 +52,9 @@ Before calling work done: typecheck, lint, tests and build must pass, and anythi
 | `src/lib/certificates.ts`, `certificate-*.ts` | Certificates: issued on passing a final, PNG via `/api/certificate/[id]`, public proof page `/certificate/[id]`, emailed through Resend (`RESEND_API_KEY`, `EMAIL_FROM`) |
 | `src/app/(site)/(auth)/` | Sign in / sign up / forgot + reset password. Social buttons appear only for providers enabled in Supabase (`src/lib/auth-providers.ts` reads the public auth settings). A sign-in with an unknown email goes to sign up (email carried in a short-lived cookie, never the URL) via the service-only `email_registered` SQL function. |
 | `src/lib/dashboard.ts` | Member dashboard context and `studentName()` (profile name → sign-up/Google name → email) |
+| `src/lib/observability/`, `src/instrumentation*.ts`, `src/app/global-error.tsx` | PostHog (lazy, no cookies, account-id identity via `components/member-identity.tsx`) and Sentry (errors only). Both off without their env keys. Server milestones: `src/lib/server/product-events.ts` |
+| `src/lib/learning/insights.ts`, `src/app/dashboard/(home)/` | Dashboard: heatmap, to-do list and recent activity from real progress and `xp_events`; `view.tsx` is the pure view, `page.tsx` loads the data |
+| `netlify.toml` | Netlify hosting (recommended). Cloudflare config (`wrangler.jsonc`) needs Workers Paid: free Workers' 10 ms CPU fails signed-in pages |
 | `src/lib/membership.ts` | Access: `getMySubscription()` (cached per request), `PERMANENT_STUDENT_EMAILS` accounts (confirmed email) get the Main Track with no end date |
 | `src/lib/service-checks.ts` | Live read-only Paystack and Resend checks shown on /admin/system |
 | `src/app/dashboard/billing/`, `src/lib/billing.ts` | Billing for one-time tracks: access and days left, Main Track upgrade, add-time, payment history, printable receipts (`receipt/[reference]`, own payments only via RLS), refund help |

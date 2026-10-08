@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Privacy policy", description: `How $
 
 export default function PrivacyPage() {
   return (
-    <LegalPage title="Privacy policy" updated="4 October 2026" intro={`${site.name} is run by ${site.company} ("we", "us"), which is responsible for your personal data. This explains what we collect, why, who helps us process it, and the rights you have under the Nigeria Data Protection Act 2023.`}>
+    <LegalPage title="Privacy policy" updated="8 October 2026" intro={`${site.name} is run by ${site.company} ("we", "us"), which is responsible for your personal data. This explains what we collect, why, who helps us process it, and the rights you have under the Nigeria Data Protection Act 2023.`}>
       <Section title="What we collect">
         <ul>
           <li><strong>Your account:</strong> your name, email address and, if you give it, your WhatsApp number.</li>
@@ -14,6 +14,8 @@ export default function PrivacyPage() {
           <li><strong>Your learning:</strong> quiz scores, completed tasks, XP, streaks and certificates, so the course can track your progress.</li>
           <li><strong>Emails you give us:</strong> when you join a mailing list on the site.</li>
           <li><strong>Visits:</strong> the page viewed, the website that sent you, your approximate country and city (from our host), and your device type. We don&apos;t use tracking cookies and don&apos;t store IP addresses; visits are counted with an anonymous code that changes every day.</li>
+          <li><strong>How the site is used:</strong> which pages and buttons are used, and milestones such as finishing a lesson or paying, through PostHog. It keeps an ID in your browser&apos;s local storage (not a cookie). When you&apos;re signed in, it&apos;s linked to your account ID, never your name or email. We don&apos;t record your screen, and the admin pages and receipts are never tracked. If your browser sends &ldquo;Do Not Track&rdquo;, PostHog doesn&apos;t run.</li>
+          <li><strong>Error reports:</strong> when something breaks, a technical report (the error, the page and your browser type) goes to Sentry so we can fix it. Signed-in reports carry your account ID only.</li>
         </ul>
       </Section>
 
@@ -43,11 +45,11 @@ export default function PrivacyPage() {
       </Section>
 
       <Section title="Who helps us">
-        <p>We use trusted providers to run the site: Supabase (accounts and database), Paystack (payments), Resend (email), Vercel (hosting), Google (speed checks and search suggestions) and Anthropic (AI writing in the free tools). They process data only to provide their service to us. Some store data outside Nigeria; we use providers that protect it with appropriate safeguards.</p>
+        <p>We use trusted providers to run the site: Supabase (accounts and database), Paystack (payments), Resend (email), Netlify (hosting), PostHog (usage analytics), Sentry (error reports), Google (speed checks and search suggestions) and Anthropic (AI writing in the free tools). They process data only to provide their service to us. Some store data outside Nigeria; we use providers that protect it with appropriate safeguards.</p>
       </Section>
 
       <Section title="Cookies">
-        <p>We use only the cookies needed to keep you signed in and secure. No advertising or tracking cookies.</p>
+        <p>We use only the cookies needed to keep you signed in and secure. No advertising or tracking cookies. Usage analytics keep an ID in local storage instead, as described above.</p>
       </Section>
 
       <Section title="How long we keep it">

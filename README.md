@@ -102,21 +102,55 @@ Every tool page wraps the tool in an app flow: the problem → how to use it (3 
 npm test
 ```
 
-## Deploying to Cloudflare
+## Deploying to Netlify (recommended, free)
 
-The site runs on Cloudflare Workers through the OpenNext adapter (`wrangler.jsonc`, `open-next.config.ts`).
-Cloudflare's free plan allows commercial sites.
+Netlify's free plan allows commercial sites and runs every part of the app (server pages, server
+actions, the proxy). `netlify.toml` holds the build settings; Netlify detects Next.js and uses its
+OpenNext adapter by itself.
 
-**Recommended: let Cloudflare build from GitHub** (Workers & Pages → Create → Import a repository):
+1. Netlify → Add new project → Import an existing project → GitHub → this repository.
+2. The build command (`npm run build`) and publish directory (`.next`) come from `netlify.toml`.
+3. Project configuration → Environment variables: add everything from `.env.example`. Mark the secret
+   keys (`SUPABASE_SECRET_KEY`, `PAYSTACK_SECRET_KEY`, `RESEND_API_KEY`, `ANTHROPIC_API_KEY`,
+   `SENTRY_AUTH_TOKEN`) as secret. `NEXT_PUBLIC_*` values are baked in at build time: redeploy after
+   changing one.
+4. Deploy, then set `NEXT_PUBLIC_SITE_URL` to the live address and redeploy.
 
-- Build command: `npx opennextjs-cloudflare build`
-- Deploy command: `npx wrangler deploy`
-- Environment variables: everything from `.env.example`. Set `NEXT_PUBLIC_*` values as **build** variables
-  (they're baked into the pages at build time), and the secret keys as runtime **secrets**.
+The free plan has 300 credits a month (a production deploy is 15, a GB of traffic 20). When they run
+out, **every project on the account pauses until next month**, so deploy in batches rather than on
+every small push, and watch Usage in the Netlify dashboard. The Personal plan ($9/month) has 1,000.
 
-From your own machine instead (Linux, macOS or WSL; OpenNext isn't reliable on plain Windows):
-`npx wrangler login`, then `npm run deploy`.
+After the first deploy: add `<address>/auth/callback` to Supabase → Authentication → URL Configuration,
+set Paystack's webhook to `<address>/api/webhooks/paystack`, then open `/admin/system` on the live site
+to check every service.
 
-After the first deploy: set `NEXT_PUBLIC_SITE_URL` to the live address, add `<address>/auth/callback` to
-Supabase → Authentication → URL Configuration, and set Paystack's webhook to `<address>/api/webhooks/paystack`.
-Then open `/admin/system` on the live site to check every service.
+## Deploying to Cloudflare (Workers Paid only)
+
+The project also runs on Cloudflare Workers through the OpenNext adapter (`wrangler.jsonc`,
+`open-next.config.ts`), but **not on the free Workers plan**: it allows about 10 ms of CPU per request,
+and signed-in pages (sign-in, dashboard, lessons) need more, so they fail with "Error 1102: Worker
+exceeded resource limits". Workers Paid ($5/month) allows 30 seconds.
+
+Let Cloudflare build from GitHub (Workers & Pages → Create → Import a repository) with build command
+`npx opennextjs-cloudflare build` and deploy command `npx wrangler deploy`. Set `NEXT_PUBLIC_*` values
+as **build** variables and the secret keys as runtime **secrets**. From your own machine instead
+(Linux, macOS or WSL; OpenNext isn't reliable on plain Windows): `npx wrangler login`, then
+`npm run deploy`. The same after-deploy steps as Netlify apply.
+
+## Analytics and error tracking
+
+Both are optional and off until their keys are set (then redeploy: the keys are read at build time).
+
+- **PostHog** (`NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN`, `NEXT_PUBLIC_POSTHOG_HOST`): page views and clicks
+  from the browser, loaded after the page is idle as its own file, with no cookies (localStorage),
+  no session recordings, Do Not Track respected, and nothing from `/admin` or receipts. Signed-in
+  members are identified by account id only (`src/components/member-identity.tsx`). The server adds
+  `payment_succeeded`, `lesson_completed` and `final_passed` (`src/lib/server/product-events.ts`),
+  which ad blockers can't hide.
+- **Sentry** (`NEXT_PUBLIC_SENTRY_DSN`): errors from the browser (`src/instrumentation-client.ts`,
+  `src/app/global-error.tsx`) and the server (`src/instrumentation.ts`: Server Components, server
+  actions, route handlers, the proxy). Errors only, no tracing or replays, no names, emails or IPs.
+  Set `SENTRY_AUTH_TOKEN`, `SENTRY_ORG` and `SENTRY_PROJECT` too and the build uploads source maps for
+  readable stack traces; without them `next.config.ts` leaves the build untouched.
+
+`/admin/system` shows whether each is switched on.

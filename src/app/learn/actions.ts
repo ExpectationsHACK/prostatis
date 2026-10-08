@@ -24,6 +24,7 @@ import {
   type LessonRow,
 } from "@/lib/learning/engine";
 import { getStore, type Store } from "@/lib/learning/store";
+import { productEvent } from "@/lib/server/product-events";
 
 export type ActionResult =
   | { ok: false; error: string }
@@ -60,7 +61,10 @@ async function finish(store: Store, userId: string, row: LessonRow) {
   let gained = 0;
   if (row.quiz_passed_at && row.task_done_at && !row.completed_at) {
     row.completed_at = new Date().toISOString();
-    if (await store.award(userId, "lesson", row.lesson_id, XP.lesson)) gained += XP.lesson;
+    if (await store.award(userId, "lesson", row.lesson_id, XP.lesson)) {
+      gained += XP.lesson;
+      productEvent(userId, "lesson_completed", { lesson: row.lesson_id, quiz_score: row.quiz_best, quiz_total: row.quiz_total });
+    }
   }
   await store.saveLesson(userId, row);
   await store.touchDay(userId, lagosDay());
@@ -162,5 +166,6 @@ export async function submitFinal(slug: string, answers: number[]): Promise<Acti
     if (!cert.emailed_at) after(() => emailCertificate(cert).catch((e) => console.error("certificate email", e)));
   }
   const gained = g.passed && (await store.award(learner.id, "final", track.id, XP.final)) ? XP.final : 0;
+  if (gained) productEvent(learner.id, "final_passed", { track: track.id, score: g.score, total: g.total });
   return summary(store, learner.id, track, state, gained, g.passed, g);
 }

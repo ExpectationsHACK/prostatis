@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { recordView, visitorId } from "@/lib/analytics";
-import { cleanPath, deviceOf, isBot, lagosDate, referrerHost } from "@/lib/analytics-shared";
+import { cleanPath, deviceOf, geoFrom, isBot, lagosDate, referrerHost } from "@/lib/analytics-shared";
 import { clientIp, rateLimited } from "@/lib/server/rate-limit";
 import { getCurrentUser } from "@/lib/supabase/server";
 
@@ -19,7 +19,6 @@ export async function POST(request: NextRequest) {
     const h = request.headers;
     const ip = (h.get("x-forwarded-for") ?? "").split(",")[0].trim() || h.get("x-real-ip") || "0.0.0.0";
     const now = new Date().toISOString();
-    const city = h.get("x-vercel-ip-city");
     // Only look up the member when a Supabase session cookie is present.
     const signedIn = request.cookies.getAll().some((c) => c.name.startsWith("sb-"));
     const user = signedIn ? await getCurrentUser().catch(() => null) : null;
@@ -29,10 +28,8 @@ export async function POST(request: NextRequest) {
       path,
       referrer: referrerHost(typeof body?.r === "string" ? body.r : undefined, request.nextUrl.hostname),
       utm_source: typeof body?.u === "string" && body.u ? body.u.slice(0, 60).toLowerCase() : null,
-      // Set by Vercel's edge (or Cloudflare's for country). Empty when running locally.
-      country: h.get("x-vercel-ip-country") || h.get("cf-ipcountry") || null,
-      region: h.get("x-vercel-ip-country-region") || null,
-      city: city ? decodeURIComponent(city) : null,
+      // From the host's edge (Netlify, Vercel or Cloudflare). Empty when running locally.
+      ...geoFrom(h),
       device: deviceOf(ua),
       visitor: visitorId(ip, ua, lagosDate(now)),
       user_id: user?.id ?? null,
