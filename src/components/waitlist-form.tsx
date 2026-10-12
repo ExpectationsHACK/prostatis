@@ -3,6 +3,7 @@
 import { CircleCheck } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { postJson } from "@/lib/fetch-errors";
 import { btn, size } from "./ui";
 
 /**
@@ -18,17 +19,10 @@ export function SubscribeForm({ source = "homepage", buttonLabel = "Subscribe" }
     e.preventDefault();
     setState("sending");
     const data = Object.fromEntries(new FormData(e.currentTarget));
-    try {
-      const res = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, source }),
-      });
-      const json = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(json.error ?? "Something went wrong. Please try again.");
-      setState("done");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+    const res = await postJson("/api/waitlist", { ...data, source });
+    if (res.ok) setState("done");
+    else {
+      setError(res.problem.message);
       setState("error");
     }
   }

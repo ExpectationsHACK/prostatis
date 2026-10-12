@@ -3,6 +3,7 @@
 import { CircleAlert, Eye, EyeOff, Mail } from "lucide-react";
 import Link from "next/link";
 import { useActionState, useState } from "react";
+import { FieldError } from "@/components/status";
 import { btn, input, size } from "@/components/ui";
 import { requestPasswordReset, sendMagicLink, signIn, signUp, updatePassword, type AuthState } from "./actions";
 
@@ -24,12 +25,20 @@ function Notice({ state }: { state: AuthState }) {
   return null;
 }
 
+type FieldName = keyof NonNullable<NonNullable<AuthState>["fields"]>;
+
+/** Props that mark a field invalid and point screen readers at its message. */
+function bad(state: AuthState, name: FieldName, id: string) {
+  return state?.fields?.[name] ? { "aria-invalid": true as const, "aria-describedby": `${id}-err` } : {};
+}
+const badInput = (state: AuthState, name: FieldName) => (state?.fields?.[name] ? " border-danger! bg-[#fffafa]!" : "");
+
 /** A password field with a show/hide button inside it. */
-function PasswordField({ id, name, autoComplete, placeholder, minLength }: { id: string; name: string; autoComplete: string; placeholder?: string; minLength?: number }) {
+function PasswordField({ id, name, autoComplete, placeholder, minLength, state }: { id: string; name: FieldName; autoComplete: string; placeholder?: string; minLength?: number; state?: AuthState }) {
   const [show, setShow] = useState(false);
   return (
     <div className="relative">
-      <input id={id} name={name} type={show ? "text" : "password"} required minLength={minLength} autoComplete={autoComplete} placeholder={placeholder} className={`${input} pr-12`} />
+      <input id={id} name={name} type={show ? "text" : "password"} required minLength={minLength} autoComplete={autoComplete} placeholder={placeholder} {...bad(state, name, id)} className={`${input} pr-12${badInput(state, name)}`} />
       <button
         type="button"
         onClick={() => setShow((v) => !v)}
@@ -59,22 +68,26 @@ export function SignupForm({ next, email, notice }: { next: string; email?: stri
       <input type="hidden" name="next" value={next} />
       <div>
         <Label htmlFor="su-name">Full name</Label>
-        <input id="su-name" name="name" required maxLength={80} autoComplete="name" aria-describedby="su-name-hint" className={input} />
+        <input id="su-name" name="name" required maxLength={80} autoComplete="name" defaultValue={state?.values?.name} aria-describedby="su-name-hint" {...bad(state, "name", "su-name")} className={input + badInput(state, "name")} />
+        <FieldError id="su-name-err" message={state?.fields?.name} />
         <p id="su-name-hint" className="mt-1 font-mono text-[12px] text-muted">As you want it on your certificate.</p>
       </div>
       <div>
         <Label htmlFor="su-email">Email</Label>
-        <input id="su-email" name="email" type="email" required autoComplete="email" defaultValue={email} className={input} />
+        <input id="su-email" name="email" type="email" required autoComplete="email" defaultValue={state?.values?.email ?? email} {...bad(state, "email", "su-email")} className={input + badInput(state, "email")} />
+        <FieldError id="su-email-err" message={state?.fields?.email} />
       </div>
       <div>
         <Label htmlFor="su-wa">
           WhatsApp number <span className="font-normal text-muted">(optional)</span>
         </Label>
-        <input id="su-wa" name="whatsapp" type="tel" autoComplete="tel" placeholder="0803 123 4567" className={input} />
+        <input id="su-wa" name="whatsapp" type="tel" autoComplete="tel" placeholder="0803 123 4567" defaultValue={state?.values?.whatsapp} {...bad(state, "whatsapp", "su-wa")} className={input + badInput(state, "whatsapp")} />
+        <FieldError id="su-wa-err" message={state?.fields?.whatsapp} />
       </div>
       <div>
         <Label htmlFor="su-pw">Password</Label>
-        <PasswordField id="su-pw" name="password" minLength={8} autoComplete="new-password" placeholder="At least 8 characters" />
+        <PasswordField id="su-pw" name="password" minLength={8} autoComplete="new-password" placeholder="At least 8 characters" state={state} />
+        <FieldError id="su-pw-err" message={state?.fields?.password} />
       </div>
       <Notice state={state} />
       <button disabled={pending} className={`${btn.primary} ${size.lg} w-full`}>
@@ -95,13 +108,15 @@ export function LoginForm({ next, initialError }: { next: string; initialError?:
   const [pwState, pwAction, pwPending] = useActionState(signIn, initialError ? { error: initialError } : undefined);
   const [mlState, mlAction, mlPending] = useActionState(sendMagicLink, undefined);
   const magic = mode === "magic";
+  const state = magic ? mlState : pwState;
 
   return (
     <form action={magic ? mlAction : pwAction} className="space-y-4">
       <input type="hidden" name="next" value={next} />
       <div>
         <Label htmlFor="li-email">Email</Label>
-        <input id="li-email" name="email" type="email" required autoComplete="email" className={input} />
+        <input id="li-email" name="email" type="email" required autoComplete="email" defaultValue={state?.values?.email} {...bad(state, "email", "li-email")} className={input + badInput(state, "email")} />
+        <FieldError id="li-email-err" message={state?.fields?.email} />
       </div>
       {!magic && (
         <div>
@@ -109,10 +124,11 @@ export function LoginForm({ next, initialError }: { next: string; initialError?:
             <label htmlFor="li-pw" className="text-[14px] font-semibold text-ink">Password</label>
             <Link href="/forgot-password" className="text-[13px] font-semibold text-brand-text underline">Forgot password?</Link>
           </div>
-          <PasswordField id="li-pw" name="password" autoComplete="current-password" />
+          <PasswordField id="li-pw" name="password" autoComplete="current-password" state={state} />
+          <FieldError id="li-pw-err" message={state?.fields?.password} />
         </div>
       )}
-      <Notice state={magic ? mlState : pwState} />
+      <Notice state={state} />
       <button disabled={pwPending || mlPending} className={`${btn.primary} ${size.lg} w-full`}>
         {magic ? (mlPending ? "Sending…" : "Email me a sign-in link") : pwPending ? "Signing in…" : "Sign in"}
       </button>
@@ -135,7 +151,8 @@ export function ForgotForm() {
     <form action={action} className="space-y-4">
       <div>
         <Label htmlFor="fp-email">Email</Label>
-        <input id="fp-email" name="email" type="email" required autoComplete="email" className={input} />
+        <input id="fp-email" name="email" type="email" required autoComplete="email" defaultValue={state?.values?.email} {...bad(state, "email", "fp-email")} className={input + badInput(state, "email")} />
+        <FieldError id="fp-email-err" message={state?.fields?.email} />
       </div>
       <Notice state={state} />
       <button disabled={pending} className={`${btn.primary} ${size.lg} w-full`}>
@@ -155,11 +172,13 @@ export function ResetForm() {
     <form action={action} className="space-y-4">
       <div>
         <Label htmlFor="rp-pw">New password</Label>
-        <PasswordField id="rp-pw" name="password" minLength={8} autoComplete="new-password" placeholder="At least 8 characters" />
+        <PasswordField id="rp-pw" name="password" minLength={8} autoComplete="new-password" placeholder="At least 8 characters" state={state} />
+        <FieldError id="rp-pw-err" message={state?.fields?.password} />
       </div>
       <div>
         <Label htmlFor="rp-confirm">Type it again</Label>
-        <PasswordField id="rp-confirm" name="confirm" minLength={8} autoComplete="new-password" />
+        <PasswordField id="rp-confirm" name="confirm" minLength={8} autoComplete="new-password" state={state} />
+        <FieldError id="rp-confirm-err" message={state?.fields?.confirm} />
       </div>
       <Notice state={state} />
       <button disabled={pending} className={`${btn.primary} ${size.lg} w-full`}>

@@ -62,6 +62,8 @@ export type PaystackTransaction = {
   metadata: Record<string, unknown> | null | string;
   customer: { email: string; customer_code: string };
   plan?: string | { plan_code?: string } | null;
+  /** The bank's or gateway's own words, e.g. "Approved", "Declined", "Insufficient Funds". */
+  gateway_response?: string | null;
 };
 
 export function verifyTransaction(reference: string) {

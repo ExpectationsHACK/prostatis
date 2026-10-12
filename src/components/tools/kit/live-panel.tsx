@@ -1,7 +1,9 @@
 "use client";
 
-import { Check, Copy, Globe, LoaderCircle, Printer } from "lucide-react";
+import { Check, Copy, Globe, LoaderCircle, Printer, RefreshCw } from "lucide-react";
 import { useState } from "react";
+import { Notice } from "@/components/status";
+import { postJson } from "@/lib/fetch-errors";
 import { blocksToHtml, blocksToText } from "@/lib/tool-defs/text";
 import type { Block, LiveSpec, Values } from "@/lib/tool-defs/types";
 import { btn, input, size } from "../../ui";
@@ -36,18 +38,18 @@ export function LivePanel({ spec, values, onChecks }: { spec: LiveSpec; values: 
   const [by, setBy] = useState(readName);
   const [copied, setCopied] = useState(false);
 
-  async function run(e: React.FormEvent) {
-    e.preventDefault();
+  async function run(e?: React.FormEvent) {
+    e?.preventDefault();
     setState("running");
     setError("");
+    const res = await postJson<Record<string, unknown>>("/api/tools/analyze", { kind: spec.kind, url, ...(spec.payload ? spec.payload(values) : {}) });
+    if (!res.ok) {
+      setError(res.problem.message);
+      setState("error");
+      return;
+    }
+    const data = res.data;
     try {
-      const res = await fetch("/api/tools/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ kind: spec.kind, url, ...(spec.payload ? spec.payload(values) : {}) }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error ?? "The check failed. Try again.");
       const out = spec.render(data, values);
       setBlocks(out.blocks);
       setChecked(typeof data.url === "string" ? data.url : typeof data.start === "string" ? data.start : url);
@@ -113,9 +115,9 @@ export function LivePanel({ spec, values, onChecks }: { spec: LiveSpec; values: 
       {(spec.url?.hint ?? spec.note) && <p className="mt-2 font-mono text-[12px] text-muted">{spec.url?.hint ?? spec.note}</p>}
       {state === "running" && waiting[spec.kind] && <p className="mt-3 font-mono text-[12px] text-muted">{waiting[spec.kind]}</p>}
       {state === "error" && (
-        <p className="mt-3 border border-edge bg-danger/10 px-3 py-2 text-[14px] text-danger" role="alert">
+        <Notice tone="error" className="mt-3" action={<button type="button" onClick={() => run()} className={`${btn.secondary} ${size.sm}`}><RefreshCw className="size-3.5" aria-hidden /> Try again</button>}>
           {error}
-        </p>
+        </Notice>
       )}
       {state === "done" && (
         <div className="mt-5 space-y-4" aria-live="polite">

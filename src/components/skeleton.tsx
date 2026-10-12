@@ -1,3 +1,5 @@
+import { SlowHint } from "./slow-hint";
+
 /**
  * Loading skeletons: grey "bones" in the shape of the page that's on its way, so a slow
  * connection shows structure instead of a blank screen. Server components (no JS needed);
@@ -26,6 +28,7 @@ function Loading({ label = "Loading", className = "", children }: { label?: stri
     <div role="status" aria-live="polite" aria-busy="true" className={className}>
       <span className="sr-only">{label}…</span>
       {children}
+      <SlowHint />
     </div>
   );
 }

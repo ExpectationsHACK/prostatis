@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Archivo, Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@/components/analytics";
+import { NetworkStatus } from "@/components/network-status";
+import { ServiceWorker } from "@/components/service-worker";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -22,6 +24,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col font-sans">
         {children}
         <Analytics />
+        <NetworkStatus />
+        <ServiceWorker />
       </body>
     </html>
   );

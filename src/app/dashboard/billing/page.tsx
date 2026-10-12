@@ -1,7 +1,8 @@
-import { ArrowRight, BadgeCheck, CalendarClock, Check, CircleHelp, Receipt, RotateCcw, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, BadgeCheck, CalendarClock, Check, CircleHelp, Receipt, ReceiptText, RotateCcw, ShieldCheck, Sparkles } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { EmptyState } from "@/components/status";
 import { btn, size } from "@/components/ui";
 import { longDate, money, myPayments } from "@/lib/billing";
 import { dashboardContext } from "@/lib/dashboard";
@@ -163,7 +164,9 @@ export default async function BillingPage() {
             ))}
           </ul>
         ) : (
-          <p className="text-[15px] text-muted">No payments yet. When you pay, your receipt appears here straight away.</p>
+          <EmptyState icon={ReceiptText} title="No payments yet">
+            When you pay for a track, the payment and its receipt appear here straight away.
+          </EmptyState>
         )}
       </Section>
 

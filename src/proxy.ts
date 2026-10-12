@@ -31,7 +31,10 @@ export async function proxy(request: NextRequest) {
   if (!signedIn && MEMBER_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"))) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
-    url.search = `?next=${encodeURIComponent(pathname + search)}`;
+    // A leftover Supabase auth cookie without a valid session means the session expired (rather
+    // than a first visit), so the login page can say so.
+    const expired = request.cookies.getAll().some((c) => c.name.startsWith("sb-") && c.name.includes("-auth-token"));
+    url.search = `?next=${encodeURIComponent(pathname + search)}${expired ? "&reason=expired" : ""}`;
     return NextResponse.redirect(url);
   }
 

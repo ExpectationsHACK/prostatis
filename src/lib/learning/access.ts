@@ -1,5 +1,5 @@
 import "server-only";
-import { redirect } from "next/navigation";
+import { forbidden, redirect } from "next/navigation";
 import { connection } from "next/server";
 import { fastTrack, mainTrack, type Track } from "@/lib/curriculum";
 import { getMySubscription, hasAccess } from "@/lib/membership";
@@ -29,10 +29,10 @@ export async function requireLearner(next: string): Promise<Learner> {
   };
 }
 
-/** Resolve a track slug the learner may open, or send them to pricing. */
+/** Resolve a track slug the learner may open. A track their plan doesn't include is a 403 (with the way to upgrade). */
 export function learnerTrack(learner: Learner, slug: string): Track | null {
   const track = trackSlugs[slug];
   if (!track) return null;
-  if (!learner.tracks.includes(track.id)) redirect(`/checkout/${track.id}`);
+  if (!learner.tracks.includes(track.id)) forbidden();
   return track;
 }

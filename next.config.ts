@@ -1,7 +1,23 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs/config";
 
-const nextConfig: NextConfig = {};
+const nextConfig: NextConfig = {
+  // authInterrupts: forbidden() and its 403 page (src/app/forbidden.tsx).
+  experimental: { authInterrupts: true },
+  // The service worker must never be cached, or a fix to it could take days to reach phones.
+  async headers() {
+    return [
+      {
+        source: "/sw.js",
+        headers: [
+          { key: "Content-Type", value: "application/javascript; charset=utf-8" },
+          { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" },
+          { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self'" },
+        ],
+      },
+    ];
+  },
+};
 
 // Readable Sentry stack traces need the build to upload source maps, which needs Sentry's build
 // credentials (SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT, read from the environment). Without

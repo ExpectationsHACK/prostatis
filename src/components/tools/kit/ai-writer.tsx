@@ -1,11 +1,13 @@
 "use client";
 
-import { LoaderCircle, ShieldCheck, Sparkles } from "lucide-react";
+import { LoaderCircle, RefreshCw, ShieldCheck, Sparkles } from "lucide-react";
 import { createContext, useContext, useState } from "react";
 import { aiSpecs, type AiResult } from "@/lib/tool-defs/ai";
 import type { Field, Values } from "@/lib/tool-defs/types";
+import { Notice } from "@/components/status";
 import { btn, size } from "../../ui";
 import { BlockView } from "./blocks";
+import { postJson } from "@/lib/fetch-errors";
 
 /** Whether the site has AI writing switched on (set by the tool page on the server). */
 export const AiEnabled = createContext(false);
@@ -24,16 +26,14 @@ export function AiWriter({ slug, values }: { slug: string; values: Values; field
   async function run() {
     setState("running");
     setError("");
-    try {
-      const res = await fetch("/api/tools/ai", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ slug, values }) });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error ?? "The AI didn't answer. Try again.");
-      setOut(data);
-      setState("done");
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "The AI didn't answer.");
+    const res = await postJson<AiResult & { flags: string[] }>("/api/tools/ai", { slug, values });
+    if (!res.ok) {
+      setError(res.problem.message);
       setState("error");
+      return;
     }
+    setOut(res.data);
+    setState("done");
   }
 
   return (
@@ -59,9 +59,9 @@ export function AiWriter({ slug, values }: { slug: string; values: Values; field
       </div>
       {state === "running" && <p className="mt-3 font-mono text-[12px] text-muted">Writing from your details. This takes 10 to 30 seconds.</p>}
       {state === "error" && (
-        <p className="mt-3 border border-edge bg-danger/10 px-3 py-2 text-[14px] text-ink" role="alert">
-          {error}
-        </p>
+        <Notice tone="error" className="mt-3" action={<button type="button" onClick={run} className={`${btn.secondary} ${size.sm}`}><RefreshCw className="size-3.5" aria-hidden /> Try again</button>}>
+          {error} The template result above still works.
+        </Notice>
       )}
       {state === "done" && out && (
         <div className="mt-4 space-y-3" aria-live="polite">

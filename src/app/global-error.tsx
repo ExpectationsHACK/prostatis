@@ -5,7 +5,7 @@ import { reportError } from "@/lib/observability/sentry-client";
 import "./globals.css";
 
 // The last-resort error page (it replaces the root layout, so it brings its own <html>).
-export default function GlobalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+export default function GlobalError({ error, retry }: { error: Error & { digest?: string }; retry: () => void }) {
   useEffect(() => reportError(error), [error]);
 
   return (
@@ -20,7 +20,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <button
-              onClick={reset}
+              onClick={() => retry()}
               className="inline-flex h-11 items-center rounded-[12px] border-2 border-ink bg-brand px-5 text-[14px] font-semibold text-ink shadow-[3px_3px_0_var(--ink)]"
             >
               Try again

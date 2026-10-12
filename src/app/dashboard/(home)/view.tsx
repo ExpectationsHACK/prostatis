@@ -2,6 +2,7 @@ import { ArrowRight, Award, BookOpen, CalendarClock, Check, CircleCheck, Circle,
 import Link from "next/link";
 import { LessonThumb } from "@/components/art/lesson-thumb";
 import { BadgeShelf } from "@/components/learn/badges";
+import { EmptyState } from "@/components/status";
 import { btn, size } from "@/components/ui";
 import { milestones } from "@/content/lessons";
 import { fastTrack, getPillar, getTrack, mainTrack } from "@/lib/curriculum";
@@ -208,9 +209,9 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
                 ))}
               </ul>
             ) : (
-              <p className="mt-3 rounded-[14px] border-2 border-dashed border-line bg-card/60 px-5 py-5 text-[14.5px] text-muted">
-                Quizzes you pass and tasks you finish will show up here, with the XP you earned.
-              </p>
+              <EmptyState icon={History} title="Nothing here yet" className="mt-3" action={next ? <Link href={`/learn/${slug}/${next.day}`} className={`${btn.secondary} ${size.sm}`}>Open your first lesson</Link> : undefined}>
+                Quizzes you pass and tasks you finish show up here, with the XP you earned.
+              </EmptyState>
             )}
           </section>
 
