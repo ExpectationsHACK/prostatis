@@ -75,7 +75,7 @@ function Tracks() {
         <Heading hue="green" eyebrow="Two tracks, paid once" sub="Start with the Fast Track for your first paid website, or take the Main Track to sell the full package.">
           Pick the track that fits your goal
         </Heading>
-        <div className="mt-10 grid grid-cols-[minmax(0,1fr)] gap-16 sm:mt-14 md:grid-cols-2 md:gap-x-16 lg:gap-x-32 md:items-start">
+        <div className="mt-10 grid grid-cols-[minmax(0,1fr)] items-start gap-16 sm:mt-14 md:grid-cols-2 md:gap-x-16 lg:gap-x-32">
           {[fastTrack, mainTrack].map((track) => {
             const plan = plans.find((p) => p.id === track.id)!;
             const slug = track.id === "main_track" ? "main-track" : "fast-track";
