@@ -133,7 +133,7 @@ export default function Home() {
       <section className="border-y-2 border-ink bg-sunk px-4 py-14 sm:py-28">
         <div className="mx-auto max-w-6xl">
           <Heading hue="blue" eyebrow="How it works" sub="No coding background, no expensive laptop, no guesswork. Here's exactly what happens after you enroll.">
-            From first lesson to first paid website
+            From first lesson to building your first website
           </Heading>
           <ol className="mt-10 sm:mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s, i) => (
