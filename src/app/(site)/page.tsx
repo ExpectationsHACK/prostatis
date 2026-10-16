@@ -69,11 +69,11 @@ function Heading({ eyebrow, children, sub, light = false }: { eyebrow?: string; 
 function Tracks() {
   return (
     <section id="tracks" className="scroll-mt-24 px-4 py-14 sm:py-28">
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-6xl">
         <Heading eyebrow="Two tracks, paid once" sub="Start with the Fast Track for your first paid website, or take the Main Track to sell the full package.">
           Pick the track that fits your goal
         </Heading>
-        <div className="mt-10 grid grid-cols-[minmax(0,1fr)] gap-8 sm:mt-14 md:grid-cols-2 md:items-start">
+        <div className="mt-10 grid grid-cols-[minmax(0,1fr)] gap-16 sm:mt-14 md:grid-cols-2 md:gap-x-16 lg:gap-x-32 md:items-start">
           {[fastTrack, mainTrack].map((track) => {
             const plan = plans.find((p) => p.id === track.id)!;
             const slug = track.id === "main_track" ? "main-track" : "fast-track";
