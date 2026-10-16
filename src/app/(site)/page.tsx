@@ -2,13 +2,12 @@ import { ArrowRight, Check, Minus, Plus } from "lucide-react";
 import Link from "next/link";
 import { LiveSite, type SiteKind } from "@/components/art/live-site";
 import { StepArt, type Step } from "@/components/art/step-art";
-import { CurriculumExplorer } from "@/components/curriculum-explorer";
 import { Hero } from "@/components/home/hero";
 import { personas } from "@/components/nav-data";
 import { PlanCard } from "@/components/plan-card";
 import { ToolCard } from "@/components/tool-card";
 import { btn, size } from "@/components/ui";
-import { fastTrack, mainTrack, type Track } from "@/lib/curriculum";
+import { fastTrack, mainTrack } from "@/lib/curriculum";
 import { formatNgn, plans } from "@/lib/site";
 import { coreTools } from "@/lib/tools";
 
@@ -66,29 +65,29 @@ function Heading({ eyebrow, children, sub, light = false }: { eyebrow?: string; 
   );
 }
 
-function TrackSection({ track, dark = false, eyebrow, title, sub }: { track: Track; dark?: boolean; eyebrow: string; title: string; sub: string }) {
-  const plan = plans.find((p) => p.id === track.id)!;
-  const slug = track.id === "main_track" ? "main-track" : "fast-track";
+/** The two tracks side by side: price, facts and outcomes. Each full curriculum has its own page. */
+function Tracks() {
   return (
-    <section id={slug} className={"scroll-mt-24 px-4 py-14 sm:py-28 " + (dark ? "relative overflow-clip bg-night [&_.ink-block]:shadow-[5px_5px_0_var(--brand)]!" : "")}>
-      {dark && <div className="pointer-events-none absolute -top-48 left-1/2 size-[640px] -translate-x-1/2 rounded-full bg-brand/20 blur-3xl" aria-hidden />}
-      <div className="relative mx-auto max-w-6xl">
-        <Heading eyebrow={eyebrow} sub={sub} light={dark}>
-          {title}
+    <section id="tracks" className="scroll-mt-24 px-4 py-14 sm:py-28">
+      <div className="mx-auto max-w-5xl">
+        <Heading eyebrow="Two tracks, paid once" sub="Start with the Fast Track for your first paid website, or take the Main Track to sell the full package.">
+          Pick the track that fits your goal
         </Heading>
-        <div className="mt-10 sm:mt-14 grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[370px_minmax(0,1fr)] lg:items-start">
-          <div className="lg:sticky lg:top-28">
-            <PlanCard plan={plan} show={5} />
-          </div>
-          <div>
-            <CurriculumExplorer track={track} dark={dark} />
-            <p className={"mt-6 text-center text-[14px] lg:text-left " + (dark ? "text-white/70" : "text-muted")}>
-              <Link href={`/tracks/${slug}`} className={"font-semibold underline " + (dark ? "text-white" : "text-ink")}>
-                See the full {track.name} curriculum
-              </Link>{" "}
-              with every lesson, task and outcome.
-            </p>
-          </div>
+        <div className="mt-10 grid grid-cols-[minmax(0,1fr)] gap-8 sm:mt-14 md:grid-cols-2 md:items-start">
+          {[fastTrack, mainTrack].map((track) => {
+            const plan = plans.find((p) => p.id === track.id)!;
+            const slug = track.id === "main_track" ? "main-track" : "fast-track";
+            return (
+              <div key={track.id} id={slug} className="scroll-mt-28">
+                <PlanCard plan={plan} show={5} />
+                <p className="mt-4 text-center text-[14px] text-muted">
+                  <Link href={`/tracks/${slug}`} className="font-semibold text-ink underline">
+                    See the full {track.name} curriculum
+                  </Link>
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -158,20 +157,7 @@ export default function Home() {
         </div>
       </section>
 
-      <TrackSection
-        track={fastTrack}
-        eyebrow={`The Fast Track · ${fastTrack.length} · ${formatNgn(plans[0].priceNgn)}`}
-        title="Your first paid website in 14 days"
-        sub={fastTrack.blurb}
-      />
-
-      <TrackSection
-        track={mainTrack}
-        dark
-        eyebrow={`The Main Track · ${mainTrack.length} · ${formatNgn(plans[1].priceNgn)}`}
-        title="Sell the full package, not just a website"
-        sub={mainTrack.blurb}
-      />
+      <Tracks />
 
       {/* Who it's for */}
       <section id="who" className="scroll-mt-24 px-4 py-14 sm:py-28">

@@ -53,9 +53,8 @@ All art is coded, drawn on a fixed 320×200 `Artboard` scaled to the card, and *
 
 - **Navbar**: the floating pill (ink outline, hard shadow) with What's inside · Tracks · Free tools · Who it's for · Pricing · Blog, then Sign in and Enroll Now. Full-screen sheet on phones.
 - **Hero (minimal)**: off-white with one soft orange glow; pill eyebrow; headline with "websites" and "income" in orange; Enroll Now + Start Learning; three facts; a fanned stack of three animated website mock-ups.
-- **Homepage**: hero → websites businesses pay for (six LiveSites) → how it works (four illustrated cards) → the Fast Track and the Main Track (each: structured `PlanCard` beside the `CurriculumExplorer`) → who it's for → six free tools → Fast Track vs Main Track table → FAQ → dark call-to-action card → orange footer.
+- **Homepage**: hero → websites businesses pay for (six LiveSites) → how it works (four illustrated cards) → the two tracks (two `PlanCard`s side by side, each linking to its full curriculum page; the week-by-week curriculum lives only on `/tracks/[track]`, to keep the homepage short) → who it's for → six free tools → Fast Track vs Main Track table → FAQ → dark call-to-action card → orange footer.
 - **`PlanCard`** (`components/plan-card.tsx`): header band (orange for the Fast Track), price, three key facts (length, lessons, access), what you'll walk away with, what's included, one button and the payment small print. Used on the homepage and `/pricing`.
-- **`CurriculumExplorer`** (`components/curriculum-explorer.tsx`): week tabs, the days of the week, and a preview of the selected day with its animated thumbnail and outcomes. Tours the days on its own until the visitor clicks; never under reduced motion.
 - **Footer**: orange, three columns (brand, blurb, Enroll Now and email signup · Learn · Company and legal).
 - **Legal**: `/privacy`, `/terms`, `/refund-policy` share `components/legal.tsx`; contact from `NEXT_PUBLIC_CONTACT_EMAIL`.
 
