@@ -10,6 +10,7 @@ import { btn, size } from "@/components/ui";
 import { fastTrack, mainTrack } from "@/lib/curriculum";
 import { formatNgn, plans } from "@/lib/site";
 import { coreTools } from "@/lib/tools";
+import { cycle, hueClass, type Hue } from "@/lib/hues";
 
 // Each card is a real project in the Fast Track (the day it's built is shown on the card).
 const websiteKinds: { kind: SiteKind; title: string; body: string; day: number }[] = [
@@ -55,10 +56,11 @@ const faqs = [
 
 const featuredTools = ["website-speed-checklist", "on-page-seo-audit", "client-pricing-calculator", "proposal-generator", "cold-dm-script-generator", "invoice-generator"];
 
-function Heading({ eyebrow, children, sub, light = false }: { eyebrow?: string; children: React.ReactNode; sub?: string; light?: boolean }) {
+function Heading({ eyebrow, children, sub, light = false, hue = "orange" }: { eyebrow?: string; children: React.ReactNode; sub?: string; light?: boolean; hue?: Hue }) {
+  // Each section's eyebrow is a small coloured pill, so the long page reads as distinct parts.
   return (
     <div className="mx-auto max-w-3xl text-center">
-      {eyebrow && <p className={"label " + (light ? "text-brand" : "text-brand-text")}>{eyebrow}</p>}
+      {eyebrow && <p className={"label inline-block rounded-full px-3 py-1 " + (light ? "bg-white/10 text-brand" : `${hueClass[hue].wash} ${hueClass[hue].text}`)}>{eyebrow}</p>}
       <h2 className={"display mt-3 text-balance text-[30px] sm:text-[52px] " + (light ? "text-white" : "text-ink")}>{children}</h2>
       {sub && <p className={"mx-auto mt-4 max-w-2xl text-pretty text-[16.5px] leading-relaxed " + (light ? "text-white/70" : "text-muted")}>{sub}</p>}
     </div>
@@ -70,7 +72,7 @@ function Tracks() {
   return (
     <section id="tracks" className="scroll-mt-24 px-4 py-14 sm:py-28">
       <div className="mx-auto max-w-6xl">
-        <Heading eyebrow="Two tracks, paid once" sub="Start with the Fast Track for your first paid website, or take the Main Track to sell the full package.">
+        <Heading hue="green" eyebrow="Two tracks, paid once" sub="Start with the Fast Track for your first paid website, or take the Main Track to sell the full package.">
           Pick the track that fits your goal
         </Heading>
         <div className="mt-10 grid grid-cols-[minmax(0,1fr)] gap-16 sm:mt-14 md:grid-cols-2 md:gap-x-16 lg:gap-x-32 md:items-start">
@@ -79,6 +81,7 @@ function Tracks() {
             const slug = track.id === "main_track" ? "main-track" : "fast-track";
             return (
               <div key={track.id} id={slug} className="scroll-mt-28">
+                <h3 className="display mb-5 text-balance text-center text-[22px] leading-tight text-ink sm:text-[26px]">{track.headline}</h3>
                 <PlanCard plan={plan} show={5} />
                 <p className="mt-4 text-center text-[14px] text-muted">
                   <Link href={`/tracks/${slug}`} className="font-semibold text-ink underline">
@@ -129,7 +132,7 @@ export default function Home() {
       {/* How it works */}
       <section className="border-y-2 border-ink bg-sunk px-4 py-14 sm:py-28">
         <div className="mx-auto max-w-6xl">
-          <Heading eyebrow="How it works" sub="No coding background, no expensive laptop, no guesswork. Here's exactly what happens after you enroll.">
+          <Heading hue="blue" eyebrow="How it works" sub="No coding background, no expensive laptop, no guesswork. Here's exactly what happens after you enroll.">
             From first lesson to first paid website
           </Heading>
           <ol className="mt-10 sm:mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
@@ -137,11 +140,11 @@ export default function Home() {
               <li key={s.step} className="ink-block flex flex-col bg-card">
                 <div className="relative border-b-2 border-ink">
                   <StepArt step={s.step} />
-                  <span className="absolute left-3 top-3 grid size-9 place-items-center rounded-full border-2 border-ink bg-brand text-[15px] font-bold text-ink shadow-[2px_2px_0_var(--ink)]">{i + 1}</span>
+                  <span className={`absolute left-3 top-3 grid size-9 place-items-center rounded-full border-2 border-ink text-[15px] font-bold shadow-[2px_2px_0_var(--ink)] ${hueClass[cycle[i % cycle.length]].wash} ${hueClass[cycle[i % cycle.length]].text}`}>{i + 1}</span>
                 </div>
-                <div className="p-5">
+                <div className={`flex-1 p-5 ${hueClass[cycle[i % cycle.length]].wash}`}>
                   <h3 className="display text-[18px] sm:text-[20px] leading-tight text-ink">{s.title}</h3>
-                  <p className="mt-2 text-[14.5px] leading-relaxed text-muted">{s.body}</p>
+                  <p className="mt-2 text-[14.5px] leading-relaxed text-ink/80">{s.body}</p>
                 </div>
               </li>
             ))}
@@ -162,13 +165,14 @@ export default function Home() {
       {/* Who it's for */}
       <section id="who" className="scroll-mt-24 px-4 py-14 sm:py-28">
         <div className="mx-auto max-w-6xl">
-          <Heading eyebrow="Who it's for" sub="You don't need a tech background. You need a laptop, a few hours a day and the will to pitch real businesses.">
+          <Heading hue="purple" eyebrow="Who it's for" sub="You don't need a tech background. You need a laptop, a few hours a day and the will to pitch real businesses.">
             Built for people who want to earn with a real skill
           </Heading>
           <div className="mt-10 sm:mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {personas.map((p, i) => (
-              <div key={p.id} id={p.id} className="ink-block scroll-mt-28 bg-card p-6">
-                <span className="grid size-10 place-items-center rounded-[12px] border-2 border-ink bg-brand-wash text-[15px] font-bold text-brand-text">{String(i + 1).padStart(2, "0")}</span>
+              <div key={p.id} id={p.id} className="ink-block relative scroll-mt-28 bg-card p-6 pt-7">
+                <span className={`absolute inset-x-0 top-0 h-1.5 ${hueClass[cycle[i % cycle.length]].solid}`} aria-hidden />
+                <span className={`grid size-10 place-items-center rounded-[12px] border-2 border-ink text-[15px] font-bold ${hueClass[cycle[i % cycle.length]].wash} ${hueClass[cycle[i % cycle.length]].text}`}>{String(i + 1).padStart(2, "0")}</span>
                 <h3 className="display mt-4 text-[19px] sm:text-[21px] text-ink">{p.label}</h3>
                 <p className="mt-2 text-[15px] leading-relaxed text-muted">{p.blurb}</p>
               </div>
@@ -180,7 +184,7 @@ export default function Home() {
       {/* Free tools */}
       <section className="border-y-2 border-ink bg-sunk px-4 py-14 sm:py-28">
         <div className="mx-auto max-w-6xl">
-          <Heading eyebrow="Free, no signup" sub="Check a website's speed and SEO, work out your price, write the proposal and the cold message, then send the invoice. Use them today, even before you enroll.">
+          <Heading hue="teal" eyebrow="Free, no signup" sub="Check a website's speed and SEO, work out your price, write the proposal and the cold message, then send the invoice. Use them today, even before you enroll.">
             {coreTools.length} free tools that do the work for you
           </Heading>
           <div className="mt-10 sm:mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
@@ -199,7 +203,7 @@ export default function Home() {
       {/* Compare */}
       <section id="compare" className="scroll-mt-24 px-4 py-14 sm:py-28">
         <div className="mx-auto max-w-4xl">
-          <Heading eyebrow="Compare" sub="Start with the Fast Track to build and sell websites. Choose the Main Track to sell monthly services on top.">
+          <Heading hue="pink" eyebrow="Compare" sub="Start with the Fast Track to build and sell websites. Choose the Main Track to sell monthly services on top.">
             Fast Track or Main Track?
           </Heading>
           <div className="ink-block mt-12 bg-card">
@@ -252,7 +256,7 @@ export default function Home() {
       {/* FAQ */}
       <section className="border-t-2 border-ink bg-sunk px-4 py-14 sm:py-24">
         <div className="mx-auto max-w-3xl">
-          <Heading eyebrow="FAQ">Questions, answered</Heading>
+          <Heading hue="yellow" eyebrow="FAQ">Questions, answered</Heading>
           <div className="mt-12 space-y-3">
             {faqs.map((f) => (
               <details key={f.q} className="ink-block group bg-card">

@@ -17,6 +17,8 @@ Direction set by the owner (2026-10-01): **bold and crafted, never cheap.** Warm
 | `brand-wash` | #fdeee6 | Soft orange tint for ticks, chips, the highlighted table column |
 | `success` / `danger` | #16794a / #b42318 | Status only |
 
+**Supporting hues** (`--hue-*`, helper `src/lib/hues.ts`): purple, blue, green, yellow, pink and teal, each with a soft wash and a text colour that reads at 4.5:1+ on it. They carry meaning, never decoration: every course skill keeps one hue on every page (`pillarHue`, shown by `PillarTag`: design purple, development blue, solutions orange, SEO green, automation yellow, leads pink, agents teal). Section eyebrows are coloured pills, numbered steps and audience cards cycle through the hues (`cycle`), the Main Track card is blue beside the orange Fast Track, and dashboard sections and side cards each have their own icon colour. Orange remains the only colour for the main action button.
+
 Section rhythm: paper and `sunk` alternate, with ink hairlines between; two dark bands (the Main Track section and the final call to action card); the orange footer.
 
 ## Type

@@ -25,6 +25,22 @@
   --danger: #b42318;
   --success: #16794a;
   --night: #151515;
+
+  /* Supporting hues: one per course skill, used for tags, icons and soft tints so pages are
+     easier to scan. Text colours are all 4.5:1+ on their wash. Orange stays the one action colour. */
+  --hue-purple: #6b3fc4;
+  --hue-purple-wash: #efe8fc;
+  --hue-blue: #2f5bd3;
+  --hue-blue-wash: #e8eefc;
+  --hue-green: #16794a;
+  --hue-green-wash: #e3f5e9;
+  --hue-yellow: #8a6100;
+  --hue-yellow-wash: #fdf3d0;
+  --hue-yellow-solid: #f2c230;
+  --hue-pink: #be185d;
+  --hue-pink-wash: #fce7f3;
+  --hue-teal: #0f766e;
+  --hue-teal-wash: #ddf3f0;
 }
 
 @theme inline {
@@ -45,6 +61,19 @@
   --color-accent-ink: var(--accent-ink);
   --color-edge: var(--edge);
   --color-night: var(--night);
+  --color-hue-purple: var(--hue-purple);
+  --color-hue-purple-wash: var(--hue-purple-wash);
+  --color-hue-blue: var(--hue-blue);
+  --color-hue-blue-wash: var(--hue-blue-wash);
+  --color-hue-green: var(--hue-green);
+  --color-hue-green-wash: var(--hue-green-wash);
+  --color-hue-yellow: var(--hue-yellow);
+  --color-hue-yellow-wash: var(--hue-yellow-wash);
+  --color-hue-yellow-solid: var(--hue-yellow-solid);
+  --color-hue-pink: var(--hue-pink);
+  --color-hue-pink-wash: var(--hue-pink-wash);
+  --color-hue-teal: var(--hue-teal);
+  --color-hue-teal-wash: var(--hue-teal-wash);
   --color-danger: var(--danger);
   --color-success: var(--success);
   --font-sans: var(--font-geist), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;

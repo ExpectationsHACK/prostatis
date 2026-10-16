@@ -7,10 +7,11 @@ import { BadgeShelf } from "@/components/learn/badges";
 import { LearnerStats } from "@/components/learn/stats";
 import { btn, size } from "@/components/ui";
 import { getLesson, milestones } from "@/content/lessons";
-import { getPillar } from "@/lib/curriculum";
+
 import { learnerTrack, requireLearner, slugOf, trackSlugs } from "@/lib/learning/access";
 import { badges, trackProgress, XP } from "@/lib/learning/engine";
 import { getStore } from "@/lib/learning/store";
+import { PillarTag } from "@/components/pillar-tag";
 
 export async function generateMetadata({ params }: { params: Promise<{ track: string }> }): Promise<Metadata> {
   return { title: trackSlugs[(await params).track]?.name ?? "Track" };
@@ -85,7 +86,10 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
                         )}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="label text-brand-text">Day {m.day} · {getPillar(m.pillar).short}</p>
+                        <p className="flex flex-wrap items-center gap-2">
+                          <span className="label text-ink">Day {m.day}</span>
+                          <PillarTag pillar={m.pillar} short />
+                        </p>
                         <h3 className="display mt-1 text-[16px] sm:text-[17px] leading-tight text-ink">{m.title}</h3>
                         <p className="mt-1 font-mono text-[12px] text-muted">{lesson?.minutes ?? 60} min</p>
                         <p className="mt-2">

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ToolCard } from "@/components/tool-card";
 import { pillars } from "@/lib/curriculum";
+import { pillarClasses } from "@/lib/hues";
 import { bonusTools, coreTools } from "@/lib/tools";
 
 export const metadata: Metadata = {
@@ -21,7 +22,8 @@ export default function ToolsPage() {
         </p>
         <nav className="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-2" aria-label="Pillars">
           {pillars.map((p) => (
-            <Link key={p.id} href={`#${p.id}`} className="rounded-full border-2 border-ink bg-card px-3.5 py-1.5 text-[13px] font-semibold text-ink transition-colors hover:bg-brand">
+            <Link key={p.id} href={`#${p.id}`} className={`inline-flex items-center gap-2 rounded-full border-2 border-ink px-3.5 py-1.5 text-[13px] font-semibold text-ink transition-transform hover:-translate-y-0.5 ${pillarClasses(p.id).wash}`}>
+              <span className={`size-2 rounded-full ${pillarClasses(p.id).solid}`} aria-hidden />
               {p.title} · {coreTools.filter((t) => t.pillar === p.id).length}
             </Link>
           ))}
@@ -33,12 +35,15 @@ export default function ToolsPage() {
           const list = coreTools.filter((t) => t.pillar === p.id);
           return (
             <section key={p.id} id={p.id} className="scroll-mt-24 pb-12 sm:pb-16">
-              <div className="flex flex-wrap items-end justify-between gap-3 border-b border-edge pb-3">
+              <div className={`flex flex-wrap items-end justify-between gap-3 border-b-2 pb-3 ${pillarClasses(p.id).border}`}>
                 <div>
-                  <h2 className="display text-[26px] text-ink sm:text-[40px]">{p.title}</h2>
+                  <h2 className="display flex items-center gap-3 text-[26px] text-ink sm:text-[40px]">
+                    <span className={`size-3.5 shrink-0 rounded-full sm:size-4 ${pillarClasses(p.id).solid}`} aria-hidden />
+                    {p.title}
+                  </h2>
                   <p className="mt-1 font-mono text-[13px] text-muted">{p.blurb}</p>
                 </div>
-                <span className="label text-muted">{list.length} tools</span>
+                <span className={`label rounded-full px-2.5 py-1 ${pillarClasses(p.id).wash} ${pillarClasses(p.id).text}`}>{list.length} tools</span>
               </div>
               <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {list.map((t) => (

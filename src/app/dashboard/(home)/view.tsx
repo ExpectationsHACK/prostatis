@@ -1,25 +1,30 @@
-import { ArrowRight, Award, BookOpen, CalendarClock, Check, CircleCheck, Circle, Compass, Flame, History, ListTodo, Lock, MessageCircle, PlayCircle, Route, Sparkles, Wrench, Zap } from "lucide-react";
+import { ArrowRight, Award, BookOpen, ChevronRight, CalendarClock, Check, CircleCheck, Circle, Compass, Flame, History, ListTodo, Lock, MessageCircle, PlayCircle, Route, Sparkles, Wrench, Zap } from "lucide-react";
 import Link from "next/link";
 import { LessonThumb } from "@/components/art/lesson-thumb";
 import { BadgeShelf } from "@/components/learn/badges";
 import { EmptyState } from "@/components/status";
 import { btn, size } from "@/components/ui";
 import { milestones } from "@/content/lessons";
-import { fastTrack, getPillar, getTrack, mainTrack } from "@/lib/curriculum";
+import { fastTrack, getTrack, mainTrack } from "@/lib/curriculum";
 import { slugOf } from "@/lib/learning/access";
 import { badges, lagosDay, levelFor, streaks, trackProgress, type LearnerState } from "@/lib/learning/engine";
 import { activityGrid, greeting, recentActivity, timeAgo, todos, xpThisWeek, type XpEvent } from "@/lib/learning/insights";
 import { getPlan, type Subscription } from "@/lib/membership";
 import { site } from "@/lib/site";
 import { Bar, Chip, Heatmap, SectionHead, Tag } from "./parts";
+import { PillarTag } from "@/components/pillar-tag";
+import { hueClass, type Hue } from "@/lib/hues";
 
 export const WEEKS = 13;
 
-function SideCard({ title, icon: Icon, children }: { title: string; icon: typeof Award; children: React.ReactNode }) {
+function SideCard({ title, icon: Icon, children, hue = "orange" }: { title: string; icon: typeof Award; children: React.ReactNode; hue?: Hue }) {
   return (
     <section className="ink-block bg-card p-5">
-      <h2 className="label flex items-center gap-1.5 text-muted">
-        <Icon className="size-3.5 text-brand-text" aria-hidden /> {title}
+      <h2 className="label flex items-center gap-2 text-muted">
+        <span className={`grid size-6 place-items-center rounded-[7px] ${hueClass[hue].wash}`}>
+          <Icon className={`size-3.5 ${hueClass[hue].text}`} aria-hidden />
+        </span>
+        {title}
       </h2>
       <div className="mt-3">{children}</div>
     </section>
@@ -79,13 +84,13 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
                 : `Your ${track.name} starts here. Let's build something people pay for.`}
           </p>
           <ul className="mt-5 flex flex-wrap gap-2">
-            <Chip icon={Sparkles}>
+            <Chip icon={Sparkles} hue="yellow">
               Level {lvl.level} · {lvl.name}
             </Chip>
-            <Chip icon={Zap}>
+            <Chip icon={Zap} hue="orange">
               {state.xp.toLocaleString("en-NG")} XP{weekXp ? <span className="hidden text-muted sm:inline"> · +{weekXp.toLocaleString("en-NG")} this week</span> : null}
             </Chip>
-            <Chip icon={BookOpen}>
+            <Chip icon={BookOpen} hue="blue">
               {prog.completed}/{prog.total} lessons
             </Chip>
           </ul>
@@ -122,8 +127,11 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
                   <LessonThumb thumb={next.thumb} index={next.day} />
                 </div>
                 <div className="min-w-0">
-                  <p className="label text-brand-text">
-                    {prog.completed ? "Up next" : "Start here"} · Day {next.day} · {getPillar(next.pillar).title}
+                  <p className="flex flex-wrap items-center gap-2">
+                    <span className="label text-brand-text">
+                      {prog.completed ? "Up next" : "Start here"} · Day {next.day}
+                    </span>
+                    <PillarTag pillar={next.pillar} />
                   </p>
                   <h2 className="display mt-1.5 text-balance text-[22px] leading-tight text-ink sm:text-[28px]">{next.title}</h2>
                   <p className="mt-2 line-clamp-2 text-[14.5px] leading-relaxed text-muted">{next.summary}</p>
@@ -161,20 +169,24 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
 
           {/* To do */}
           <section>
-            <SectionHead title="To do" icon={ListTodo} count={todo.length} link={{ href: `/learn/${slug}`, label: "Course map" }} />
+            <SectionHead hue="blue" title="To do" icon={ListTodo} count={todo.length} link={{ href: `/learn/${slug}`, label: "Course map" }} />
             <div className="ink-block mt-3 bg-card">
               {todo.length ? (
                 <ul className="divide-y divide-line">
                   {todo.map((t) => (
                     <li key={t.id}>
-                      <Link href={t.href} className="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3.5 hover:bg-sunk sm:flex-nowrap sm:px-5">
-                        <Circle className="size-[18px] shrink-0 text-ink" strokeWidth={2.2} aria-hidden />
-                        <span className="min-w-0 flex-1 text-[14.5px] font-medium text-ink">{t.text}</span>
-                        <span className="flex shrink-0 gap-1.5 pl-[30px] sm:pl-0">
-                          {t.tags.map((tag) => (
-                            <Tag key={tag.label} tag={tag} />
-                          ))}
+                      {/* Text gets the full width; tags sit under it so long titles never get squeezed. */}
+                      <Link href={t.href} className="group flex items-start gap-3 px-4 py-3.5 hover:bg-sunk sm:px-5">
+                        <Circle className="mt-0.5 size-[18px] shrink-0 text-ink" strokeWidth={2.2} aria-hidden />
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-[14.5px] font-medium leading-snug text-ink">{t.text}</span>
+                          <span className="mt-2 flex flex-wrap gap-1.5">
+                            {t.tags.map((tag) => (
+                              <Tag key={tag.label} tag={tag} />
+                            ))}
+                          </span>
                         </span>
+                        <ChevronRight className="mt-0.5 size-[18px] shrink-0 text-muted transition-transform group-hover:translate-x-0.5" aria-hidden />
                       </Link>
                     </li>
                   ))}
@@ -189,7 +201,7 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
 
           {/* Recent activity */}
           <section>
-            <SectionHead title="Recent activity" icon={History} />
+            <SectionHead hue="purple" title="Recent activity" icon={History} />
             {recent.length ? (
               <ul className="mt-5 grid gap-x-4 gap-y-6 sm:grid-cols-2 xl:grid-cols-3">
                 {recent.map((a, i) => (
@@ -217,7 +229,7 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
 
           {/* The course, week by week */}
           <section>
-            <SectionHead title="Your course" icon={Route} link={{ href: `/learn/${slug}`, label: "Full course map" }} />
+            <SectionHead hue="green" title="Your course" icon={Route} link={{ href: `/learn/${slug}`, label: "Full course map" }} />
             <ol className="ink-block mt-3 divide-y divide-line bg-card">
               {track.weeks.map((w) => {
                 const days = prog.days.filter((d) => d.module.week === w.week);
@@ -269,13 +281,13 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
 
         {/* Side column */}
         <aside className="space-y-4">
-          <SideCard title={`Level ${lvl.level}`} icon={Sparkles}>
+          <SideCard title={`Level ${lvl.level}`} icon={Sparkles} hue="yellow">
             <p className="text-[20px] font-bold leading-tight text-ink">{lvl.name}</p>
-            <div className="mt-3"><Bar pct={lvl.progress * 100} label="Progress to the next level" /></div>
+            <div className="mt-3"><Bar pct={lvl.progress * 100} tone="bg-hue-yellow-solid" label="Progress to the next level" /></div>
             <p className="mt-1.5 text-[12.5px] text-muted">{lvl.next ? `${(lvl.next - state.xp).toLocaleString("en-NG")} XP to level ${lvl.level + 1}` : "Top level reached"}</p>
           </SideCard>
 
-          <SideCard title="Certificate" icon={Award}>
+          <SideCard title="Certificate" icon={Award} hue="green">
             {final?.passed_at ? (
               <>
                 <p className="font-bold text-ink">Earned. Share your proof.</p>
@@ -291,21 +303,21 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
           </SideCard>
 
           {fastProg && (
-            <SideCard title="Also included" icon={Compass}>
+            <SideCard title="Also included" icon={Compass} hue="purple">
               <p className="font-bold text-ink">Fast Track</p>
-              <div className="mt-2"><Bar pct={fastProg.pct} tone="bg-success" label="Fast Track progress" /></div>
+              <div className="mt-2"><Bar pct={fastProg.pct} tone="bg-hue-purple" label="Fast Track progress" /></div>
               <p className="mt-1.5 text-[12.5px] text-muted">{fastProg.completed}/{fastProg.total} lessons · shared lessons count for both</p>
               <Link href="/learn/fast-track" className="mt-3 inline-flex items-center gap-1 text-[13px] font-semibold text-brand-text hover:underline">Open the Fast Track <ArrowRight className="size-3.5" aria-hidden /></Link>
             </SideCard>
           )}
 
-          <SideCard title="Access" icon={CalendarClock}>
+          <SideCard title="Access" icon={CalendarClock} hue="blue">
             <p className="font-bold text-ink">{getPlan(sub.plan)?.name}</p>
             {daysLeft === null ? (
               <p className="text-[13px] text-muted">Permanent: access never ends on this account</p>
             ) : (
               <>
-                <div className="mt-2"><Bar pct={(daysLeft / accessDays) * 100} tone={daysLeft <= 5 ? "bg-danger" : "bg-ink"} label="Access left" /></div>
+                <div className="mt-2"><Bar pct={(daysLeft / accessDays) * 100} tone={daysLeft <= 5 ? "bg-danger" : "bg-hue-blue"} label="Access left" /></div>
                 <p className="mt-1.5 text-[12.5px] text-muted">{daysLeft} {daysLeft === 1 ? "day" : "days"} left · until {end.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Africa/Lagos" })}</p>
               </>
             )}
@@ -313,13 +325,13 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
           </SideCard>
 
           {site.whatsappInviteUrl && (
-            <SideCard title="Community" icon={MessageCircle}>
+            <SideCard title="Community" icon={MessageCircle} hue="teal">
               <p className="text-[14px] leading-snug text-ink">Share builds, get unstuck, hear about client leads.</p>
               <a href={site.whatsappInviteUrl} target="_blank" rel="noopener" className={`${btn.accent} ${size.sm} mt-3 w-full`}>Open WhatsApp group</a>
             </SideCard>
           )}
 
-          <SideCard title="Quick links" icon={Wrench}>
+          <SideCard title="Quick links" icon={Wrench} hue="pink">
             <ul className="space-y-0.5 text-[14px]">
               <li><Link href="/learn/start" className="flex items-center gap-2 rounded-[8px] px-1 py-1.5 text-ink hover:bg-sunk"><Compass className="size-4 text-muted" aria-hidden /> How the course works</Link></li>
               <li><Link href="/learn/glossary" className="flex items-center gap-2 rounded-[8px] px-1 py-1.5 text-ink hover:bg-sunk"><BookOpen className="size-4 text-muted" aria-hidden /> Glossary</Link></li>

@@ -20,7 +20,7 @@ export function PlanCard({ plan, show, badge }: { plan: Plan; show?: number; bad
   return (
     <div className="ink-block flex h-full flex-col bg-card">
       {/* Header band */}
-      <div className={"flex items-start justify-between gap-3 border-b-2 border-ink px-6 py-5 " + (hi ? "bg-brand" : "bg-sunk")}>
+      <div className={"flex items-start justify-between gap-3 border-b-2 border-ink px-6 py-5 " + (hi ? "bg-brand" : "bg-hue-blue-wash")}>
         <div>
           <h3 className="display text-[24px] sm:text-[28px] text-ink">{plan.name}</h3>
           <p className="mt-1 text-[14.5px] font-medium leading-snug text-ink/80">{plan.blurb}</p>
@@ -45,7 +45,7 @@ export function PlanCard({ plan, show, badge }: { plan: Plan; show?: number; bad
             const I = Icon as typeof Layers;
             return (
               <div key={k as string} className="px-1 py-2.5">
-                <I className="mx-auto size-4 text-brand-text" aria-hidden />
+                <I className={"mx-auto size-4 " + (hi ? "text-brand-text" : "text-hue-blue")} aria-hidden />
                 <dt className="sr-only">{k as string}</dt>
                 <dd className="mt-1 text-[14px] font-semibold leading-tight text-ink">{v as string}</dd>
                 <dd className="text-[12px] text-muted">{k as string}</dd>

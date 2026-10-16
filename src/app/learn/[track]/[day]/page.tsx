@@ -8,10 +8,11 @@ import { Quiz } from "@/components/learn/quiz";
 import { TaskCheck } from "@/components/learn/task-card";
 import { btn, size } from "@/components/ui";
 import { getLesson } from "@/content/lessons";
-import { getPillar } from "@/lib/curriculum";
+
 import { learnerTrack, requireLearner, trackSlugs } from "@/lib/learning/access";
 import { PASS_MARK, publicQuestions, trackProgress, XP } from "@/lib/learning/engine";
 import { getStore } from "@/lib/learning/store";
+import { PillarTag } from "@/components/pillar-tag";
 
 export async function generateMetadata({ params }: { params: Promise<{ track: string; day: string }> }): Promise<Metadata> {
   const { track: slug, day } = await params;
@@ -70,8 +71,11 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
         </Link>
 
         <header className="mt-5">
-          <p className="label text-brand-text">
-            Day {day} of {track.modules.length} · {getPillar(mod.pillar).title}
+          <p className="flex flex-wrap items-center gap-2">
+            <span className="label text-brand-text">
+              Day {day} of {track.modules.length}
+            </span>
+            <PillarTag pillar={mod.pillar} />
           </p>
           <h1 className="display mt-2 text-balance text-[30px] leading-[1.05] text-ink sm:text-[48px]">{lesson.title}</h1>
           <div className="mt-4 flex flex-wrap gap-2">

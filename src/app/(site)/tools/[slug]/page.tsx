@@ -14,6 +14,7 @@ import { getPillar, lessonsForPillar } from "@/lib/curriculum";
 import { site } from "@/lib/site";
 import { guides } from "@/lib/tool-guides";
 import { coreTools, getTool, nextTool, tools } from "@/lib/tools";
+import { PillarTag } from "@/components/pillar-tag";
 
 export const dynamicParams = false;
 
@@ -45,8 +46,8 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
       <header className="border-b border-edge">
         <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-10 md:grid-cols-[1.3fr_1fr] md:py-14">
           <div>
-            <Link href={`/tools#${tool.pillar}`} className="label text-brand-text hover:underline">
-              {pillar.title} tools
+            <Link href={`/tools#${tool.pillar}`} className="hover:opacity-80" aria-label={`More ${pillar.title} tools`}>
+              <PillarTag pillar={tool.pillar} extra=" tools" />
             </Link>
             <h1 className="display mt-3 text-balance text-[32px] text-ink sm:text-[56px]">{tool.title}</h1>
             <p className="mt-3 text-pretty font-mono text-[15px] leading-relaxed text-muted">{tool.description}</p>
@@ -127,7 +128,9 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
               <ToolThumb slug={next.slug} tone={next.tone} />
             </div>
             <div className="flex flex-col justify-center p-5">
-              <p className="label text-brand-text">{getPillar(next.pillar).title}</p>
+              <p>
+                <PillarTag pillar={next.pillar} />
+              </p>
               <p className="display mt-1 flex items-center gap-2 text-[21px] sm:text-[24px] text-ink">
                 {next.title} <ArrowRight className="size-5 text-brand-text transition-transform group-hover:translate-x-1" aria-hidden />
               </p>

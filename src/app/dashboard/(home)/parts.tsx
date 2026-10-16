@@ -1,6 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import type { HeatCell, TodoTag } from "@/lib/learning/insights";
+import { hueClass, type Hue } from "@/lib/hues";
 
 /** A thin progress bar with an ink outline. */
 export function Bar({ pct, tone = "bg-brand", label }: { pct: number; tone?: string; label?: string }) {
@@ -13,12 +14,12 @@ export function Bar({ pct, tone = "bg-brand", label }: { pct: number; tone?: str
 }
 
 /** A section heading with an optional count and a link on the right. */
-export function SectionHead({ title, icon: Icon, count, link }: { title: string; icon: LucideIcon; count?: number; link?: { href: string; label: string } }) {
+export function SectionHead({ title, icon: Icon, count, link, hue = "orange" }: { title: string; icon: LucideIcon; count?: number; link?: { href: string; label: string }; hue?: Hue }) {
   return (
     <div className="flex items-center justify-between gap-3">
       <h2 className="flex items-center gap-2 text-[17px] font-bold text-ink sm:text-[18px]">
-        <span className="grid size-7 place-items-center rounded-[8px] border-2 border-edge bg-brand-wash">
-          <Icon className="size-4 text-brand-text" aria-hidden />
+        <span className={`grid size-7 place-items-center rounded-[8px] border-2 border-edge ${hueClass[hue].wash}`}>
+          <Icon className={`size-4 ${hueClass[hue].text}`} aria-hidden />
         </span>
         {title}
         {count !== undefined && <span className="grid h-6 min-w-6 place-items-center rounded-full bg-wash px-1.5 text-[12px] font-bold tabular-nums text-ink">{count}</span>}
@@ -44,10 +45,13 @@ export function Tag({ tag }: { tag: TodoTag }) {
 }
 
 /** A pill on the dark hero. */
-export function Chip({ icon: Icon, children }: { icon: LucideIcon; children: React.ReactNode }) {
+export function Chip({ icon: Icon, children, hue = "orange" }: { icon: LucideIcon; children: React.ReactNode; hue?: Hue }) {
   return (
     <li className="inline-flex h-8 items-center gap-1.5 rounded-full border-2 border-edge bg-card px-2.5 text-[12.5px] font-semibold text-ink sm:h-9 sm:px-3 sm:text-[13px]">
-      <Icon className="size-4 text-brand-text" aria-hidden /> {children}
+      <span className={`grid size-5 place-items-center rounded-full ${hueClass[hue].wash}`}>
+        <Icon className={`size-3.5 ${hueClass[hue].text}`} aria-hidden />
+      </span>
+      {children}
     </li>
   );
 }

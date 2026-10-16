@@ -34,9 +34,9 @@ export default async function TrackPage({ params }: { params: Promise<{ track: s
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-start">
           <div>
             <p className="text-[13px] font-semibold text-brand-text">
-              {track.length} · {track.modules.length} lessons · {track.weeks.length} weeks
+              The {track.name} · {track.length} · {track.modules.length} lessons · {track.weeks.length} weeks
             </p>
-            <h1 className="display mt-3 text-[34px] text-ink sm:text-[60px]">The {track.name}</h1>
+            <h1 className="display mt-3 text-balance text-[32px] leading-[1.05] text-ink sm:text-[52px]">{track.headline}</h1>
             <p className="mt-4 max-w-xl text-[16.5px] leading-relaxed text-muted">{track.blurb}</p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link href={`/checkout/${track.id}`} className={`${btn.primary} ${size.lg}`}>

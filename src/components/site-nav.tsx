@@ -18,7 +18,7 @@ function Dropdown({ label, items, open, onToggle }: { label: string; items: Item
         type="button"
         onClick={onToggle}
         aria-expanded={open}
-        className="flex items-center gap-1 px-2.5 py-2 font-code text-[12px] font-bold uppercase tracking-[0.12em] text-ink hover:text-brand-text"
+        className="flex items-center gap-1 whitespace-nowrap px-1.5 py-2 font-code text-[11.5px] font-bold uppercase tracking-[0.06em] xl:px-2.5 xl:text-[12px] xl:tracking-[0.12em] text-ink hover:text-brand-text"
       >
         {label}
         <ChevronDown className={"size-3.5 transition-transform " + (open ? "rotate-180" : "")} strokeWidth={3} aria-hidden />
@@ -83,16 +83,16 @@ export function SiteNav() {
         </Link>
 
         <nav className="hidden items-center lg:flex" aria-label="Main">
-          <Link href="/#inside" className="px-2.5 py-2 font-code text-[12px] font-bold uppercase tracking-[0.12em] text-ink hover:text-brand-text">
+          <Link href="/#inside" className="whitespace-nowrap px-1.5 py-2 font-code text-[11.5px] font-bold uppercase tracking-[0.06em] xl:px-2.5 xl:text-[12px] xl:tracking-[0.12em] text-ink hover:text-brand-text">
             What&apos;s inside
           </Link>
           <Dropdown label="Tracks" items={navMenus.tracks} open={open === "tracks"} onToggle={() => toggle("tracks")} />
           <Dropdown label="Free tools" items={navMenus.tools} open={open === "tools"} onToggle={() => toggle("tools")} />
           <Dropdown label="Who it's for" items={navMenus.who} open={open === "who"} onToggle={() => toggle("who")} />
-          <Link href="/pricing" className="px-2.5 py-2 font-code text-[12px] font-bold uppercase tracking-[0.12em] text-ink hover:text-brand-text">
+          <Link href="/pricing" className="whitespace-nowrap px-1.5 py-2 font-code text-[11.5px] font-bold uppercase tracking-[0.06em] xl:px-2.5 xl:text-[12px] xl:tracking-[0.12em] text-ink hover:text-brand-text">
             Pricing
           </Link>
-          <Link href="/blog" className="px-2.5 py-2 font-code text-[12px] font-bold uppercase tracking-[0.12em] text-ink hover:text-brand-text">
+          <Link href="/blog" className="whitespace-nowrap px-1.5 py-2 font-code text-[11.5px] font-bold uppercase tracking-[0.06em] xl:px-2.5 xl:text-[12px] xl:tracking-[0.12em] text-ink hover:text-brand-text">
             Blog
           </Link>
         </nav>

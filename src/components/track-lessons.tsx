@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { getPillar, type Module, type Track } from "@/lib/curriculum";
+import { type Module, type Track } from "@/lib/curriculum";
 import { LessonThumb } from "./art/lesson-thumb";
+import { PillarTag } from "./pillar-tag";
 import { WeekCarousel } from "./week-carousel";
 
 export function LessonCard({ m, i, href }: { m: Module; i: number; href?: string }) {
@@ -11,7 +12,9 @@ export function LessonCard({ m, i, href }: { m: Module; i: number; href?: string
         <span className="display absolute left-2 top-2 border border-edge bg-paper px-2 py-0.5 text-[15px] text-ink">Day {m.day}</span>
       </div>
       <div className="flex flex-1 flex-col p-4">
-        <p className="label text-brand-text">{getPillar(m.pillar).title}</p>
+        <p>
+          <PillarTag pillar={m.pillar} />
+        </p>
         <h4 className="display mt-1.5 text-[17px] sm:text-[19px] text-ink">{m.title}</h4>
         <p className="mt-1.5 font-mono text-[12.5px] leading-relaxed text-muted">{m.summary}</p>
         <ul className="mt-3 space-y-1 border-t border-dashed border-line pt-3">
