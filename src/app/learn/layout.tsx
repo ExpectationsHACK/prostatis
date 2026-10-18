@@ -13,7 +13,7 @@ export default function LearnLayout({ children }: { children: React.ReactNode })
           <Link href="/learn" className="flex items-center gap-2" aria-label={`${site.name}: my learning`}>
             <LogoMark size={30} />
             <span className="display hidden text-[16px] sm:text-[17px] text-ink sm:inline">{site.name}</span>
-            <span className="label border border-edge bg-brand px-1.5 py-0.5 text-ink">Learn</span>
+            <span className="label rounded-full border border-edge bg-brand px-1.5 py-0.5 text-ink">Learn</span>
           </Link>
           <nav className="flex items-center gap-1 font-mono text-[12px] font-bold" aria-label="Learning">
             <Link href="/learn" className="px-2.5 py-2 text-ink hover:bg-wash">My tracks</Link>

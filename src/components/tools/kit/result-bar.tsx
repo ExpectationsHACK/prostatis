@@ -3,7 +3,7 @@
 import { Check, Copy, Download, Link2, Printer } from "lucide-react";
 import { useState } from "react";
 
-const btn = "inline-flex items-center gap-1.5 border border-edge bg-card px-2.5 py-1.5 font-mono text-[11px] font-bold text-ink hover:bg-wash";
+const btn = "inline-flex items-center gap-1.5 rounded-[12px] border border-edge bg-card px-2.5 py-1.5 font-mono text-[11px] font-bold text-ink hover:bg-wash";
 
 /** Open a printable page in a new window and show the print dialog (Save as PDF works there). */
 export function printHtml(doc: string) {
@@ -52,7 +52,7 @@ export function ResultBar({ text, filename, shareUrl, html }: { text: string; fi
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-2 border border-edge bg-sunk p-2" role="toolbar" aria-label="Result actions">
+    <div className="flex flex-wrap items-center gap-2 rounded-[12px] border border-edge bg-sunk p-2" role="toolbar" aria-label="Result actions">
       <button type="button" className={btn} onClick={() => copy(text, "all")} aria-live="polite">
         {done === "all" ? <Check className="size-3.5 text-success" strokeWidth={3} /> : <Copy className="size-3.5" />} {done === "all" ? "Copied" : "Copy everything"}
       </button>
@@ -74,7 +74,7 @@ export function ResultBar({ text, filename, shareUrl, html }: { text: string; fi
 export function StepHead({ n, title, sub }: { n: number; title: string; sub?: string }) {
   return (
     <div className="flex items-start gap-3">
-      <span className="display grid size-8 shrink-0 place-items-center border border-edge bg-brand text-[15px] text-ink">{n}</span>
+      <span className="display grid size-8 shrink-0 place-items-center rounded-[12px] border border-edge bg-brand text-[15px] text-ink">{n}</span>
       <div>
         <p className="display text-[18px] sm:text-[20px] leading-tight text-ink">{title}</p>
         {sub && <p className="mt-0.5 font-mono text-[12px] text-muted">{sub}</p>}

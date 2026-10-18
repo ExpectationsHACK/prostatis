@@ -9,7 +9,7 @@ export function LessonCard({ m, i, href }: { m: Module; i: number; href?: string
     <>
       <div className="relative border-b border-edge">
         <LessonThumb thumb={m.thumb} index={m.day + i} />
-        <span className="display absolute left-2 top-2 border border-edge bg-paper px-2 py-0.5 text-[15px] text-ink">Day {m.day}</span>
+        <span className="display absolute left-2 top-2 rounded-full border border-edge bg-paper px-2 py-0.5 text-[15px] text-ink">Day {m.day}</span>
       </div>
       <div className="flex flex-1 flex-col p-4">
         <p>

@@ -35,7 +35,7 @@ function Loading({ label = "Loading", className = "", children }: { label?: stri
 
 function CardBone({ tall = false }: { tall?: boolean }) {
   return (
-    <div className="border border-edge bg-card p-4">
+    <div className="rounded-[12px] border border-edge bg-card p-4">
       <Bone className={(tall ? "h-36" : "h-24") + " w-full"} />
       <Bone className="mt-4 h-5 w-3/4" />
       <Lines n={2} className="mt-3" />
@@ -91,7 +91,7 @@ export function ToolSkeleton() {
 export function ToolBodySkeleton() {
   return (
     <div aria-hidden className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-      <div className="space-y-4 border border-edge bg-card p-5">
+      <div className="space-y-4 rounded-[12px] border border-edge bg-card p-5">
         <div className="flex items-center gap-3">
           <Bone className="size-8" />
           <Bone className="h-5 w-48" />
@@ -210,7 +210,7 @@ export function AccountSkeleton() {
   return (
     <Loading label="Loading" className="mx-auto max-w-3xl px-4 py-6 sm:px-6 lg:py-8">
       <Bone className="h-9 w-40" />
-      <div className="mt-6 border border-edge bg-card p-5">
+      <div className="mt-6 rounded-[12px] border border-edge bg-card p-5">
         <Bone className="h-3.5 w-28" />
         <Bone className="mt-3 h-8 w-56" />
         <Bone className="mt-5 h-2.5 w-full" />
@@ -236,7 +236,7 @@ export function TrackSkeleton() {
       <Bone className="mt-6 h-3 w-full max-w-xl" />
       <div className="mt-10 space-y-3">
         {Array.from({ length: 6 }, (_, i) => (
-          <div key={i} className="flex items-center gap-4 border border-edge bg-card p-4">
+          <div key={i} className="flex items-center gap-4 rounded-[12px] border border-edge bg-card p-4">
             <Bone className="size-12 shrink-0" />
             <div className="min-w-0 flex-1">
               <Bone className="h-3.5 w-20" />

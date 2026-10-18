@@ -9,7 +9,7 @@ import { PalettePreview } from "./palette-preview";
 
 const head = "flex items-center justify-between gap-2 border-b border-edge px-4 py-2.5";
 const headTitle = "font-mono text-[11px] font-bold text-muted";
-const box = "overflow-hidden border border-edge bg-card";
+const box = "overflow-hidden rounded-[12px] border border-edge bg-card";
 
 function FontLoader({ families }: { families: string[] }) {
   useEffect(() => {
@@ -57,7 +57,7 @@ export function BlockView({ b }: { b: Block }) {
       const Icon = b.tone === "warn" ? CircleAlert : b.tone === "good" ? Check : Info;
       const cls = b.tone === "warn" ? "bg-danger/10 text-danger" : b.tone === "good" ? "bg-success/10 text-success" : "bg-brand-wash text-ink";
       return (
-        <p className={`flex items-start gap-2 border border-edge px-3 py-2.5 text-[14px] ${cls}`}>
+        <p className={`flex items-start gap-2 rounded-[12px] border border-edge px-3 py-2.5 text-[14px] ${cls}`}>
           <Icon className="mt-0.5 size-4 shrink-0" aria-hidden />
           <span className="text-ink">{b.text}</span>
         </p>
@@ -120,7 +120,7 @@ export function BlockView({ b }: { b: Block }) {
       return (
         <div className="grid grid-cols-2 gap-3">
           {b.items.map((it) => (
-            <div key={it.label} className="border border-edge bg-card p-4">
+            <div key={it.label} className="rounded-[12px] border border-edge bg-card p-4">
               <p className={headTitle}>{it.label}</p>
               <p className="display tabular mt-1 text-[24px] sm:text-[28px] text-ink">{it.value}</p>
               {it.sub && <p className="mt-0.5 text-[12px] text-muted">{it.sub}</p>}
@@ -228,7 +228,7 @@ export function BlockView({ b }: { b: Block }) {
           <ol className="bg-sunk p-4">
             {b.steps.map((st, i) => (
               <li key={i} className="flex flex-col items-center">
-                <div className="w-full max-w-md border border-edge bg-card px-3 py-2">
+                <div className="w-full max-w-md rounded-[12px] border border-edge bg-card px-3 py-2">
                   <p className="text-[13px] font-bold text-ink">
                     <span className="mr-2 font-mono text-brand-text">{String(i + 1).padStart(2, "0")}</span>
                     {st.label}
@@ -250,7 +250,7 @@ export function BlockView({ b }: { b: Block }) {
           </div>
           <div className="grid place-items-center bg-sunk p-3">
             {/* eslint-disable-next-line @next/next/no-img-element -- data URL from the analysis, not an optimisable asset */}
-            <img src={b.src} alt={b.alt} className="max-h-[420px] w-auto border border-edge" />
+            <img src={b.src} alt={b.alt} className="max-h-[420px] w-auto rounded-[12px] border border-edge" />
           </div>
         </div>
       );

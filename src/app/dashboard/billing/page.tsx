@@ -52,7 +52,7 @@ export default async function BillingPage() {
             <div>
               <p className="flex flex-wrap items-center gap-2">
                 <span className="display text-[22px] sm:text-[26px] leading-tight text-ink">{plan.name}</span>
-                <span className={"label border border-edge px-2 py-0.5 " + (active ? "bg-[#e3f5e9] text-ink" : "bg-danger/10 text-danger")}>{active ? "Active" : "Ended"}</span>
+                <span className={"label rounded-full border border-edge px-2 py-0.5 " + (active ? "bg-[#e3f5e9] text-ink" : "bg-danger/10 text-danger")}>{active ? "Active" : "Ended"}</span>
               </p>
               <p className="mt-1 font-mono text-[13px] text-muted">
                 {sub.permanent ? "Permanent account: no payment needed" : `Paid once${lastPaid ? `: ${money(lastPaid.amount_kobo, lastPaid.currency)} on ${longDate(lastPaid.created_at)}` : `: ${formatNgn(plan.priceNgn)}`}`}
@@ -73,7 +73,7 @@ export default async function BillingPage() {
                 )}
               </p>
               {active && !sub.permanent && (
-                <div className="mt-3 h-2.5 max-w-md border border-edge bg-paper" role="progressbar" aria-label="Access time left" aria-valuenow={daysLeft} aria-valuemin={0} aria-valuemax={plan.accessDays}>
+                <div className="mt-3 h-2.5 max-w-md rounded-[12px] border border-edge bg-paper" role="progressbar" aria-label="Access time left" aria-valuenow={daysLeft} aria-valuemin={0} aria-valuemax={plan.accessDays}>
                   <div className={"h-full " + (daysLeft <= 7 ? "bg-danger" : "bg-brand")} style={{ width: `${Math.min(100, (daysLeft / plan.accessDays) * 100)}%` }} />
                 </div>
               )}
@@ -157,7 +157,7 @@ export default async function BillingPage() {
                       <Receipt className="size-3.5" aria-hidden /> Receipt
                     </Link>
                   ) : (
-                    <span className="label border border-edge bg-danger/10 px-2 py-1 text-danger">{p.status}</span>
+                    <span className="label rounded-full border border-edge bg-danger/10 px-2 py-1 text-danger">{p.status}</span>
                   )}
                 </div>
               </li>

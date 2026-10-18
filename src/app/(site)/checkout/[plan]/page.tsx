@@ -74,7 +74,7 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
       </div>
 
       {note && (
-        <div className="mt-4 flex gap-3 border border-edge bg-brand-wash p-4 text-ink">
+        <div className="mt-4 flex gap-3 rounded-[12px] border border-edge bg-brand-wash p-4 text-ink">
           <note.icon className="mt-0.5 size-5 shrink-0 text-brand-text" aria-hidden />
           <div>
             <p className="font-bold">{note.title}</p>
@@ -101,14 +101,14 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
         </ul>
 
         {error && (
-          <p className="mt-5 flex items-start gap-2 border border-edge bg-danger/10 px-3 py-2.5 text-[14px] text-ink" role="alert">
+          <p className="mt-5 flex items-start gap-2 rounded-[12px] border border-edge bg-danger/10 px-3 py-2.5 text-[14px] text-ink" role="alert">
             <CircleAlert className="mt-0.5 size-4 shrink-0 text-danger" aria-hidden />
             {error}
           </p>
         )}
 
         {mode === "disabled" ? (
-          <p className="mt-6 border border-edge bg-sunk px-3 py-3 text-center text-[14px] text-ink">Payments aren&apos;t open yet. Check back soon.</p>
+          <p className="mt-6 rounded-[12px] border border-edge bg-sunk px-3 py-3 text-center text-[14px] text-ink">Payments aren&apos;t open yet. Check back soon.</p>
         ) : (
           <form action={startCheckout} className="mt-6">
             <input type="hidden" name="plan" value={plan.id} />
@@ -120,7 +120,7 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
         <p className="mt-3 text-center text-[13px] text-muted">Card, bank transfer or USSD. One payment · {plan.accessDays} days of access · nothing renews.</p>
 
         {mode === "paystack" && isTestKey() && (
-          <p className="mt-5 flex items-start gap-2 border border-edge bg-brand-wash px-3 py-2.5 text-[13px] text-ink">
+          <p className="mt-5 flex items-start gap-2 rounded-[12px] border border-edge bg-brand-wash px-3 py-2.5 text-[13px] text-ink">
             <FlaskConical className="mt-0.5 size-4 shrink-0 text-brand-text" aria-hidden />
             <span>
               <strong>Paystack test mode.</strong> Use test card 4084 0840 8408 4081, any future expiry, CVV 408.

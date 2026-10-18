@@ -77,7 +77,7 @@ const D: Record<DiagramKind, { tone: Tone; draw: () => ReactNode }> = {
       <div className="flex h-full items-center justify-center gap-3 p-3">
         <div className={`${E} ${S} w-[130px] space-y-1 bg-card p-1.5`}>
           {[["NAV", "h-3"], ["HERO", "h-10 bg-brand"], ["PROOF", "h-3"], ["SERVICES", "h-6"], ["FAQ", "h-4"], ["CTA", "h-4 bg-accent"]].map(([l, c]) => (
-            <div key={l} className={`flex items-center justify-center border border-edge/50 ${c}`}><span className="font-mono text-[7px] font-bold">{l}</span></div>
+            <div key={l} className={`flex items-center justify-center rounded-[4px] border border-edge/50 ${c}`}><span className="font-mono text-[7px] font-bold">{l}</span></div>
           ))}
         </div>
         <div className="space-y-1.5">
@@ -256,10 +256,10 @@ const D: Record<DiagramKind, { tone: Tone; draw: () => ReactNode }> = {
       <div className="flex h-full items-center justify-center p-4">
         <div className={`${E} ${S} w-[270px] bg-card p-2.5`}>
           <p className={`${m10} border-b border-edge pb-1`}>GLOW BEAUTY · BRAND KIT</p>
-          <div className="mt-1.5 flex gap-1">{["#ff6719", "#0f4d3a", "#1b1714", "#f6efe2"].map((c) => <span key={c} className="h-6 flex-1 border border-edge" style={{ background: c }} />)}</div>
+          <div className="mt-1.5 flex gap-1">{["#ff6719", "#0f4d3a", "#1b1714", "#f6efe2"].map((c) => <span key={c} className="h-6 flex-1 rounded-[4px] border border-edge" style={{ background: c }} />)}</div>
           <p className="mt-1.5 font-display text-[15px] font-bold leading-none">Aa Headline: Archivo</p>
           <p className="font-sans text-[10px]">Aa Body text: Inter, 16px+</p>
-          <div className="mt-1.5 flex gap-1">{["Warm", "Reliable", "Premium"].map((w) => <span key={w} className={`${m9} border border-edge bg-brand px-1`}>{w}</span>)}</div>
+          <div className="mt-1.5 flex gap-1">{["Warm", "Reliable", "Premium"].map((w) => <span key={w} className={`${m9} rounded-[4px] border border-edge bg-brand px-1`}>{w}</span>)}</div>
         </div>
       </div>
     ),
@@ -359,7 +359,7 @@ const D: Record<DiagramKind, { tone: Tone; draw: () => ReactNode }> = {
         {([["New", ["Ada · braids", "Tunde · site"]], ["Contacted", ["Kemi · lashes"]], ["Booked", ["Bisi · Sat 11am"]], ["Paid", ["Uche · ₦30k"]]] as const).map(([col, cards]) => (
           <div key={col} className={`${E} bg-wash p-1`}>
             <p className={`${m10} border-b border-edge pb-0.5`}>{col}</p>
-            <div className="mt-1 space-y-1">{cards.map((c) => <p key={c} className={`${m9} border border-edge bg-card px-1 py-0.5`}>{c}</p>)}</div>
+            <div className="mt-1 space-y-1">{cards.map((c) => <p key={c} className={`${m9} rounded-full border border-edge bg-card px-1 py-0.5`}>{c}</p>)}</div>
           </div>
         ))}
       </div>

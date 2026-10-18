@@ -15,6 +15,7 @@ import { site } from "@/lib/site";
 import { guides } from "@/lib/tool-guides";
 import { coreTools, getTool, nextTool, tools } from "@/lib/tools";
 import { PillarTag } from "@/components/pillar-tag";
+import { cycle, hueClass } from "@/lib/hues";
 
 export const dynamicParams = false;
 
@@ -52,13 +53,13 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
             <h1 className="display mt-3 text-balance text-[32px] text-ink sm:text-[56px]">{tool.title}</h1>
             <p className="mt-3 text-pretty font-mono text-[15px] leading-relaxed text-muted">{tool.description}</p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              <p className="flex items-start gap-2 border border-edge bg-card px-3 py-2.5 text-[14px] leading-snug text-ink">
+              <p className="flex items-start gap-2 rounded-[12px] border border-edge bg-card px-3 py-2.5 text-[14px] leading-snug text-ink">
                 <CircleAlert className="mt-0.5 size-4 shrink-0 text-danger" aria-hidden />
                 <span>
                   <strong>The problem:</strong> {guide.problem}
                 </span>
               </p>
-              <p className="flex items-start gap-2 border border-edge bg-[#e3f5e9] px-3 py-2.5 text-[14px] leading-snug text-ink">
+              <p className="flex items-start gap-2 rounded-[12px] border border-edge bg-[#e3f5e9] px-3 py-2.5 text-[14px] leading-snug text-ink">
                 <Gift className="mt-0.5 size-4 shrink-0 text-success" aria-hidden />
                 <span>
                   <strong>You get:</strong> {guide.get}
@@ -85,13 +86,13 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
       {/* How to use it */}
       <section className="mx-auto mt-10 max-w-6xl px-4" aria-labelledby="how">
         <h2 id="how" className="label flex items-center gap-1.5 text-ink">
-          <ListChecks className="size-4" aria-hidden /> How to use it
+          <ListChecks className="size-4 text-hue-blue" aria-hidden /> How to use it
         </h2>
         <ol className="mt-3 grid gap-3 md:grid-cols-3">
           {guide.steps.map((step, i) => (
-            <li key={i} className="flex gap-3 border border-edge bg-card p-3.5">
-              <span className="display grid size-7 shrink-0 place-items-center border border-edge bg-brand text-[14px] text-ink">{i + 1}</span>
-              <span className="text-[14px] leading-snug text-ink">{step}</span>
+            <li key={i} className="flex gap-3 rounded-[12px] border border-edge bg-card p-3.5">
+              <span className={`grid size-7 shrink-0 place-items-center rounded-full border-2 border-edge text-[13px] font-bold ${hueClass[cycle[i % cycle.length]].wash} ${hueClass[cycle[i % cycle.length]].text}`}>{i + 1}</span>
+              <span className="pt-0.5 text-[14.5px] leading-snug text-ink">{step}</span>
             </li>
           ))}
         </ol>

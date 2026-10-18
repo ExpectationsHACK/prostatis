@@ -105,7 +105,7 @@ export function AppToolLayout({
   const small = "inline-flex items-center gap-1.5 font-mono text-[12px] font-bold text-muted hover:text-ink";
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-      <div className="space-y-4 border border-edge bg-card p-5">
+      <div className="space-y-4 rounded-[12px] border border-edge bg-card p-5">
         <StepHead n={1} title="Fill in your details" sub={note} />
         {examples && examples.length > 0 && onExample && (
           <div className="border border-dashed border-line p-3">
@@ -118,7 +118,7 @@ export function AppToolLayout({
                   key={ex.label}
                   type="button"
                   onClick={() => onExample(i)}
-                  className="border border-edge bg-paper px-2.5 py-1 font-mono text-[11.5px] font-bold text-ink transition-colors hover:bg-brand"
+                  className="rounded-[12px] border border-edge bg-paper px-2.5 py-1 font-mono text-[11.5px] font-bold text-ink transition-colors hover:bg-brand"
                 >
                   {ex.label}
                 </button>

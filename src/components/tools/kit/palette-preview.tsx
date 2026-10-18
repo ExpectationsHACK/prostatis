@@ -16,7 +16,7 @@ export function PalettePreview({ title, name, colors }: { title: string; name: s
   const [view, setView] = useState<"normal" | Vision>("normal");
   const c = Object.fromEntries(Object.entries(colors).map(([k, v]) => [k, view === "normal" ? v : simulate(v, view)])) as PreviewColors;
   return (
-    <div className="overflow-hidden border border-edge bg-card">
+    <div className="overflow-hidden rounded-[12px] border border-edge bg-card">
       <div className="flex items-center justify-between gap-2 border-b border-edge px-4 py-2.5">
         <span className="font-mono text-[11px] font-bold text-muted">{title}</span>
       </div>
@@ -28,7 +28,7 @@ export function PalettePreview({ title, name, colors }: { title: string; name: s
             role="tab"
             aria-selected={view === v.id}
             onClick={() => setView(v.id)}
-            className={"border border-edge px-2 py-1 font-mono text-[11px] font-bold " + (view === v.id ? "bg-ink text-paper" : "bg-card text-ink hover:bg-wash")}
+            className={"rounded-full border border-edge px-2 py-1 font-mono text-[11px] font-bold " + (view === v.id ? "bg-ink text-paper" : "bg-card text-ink hover:bg-wash")}
           >
             {v.label}
           </button>

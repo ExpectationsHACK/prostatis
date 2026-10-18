@@ -89,7 +89,7 @@ export function DownloadButton({ text, filename, label = "Download" }: { text: s
 
 export function Output({ title, text, filename }: { title: string; text: string; filename?: string }) {
   return (
-    <div className="overflow-hidden border border-edge bg-card">
+    <div className="overflow-hidden rounded-[12px] border border-edge bg-card">
       <div className="flex items-center justify-between gap-2 border-b border-edge px-4 py-2.5">
         <span className="font-mono text-[11px] font-bold text-muted">{title}</span>
         <div className="flex gap-2">
@@ -107,7 +107,7 @@ export function Output({ title, text, filename }: { title: string; text: string;
 export function ToolLayout({ form, output }: { form: ReactNode; output: ReactNode }) {
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-      <div className="space-y-4 border border-edge bg-card p-5">{form}</div>
+      <div className="space-y-4 rounded-[12px] border border-edge bg-card p-5">{form}</div>
       <div className="min-w-0 space-y-4 lg:sticky lg:top-24 lg:self-start">{output}</div>
     </div>
   );

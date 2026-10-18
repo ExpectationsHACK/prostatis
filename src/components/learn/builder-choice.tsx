@@ -52,7 +52,7 @@ export function BuilderSteps({ title, paths }: { title: string; paths: Record<Bu
   const active = useSyncExternalStore(subscribe, read, () => "antigravity" as Builder);
   const tab = tabs.find((t) => t.id === active)!;
   return (
-    <div className="my-6 border border-edge bg-card">
+    <div className="my-6 rounded-[12px] border border-edge bg-card">
       <div className="border-b border-edge bg-sunk px-3 pt-3">
         <p className="label text-ink">{title}</p>
         <div role="tablist" aria-label="Choose how you build" className="mt-2 grid grid-cols-3 gap-1">
@@ -76,7 +76,7 @@ export function BuilderSteps({ title, paths }: { title: string; paths: Record<Bu
         <ol className="mt-3 space-y-3">
           {paths[active].map((s, n) => (
             <li key={s.title} className="flex gap-3">
-              <span className="display grid size-7 shrink-0 place-items-center border border-edge bg-brand text-[14px] text-ink">{n + 1}</span>
+              <span className="display grid size-7 shrink-0 place-items-center rounded-[12px] border border-edge bg-brand text-[14px] text-ink">{n + 1}</span>
               <div className="pt-0.5">
                 <p className="font-bold text-ink"><Rich text={s.title} /></p>
                 <p className="mt-0.5 text-[15px] leading-relaxed text-muted"><Rich text={s.detail} /></p>

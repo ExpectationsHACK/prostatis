@@ -6,6 +6,7 @@ import { TrackLessons } from "@/components/track-lessons";
 import { btn, size } from "@/components/ui";
 import { fastTrack, mainTrack, type Track } from "@/lib/curriculum";
 import { formatNgn, plans } from "@/lib/site";
+import { Eyebrow } from "@/components/eyebrow";
 
 const bySlug: Record<string, Track> = { "fast-track": fastTrack, "main-track": mainTrack };
 
@@ -33,9 +34,9 @@ export default async function TrackPage({ params }: { params: Promise<{ track: s
       <header className="border-b border-line bg-card px-4 py-14 sm:py-20">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-start">
           <div>
-            <p className="text-[13px] font-semibold text-brand-text">
-              The {track.name} · {track.length} · {track.modules.length} lessons · {track.weeks.length} weeks
-            </p>
+            <Eyebrow hue={track.id === "main_track" ? "blue" : "orange"}>
+              The {track.name} · {track.length} · {track.modules.length} lessons
+            </Eyebrow>
             <h1 className="display mt-3 text-balance text-[32px] leading-[1.05] text-ink sm:text-[52px]">{track.headline}</h1>
             <p className="mt-4 max-w-xl text-[16.5px] leading-relaxed text-muted">{track.blurb}</p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -68,7 +69,7 @@ export default async function TrackPage({ params }: { params: Promise<{ track: s
             { icon: Flame, title: "Daily streak", body: "Learn something every day to keep your streak alive, small steps, every day." },
           ].map((c) => (
             <div key={c.title} className="ink-block flex gap-4 bg-card p-5">
-              <span className="grid size-11 shrink-0 place-items-center border border-edge bg-brand">
+              <span className="grid size-11 shrink-0 place-items-center rounded-[12px] border border-edge bg-brand">
                 <c.icon className="size-5 text-ink" aria-hidden />
               </span>
               <div>

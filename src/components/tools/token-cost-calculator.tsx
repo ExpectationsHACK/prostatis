@@ -95,7 +95,7 @@ List prices from claude.com/pricing (standard tier, before caching or batch disc
       }
       output={
         <>
-          <div className="border border-edge bg-card p-5">
+          <div className="rounded-[12px] border border-edge bg-card p-5">
             <p className="text-sm font-semibold text-muted">
               {sel.name} · {monthlyReq.toLocaleString()} requests/month
             </p>
@@ -105,12 +105,12 @@ List prices from claude.com/pricing (standard tier, before caching or batch disc
               {formatNgn(sel.perReq * fx)} per request ({formatUsd(sel.perReq, 4)}) · budget <strong>{formatNgn(quote)}</strong> with a {num(f.margin)}% margin
             </p>
             {sel.id !== cheapest.id && sel.month > 0 && (
-              <p className="mt-3 border border-edge bg-brand-wash px-3 py-2 text-sm text-ink">
+              <p className="mt-3 rounded-[12px] border border-edge bg-brand-wash px-3 py-2 text-sm text-ink">
                 If {cheapest.name} is good enough for this job, you'd save <strong>{formatNgn((sel.month - cheapest.month) * fx)}</strong> a month. Test it with your real questions first.
               </p>
             )}
           </div>
-          <div className="overflow-x-auto border border-edge bg-card">
+          <div className="overflow-x-auto rounded-[12px] border border-edge bg-card">
             <table className="w-full text-left text-sm">
               <thead className="bg-sunk text-xs text-muted">
                 <tr>

@@ -21,7 +21,7 @@ export const metadata: Metadata = { title: "Dashboard", robots: { index: false }
 function Avatar({ name, email }: { name: string; email: string }) {
   const letter = (name || email || "?").trim().charAt(0).toUpperCase();
   return (
-    <span className="grid size-9 shrink-0 place-items-center border border-edge bg-brand font-mono text-[14px] font-bold text-ink" aria-hidden>
+    <span className="grid size-9 shrink-0 place-items-center rounded-[12px] border border-edge bg-brand font-mono text-[14px] font-bold text-ink" aria-hidden>
       {letter}
     </span>
   );

@@ -115,7 +115,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
       <div className="mx-auto max-w-3xl px-4">
         {toc.length >= 3 && (
-          <nav className="mt-10 border border-edge bg-card p-5" aria-label="In this article">
+          <nav className="mt-10 rounded-[12px] border border-edge bg-card p-5" aria-label="In this article">
             <p className="label text-muted">In this article</p>
             <ol className="mt-3 list-decimal space-y-1.5 pl-5 font-mono text-[13.5px] marker:text-brand-text">
               {toc.map((h) => (
@@ -135,7 +135,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           <ul className="mt-10 flex flex-wrap gap-2" aria-label="Tags">
             {post.tags.map((t) => (
               <li key={t}>
-                <Link href={`/blog/tag/${tagSlug(t)}`} className="label border border-edge bg-card px-2.5 py-1.5 text-ink hover:bg-wash">{t}</Link>
+                <Link href={`/blog/tag/${tagSlug(t)}`} className="label rounded-full border border-edge bg-card px-2.5 py-1.5 text-ink hover:bg-wash">{t}</Link>
               </li>
             ))}
           </ul>

@@ -180,7 +180,7 @@ export default function CronScheduleGenerator() {
       }
       output={
         <>
-          <div className="border border-edge bg-card p-5">
+          <div className="rounded-[12px] border border-edge bg-card p-5">
             <div className="flex items-center justify-between gap-3">
               <code className="font-mono text-3xl font-bold text-ink">{expr}</code>
               <CopyButton text={expr} />
@@ -201,7 +201,7 @@ export default function CronScheduleGenerator() {
               ))}
             </ul>
           </div>
-          <div className={"border border-edge px-3 py-2.5 text-[14px] text-ink " + (frequent ? "bg-danger/10" : "bg-brand-wash")}>
+          <div className={"rounded-[12px] border border-edge px-3 py-2.5 text-[14px] text-ink " + (frequent ? "bg-danger/10" : "bg-brand-wash")}>
             <strong>Free-plan limits:</strong>
             <ul className="mt-1 list-disc space-y-0.5 pl-5">
               {limits.map((l) => (
@@ -210,7 +210,7 @@ export default function CronScheduleGenerator() {
             </ul>
           </div>
           {Object.entries(snippets).map(([k, v]) => (
-            <div key={k} className="overflow-hidden border border-edge bg-card">
+            <div key={k} className="overflow-hidden rounded-[12px] border border-edge bg-card">
               <div className="flex items-center justify-between border-b border-line bg-sunk px-4 py-2">
                 <span className="text-xs font-semibold text-muted">{k}</span>
                 <CopyButton text={v} />

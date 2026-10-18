@@ -37,7 +37,7 @@ function FigureView({ f, i }: { f: Figure; i: number }) {
 
 function Callout({ tone, icon, title, children }: { tone: "tip" | "warn"; icon: ReactNode; title: string; children: ReactNode }) {
   return (
-    <div className={"my-5 flex gap-3 border border-edge p-4 " + (tone === "tip" ? "bg-[#fff4d6]" : "bg-[#ffe3dc]")}>
+    <div className={"my-5 flex gap-3 rounded-[12px] border border-edge p-4 " + (tone === "tip" ? "bg-[#fff4d6]" : "bg-[#ffe3dc]")}>
       <span className="mt-0.5 shrink-0">{icon}</span>
       <div>
         <p className="label text-ink">{title}</p>
@@ -69,7 +69,7 @@ function Block({ b, i, lessonId, track }: { b: LessonBlock; i: number; lessonId:
         <ol className="my-5 space-y-3">
           {b.items.map((s, n) => (
             <li key={s.title} className="flex gap-3.5">
-              <span className="display grid size-8 shrink-0 place-items-center border border-edge bg-brand text-[15px] text-ink">{n + 1}</span>
+              <span className="display grid size-8 shrink-0 place-items-center rounded-[12px] border border-edge bg-brand text-[15px] text-ink">{n + 1}</span>
               <div className="pt-0.5">
                 <p className="font-bold text-ink"><Rich text={s.title} /></p>
                 <p className="mt-0.5 text-[15px] leading-relaxed text-muted"><Rich text={s.detail} /></p>
@@ -80,7 +80,7 @@ function Block({ b, i, lessonId, track }: { b: LessonBlock; i: number; lessonId:
       );
     case "prompt":
       return (
-        <div className="my-6 border border-edge bg-night text-paper">
+        <div className="my-6 rounded-[12px] border border-edge bg-night text-paper">
           <div className="flex items-center justify-between gap-3 border-b border-paper/20 px-4 py-2.5">
             <p className="label text-brand">Prompt · {b.title}</p>
             <CopyButton text={b.text} label="Copy prompt" />
@@ -90,7 +90,7 @@ function Block({ b, i, lessonId, track }: { b: LessonBlock; i: number; lessonId:
       );
     case "code":
       return (
-        <div className="my-5 border border-edge bg-sunk">
+        <div className="my-5 rounded-[12px] border border-edge bg-sunk">
           <div className="flex items-center justify-between border-b border-edge px-3 py-1.5">
             <span className="label text-muted">{b.lang}</span>
             <CopyButton text={b.text} />
@@ -106,7 +106,7 @@ function Block({ b, i, lessonId, track }: { b: LessonBlock; i: number; lessonId:
       return <FigureView f={b.figure} i={i} />;
     case "table":
       return (
-        <div className="my-5 overflow-x-auto border border-edge">
+        <div className="my-5 overflow-x-auto rounded-[12px] border border-edge">
           <table className="w-full min-w-[480px] border-collapse text-left text-[14px]">
             <thead className="bg-ink text-paper">
               <tr>{b.columns.map((c, n) => <th key={n} className="px-3 py-2 font-mono text-[12px] font-bold">{c}</th>)}</tr>
@@ -123,13 +123,13 @@ function Block({ b, i, lessonId, track }: { b: LessonBlock; i: number; lessonId:
       );
     case "define":
       return (
-        <div id={`term-${slugTerm(b.term)}`} className="my-5 scroll-mt-24 border border-edge bg-card">
+        <div id={`term-${slugTerm(b.term)}`} className="my-5 scroll-mt-24 rounded-[12px] border border-edge bg-card">
           <p className="label flex items-center gap-1.5 border-b border-edge bg-accent px-3 py-1.5 text-accent-ink">
             <BookA className="size-3.5" aria-hidden /> Jargon buster
           </p>
           <div className="px-4 py-3">
             <p className="display text-[17px] sm:text-[19px] text-ink">{b.term}</p>
-            <p className="mt-1.5 border-l-4 border-brand pl-3 text-[15.5px] leading-relaxed text-ink">
+            <p className="mt-2 rounded-[10px] bg-brand-wash px-3 py-2 text-[15.5px] leading-relaxed text-ink">
               <span className="font-semibold">Think of it like </span>
               <Rich text={b.like} />
             </p>
@@ -142,7 +142,7 @@ function Block({ b, i, lessonId, track }: { b: LessonBlock; i: number; lessonId:
       );
     case "scenario":
       return (
-        <div className="my-6 border border-edge bg-[#fff8ec] p-4">
+        <div className="my-6 rounded-[12px] border border-edge bg-[#fff8ec] p-4">
           <p className="label flex items-center gap-1.5 text-brand-text"><MapPin className="size-3.5" aria-hidden /> Real-life scenario</p>
           <p className="display mt-1.5 text-[16.5px] sm:text-[18px] text-ink">{b.title}</p>
           <p className="mt-1.5 text-[15.5px] leading-relaxed text-ink/90"><Rich text={b.text} /></p>
@@ -154,7 +154,7 @@ function Block({ b, i, lessonId, track }: { b: LessonBlock; i: number; lessonId:
       return <SelfCheck q={b.q} options={b.options} answer={b.answer} why={b.why} />;
     case "mistakes":
       return (
-        <div className="my-6 border border-edge">
+        <div className="my-6 rounded-[12px] border border-edge">
           <p className="label border-b border-edge bg-ink px-3 py-1.5 text-paper">Common mistakes: and the fix</p>
           <ul>
             {b.items.map((m, n) => (
@@ -171,7 +171,7 @@ function Block({ b, i, lessonId, track }: { b: LessonBlock; i: number; lessonId:
       if (!tool) return null;
       return (
         <Link href={`/tools/${tool.slug}`} target="_blank" className="ink-block block-press my-5 flex items-center gap-4 bg-card p-3">
-          <div className="w-28 shrink-0 border border-edge sm:w-36">
+          <div className="w-28 shrink-0 rounded-[12px] border border-edge sm:w-36">
             <ToolThumb slug={tool.slug} tone={tool.tone} />
           </div>
           <div className="min-w-0 flex-1">
@@ -196,7 +196,7 @@ function Block({ b, i, lessonId, track }: { b: LessonBlock; i: number; lessonId:
           <p className="label">Milestone</p>
           <p className="display mt-1 max-w-[30rem] pr-14 text-[21px] sm:text-[24px] leading-tight">{b.title}</p>
           <p className="mt-2 text-[15.5px] leading-relaxed"><span className="font-bold">You just proved: </span><Rich text={b.proved} /></p>
-          <p className="label mt-3 inline-block border border-edge bg-paper px-2 py-1 normal-case tracking-normal"><Rich text={b.cue} /></p>
+          <p className="label mt-3 inline-block rounded-full border border-edge bg-paper px-2 py-1 normal-case tracking-normal"><Rich text={b.cue} /></p>
         </div>
       );
     case "later": {
@@ -213,7 +213,7 @@ function Block({ b, i, lessonId, track }: { b: LessonBlock; i: number; lessonId:
     }
     case "upgrade":
       return (
-        <div className="my-5 flex gap-3 border border-edge bg-[#eef6ff] p-4">
+        <div className="my-5 flex gap-3 rounded-[12px] border border-edge bg-[#eef6ff] p-4">
           <Rocket className="mt-0.5 size-5 shrink-0 text-ink" aria-hidden />
           <div>
             <p className="label text-ink">Optional upgrade · once you&apos;re earning</p>
@@ -225,7 +225,7 @@ function Block({ b, i, lessonId, track }: { b: LessonBlock; i: number; lessonId:
       );
     case "errors":
       return (
-        <div className="my-6 border border-edge">
+        <div className="my-6 rounded-[12px] border border-edge">
           <p className="label flex items-center gap-1.5 border-b border-edge bg-[#ffe3dc] px-3 py-1.5 text-ink"><MonitorX className="size-3.5" aria-hidden /> If you see this on screen</p>
           <ul>
             {b.items.map((e, n) => (

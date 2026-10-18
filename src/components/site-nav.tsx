@@ -27,7 +27,7 @@ function Dropdown({ label, items, open, onToggle }: { label: string; items: Item
         <div className="absolute left-1/2 top-full z-50 mt-3 w-64 -translate-x-1/2 border-2 border-edge bg-paper py-2 shadow-[6px_6px_0_var(--edge)]">
           {items.map((it) => (
             <Link key={it.href} href={it.href} className="flex items-center gap-3 px-4 py-2.5 hover:bg-wash">
-              <span className="size-2 shrink-0 border border-edge bg-brand" aria-hidden />
+              <span className="size-2 shrink-0 rounded-[4px] border border-edge bg-brand" aria-hidden />
               <span className="flex-1 font-code text-[12.5px] font-bold uppercase tracking-[0.08em] text-ink">{it.label}</span>
               {it.note && <span className="font-code text-[10px] text-muted">{it.note}</span>}
             </Link>
@@ -132,7 +132,7 @@ export function SiteNav() {
           <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2.5">
             {personas.map((p) => (
               <Link key={p.id} href={`/#${p.id}`} className="flex items-start gap-2 font-code text-[12px] font-bold uppercase tracking-[0.06em] text-ink">
-                <span className="mt-1 size-2 shrink-0 border border-edge bg-brand" aria-hidden />
+                <span className="mt-1 size-2 shrink-0 rounded-[4px] border border-edge bg-brand" aria-hidden />
                 {p.label}
               </Link>
             ))}

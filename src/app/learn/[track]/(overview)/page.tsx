@@ -79,7 +79,7 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
                   const lesson = getLesson(m.lesson);
                   const inner = (
                     <>
-                      <div className="relative w-32 shrink-0 border border-edge sm:w-40">
+                      <div className="relative w-32 shrink-0 rounded-[12px] border border-edge sm:w-40">
                         <LessonThumb thumb={m.thumb} index={m.day + i} />
                         {status === "locked" && (
                           <span className="absolute inset-0 grid place-items-center bg-paper/70"><Lock className="size-6 text-ink" aria-hidden /></span>
@@ -120,7 +120,7 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
           </section>
         ))}
 
-        <section className={"mt-12 border border-edge p-6 sm:p-8 " + (prog.allDone ? "ink-block bg-brand" : "bg-card")}>
+        <section className={"mt-12 rounded-[12px] border border-edge p-6 sm:p-8 " + (prog.allDone ? "ink-block bg-brand" : "bg-card")}>
           <p className="label text-ink">Final assessment</p>
           <h2 className="display mt-2 text-[24px] sm:text-[28px] text-ink">{final?.passed_at ? "Passed: your certificate is ready" : "One question from every lesson"}</h2>
           <p className="mt-2 max-w-2xl font-mono text-[13px] leading-relaxed text-ink/80">

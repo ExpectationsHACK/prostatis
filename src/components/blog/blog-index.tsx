@@ -3,6 +3,7 @@ import Link from "next/link";
 import { btn, size } from "@/components/ui";
 import { type Post, tagSlug } from "@/lib/blog-shared";
 import { PostCard } from "./post-card";
+import { Eyebrow } from "@/components/eyebrow";
 
 export function BlogIndex({ posts, allForTags, activeTag, tagName }: { posts: Post[]; allForTags?: Post[]; activeTag?: string; tagName?: string }) {
   const counts = new Map<string, { name: string; n: number }>();
@@ -17,7 +18,7 @@ export function BlogIndex({ posts, allForTags, activeTag, tagName }: { posts: Po
   return (
     <div className="pb-14 sm:pb-20">
       <header className="border-b border-line bg-card px-4 py-12 text-center sm:py-16">
-        <p className="text-[13px] font-semibold text-brand-text">{tagName ? "Topic" : "The blog"}</p>
+        <Eyebrow hue="purple">{tagName ? "Topic" : "The blog"}</Eyebrow>
         <h1 className="display mx-auto mt-3 max-w-3xl text-balance text-[34px] text-ink sm:text-[62px]">{tagName ?? "Build it. Sell it. Get paid."}</h1>
         <p className="mx-auto mt-4 max-w-xl text-[16.5px] leading-relaxed text-muted">
           Practical guides on building websites with AI, finding clients, pricing, SEO and getting paid, written for Nigeria.

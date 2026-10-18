@@ -30,7 +30,7 @@ function useStored(key: string) {
 export function TryIt({ id, title, minutes, steps }: { id: string; title: string; minutes: number; steps: string[] }) {
   const [done, setDone] = useStored(`bwac:try:${id}`);
   return (
-    <div className={"my-6 border border-edge p-4 transition-colors " + (done ? "bg-[#e3f5e9]" : "bg-[#eaf0ff]")}>
+    <div className={"my-6 rounded-[12px] border border-edge p-4 transition-colors " + (done ? "bg-[#e3f5e9]" : "bg-[#eaf0ff]")}>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="label flex items-center gap-1.5 text-ink">
           <Dumbbell className="size-4" aria-hidden /> Try it now · {minutes} min
@@ -49,7 +49,7 @@ export function TryIt({ id, title, minutes, steps }: { id: string; title: string
       <button
         type="button"
         onClick={() => setDone(!done)}
-        className={"label mt-3 inline-flex items-center gap-1.5 border border-edge px-2.5 py-1.5 " + (done ? "bg-card text-ink" : "bg-ink text-paper")}
+        className={"label mt-3 inline-flex items-center gap-1.5 rounded-full border border-edge px-2.5 py-1.5 " + (done ? "bg-card text-ink" : "bg-ink text-paper")}
       >
         {done ? <><RotateCcw className="size-3.5" aria-hidden /> Mark as not done</> : <><Check className="size-3.5" strokeWidth={3} aria-hidden /> I did this</>}
       </button>

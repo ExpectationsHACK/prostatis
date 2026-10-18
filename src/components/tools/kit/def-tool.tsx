@@ -101,7 +101,7 @@ function FieldInput({ f, value, set }: { f: FieldDef; value: Values[string]; set
               type="color"
               value={String(value)}
               onChange={(e) => set(e.target.value)}
-              className="h-11 w-14 shrink-0 cursor-pointer border border-edge bg-card p-1"
+              className="h-11 w-14 shrink-0 cursor-pointer rounded-[12px] border border-edge bg-card p-1"
               aria-label={f.label}
             />
             <TextInput value={String(value)} onChange={(e) => set(e.target.value)} />
@@ -116,9 +116,9 @@ function FieldInput({ f, value, set }: { f: FieldDef; value: Values[string]; set
           role="switch"
           aria-checked={value === true}
           onClick={() => set(!(value === true))}
-          className={"flex h-8 w-14 items-center border border-edge px-0.5 transition-colors " + (value === true ? "bg-brand" : "bg-wash")}
+          className={"flex h-8 w-14 items-center rounded-[12px] border border-edge px-0.5 transition-colors " + (value === true ? "bg-brand" : "bg-wash")}
         >
-          <span className={"size-6 border border-edge bg-card transition-transform " + (value === true ? "translate-x-6" : "")} />
+          <span className={"size-6 rounded-[12px] border border-edge bg-card transition-transform " + (value === true ? "translate-x-6" : "")} />
         </button>
       );
     case "multi": {
@@ -193,7 +193,7 @@ function GeneratorTool({ def, slug, title }: { def: GeneratorDef; slug: string; 
         <LivePanel key={spec.kind + spec.title} spec={spec} values={v} />
       ))}
       <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-        <div className="space-y-4 border border-edge bg-card p-5">
+        <div className="space-y-4 rounded-[12px] border border-edge bg-card p-5">
           <StepHead n={1} title="Fill in your details" sub={note} />
           {def.intro && <p className="text-[14px] text-muted">{def.intro}</p>}
           {def.examples && def.examples.length > 0 && (
@@ -207,7 +207,7 @@ function GeneratorTool({ def, slug, title }: { def: GeneratorDef; slug: string; 
                     key={ex.label}
                     type="button"
                     onClick={() => load(sanitize(def.fields, ex.values), "example")}
-                    className="border border-edge bg-paper px-2.5 py-1 font-mono text-[11.5px] font-bold text-ink transition-colors hover:bg-brand"
+                    className="rounded-[12px] border border-edge bg-paper px-2.5 py-1 font-mono text-[11.5px] font-bold text-ink transition-colors hover:bg-brand"
                   >
                     {ex.label}
                   </button>
@@ -289,7 +289,7 @@ function ChecklistTool({ def, slug, title }: { def: ChecklistDef; slug: string; 
           <StepHead n={1} title="Check each item" sub="Your ticks are saved on this device." />
           {def.intro && <p className="text-[14px] text-muted">{def.intro}</p>}
           {def.groups.map((g) => (
-            <fieldset key={g.title} className="border border-edge bg-card p-5">
+            <fieldset key={g.title} className="rounded-[12px] border border-edge bg-card p-5">
               <legend className="bg-paper px-2 font-mono text-[12px] font-bold text-ink">{g.title}</legend>
               <ul className="space-y-3">
                 {g.checks.map((c) => (
@@ -334,12 +334,12 @@ function ChecklistTool({ def, slug, title }: { def: ChecklistDef; slug: string; 
               )
             }
           />
-          <div className="border border-edge bg-card p-5">
+          <div className="rounded-[12px] border border-edge bg-card p-5">
             <div className="flex items-baseline justify-between">
               <span className="font-mono text-[12px] font-bold text-muted">Your score</span>
               <span className="display tabular text-[34px] sm:text-[44px] text-ink">{pct}</span>
             </div>
-            <div className="mt-2 h-3 border border-edge bg-wash">
+            <div className="mt-2 h-3 rounded-[12px] border border-edge bg-wash">
               <div className="h-full bg-brand transition-all duration-300" style={{ width: pct + "%" }} />
             </div>
             <p className="mt-2 text-[14px] font-semibold text-ink">{grade}</p>

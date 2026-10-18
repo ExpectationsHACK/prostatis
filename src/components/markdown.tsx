@@ -102,7 +102,7 @@ export function Markdown({ md }: { md: string }) {
       while (i < lines.length && !lines[i].trim().startsWith("```")) body.push(lines[i++]);
       i++;
       out.push(
-        <pre key={key} className="my-6 overflow-x-auto border border-edge bg-night p-4 font-mono text-[13.5px] leading-relaxed text-paper" data-lang={lang || undefined}>
+        <pre key={key} className="my-6 overflow-x-auto rounded-[12px] border border-edge bg-night p-4 font-mono text-[13.5px] leading-relaxed text-paper" data-lang={lang || undefined}>
           <code>{body.join("\n")}</code>
         </pre>,
       );
@@ -137,7 +137,7 @@ export function Markdown({ md }: { md: string }) {
         out.push(
           <figure key={key} className="my-7">
             {/* eslint-disable-next-line @next/next/no-img-element -- author-supplied images from any host */}
-            <img src={src} alt={img[1]} loading="lazy" decoding="async" className="h-auto w-full border border-edge bg-card" />
+            <img src={src} alt={img[1]} loading="lazy" decoding="async" className="h-auto w-full rounded-[12px] border border-edge bg-card" />
             {img[3] && <figcaption className="mt-2 font-mono text-[12.5px] text-muted">{img[3]}</figcaption>}
           </figure>,
         );
@@ -149,7 +149,7 @@ export function Markdown({ md }: { md: string }) {
       const body: string[] = [];
       while (i < lines.length && lines[i].startsWith(">")) body.push(lines[i++].replace(/^>\s?/, ""));
       out.push(
-        <blockquote key={key} className="my-6 border-l-4 border-brand bg-card px-5 py-3 text-[16px] sm:text-[17px] italic leading-relaxed text-ink">
+        <blockquote key={key} className="my-6 rounded-[12px] border-2 border-edge bg-brand-wash px-5 py-4 text-[16px] sm:text-[17px] italic leading-relaxed text-ink">
           {inline(body.join(" "), key)}
         </blockquote>,
       );
@@ -173,7 +173,7 @@ export function Markdown({ md }: { md: string }) {
       const rows: string[][] = [];
       while (i < lines.length && lines[i].trim().startsWith("|")) rows.push(cells(lines[i++]));
       out.push(
-        <div key={key} className="my-6 overflow-x-auto border border-edge">
+        <div key={key} className="my-6 overflow-x-auto rounded-[12px] border border-edge">
           <table className="w-full border-collapse text-left text-[15px]">
             <thead className="bg-wash">
               <tr>{head.map((c, j) => <th key={j} className="border-b border-edge px-3 py-2 font-mono text-[12px] font-bold text-ink">{inline(c, `${key}-h${j}`)}</th>)}</tr>

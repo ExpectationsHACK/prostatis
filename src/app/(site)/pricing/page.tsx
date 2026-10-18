@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PlanCard } from "@/components/plan-card";
 import { plans } from "@/lib/site";
+import { Eyebrow } from "@/components/eyebrow";
 
 export const metadata: Metadata = {
   title: "Pricing: Fast Track ₦15,000 · Main Track ₦30,000",
@@ -24,7 +25,7 @@ export default function PricingPage() {
   return (
     <div>
       <header className="border-b-2 border-ink bg-card px-4 py-10 text-center sm:py-20">
-        <p className="label text-brand-text">Pricing</p>
+        <Eyebrow>Pricing</Eyebrow>
         <h1 className="display mx-auto mt-3 max-w-3xl text-balance text-[32px] text-ink sm:text-[60px]">Pay once. Keep everything you build.</h1>
         <p className="mx-auto mt-4 max-w-xl text-[16.5px] leading-relaxed text-muted">
           Start with the Fast Track to build and sell websites in 14 days. Choose the Main Track to sell SEO, automation and AI agents on top.

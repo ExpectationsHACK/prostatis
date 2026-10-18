@@ -150,7 +150,7 @@ ${f.notes}`;
       }
       output={
       <div className="min-w-0 space-y-3">
-        <ul className="border border-edge bg-card p-3 text-[13.5px] print:hidden">
+        <ul className="rounded-[12px] border border-edge bg-card p-3 text-[13.5px] print:hidden">
           {ready.map(([ok, label]) => (
             <li key={label} className={ok ? "text-success" : "text-danger"}>
               {ok ? "✓" : "✗"} <span className="text-ink">{label}</span>
@@ -160,7 +160,7 @@ ${f.notes}`;
         <button type="button" onClick={() => window.print()} className={`${btn.primary} ${size.md} w-full print:hidden`}>
           <Printer className="size-4" aria-hidden /> Print / Save as PDF
         </button>
-        <div id="invoice-print" className="border border-edge bg-white p-6 text-[13px] text-neutral-900 sm:p-8 print:border-0 print:p-0">
+        <div id="invoice-print" className="rounded-[12px] border border-edge bg-white p-6 text-[13px] text-neutral-900 sm:p-8 print:border-0 print:p-0">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="text-xl font-bold">{f.fromName}</p>

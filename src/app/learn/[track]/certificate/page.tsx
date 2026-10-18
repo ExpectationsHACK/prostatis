@@ -49,7 +49,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ tr
       </div>
 
       <section className="mt-6 border-[3px] border-edge bg-card p-2 print:mt-0 print:shadow-none">
-        <div className="field-grid border border-edge bg-paper px-6 py-10 text-center sm:px-14 sm:py-14">
+        <div className="field-grid rounded-[12px] border border-edge bg-paper px-6 py-10 text-center sm:px-14 sm:py-14">
           <div className="flex items-center justify-center gap-2.5">
             <LogoMark size={40} />
             <span className="display text-[20px] sm:text-[22px] text-ink">{site.name}</span>
@@ -62,7 +62,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ tr
           </p>
           <ul className="mx-auto mt-6 flex max-w-xl flex-wrap justify-center gap-2">
             {skills.map((s) => (
-              <li key={s} className="label border border-edge bg-card px-2 py-1 text-ink">{s}</li>
+              <li key={s} className="label rounded-full border border-edge bg-card px-2 py-1 text-ink">{s}</li>
             ))}
           </ul>
           <div className="mt-10 grid gap-6 border-t border-edge pt-6 sm:grid-cols-2">

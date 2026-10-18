@@ -79,10 +79,10 @@ export function LivePanel({ spec, values, onChecks }: { spec: LiveSpec; values: 
       /* clipboard blocked */
     }
   };
-  const small = "inline-flex items-center gap-1.5 border border-edge bg-card px-2.5 py-1.5 font-mono text-[11px] font-bold text-ink hover:bg-wash";
+  const small = "inline-flex items-center gap-1.5 rounded-[12px] border border-edge bg-card px-2.5 py-1.5 font-mono text-[11px] font-bold text-ink hover:bg-wash";
 
   return (
-    <section className="mb-8 border border-edge bg-brand-wash p-5">
+    <section className="mb-8 rounded-[12px] border border-edge bg-brand-wash p-5">
       <p className="flex items-center gap-2 font-mono text-[12px] font-bold text-brand-text">
         <Globe className="size-4" aria-hidden /> Live check
       </p>
@@ -121,7 +121,7 @@ export function LivePanel({ spec, values, onChecks }: { spec: LiveSpec; values: 
       )}
       {state === "done" && (
         <div className="mt-5 space-y-4" aria-live="polite">
-          <div className="flex flex-wrap items-end gap-2 border border-edge bg-sunk p-2">
+          <div className="flex flex-wrap items-end gap-2 rounded-[12px] border border-edge bg-sunk p-2">
             <label className="min-w-[180px] flex-1">
               <span className="block font-mono text-[11px] font-bold text-muted">Report prepared by (optional)</span>
               <input value={by} onChange={(e) => saveName(e.target.value)} placeholder="Your name or business" className={`${input} mt-1 h-9 text-[14px]`} />

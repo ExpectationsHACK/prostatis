@@ -4,6 +4,7 @@ import { ToolCard } from "@/components/tool-card";
 import { pillars } from "@/lib/curriculum";
 import { pillarClasses } from "@/lib/hues";
 import { bonusTools, coreTools } from "@/lib/tools";
+import { Eyebrow } from "@/components/eyebrow";
 
 export const metadata: Metadata = {
   title: "50 free tools for web design, SEO, automation and AI agents",
@@ -15,7 +16,7 @@ export default function ToolsPage() {
   return (
     <div className="paper-grid">
       <header className="border-b-2 border-ink bg-card px-4 py-10 text-center sm:py-20">
-        <p className="label text-brand-text">Free, no signup</p>
+        <Eyebrow hue="teal">Free, no signup</Eyebrow>
         <h1 className="display mx-auto mt-3 max-w-3xl text-balance text-[32px] text-ink sm:text-[60px]">{coreTools.length} free tools that do the work for you</h1>
         <p className="mx-auto mt-4 max-w-2xl text-[16.5px] leading-relaxed text-muted">
           Pick a colour palette, check a site&apos;s speed and SEO, write the proposal and the cold message, then send the invoice. Every tool works on your phone and gives you results you can copy straight away.

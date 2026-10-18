@@ -11,6 +11,7 @@ import { fastTrack, mainTrack } from "@/lib/curriculum";
 import { formatNgn, plans } from "@/lib/site";
 import { coreTools } from "@/lib/tools";
 import { cycle, hueClass, type Hue } from "@/lib/hues";
+import { Eyebrow } from "@/components/eyebrow";
 
 // Each card is a real project in the Fast Track (the day it's built is shown on the card).
 const websiteKinds: { kind: SiteKind; title: string; body: string; day: number }[] = [
@@ -60,7 +61,7 @@ function Heading({ eyebrow, children, sub, light = false, hue = "orange" }: { ey
   // Each section's eyebrow is a small coloured pill, so the long page reads as distinct parts.
   return (
     <div className="mx-auto max-w-3xl text-center">
-      {eyebrow && <p className={"label inline-block rounded-full px-3 py-1 " + (light ? "bg-white/10 text-brand" : `${hueClass[hue].wash} ${hueClass[hue].text}`)}>{eyebrow}</p>}
+      {eyebrow && (light ? <p className="label inline-block rounded-full bg-white/10 px-3 py-1 text-brand">{eyebrow}</p> : <Eyebrow hue={hue}>{eyebrow}</Eyebrow>)}
       <h2 className={"display mt-3 text-balance text-[30px] sm:text-[52px] " + (light ? "text-white" : "text-ink")}>{children}</h2>
       {sub && <p className={"mx-auto mt-4 max-w-2xl text-pretty text-[16.5px] leading-relaxed " + (light ? "text-white/70" : "text-muted")}>{sub}</p>}
     </div>

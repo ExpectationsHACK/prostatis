@@ -15,12 +15,12 @@ const bits = Array.from({ length: 18 }, (_, i) => ({
  */
 export function Celebrate({ title, proved, xp, levelUp, badges }: { title: string; proved?: string; xp: number; levelUp?: { level: number; name: string }; badges: { name: string; desc: string }[] }) {
   return (
-    <div role="status" className="relative mt-5 overflow-hidden border border-edge bg-brand p-5 text-ink">
+    <div role="status" className="relative mt-5 overflow-hidden rounded-[12px] border border-edge bg-brand p-5 text-ink">
       <div className="pointer-events-none absolute left-1/2 top-1/2 motion-reduce:hidden" aria-hidden>
         {bits.map((b, i) => (
           <span
             key={i}
-            className="confetti absolute block size-2.5 border border-edge"
+            className="confetti absolute block size-2.5 rounded-[4px] border border-edge"
             style={{ background: b.c, ["--x" as string]: `${b.x}px`, ["--y" as string]: `${b.y}px`, ["--r" as string]: `${b.r}deg`, animationDelay: `${(i % 6) * 30}ms` }}
           />
         ))}
@@ -29,10 +29,10 @@ export function Celebrate({ title, proved, xp, levelUp, badges }: { title: strin
       <p className="display mt-1 text-[24px] sm:text-[28px] leading-tight">{title}</p>
       {proved && <p className="mt-2 max-w-[36rem] text-[15.5px] leading-relaxed"><span className="font-bold">What you just proved: </span>{proved}</p>}
       <div className="mt-3 flex flex-wrap gap-2">
-        {xp > 0 && <span className="label border border-edge bg-paper px-2 py-1">+{xp} XP</span>}
-        {levelUp && <span className="label border border-edge bg-ink px-2 py-1 text-paper">Level up! → Level {levelUp.level} · {levelUp.name}</span>}
+        {xp > 0 && <span className="label rounded-full border border-edge bg-paper px-2 py-1">+{xp} XP</span>}
+        {levelUp && <span className="label rounded-full border border-edge bg-ink px-2 py-1 text-paper">Level up! → Level {levelUp.level} · {levelUp.name}</span>}
         {badges.map((b) => (
-          <span key={b.name} className="label inline-flex items-center gap-1.5 border border-edge bg-[#f2c230] px-2 py-1" title={b.desc}>
+          <span key={b.name} className="label inline-flex items-center gap-1.5 rounded-full border border-edge bg-[#f2c230] px-2 py-1" title={b.desc}>
             <Award className="size-3.5" aria-hidden /> New badge: {b.name}
           </span>
         ))}

@@ -37,7 +37,7 @@ export function AiWriter({ slug, values }: { slug: string; values: Values; field
   }
 
   return (
-    <section className="border border-edge bg-card p-4">
+    <section className="rounded-[12px] border border-edge bg-card p-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
           <p className="flex items-center gap-1.5 font-bold text-ink">
@@ -66,7 +66,7 @@ export function AiWriter({ slug, values }: { slug: string; values: Values; field
       {state === "done" && out && (
         <div className="mt-4 space-y-3" aria-live="polite">
           {out.flags.length > 0 && (
-            <p className="flex items-start gap-2 border border-edge bg-danger/10 px-3 py-2.5 text-[14px] text-ink">
+            <p className="flex items-start gap-2 rounded-[12px] border border-edge bg-danger/10 px-3 py-2.5 text-[14px] text-ink">
               <ShieldCheck className="mt-0.5 size-4 shrink-0 text-danger" aria-hidden />
               <span>
                 <strong>Check before you use it:</strong> these weren't in your details, so make sure they're true or remove them: {out.flags.map((f) => `“${f}”`).join(", ")}.

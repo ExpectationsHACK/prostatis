@@ -134,10 +134,10 @@ export default function HookLineGenerator() {
       output={
         <>
           <AiWriter slug="hook-line-generator" values={f} />
-          <p className="border border-edge bg-brand-wash px-3 py-2 text-sm text-ink">
+          <p className="rounded-[12px] border border-edge bg-brand-wash px-3 py-2 text-sm text-ink">
             <strong>{f.platform}:</strong> {platformTip[f.platform]}
           </p>
-          <div className="overflow-hidden border border-edge bg-card">
+          <div className="overflow-hidden rounded-[12px] border border-edge bg-card">
             <ul className="divide-y divide-line">
               {hooks.map((h, i) => (
                 <li key={i} className="flex items-start justify-between gap-3 px-4 py-3">

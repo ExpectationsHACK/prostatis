@@ -96,18 +96,18 @@ Based on: ${formatNgn(num(goal))}/month take-home goal, ${Math.round(billableHou
       output={
         <>
           <div className="grid grid-cols-2 gap-3">
-            <div className="border border-edge bg-card p-5">
+            <div className="rounded-[12px] border border-edge bg-card p-5">
               <p className="text-sm font-semibold text-muted">Minimum hourly rate</p>
               <p className="font-display text-4xl font-semibold text-ink tabular">{formatUsd(hourly, 0)}</p>
               <p className="text-sm text-muted">≈ {formatNgn(hourly * fx)}</p>
             </div>
-            <div className="border border-edge bg-card p-5">
+            <div className="rounded-[12px] border border-edge bg-card p-5">
               <p className="text-sm font-semibold text-muted">You need to bill</p>
               <p className="font-display text-4xl font-semibold text-ink tabular">{formatUsd(monthlyNeedNgn / fx / (keep || 1), 0)}</p>
               <p className="text-sm text-muted">per month, before fees</p>
             </div>
           </div>
-          <div className="overflow-hidden border border-edge bg-card">
+          <div className="overflow-hidden rounded-[12px] border border-edge bg-card">
             <table className="w-full text-left text-sm">
               <thead className="bg-sunk text-xs text-muted">
                 <tr>

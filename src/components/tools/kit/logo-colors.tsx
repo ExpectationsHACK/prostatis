@@ -42,14 +42,14 @@ export function LogoColors({ onPick }: { onPick: (hex: string) => void }) {
   return (
     <div className="mt-2">
       <input ref={file} type="file" accept="image/*" className="sr-only" onChange={(e) => read(e.target.files?.[0])} tabIndex={-1} aria-hidden />
-      <button type="button" onClick={() => file.current?.click()} className="inline-flex items-center gap-1.5 border border-edge bg-paper px-2.5 py-1.5 font-mono text-[11.5px] font-bold text-ink hover:bg-wash">
+      <button type="button" onClick={() => file.current?.click()} className="inline-flex items-center gap-1.5 rounded-[12px] border border-edge bg-paper px-2.5 py-1.5 font-mono text-[11.5px] font-bold text-ink hover:bg-wash">
         <ImageUp className="size-3.5" aria-hidden /> Pick from logo
       </button>
       {found.length > 0 && (
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <span className="font-mono text-[11px] text-muted">Colours in the logo:</span>
           {found.map((c) => (
-            <button key={c} type="button" onClick={() => onPick(c)} className="flex items-center gap-1 border border-edge bg-card px-1.5 py-1 font-mono text-[11px] text-ink hover:bg-wash" aria-label={`Use ${c}`}>
+            <button key={c} type="button" onClick={() => onPick(c)} className="flex items-center gap-1 rounded-full border border-edge bg-card px-1.5 py-1 font-mono text-[11px] text-ink hover:bg-wash" aria-label={`Use ${c}`}>
               <span className="size-4 border border-black/10" style={{ background: c }} />
               {c}
             </button>
