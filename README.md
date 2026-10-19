@@ -1,6 +1,6 @@
 # Prostatis by Stynark
 
-Nigeria-first club that teaches website building with AI, plus web solutions, SEO, automation, lead generation and AI agents. Two one-time tracks — **Fast Track** (14 days, ₦15,000) and **Main Track** (1 month, ₦30,000) — a WhatsApp community, and 50 free public tools.
+Nigeria-first club that teaches website building with AI, plus web solutions, SEO, automation, lead generation and AI agents. Two one-time tracks — **Fast Track** (14 lessons, ₦15,000) and **Main Track** (26 lessons, ₦30,000), self-paced with lifetime access — a WhatsApp community, and 50 free public tools.
 
 **Status:** marketing site; all 50 free tools (+6 bonus) live and tested; Supabase auth; Paystack one-time payments (test/demo); the full written course (27 lessons with illustrations, tasks, resources and quizzes); progress, XP, levels and streaks; final assessments and certificates.
 
@@ -42,7 +42,7 @@ Flow: `/pricing` → `/checkout/[plan]` (sign-up/login first if needed) → Pays
 - **Webhook:** in Paystack → Settings → API Keys & Webhooks, set the URL to `https://<your-domain>/api/webhooks/paystack`.
   It checks the `x-paystack-signature` HMAC, re-verifies charges, and handles renewals, cancellations and failed payments.
   To receive webhooks locally, expose port 3000 with a tunnel (e.g. `ngrok http 3000`).
-- **One-time:** each payment unlocks its track for `accessDays` (Fast Track 30, Main Track 60). Buying again extends from the later of now or the current end; the Main Track outranks and includes the Fast Track.
+- **One-time, lifetime:** each payment opens its track for good (`current_period_end` = 9999-12-31). Checkout never sells a track the member already has; buying the Main Track upgrades a Fast Track member. Admins can close access (e.g. after a refund) and restore it from the student's page.
 - Payment recording is idempotent per reference, so the callback and webhook can both fire safely.
 - Membership access = `current_period_end` + 3 days grace (`src/lib/membership.ts`).
 
@@ -67,7 +67,7 @@ Edit or add a file in `src/content/lessons/`, register new ones in `index.ts`, a
 | Path | What |
 |---|---|
 | `src/lib/site.ts` | Name, tagline, the two plans (price, access days, results) |
-| `src/lib/curriculum.ts` | 7 pillars; Fast Track (14 days) and Main Track (25 lessons over 4 weeks) |
+| `src/lib/curriculum.ts` | 7 pillars; Fast Track (14 lessons) and Main Track (26 lessons), self-paced |
 | `src/lib/tools.ts` | Registry: 50 core + 6 bonus tools — pillar, copy, illustration |
 | `src/lib/tool-defs/*.ts` | Tool logic per pillar (pure functions, unit-tested) |
 | `src/components/tools/kit/` | Renders any tool definition (form + output blocks) |

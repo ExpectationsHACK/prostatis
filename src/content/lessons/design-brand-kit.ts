@@ -75,7 +75,7 @@ const lesson: Lesson = {
           t: "define",
           term: "AI",
           like: "a very well-read apprentice who has read millions of pages. Ask clearly and they draft in seconds; but they can sound confident and still be wrong, so the master (you) always checks the work.",
-          meaning: "AI (artificial intelligence) here means a computer program you chat with in plain English, like WhatsApp. It writes drafts, ideas and, from Day 3, the website itself. It only knows the business if you tell it, and it makes mistakes, so you check everything it gives you.",
+          meaning: "AI (artificial intelligence) here means a computer program you chat with in plain English, like WhatsApp. It writes drafts, ideas and, from Lesson 3, the website itself. It only knows the business if you tell it, and it makes mistakes, so you check everything it gives you.",
         },
         {
           t: "define",
@@ -226,7 +226,7 @@ const lesson: Lesson = {
   ],
   task: {
     title: "Make a brand kit for a real business",
-    steps: ["Pick a real business (or follow Bisi).", "Ask the 5 questions and save the answers in your project notes.", "Create your free Claude account and try one prompt.", "Choose 4 colours and check the text colours pass 4.5 : 1 on WebAIM.", "Pick two fonts on Google Fonts.", "Get a logo idea from a free image maker and simplify it.", "Put everything on one page and save it. You'll use it tomorrow and on Day 3."],
+    steps: ["Pick a real business (or follow Bisi).", "Ask the 5 questions and save the answers in your project notes.", "Create your free Claude account and try one prompt.", "Choose 4 colours and check the text colours pass 4.5 : 1 on WebAIM.", "Pick two fonts on Google Fonts.", "Get a logo idea from a free image maker and simplify it.", "Put everything on one page and save it. You'll use it tomorrow and on Lesson 3."],
     done: ["My palette has a main, accent, dark and light colour, each with a hex code", "My body text colour passes 4.5 : 1 on my background", "I chose exactly two fonts", "I have a free Claude account and sent it at least one prompt", "My brand kit fits on one page"],
   },
   recap: [
@@ -245,13 +245,13 @@ const lesson: Lesson = {
   ],
   quiz: [
     { q: "What is a brand kit for?", options: ["Looking impressive in a meeting", "Making the look-and-sound decisions once, so everything matches", "Replacing the website", "Choosing the shop's location"], answer: 1, why: "One page of decisions keeps every page, post and AI instruction consistent.", from: 0, aim: "core" },
-    { q: "Bisi wants white words on her gold buttons. The checker says 2.4 : 1. What do you do?", options: ["Keep white: it looks classy", "Use dark words on the gold, which pass the 4.5 : 1 contrast rule", "Make the button bigger", "Remove the button"], answer: 1, why: "White on gold fails; near-black on the same gold passes. You'll check every page's contrast again on Day 6.", from: 1, aim: "responsive-fast-accessible" },
-    { q: "Why write down the exact hex codes of the colours?", options: ["Printers need them", "So you can paste the exact colours into your prompts when the AI builds the page", "They make the logo bigger", "Google asks for them"], answer: 1, why: "On Day 3 your build prompt includes the codes, so the website comes out in the exact brand colours.", from: 2, aim: "ai-dev-setup" },
+    { q: "Bisi wants white words on her gold buttons. The checker says 2.4 : 1. What do you do?", options: ["Keep white: it looks classy", "Use dark words on the gold, which pass the 4.5 : 1 contrast rule", "Make the button bigger", "Remove the button"], answer: 1, why: "White on gold fails; near-black on the same gold passes. You'll check every page's contrast again on Lesson 6.", from: 1, aim: "responsive-fast-accessible" },
+    { q: "Why write down the exact hex codes of the colours?", options: ["Printers need them", "So you can paste the exact colours into your prompts when the AI builds the page", "They make the logo bigger", "Google asks for them"], answer: 1, why: "On Lesson 3 your build prompt includes the codes, so the website comes out in the exact brand colours.", from: 2, aim: "ai-dev-setup" },
     { q: "Which prompt will get the most useful logo ideas?", options: ["“Make me a logo”", "“A simple logo for Stitches by Bisi, a Yaba tailor: elegant, reliable, warm; wine and gold; clear at small sizes”", "“Something nice”", "“Copy a famous fashion logo”"], answer: 1, why: "A specific prompt (who, what, feeling, colours, rules) gets usable drafts. You'll write prompts like this every day.", from: 3, aim: "ai-dev-setup" },
-    { q: "Bisi's voice words are elegant, reliable and warm. Where do they matter next?", options: ["Nowhere: they were only for colours", "In the words on her website and in every build prompt you give the AI", "Only on her business card", "In her bank account name"], answer: 1, why: "Tomorrow you write the website's words in her voice, and from Day 3 the voice words go into every build prompt.", from: 4, aim: "layouts-wireframes-copy" },
+    { q: "Bisi's voice words are elegant, reliable and warm. Where do they matter next?", options: ["Nowhere: they were only for colours", "In the words on her website and in every build prompt you give the AI", "Only on her business card", "In her bank account name"], answer: 1, why: "Tomorrow you write the website's words in her voice, and from Lesson 3 the voice words go into every build prompt.", from: 4, aim: "layouts-wireframes-copy" },
   ],
   celebrate: {
-    title: "Day 1 complete: the look is decided",
+    title: "Lesson 1 complete: the look is decided",
     proved: "You can take a business that looks different in every post and give it one clear, readable identity, the first thing every customer notices.",
     badge: "Brand maker",
     badgeDesc: "Made a one-page brand kit",

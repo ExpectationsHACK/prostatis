@@ -8,7 +8,7 @@ const lesson: Lesson = {
   intro:
     "Every day Bisi answers “Are you free on Saturday?” on WhatsApp, again and again. Worse, about two customers a week book a fitting and never come, and she loses that hour each time. A booking page fixes both: customers see the times she's really free and choose one themselves, day or night. A small **deposit** paid upfront makes people far more likely to turn up, and it's taken off the final price. It's one of the easiest upgrades you can sell on top of any website, and every tool today is free to start.",
   core: "Let customers book only real free times, and ask for a small deposit: paying something upfront is what makes people turn up.",
-  youNeed: ["Your live, GitHub-connected site from Day 7", "The owner's services, how long each takes, prices and opening hours", "An email address for a free Cal.com account", "An email address for a free Paystack account (no business documents needed to practise)"],
+  youNeed: ["Your live, GitHub-connected site from Lesson 7", "The owner's services, how long each takes, prices and opening hours", "An email address for a free Cal.com account", "An email address for a free Paystack account (no business documents needed to practise)"],
   sections: [
     {
       heading: "What a booking flow looks like",
@@ -191,7 +191,7 @@ const lesson: Lesson = {
     { q: "How should you test the deposit payment?", options: ["With your real card", "In test mode with Paystack's published test card", "Don't test it", "Ask a real customer to try"], answer: 1, why: "Test mode moves pretend money. Tomorrow you'll use test mode again for the store.", from: 4, aim: "online-store-paystack" },
   ],
   celebrate: {
-    title: "Day 8 complete: booked and paid",
+    title: "Lesson 8 complete: booked and paid",
     proved: "You can give a business a booking page that only offers real free times and takes a deposit through Paystack, so customers turn up and the owner gets paid first.",
     badge: "Booked & paid",
     badgeDesc: "Connected bookings to Paystack deposits",

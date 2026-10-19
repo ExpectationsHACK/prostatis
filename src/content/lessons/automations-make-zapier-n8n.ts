@@ -78,13 +78,13 @@ const lesson: Lesson = {
       heading: "Automation 2: Payment → record once → thank-you",
       blocks: [
         { t: "p", text: "When a payment succeeds, record it in a **Payments** sheet and send the customer a warm thank-you with next steps (Paystack already sends the receipt itself)." },
-        { t: "list", items: ["**Trigger**: a second Make webhook, called by your site's function after it has verified the payment with Paystack (Day 9), so Make only ever hears about real payments.", "**Filter**: continue only if the status is “success”.", "**Actions**: search the Payments sheet for the payment **reference**; only if it isn't there, add a row (reference, customer, item, amount = kobo ÷ 100) and send the thank-you email."] },
+        { t: "list", items: ["**Trigger**: a second Make webhook, called by your site's function after it has verified the payment with Paystack (Lesson 9), so Make only ever hears about real payments.", "**Filter**: continue only if the status is “success”.", "**Actions**: search the Payments sheet for the payment **reference**; only if it isn't there, add a row (reference, customer, item, amount = kobo ÷ 100) and send the thank-you email."] },
         {
           t: "define",
           term: "Unique key",
           also: ["Unique ID"],
           like: "your NIN: many people share your name, but nobody shares your NIN.",
-          meaning: "One piece of information that identifies a record and is never repeated. For payments it's Paystack's **reference**; for customers (Day 18) it's the phone number, written one standard way. Also called a **unique ID**.",
+          meaning: "One piece of information that identifies a record and is never repeated. For payments it's Paystack's **reference**; for customers (Lesson 18) it's the phone number, written one standard way. Also called a **unique ID**.",
         },
         { t: "warn", text: "Automations that touch money must never record a payment twice. Messages can arrive more than once, so always use the **payment reference** as the unique ID: search for it first, and add a row only if it isn't there." },
         { t: "tool", slug: "email-autoresponder-generator", why: "Writes the thank-you and next-step emails in the business's voice." },
@@ -114,7 +114,7 @@ const lesson: Lesson = {
           t: "define",
           term: "AI model",
           also: ["LLM"],
-          like: "the brain behind the chat: the same well-read apprentice from Day 1, now working without the chat window, inside your automation.",
+          like: "the brain behind the chat: the same well-read apprentice from Lesson 1, now working without the chat window, inside your automation.",
           meaning: "The trained program that actually reads and writes text, such as Claude or Gemini. Automations can send it text and get an answer back. These programs are also called **LLMs** (large language models).",
         },
         {
@@ -167,13 +167,13 @@ const lesson: Lesson = {
   ],
   quiz: [
     { q: "The same Paystack payment reaches your automation twice. What stops it being recorded twice?", options: ["Hoping it doesn't happen", "Using the payment reference as a unique ID: search the sheet first, add a row only if it isn't there", "Turning the automation off", "Recording it by hand"], answer: 1, why: "A unique reference makes the automation safe even if it runs twice.", from: 1, aim: "core" },
-    { q: "Make's free plan works like what?", options: ["Unlimited data", "A prepaid meter: a monthly allowance of credits, used a little each time a module runs", "A one-time payment", "A bank loan"], answer: 1, why: "Credits refill monthly. Checking the balance is part of the weekly checks you'll set up on Day 19.", from: 0, aim: "monitoring-handover" },
+    { q: "Make's free plan works like what?", options: ["Unlimited data", "A prepaid meter: a monthly allowance of credits, used a little each time a module runs", "A one-time payment", "A bank loan"], answer: 1, why: "Credits refill monthly. Checking the balance is part of the weekly checks you'll set up on Lesson 19.", from: 0, aim: "monitoring-handover" },
     { q: "What is a scheduled automation?", options: ["One that runs at a set time, like 8am daily, instead of on an event", "One that never runs", "A task done by hand", "A chatbot"], answer: 0, why: "Scheduled runs start from the clock. You'll use one for reminder messages when you connect the whole system.", from: 2, aim: "connect-the-system" },
     { q: "Where does AI help most in an automation?", options: ["Steps that need understanding: summarising, labelling, drafting", "Adding up numbers", "Nowhere", "Only images"], answer: 0, why: "Rules handle simple logic; AI handles language. Tomorrow you'll design an AI assistant properly.", from: 3, aim: "agents-personas-kb" },
-    { q: "What must be ready before you hand automations to a client?", options: ["Nothing", "Error alerts on and a one-page handover note", "A new logo", "A blog"], answer: 1, why: "The client needs to know what runs and what to do when something fails. Day 19 builds on this.", from: 4, aim: "monitoring-handover" },
+    { q: "What must be ready before you hand automations to a client?", options: ["Nothing", "Error alerts on and a one-page handover note", "A new logo", "A blog"], answer: 1, why: "The client needs to know what runs and what to do when something fails. Lesson 19 builds on this.", from: 4, aim: "monitoring-handover" },
   ],
   celebrate: {
-    title: "Day 15 complete: Bisi's evenings are back",
+    title: "Lesson 15 complete: Bisi's evenings are back",
     proved: "You can make a business's busywork happen by itself, reliably, on a free plan, with records that never double up and alerts when anything fails.",
     badge: "Automator",
     badgeDesc: "Built three live automations",

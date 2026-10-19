@@ -2,7 +2,7 @@
 
 # Prostatis — project guide for Claude
 
-**Prostatis** (the product) **by Stynark** (the company that owns it): a Nigeria-first platform that teaches people to build and sell websites with AI. Two one-time paid tracks (Fast Track: 14 days, ₦15,000 · Main Track: 26 lessons over 1 month, ₦30,000), a written in-app course with assessments, XP and streaks, 50 free public tools (+6 bonus), Paystack payments and a WhatsApp community.
+**Prostatis** (the product) **by Stynark** (the company that owns it): a Nigeria-first platform that teaches people to build and sell websites with AI. Two one-time paid tracks, self-paced with lifetime access (Fast Track: 14 lessons, ₦15,000 · Main Track: 26 lessons, ₦30,000), a written in-app course with assessments, XP and streaks, 50 free public tools (+6 bonus), Paystack payments and a WhatsApp community.
 
 Read before changing things: `PRODUCT.md` (who it's for, principles, honesty rules), `DESIGN.md` (visual system — follow it), `README.md` (setup, payments, course architecture).
 
@@ -72,7 +72,7 @@ Before calling work done: typecheck, lint, tests and build must pass, and anythi
 - **Free tools first:** no lesson may require a paid account (`youNeed` items that cost money start with "Optional"). The default builder is **Google Antigravity** (free); Claude Code (Claude Pro) is the paid choice; a free AI chat + VS Code is the backup. Steps that differ use a `builder` block with all three tabs. Hosting is Cloudflare Pages (free, commercial use allowed); server code is Cloudflare Pages Functions; paid tools appear only in `upgrade` blocks. Things taught later get a `later` block.
 - **Facts that change** (prices, install commands, platform rules) must be checked against the official source before editing — e.g. Claude Code's native installer, Vercel Hobby = non-commercial, Meta per-message WhatsApp pricing, Google no longer shows FAQ rich results, Supabase free projects pause after a quiet week.
 - **Tool standard** (enforced by `src/lib/tool-defs/tools.test.ts`): every tool has a guide in `src/lib/tool-guides.ts` (problem, what you get, 3 explicit steps, next actions); every generator has 2+ one-tap `examples`; outputs never invent reviews, results or proof — use [brackets] for anything the user must fill in.
-- **Wording:** say "get paid", not "invoice", in site copy (the printed document itself may say INVOICE). Main CTAs are **Enroll Now** (to pay) and **Start Learning** (to open the course).
+- **Wording:** prefer "get paid" over "invoice" in general site copy, but the tool is the **Invoice Generator** (owner's choice, 2026-10-19). Never present a track as taking a number of days: tracks are **lessons**, self-paced, with **lifetime access** (say "Lesson N", "Part N", "14 lessons"; real-world schedules inside lessons, like follow-up timings, may use days). Main CTAs are **Enroll Now** (to pay) and **Start Learning** (to open the course).
 - **Security:** secrets only in env vars; nothing sensitive in URLs; user-supplied URLs go through `safeFetch` (DNS + private-IP blocking).
 - **Mobile first:** users are on phones and metered data. Keep pages light; no horizontal scroll at 360px.
 - **Loading skeletons:** every dynamic route has a `loading.tsx` using a shape from `src/components/skeleton.tsx`. Keep **one** `loading.tsx` per route path: a parent folder's skeleton would flash first, so index pages that sit above other routes live in a route group (`dashboard/(home)`, `learn/(home)`, `learn/[track]/(overview)`, `blog/(index)`).

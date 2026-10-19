@@ -11,7 +11,7 @@ const lesson: Lesson = {
   youNeed: [
     "A laptop or desktop computer: Windows 10 or 11 (64-bit) or a Mac from the last few years is best for Antigravity; any computer with a browser works with the backup way",
     "A personal Gmail account (not a work or school one). Antigravity is for people aged 18 and over",
-    "Your brand kit (Day 1) and your page plan and words (Day 2)",
+    "Your brand kit (Lesson 1) and your page plan and words (Lesson 2)",
     "An email address for one more free account (Cloudflare)",
   ],
   sections: [
@@ -158,7 +158,7 @@ const lesson: Lesson = {
           chat: [
             { title: "Install VS Code (free editor)", detail: "Go to `code.visualstudio.com`, click **Download**, and install it (Windows: accept → Next → Install; Mac: unzip and drag it into Applications)." },
             { title: "Open your project", detail: "In VS Code: **File** → **Open Folder…** → `Documents` → `bisi-project`. When asked “Do you trust the authors?”, click **Yes, I trust the authors**: it's your folder." },
-            { title: "Keep your free AI chat open", detail: "Use **claude.ai** (your Day 1 account) in the browser. If you hit its free limit, the same prompts work in **ChatGPT** (chatgpt.com) or **Gemini** (gemini.google.com)." },
+            { title: "Keep your free AI chat open", detail: "Use **claude.ai** (your Lesson 1 account) in the browser. If you hit its free limit, the same prompts work in **ChatGPT** (chatgpt.com) or **Gemini** (gemini.google.com)." },
           ],
         },
         {
@@ -203,8 +203,8 @@ const lesson: Lesson = {
     {
       heading: "Step 4: Ask for the page",
       blocks: [
-        { t: "p", text: "Now the moment: your plan and words from Day 2 become a real page. Fill in the brackets in this prompt first (in a notes app), then send it." },
-        { t: "prompt", title: "Bisi's home page", text: "Read the project brief first and follow it.\n\nCreate ONE file, site/index.html, for the home page. Put all the styling inside a <style> tag in the same file and load the two Google Fonts from the brief. Build it phone first, then make it look good on laptops. Use these sections in this order: [paste your wireframe boxes]. Use exactly these words: [paste your words from Day 2]. Every 'Order on WhatsApp' button opens https://wa.me/2348000000000 (I'll change the number later). Where photos will go, show a tasteful coloured box with a label like [photo: green boubou]. Don't invent reviews, prices or numbers. When you're done, tell me in one sentence what to check.\n\n(Free chat only: also say 'Give me the complete file from <!DOCTYPE html> to </html> in one code block.')" },
+        { t: "p", text: "Now the moment: your plan and words from Lesson 2 become a real page. Fill in the brackets in this prompt first (in a notes app), then send it." },
+        { t: "prompt", title: "Bisi's home page", text: "Read the project brief first and follow it.\n\nCreate ONE file, site/index.html, for the home page. Put all the styling inside a <style> tag in the same file and load the two Google Fonts from the brief. Build it phone first, then make it look good on laptops. Use these sections in this order: [paste your wireframe boxes]. Use exactly these words: [paste your words from Lesson 2]. Every 'Order on WhatsApp' button opens https://wa.me/2348000000000 (I'll change the number later). Where photos will go, show a tasteful coloured box with a label like [photo: green boubou]. Don't invent reviews, prices or numbers. When you're done, tell me in one sentence what to check.\n\n(Free chat only: also say 'Give me the complete file from <!DOCTYPE html> to </html> in one code block.')" },
         {
           t: "builder",
           title: "Send it and review the result",
@@ -297,7 +297,7 @@ const lesson: Lesson = {
             { title: "Undo a bad change", detail: "Find an older version in the list, open its **⋯** menu and choose **Rollback to this deployment**. The live site goes back instantly." },
           ],
         },
-        { t: "later", lesson: "deploy-domain", text: "upload the `site` folder again whenever you change something. On Day 7 the website will start updating by itself every time you save a change online, with a full history of every edit." },
+        { t: "later", lesson: "deploy-domain", text: "upload the `site` folder again whenever you change something. On Lesson 7 the website will start updating by itself every time you save a change online, with a full history of every edit." },
         { t: "scenario", title: "The power cut that cost nothing", text: "Picture this: you're halfway through changes when the light goes and your laptop dies. Nothing on the internet is affected, because the live site is the last version you deployed. When the light comes back, your files are still in `site`, and Cloudflare still has every earlier version if a change went wrong. Check often; deploy when a change is right." },
         { t: "mistakes", items: [{ wrong: "Uploading `bisi-project` (with your notes inside)", right: "Uploading only the `site` folder" }, { wrong: "Deploying without checking in your browser first", right: "Check on your computer, then deploy" }, { wrong: "Letting the agent change things you didn't ask for", right: "Reading its plan and walkthrough, and saying no to anything unexpected" }] },
       ],
@@ -326,13 +326,13 @@ const lesson: Lesson = {
   ],
   quiz: [
     { q: "Bisi loves the page on your laptop, but her customer in Ikeja can't open it. Why?", options: ["Ikeja has no network", "It's only on your computer (file:///) and hasn't been put on the hosting yet", "Customers need a password", "Chrome doesn't work in Ikeja"], answer: 1, why: "Until the files are deployed to hosting, the page exists only on your laptop.", from: 5, aim: "core" },
-    { q: "What does hosting do for a website?", options: ["Designs the logo", "Keeps the files online, open day and night, at a web address anyone can reach", "Writes the words", "Takes payments"], answer: 1, why: "Hosting is the shop that never closes. On Day 7 you'll point a business's own domain at it.", from: 1, aim: "deploy-domain" },
+    { q: "What does hosting do for a website?", options: ["Designs the logo", "Keeps the files online, open day and night, at a web address anyone can reach", "Writes the words", "Takes payments"], answer: 1, why: "Hosting is the shop that never closes. On Lesson 7 you'll point a business's own domain at it.", from: 1, aim: "deploy-domain" },
     { q: "Antigravity shows you a plan before building the page. What do you do?", options: ["Approve it without reading", "Read the plan, comment on anything wrong, then approve it and check the result", "Close the app", "Delete the project"], answer: 1, why: "You're the master; the agent is the apprentice. Tomorrow you'll approve five pages this way.", from: 2, aim: "build-business-site" },
     { q: "The headline is too small and the button is the wrong colour. What's the best way to fix them?", options: ["One message asking for ten changes", "One change at a time: ask, refresh, check, then the next", "Start a brand-new website", "Edit the code by guessing"], answer: 1, why: "Small checked steps keep problems easy to spot. Tomorrow you build five pages this way.", from: 4, aim: "build-business-site" },
     { q: "Antigravity says you've used this week's free allowance and you're mid-build. What do you do?", options: ["Pay for a plan immediately", "Use the free chat backup (Claude, ChatGPT or Gemini) for the rest of the week, or wait for the refresh", "Give up for the month", "Buy someone's account"], answer: 1, why: "The free path always has a backup, and the same prompts work there.", from: 6, aim: "build-business-site" },
   ],
   celebrate: {
-    title: "Day 3 complete: you're live on the internet",
+    title: "Lesson 3 complete: you're live on the internet",
     proved: "You can build a real web page with a free AI builder and publish it at a web address anyone can open, with no code typed and no money spent.",
     badge: "Live on the internet",
     badgeDesc: "Published a first page on free hosting",

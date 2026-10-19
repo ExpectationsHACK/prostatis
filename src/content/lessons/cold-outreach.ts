@@ -70,7 +70,7 @@ const lesson: Lesson = {
     {
       heading: "Step 3: Track everything",
       blocks: [
-        { t: "p", text: "Use a simple sheet as your pipeline (Day 18): business, channel, date sent, follow-up dates, status (sent / replied / call booked / proposal / won / lost) and notes. Check it every morning." },
+        { t: "p", text: "Use a simple sheet as your pipeline (Lesson 18): business, channel, date sent, follow-up dates, status (sent / replied / call booked / proposal / won / lost) and notes. Check it every morning." },
         { t: "tip", text: "Aim for **about 10 new personal messages a day**. In two weeks that's over 100 conversations started: enough for real results." },
         { t: "try", title: "Send your first 3 right now", minutes: 15, steps: ["Take your top 3 researched prospects.", "Write each a personal message using the four-part shape.", "Send them: don't wait until they're perfect. Log them in your tracker with follow-up dates."] },
       ],
@@ -115,7 +115,7 @@ const lesson: Lesson = {
     { q: "How many new personal messages a day is a good target?", options: ["One a month", "About 10", "1,000", "None"], answer: 1, why: "Steady daily volume, with quality, builds a pipeline. After your final project, keep this habit going.", from: 4, aim: "capstone" },
   ],
   celebrate: {
-    title: "Day 23 complete: conversations started",
+    title: "Lesson 23 complete: conversations started",
     proved: "You can start honest, specific conversations with business owners who've never heard of you, and keep them going without being pushy.",
     badge: "Conversation starter",
     badgeDesc: "Sent 10 personal messages with a follow-up plan",

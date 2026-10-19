@@ -200,7 +200,7 @@ export function badges(track: Track, state: LearnerState, milestones: Milestone[
     { id: "streak7", name: "Unstoppable", desc: "Learn 7 days in a row", icon: "flame", earned: st.longest >= 7 },
     ...track.weeks.map((w) => ({
       id: `week${w.week}`,
-      name: `Week ${w.week} done`,
+      name: `Part ${w.week} done`,
       desc: w.title,
       icon: "flag" as const,
       earned: track.modules.filter((m) => m.week === w.week).every((m) => state.lessons[m.lesson]?.completed_at),

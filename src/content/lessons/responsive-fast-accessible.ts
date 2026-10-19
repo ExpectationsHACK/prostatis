@@ -8,7 +8,7 @@ const lesson: Lesson = {
   intro:
     "Picture Bisi's customer in Aba: a budget Android phone, a slow connection, and ₦500 of data left. She taps Bisi's link. The gallery downloads six photos straight from Bisi's phone camera, about 4 megabytes each, and she waits, and waits, and leaves, with less data than before. Most of your clients' customers are on phones, many on slow or expensive data. Today you'll run the checks professionals run before showing a site to anyone, on **your own live site**, and fix what they find. You'll finish with a score you can screenshot.",
   core: "Test like a real customer on a cheap phone with slow data: make the photos light first, then fix the layout and access, and measure again.",
-  youNeed: ["Your live site from Days 3 to 5", "Google Chrome on your computer", "Your own phone (a budget Android is perfect for testing)", "The original photos you used, saved on your computer"],
+  youNeed: ["Your live site from Lessons 3 to 5", "Google Chrome on your computer", "Your own phone (a budget Android is perfect for testing)", "The original photos you used, saved on your computer"],
   sections: [
     {
       heading: "Why this matters so much in Nigeria",
@@ -175,7 +175,7 @@ const lesson: Lesson = {
           sketch: { layout: "flow", nodes: [{ draw: "camera", label: "a photo of the outfit" }, { draw: "chat", label: "alt text: “green boubou, gold embroidery”" }, { draw: "person", label: "a blind customer hears it", hot: true }] },
           caption: "Alt text in action: the photo carries a short description, and a screen reader says it aloud, so a blind customer knows what Bisi made.",
         },
-        { t: "list", items: ["Every meaningful photo has alt text describing it", "Words pass the 4.5 : 1 contrast rule (Day 1)", "Every form box has a visible label", "The whole site works with the keyboard alone: **Tab** moves forward, **Enter** clicks", "One H1 per page, then H2s for sections, in order"] },
+        { t: "list", items: ["Every meaningful photo has alt text describing it", "Words pass the 4.5 : 1 contrast rule (Lesson 1)", "Every form box has a visible label", "The whole site works with the keyboard alone: **Tab** moves forward, **Enter** clicks", "One H1 per page, then H2s for sections, in order"] },
         { t: "prompt", title: "Accessibility pass", text: "Do an accessibility pass on every page in site: add short, descriptive alt text to every meaningful image (describe the outfit, colour and detail), make sure every form field has a visible label, make sure there is exactly one h1 and the other headings go in order, make sure every link and button can be reached with the Tab key and shows a clear outline when focused, and fix any text colour below 4.5:1 contrast. List every change." },
         { t: "try", title: "Use the site without a mouse", minutes: 5, steps: ["Open your live site and click once in the browser's address bar.", "Press **Tab** again and again. Can you always see which link or button is selected?", "Reach the main button and press **Enter**. Does it work?"] },
         { t: "mistakes", items: [{ wrong: "Uploading photos straight from the phone", right: "WebP, resized, about 100 to 200 KB each" }, { wrong: "Testing only on a big laptop screen", right: "360 pixels wide in developer tools, then a real phone on mobile data" }, { wrong: "alt=\"IMG_2034.jpg\"", right: "alt=\"Green boubou with gold embroidery on the neckline\"" }] },
@@ -212,12 +212,12 @@ const lesson: Lesson = {
   quiz: [
     { q: "Bisi's gallery scores 38 on mobile and PageSpeed's top suggestion is about images. What do you fix first?", options: ["Change the colours", "Compress the photos to WebP, about 100 to 200 KB each, with Squoosh", "Add more photos", "Remove the menu"], answer: 1, why: "Huge photos are the most common cause of slow small-business sites; fix them first, then measure again.", from: 1, aim: "core" },
     { q: "Why check at 360 pixels wide and on a real phone, not just on your laptop?", options: ["Laptops are illegal", "Many customers use budget phones about that wide; laptop-only testing hides problems they'll hit", "Google requires exactly 360", "It makes the site cheaper"], answer: 1, why: "Your clients' customers are on phones, and clients will judge your own work on a phone too.", from: 2, aim: "portfolio-site" },
-    { q: "What's good alt text for a photo of Bisi's green boubou?", options: ["image1.jpg", "photo", "Green boubou with gold embroidery on the neckline", "Click here"], answer: 2, why: "It describes what a person would see. On Day 11 you'll see that Google uses it too.", from: 3, aim: "seo-keywords-onpage" },
-    { q: "Bisi's services page has three big titles, all marked H1. What's the fix?", options: ["Leave them: more H1s is better", "Keep one H1 for the main title and make the section titles H2s", "Delete all the titles", "Make them all bigger"], answer: 1, why: "One H1, then H2s, in order. On Day 11 your main search words go into that one H1.", from: 4, aim: "seo-keywords-onpage" },
+    { q: "What's good alt text for a photo of Bisi's green boubou?", options: ["image1.jpg", "photo", "Green boubou with gold embroidery on the neckline", "Click here"], answer: 2, why: "It describes what a person would see. On Lesson 11 you'll see that Google uses it too.", from: 3, aim: "seo-keywords-onpage" },
+    { q: "Bisi's services page has three big titles, all marked H1. What's the fix?", options: ["Leave them: more H1s is better", "Keep one H1 for the main title and make the section titles H2s", "Delete all the titles", "Make them all bigger"], answer: 1, why: "One H1, then H2s, in order. On Lesson 11 your main search words go into that one H1.", from: 4, aim: "seo-keywords-onpage" },
     { q: "A customer says the button jumped as the page loaded and she tapped the wrong thing. What's happening?", options: ["Her phone is broken", "Things jump while loading: a Core Web Vitals problem (CLS)", "The page is too fast", "The colours are wrong"], answer: 1, why: "Layout shift. Giving every photo its size in advance usually fixes it. You'll check this on every client site before handover.", from: 5, aim: "client-work" },
   ],
   celebrate: {
-    title: "Day 6 complete: fast on any phone",
+    title: "Lesson 6 complete: fast on any phone",
     proved: "You can measure a real website like a professional, make it fast on cheap phones and slow data, make it usable by everyone, and prove it with a score.",
     badge: "Fast on any phone",
     badgeDesc: "Got a live site to 80+ on mobile speed",

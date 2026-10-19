@@ -40,7 +40,7 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
           </div>
           {prog.next ? (
             <Link href={`/learn/${slug}/${prog.next.day}`} className={`${btn.primary} ${size.lg}`}>
-              <PlayCircle className="size-5" aria-hidden /> {prog.completed ? `Continue: Day ${prog.next.day}` : "Start Learning"}
+              <PlayCircle className="size-5" aria-hidden /> {prog.completed ? `Continue: Lesson ${prog.next.day}` : "Start Learning"}
             </Link>
           ) : (
             <Link href={`/learn/${slug}/final`} className={`${btn.primary} ${size.lg}`}>
@@ -68,7 +68,7 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
         {track.weeks.map((w) => (
           <section key={w.week} className="mt-12">
             <h2 className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-edge pb-2">
-              <span className="label bg-ink px-2 py-0.5 text-paper">Week {w.week}</span>
+              <span className="label bg-ink px-2 py-0.5 text-paper">Part {w.week}</span>
               <span className="display text-[21px] sm:text-[24px] text-ink">{w.title}</span>
             </h2>
             <ol className="mt-5 grid gap-4 md:grid-cols-2">
@@ -87,7 +87,7 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="flex flex-wrap items-center gap-2">
-                          <span className="label text-ink">Day {m.day}</span>
+                          <span className="label text-ink">Lesson {m.day}</span>
                           <PillarTag pillar={m.pillar} short />
                         </p>
                         <h3 className="display mt-1 text-[16px] sm:text-[17px] leading-tight text-ink">{m.title}</h3>
@@ -109,7 +109,7 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
                   return (
                     <li key={m.day}>
                       {status === "locked" ? (
-                        <div className="flex gap-4 border border-line bg-card/60 p-3 opacity-80" aria-label={`Day ${m.day}: locked`}>{inner}</div>
+                        <div className="flex gap-4 border border-line bg-card/60 p-3 opacity-80" aria-label={`Lesson ${m.day}: locked`}>{inner}</div>
                       ) : (
                         <Link href={`/learn/${slug}/${m.day}`} className="ink-block block-press flex gap-4 bg-card p-3">{inner}</Link>
                       )}

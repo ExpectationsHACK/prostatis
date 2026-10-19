@@ -9,7 +9,7 @@ const lesson: Lesson = {
     "Yesterday you built one page. Today you build the whole website: the five pages almost every small business needs. Bisi wants customers to see her prices before they ask, see real outfits she has made, meet the real Bisi, and reach her in one tap. You'll also learn the most important habit of building with AI: **small steps, checked one at a time**. Professionals never ask for “the whole website” in one message, and by the end of today you'll see why.",
   core: "Build in small, checked steps: shared parts first, then one page at a time, testing each on a phone before moving to the next.",
   youNeed: [
-    "Your `bisi-project` folder and live address from Day 3",
+    "Your `bisi-project` folder and live address from Lesson 3",
     "Real information from the owner: services, starting prices, address, opening hours, WhatsApp number",
     "3 to 10 real photos if you can get them (labelled boxes are fine for now)",
     "An email address the owner checks every day (for the contact form)",
@@ -100,7 +100,7 @@ const lesson: Lesson = {
         { t: "prompt", title: "One page at a time", text: "Now create site/services.html using the same styles.css and site.js. Services (use exactly these, they're from the owner): [list each service with a one-line description and its starting price in naira, e.g. Corporate gown, from ₦25,000]. Show each service as a card with an 'Order on WhatsApp' button that opens WhatsApp with the message: 'Hi Bisi, I'd like to order a [service name]'. Phone first. Don't change the shared files." },
         { t: "p", text: "Check it, then do **About**, **Gallery** and **Contact** the same way, one at a time. Replace any [placeholder] with the owner's real words and photos as soon as you have them." },
         { t: "tip", text: "Photos: ask the owner for real ones, such as finished outfits, the shop front, the owner at work. Put them in a folder `site/images`. For placeholders, free photos from **Unsplash** or **Pexels** are allowed. Never take photos from Google Images or another business's page." },
-        { t: "later", lesson: "responsive-fast-accessible", text: "use the photos as they are. On Day 6 you'll shrink each one so the site loads fast on mobile data, without it looking any different." },
+        { t: "later", lesson: "responsive-fast-accessible", text: "use the photos as they are. On Lesson 6 you'll shrink each one so the site loads fast on mobile data, without it looking any different." },
         {
           t: "scenario",
           title: "The gallery that sells",
@@ -155,7 +155,7 @@ const lesson: Lesson = {
           t: "define",
           term: "Access key",
           like: "a PO box number printed on an envelope. Anyone can see it; it only gets letters to the right box, it can't open the box or read the mail.",
-          meaning: "A code that tells Web3Forms which owner a form belongs to. It's **designed to sit in your page** where anyone can see it: it only lets visitors send messages to the owner. (Other keys you'll meet on Day 9 are private and must never go in a page.)",
+          meaning: "A code that tells Web3Forms which owner a form belongs to. It's **designed to sit in your page** where anyone can see it: it only lets visitors send messages to the owner. (Other keys you'll meet on Lesson 9 are private and must never go in a page.)",
         },
         {
           t: "steps",
@@ -229,13 +229,13 @@ const lesson: Lesson = {
   ],
   quiz: [
     { q: "What's the best way to build a five-page site with AI?", options: ["One giant message asking for everything", "Small steps: shared parts first, then one page at a time, checking each on a phone", "Copy another business's site", "Build it all and look only at the end"], answer: 1, why: "Small, checked steps catch problems early, while they're easy to fix.", from: 0, aim: "core" },
-    { q: "Bisi wants “Prices” added to the menu on all five pages. With the shared `site.js` component, how many files do you change?", options: ["Five, one per page", "One: the component file site.js", "None, it updates itself", "Ten"], answer: 1, why: "That's the point of a component. On Day 5 you'll build a page that deliberately leaves the menu out.", from: 1, aim: "landing-pages" },
-    { q: "What is the correct WhatsApp link for 0801 234 5678?", options: ["https://wa.me/08012345678", "https://wa.me/+2348012345678", "https://wa.me/2348012345678", "https://whatsapp.com/08012345678"], answer: 2, why: "Use 234 and drop the first 0, no plus sign. You'll use the same format for booking reminders on Day 8.", from: 2, aim: "booking-systems" },
+    { q: "Bisi wants “Prices” added to the menu on all five pages. With the shared `site.js` component, how many files do you change?", options: ["Five, one per page", "One: the component file site.js", "None, it updates itself", "Ten"], answer: 1, why: "That's the point of a component. On Lesson 5 you'll build a page that deliberately leaves the menu out.", from: 1, aim: "landing-pages" },
+    { q: "What is the correct WhatsApp link for 0801 234 5678?", options: ["https://wa.me/08012345678", "https://wa.me/+2348012345678", "https://wa.me/2348012345678", "https://whatsapp.com/08012345678"], answer: 2, why: "Use 234 and drop the first 0, no plus sign. You'll use the same format for booking reminders on Lesson 8.", from: 2, aim: "booking-systems" },
     { q: "How do you know the contact form really works?", options: ["It looks nice", "The AI said so", "A real test message arrived in the owner's inbox", "There's a Send button"], answer: 2, why: "Only a real test proves delivery. It's on your handover checklist for every client.", from: 3, aim: "deliver-get-paid" },
-    { q: "Which of these is safe to put inside a page anyone can see?", options: ["A Web3Forms access key", "A payment company's private key", "The owner's email password", "Your Cloudflare password"], answer: 0, why: "The access key only lets visitors send messages; private keys and passwords never go in a page. On Day 9 you'll meet a private payment key and keep it hidden.", from: 4, aim: "online-store-paystack" },
+    { q: "Which of these is safe to put inside a page anyone can see?", options: ["A Web3Forms access key", "A payment company's private key", "The owner's email password", "Your Cloudflare password"], answer: 0, why: "The access key only lets visitors send messages; private keys and passwords never go in a page. On Lesson 9 you'll meet a private payment key and keep it hidden.", from: 4, aim: "online-store-paystack" },
   ],
   celebrate: {
-    title: "Day 4 complete: Bisi has a real website",
+    title: "Lesson 4 complete: Bisi has a real website",
     proved: "You can build and publish a complete five-page business website, with working WhatsApp buttons and a form that delivers, using only free tools.",
     badge: "Site builder",
     badgeDesc: "Published a full five-page website",

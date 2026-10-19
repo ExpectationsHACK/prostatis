@@ -79,7 +79,7 @@ export const tools: ToolMeta[] = [
   // Bonus: getting paid
   t("lead_gen", "proposal-generator", "Proposal Template Generator", "A client-ready proposal with scope, timeline, pricing and terms.", "Sending a proposal right after a good call.", "ink", true),
   t("lead_gen", "client-pricing-calculator", "Client Pricing Calculator (₦→$)", "Work out what to charge foreign clients in dollars from your naira goal.", "Setting your rates for dollar clients.", "forest", true),
-  t("lead_gen", "invoice-generator", "Get Paid Generator", "A clean USD or NGN payment request with your payment details, print or save as PDF.", "Getting paid once the project is delivered.", "sand", true),
+  t("lead_gen", "invoice-generator", "Invoice Generator", "A clean USD or NGN invoice with your payment details, print or save as PDF.", "Getting paid once the project is delivered.", "sand", true),
   t("web_solutions", "whatsapp-business-bio", "WhatsApp Business Bio Generator", "A WhatsApp Business bio inside the 139-character limit.", "Setting up a client's WhatsApp Business profile.", "peach", true),
   t("automation", "cron-schedule-generator", "Cron Schedule Generator", "Cron expressions in plain English, with Lagos-time conversion.", "Scheduling agents and automations to run on time.", "ink", true),
   t("lead_gen", "hook-line-generator", "Hook Line Generator", "Scroll-stopping first lines for TikTok, Reels, X and LinkedIn.", "Promoting your services on social media.", "orange", true),

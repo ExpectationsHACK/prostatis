@@ -32,7 +32,8 @@ const steps: { step: Step; title: string; body: string }[] = [
 
 const compare: [string, boolean | string, boolean | string][] = [
   ["Price, paid once", formatNgn(plans[0].priceNgn), formatNgn(plans[1].priceNgn)],
-  ["Length", "14 days", "1 month"],
+  ["Length", "14 lessons", "26 lessons"],
+  ["Pace and access", "Self-paced, lifetime access", "Self-paced, lifetime access"],
   ["Lessons with practical tasks", String(fastTrack.modules.length), String(mainTrack.modules.length)],
   ["Business websites and landing pages", true, true],
   ["Online stores, booking systems and web apps", true, true],
@@ -49,8 +50,8 @@ const faqs = [
   { q: "Do I need to pay for any tools?", a: "No. Every lesson uses free tools: Google Antigravity to build, Cloudflare to put sites online (business use allowed), Paystack in test mode, and the free plans of the rest. Paid upgrades are always marked optional, and a client pays for their own domain." },
   { q: "Do I need a powerful laptop?", a: "No. Antigravity runs best on Windows 10 or 11 (64-bit) or a recent Mac, and any laptop with a modern browser can follow the free backup way. You can read lessons on your phone, but you build on a laptop." },
   { q: "How soon can I start earning?", a: "The Fast Track has you pricing your work and pitching real businesses in week two, with the scripts, proposal and portfolio to do it. How fast you land a client depends on how many businesses you reach, so we won't promise a date or an amount." },
-  { q: "What's the difference between the Fast Track and the Main Track?", a: "The Fast Track (14 days, ₦15,000) takes you from zero to building and selling websites. The Main Track (1 month, ₦30,000) includes all of it and adds full SEO, automation, AI agents and lead generation, so you can sell monthly services, not just one-off websites." },
-  { q: "Is it a subscription?", a: "No. You pay once per track. The Fast Track stays open for 30 days and the Main Track for 60, so you have time to catch up." },
+  { q: "What's the difference between the Fast Track and the Main Track?", a: "The Fast Track (14 lessons, ₦15,000) takes you from zero to building and selling websites. The Main Track (26 lessons, ₦30,000) includes all of it and adds full SEO, automation, AI agents and lead generation, so you can sell monthly services, not just one-off websites." },
+  { q: "Is it a subscription?", a: "No. You pay once per track and keep lifetime access, so you can learn at your own pace and come back to any lesson whenever you need it." },
   { q: "Do I get a certificate?", a: "Yes. Pass every lesson and the final assessment to get a certificate of completion: download it, receive a copy by email, and share its public proof page so clients can check it's real." },
   { q: "Can I start with the Fast Track and upgrade later?", a: "Yes. Everything in the Fast Track is part of the Main Track, so nothing you learn is wasted." },
 ];
@@ -121,7 +122,7 @@ export default function Home() {
                   <h3 className="display text-[20px] sm:text-[22px] text-ink">{w.title}</h3>
                   <p className="mt-1.5 flex-1 text-[15px] leading-relaxed text-muted">{w.body}</p>
                   <p className="mt-4 inline-flex w-fit items-center gap-1.5 rounded-full bg-brand-wash px-2.5 py-1 text-[12.5px] font-semibold text-brand-text">
-                    Built on Day {w.day} of the Fast Track
+                    Built in lesson {w.day} of the Fast Track
                   </p>
                 </div>
               </article>

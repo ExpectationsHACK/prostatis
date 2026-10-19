@@ -30,9 +30,9 @@ export function Hero() {
             </Link>
           </div>
           <ul className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-[13.5px] text-muted lg:justify-start">
-            <li className="flex items-center gap-1.5"><Clock className="size-4 text-ink" aria-hidden /> Fast Track in {fast.period}</li>
+            <li className="flex items-center gap-1.5"><Clock className="size-4 text-ink" aria-hidden /> Fast Track: {fast.period}, self-paced</li>
             <li className="flex items-center gap-1.5"><Wallet className="size-4 text-ink" aria-hidden /> {formatNgn(fast.priceNgn)}, paid once</li>
-            <li className="flex items-center gap-1.5"><Award className="size-4 text-ink" aria-hidden /> Verified certificate</li>
+            <li className="flex items-center gap-1.5"><Award className="size-4 text-ink" aria-hidden /> Lifetime access</li>
           </ul>
         </div>
 

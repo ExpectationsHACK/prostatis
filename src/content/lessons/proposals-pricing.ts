@@ -8,7 +8,7 @@ const lesson: Lesson = {
   intro:
     "You now have skills worth real money: websites, bookings, shops, portals, SEO, automations and AI assistants. Today you'll package and price them so business owners understand exactly what they're buying, and say yes. The secret: sell **outcomes** (more orders, fewer evenings on WhatsApp), not hours or technology. Nobody wakes up wanting “a Cloudflare Function”; Bisi wanted her Saturdays back and her customers to stop asking “how much?”.",
   core: "Sell three clear packages described as results, priced above your floor using what the result is worth to the client, and end every proposal with one clear next step.",
-  youNeed: ["Your list of skills from Weeks 1 to 3", "How many hours your practice projects took", "What 3 local competitors charge", "The hours-and-naira numbers from your workflow mapping (Day 14)"],
+  youNeed: ["Your list of skills from Weeks 1 to 3", "How many hours your practice projects took", "What 3 local competitors charge", "The hours-and-naira numbers from your workflow mapping (Lesson 14)"],
   sections: [
     {
       heading: "Step 1: Package, don't list",
@@ -51,7 +51,7 @@ const lesson: Lesson = {
           like: "a generator installer charging for keeping a shop's sales flowing through every outage, not just for the hours of wiring.",
           meaning: "Setting your price by what the result is worth to the client, not only by your hours. If an automation saves Bisi ₦78,000 of time every month, ₦150,000 to build it is a bargain for her.",
         },
-        { t: "list", items: ["**Cost-based**: your hours × a fair hourly rate + costs. This is your **floor**.", "**Market-based**: what others charge for similar work in your area.", "**Value-based**: what the result is worth to the client, using the numbers from Day 14."] },
+        { t: "list", items: ["**Cost-based**: your hours × a fair hourly rate + costs. This is your **floor**.", "**Market-based**: what others charge for similar work in your area.", "**Value-based**: what the result is worth to the client, using the numbers from Lesson 14."] },
         { t: "tool", slug: "client-pricing-calculator", why: "Enter hours, costs and the client's value: see your floor, a fair price and a value-based price." },
         { t: "warn", text: "Don't underprice to win work. Very low prices attract difficult clients and make you look inexperienced. Charge fairly, then deliver excellently." },
         { t: "check", q: "A booking system will save a salon about ₦300,000 a month in missed appointments. Which pricing approach uses that fact?", options: ["Cost-based", "Value-based", "Random"], answer: 1, why: "Value-based pricing looks at what the result is worth to the client." },
@@ -145,7 +145,7 @@ const lesson: Lesson = {
     { q: "How should a proposal end?", options: ["With your life story", "With one clear next step to say yes", "With a long list of technologies", "With nothing"], answer: 1, why: "Make saying yes easy. Tomorrow, the deposit request follows that yes.", from: 4, aim: "deliver-get-paid" },
   ],
   celebrate: {
-    title: "Day 24 complete: your offer is ready",
+    title: "Lesson 24 complete: your offer is ready",
     proved: "You can turn a month of skills into clear packages, defend your price with the value you create, and make saying yes easy.",
     badge: "Deal maker",
     badgeDesc: "Packaged and priced your services",

@@ -58,14 +58,14 @@ const lesson: Lesson = {
     {
       heading: "Step 1: Choose the customer list",
       blocks: [
-        { t: "table", columns: ["Option", "Use it when", "Cost"], rows: [["Google Sheets", "Starting out; one or two people use it", "Free"], ["Airtable", "They want board views and filters, still no code", "Free plan"], ["HubSpot's free CRM", "A sales team, email tracking", "Free plan"], ["Your own Supabase table", "It's part of a web app you've built (Day 10)", "Free plan"]] },
+        { t: "table", columns: ["Option", "Use it when", "Cost"], rows: [["Google Sheets", "Starting out; one or two people use it", "Free"], ["Airtable", "They want board views and filters, still no code", "Free plan"], ["HubSpot's free CRM", "A sales team, email tracking", "Free plan"], ["Your own Supabase table", "It's part of a web app you've built (Lesson 10)", "Free plan"]] },
         { t: "tip", text: "Simple beats clever. A Google Sheet the owner actually opens is worth more than a powerful CRM nobody uses. Columns: Name, Phone, Source, Need, Status, Next step, Last contact." },
       ],
     },
     {
       heading: "Step 2: One person, one record",
       blocks: [
-        { t: "p", text: "The biggest mistake is creating a new record every time the same person writes: once from the form, again on WhatsApp. The fix: use the **phone number** as the unique key (Day 15), always written the same way." },
+        { t: "p", text: "The biggest mistake is creating a new record every time the same person writes: once from the form, again on WhatsApp. The fix: use the **phone number** as the unique key (Lesson 15), always written the same way." },
         {
           t: "define",
           term: "Normalise",
@@ -89,7 +89,7 @@ const lesson: Lesson = {
         {
           t: "steps",
           items: [
-            { title: "Website form → Make (done on Day 15)", detail: "Open the enquiries scenario. After the webhook, add **Tools** → **Set variable** with the normalising formula." },
+            { title: "Website form → Make (done on Lesson 15)", detail: "Open the enquiries scenario. After the webhook, add **Tools** → **Set variable** with the normalising formula." },
             { title: "Find or create", detail: "Add **Google Sheets** → **Search Rows** where Phone equals the normalised number. Then a **Router** with two paths: if a row was found, **Update a Row** (last contact, need); if not, **Add a Row** (status New)." },
             { title: "Website chat → Make", detail: "Ask your AI assistant to make the chat function send a short summary to a second Make webhook (stored as a Cloudflare secret) whenever the assistant hands over or the customer leaves a phone number. Use the same find-or-create steps." },
             { title: "WhatsApp, honestly", detail: "The free Business app can't send chats to Make. Give Bisi a 10-second Google Form on her home screen (name, phone, need) for hot WhatsApp enquiries, and send that form to the same sheet. (A Cloud API bot from the stretch goal can send to a webhook directly.)" },
@@ -142,7 +142,7 @@ const lesson: Lesson = {
     { q: "How do you know the whole system works?", options: ["It looks connected", "An end-to-end test as several customers, including one who contacts you twice", "Make says “active”", "Ask the owner"], answer: 1, why: "Only a full journey test proves it. It's one of the checks in your final project.", from: 4, aim: "capstone" },
   ],
   celebrate: {
-    title: "Day 18 complete: one connected system",
+    title: "Lesson 18 complete: one connected system",
     proved: "You can join a website, an AI assistant and automations into one front desk that recognises returning customers and only interrupts the owner when it matters.",
     badge: "System builder",
     badgeDesc: "Connected site, assistant and automations",

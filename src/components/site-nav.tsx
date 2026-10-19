@@ -117,8 +117,8 @@ export function SiteNav() {
           <nav className="flex flex-col" aria-label="Menu">
             {[
               { href: "/#inside", label: "What's inside" },
-              { href: "/tracks/fast-track", label: "Fast Track · 14 days" },
-              { href: "/tracks/main-track", label: "Main Track · 1 month" },
+              { href: "/tracks/fast-track", label: "Fast Track · 14 lessons" },
+              { href: "/tracks/main-track", label: "Main Track · 26 lessons" },
               { href: "/tools", label: "50 free tools" },
               { href: "/pricing", label: "Pricing" },
               { href: "/blog", label: "Blog" },

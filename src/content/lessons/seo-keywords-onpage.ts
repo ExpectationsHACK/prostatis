@@ -31,7 +31,7 @@ const lesson: Lesson = {
           caption: "How a page reaches a customer on Google: the messenger visits and reads the page, writes it into the register, and when someone searches, the best-matching pages are shown first.",
         },
         { t: "figure", figure: { diagram: "search-journey", caption: "Google visits your page (crawl), stores what it's about (index), orders the results (rank), and a customer clicks." } },
-        { t: "p", text: "Google wants to show the most helpful page for each search. It reads a page's **title**, **headings**, **words** and **links**, and checks things like speed, whether it works on phones (you did that on Day 6) and whether other sites trust it. You can't control everything, but you can make every page crystal clear." },
+        { t: "p", text: "Google wants to show the most helpful page for each search. It reads a page's **title**, **headings**, **words** and **links**, and checks things like speed, whether it works on phones (you did that on Lesson 6) and whether other sites trust it. You can't control everything, but you can make every page crystal clear." },
         { t: "figure", figure: { diagram: "serp-anatomy", caption: "One search result: the address, the title (about 60 characters), the description (about 155 characters)." } },
       ],
     },
@@ -98,7 +98,7 @@ const lesson: Lesson = {
     {
       heading: "Step 3: Headings, words and links",
       blocks: [
-        { t: "list", items: ["**One H1 per page** (Day 6) that includes the main keyword naturally: “Corporate gowns sewn to your measurements in Lagos”.", "**H2s** for each section, using related words.", "Answer what customers ask: prices, location, how long, what's included.", "**Alt text** on photos (Day 6) also helps Google Images understand them."] },
+        { t: "list", items: ["**One H1 per page** (Lesson 6) that includes the main keyword naturally: “Corporate gowns sewn to your measurements in Lagos”.", "**H2s** for each section, using related words.", "Answer what customers ask: prices, location, how long, what's included.", "**Alt text** on photos (Lesson 6) also helps Google Images understand them."] },
         {
           t: "define",
           term: "Internal link",
@@ -225,7 +225,7 @@ const lesson: Lesson = {
     { q: "A customer searches “tailor near me”. What do they most likely want?", options: ["To learn how tailoring works", "To compare prices for next year", "To find a tailor and go now", "Nothing"], answer: 2, why: "“Near me” means ready to act. In the Main Track, the Google Business Profile wins exactly these searches.", from: 4, aim: "local-seo-gbp" },
   ],
   celebrate: {
-    title: "Day 11 complete: Google knows Bisi exists",
+    title: "Lesson 11 complete: Google knows Bisi exists",
     proved: "You can find the words customers really search, put them where Google reads them, and tell Google about a site: the start of the SEO work businesses pay for every month.",
     badge: "Found on Google",
     badgeDesc: "Submitted a site to Google with a sitemap",

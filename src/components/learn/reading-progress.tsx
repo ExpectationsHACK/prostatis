@@ -36,7 +36,7 @@ export function ReadingProgress({ day, total, title, doneLessons, steps }: { day
     <div className="sticky top-14 z-20 border-b border-edge bg-paper/95 backdrop-blur print:hidden">
       <div className="mx-auto flex h-11 max-w-6xl items-center gap-3 px-4">
         <p className="label shrink-0 text-brand-text">
-          Day {day}/{total}
+          Lesson {day}/{total}
         </p>
         <p className="min-w-0 flex-1 truncate font-mono text-[12.5px] font-bold text-ink">{title}</p>
         <ol className="hidden items-center gap-2 md:flex" aria-label="Today's steps">

@@ -8,7 +8,7 @@ const lesson: Lesson = {
   intro:
     "You've built a lot for Bisi. Now build the one website you'll share more than any other: **your own**. When a business owner asks “Have you done this before?”, this page answers in ten seconds, on their phone, while you're still typing your reply. Clients don't hire skills; they hire proof they can see. Today you'll turn what you've already built into that proof, honestly labelled, and put it live for free.",
   core: "Clients hire proof: show who you help, real (or honestly labelled) work with results, and one easy way to hire you.",
-  youNeed: ["Screenshots of your work so far, especially Bisi's site (home, booking, shop, portal)", "A clear, friendly photo of yourself", "Your own mini brand kit (do Day 1's steps for yourself in 20 minutes)", "Optional: your own domain (you can finish on a free .pages.dev address)"],
+  youNeed: ["Screenshots of your work so far, especially Bisi's site (home, booking, shop, portal)", "A clear, friendly photo of yourself", "Your own mini brand kit (do Lesson 1's steps for yourself in 20 minutes)", "Optional: your own domain (you can finish on a free .pages.dev address)"],
   sections: [
     {
       heading: "What a page that wins work contains",
@@ -71,7 +71,7 @@ const lesson: Lesson = {
     {
       heading: "Step 2: Build it",
       blocks: [
-        { t: "p", text: "It's a new project: make a folder `yourname-portfolio` with `site` and `notes` inside (exactly like Day 3), write a short project brief about **you**, and open the folder in your builder as a new project." },
+        { t: "p", text: "It's a new project: make a folder `yourname-portfolio` with `site` and `notes` inside (exactly like Lesson 3), write a short project brief about **you**, and open the folder in your builder as a new project." },
         { t: "prompt", title: "Your portfolio", text: "Read my project brief first (about me: name, city, niche, colours, fonts, voice) and follow it.\n\nCreate ONE file, site/index.html, a one-page portfolio for me. Sections: a hero with the headline '[your headline]', one line under it, and a 'Hire me on WhatsApp' button (https://wa.me/[your number]?text=Hi%2C%20I%20saw%20your%20portfolio); 2 case study cards, each with a screenshot from images/, the business, the problem, what I built and the result, and a label 'Practice project' where true; 3 services with 'from' prices; a short about section with my photo; a contact section with WhatsApp and email. Phone first, fast, accessible, one h1, its own title and meta description." },
         { t: "tool", slug: "hero-copy-generator", why: "Write five headline options for yourself, then pick the clearest." },
         {
@@ -87,14 +87,14 @@ const lesson: Lesson = {
         {
           t: "steps",
           items: [
-            { title: "Put it live", detail: "Create a GitHub repository and a GitHub-connected Cloudflare project, exactly as on Day 7. Name the project after you, e.g. `ada-builds`: your address becomes ada-builds.pages.dev." },
-            { title: "Check it like a client", detail: "Run PageSpeed on it (Day 6) and the meta tag checker below. Your own site must be excellent: it's the first sample a client sees." },
+            { title: "Put it live", detail: "Create a GitHub repository and a GitHub-connected Cloudflare project, exactly as on Lesson 7. Name the project after you, e.g. `ada-builds`: your address becomes ada-builds.pages.dev." },
+            { title: "Check it like a client", detail: "Run PageSpeed on it (Lesson 6) and the meta tag checker below. Your own site must be excellent: it's the first sample a client sees." },
             { title: "Share it everywhere", detail: "WhatsApp Business: **Settings** → **Business tools** → **Business profile** → **Website**. Also your Instagram bio, Facebook and LinkedIn." },
           ],
         },
         { t: "tool", slug: "meta-tag-generator", why: "See how your portfolio looks in Google and when shared on WhatsApp, and fix the title and description." },
         { t: "try", title: "The 10-second test", minutes: 5, steps: ["Send your live link to two friends.", "Ask: “In 10 seconds: who do I help, and how would you hire me?”", "If either hesitates, sharpen the headline and the button."] },
-        { t: "upgrade", title: "Your own domain", text: "A name like adabuilds.com.ng costs a few thousand naira a year (.com.ng is among the cheapest; compare renewal prices at NiRA-accredited registrars). It's worth buying with the money from your first client, then connecting it exactly as on Day 7." },
+        { t: "upgrade", title: "Your own domain", text: "A name like adabuilds.com.ng costs a few thousand naira a year (.com.ng is among the cheapest; compare renewal prices at NiRA-accredited registrars). It's worth buying with the money from your first client, then connecting it exactly as on Lesson 7." },
         { t: "tool", slug: "domain-name-generator", why: "Find an available, sayable name for when you're ready." },
         { t: "mistakes", items: [{ wrong: "Listing tools instead of results", right: "“I build websites that bring Lagos tailors more orders”" }, { wrong: "Presenting a practice project as a paid client job", right: "Labelling it “Practice project” or “Concept”" }, { wrong: "A slow page full of huge screenshots", right: "WebP screenshots and a mobile score of 80+" }] },
         { t: "win", title: "Your portfolio is live", proved: "you can present your own work honestly and persuasively, at a link that answers “have you done this before?” in ten seconds.", cue: "Put the link in your WhatsApp profile today. Finish your mission for the **Proof on display** badge." },

@@ -9,7 +9,7 @@ export function LessonCard({ m, i, href }: { m: Module; i: number; href?: string
     <>
       <div className="relative border-b border-edge">
         <LessonThumb thumb={m.thumb} index={m.day + i} />
-        <span className="display absolute left-2 top-2 rounded-full border border-edge bg-paper px-2 py-0.5 text-[15px] text-ink">Day {m.day}</span>
+        <span className="display absolute left-2 top-2 rounded-full border border-edge bg-paper px-2 py-0.5 text-[15px] text-ink">Lesson {m.day}</span>
       </div>
       <div className="flex flex-1 flex-col p-4">
         <p>
@@ -45,7 +45,7 @@ export function TrackLessons({ track, hrefFor, compact = false }: { track: Track
       {track.weeks.map((w) => (
         <div key={w.week} className={"mx-auto max-w-6xl " + (compact ? "mt-10" : "mt-10 sm:mt-14")}>
           <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-edge pb-3">
-            <span className="label bg-ink px-2 py-1 text-paper">Week {w.week}</span>
+            <span className="label bg-ink px-2 py-1 text-paper">Part {w.week}</span>
             <h3 className={"display text-ink " + (compact ? "text-[20px] sm:text-[26px]" : "text-[22px] sm:text-[32px]")}>{w.title}</h3>
             <p className="w-full font-mono text-[13px] text-muted sm:w-auto">{w.blurb}</p>
           </div>

@@ -292,7 +292,7 @@ Research and rebuild: October 2026. Covers all 56 free tools (50 core + 6 bonus)
 |---|---|---|---|
 | Proposal Generator | ✅ | AI writes the persuasive parts from call notes, using only the prices and timeline given | No multi-option package builder yet |
 | Client Pricing Calculator | ✅ | Today's USD→NGN rate, one tap to use it | - |
-| Get Paid Generator | ✅ | Shows the naira equivalent of a dollar request at today's rate (on screen only, not printed) | No reminder schedule yet |
+| Invoice Generator | ✅ | Shows the naira equivalent of a dollar request at today's rate (on screen only, not printed) | No reminder schedule yet |
 | WhatsApp Business Bio | ✅ | AI versions within the 139-character "About" limit, plus greeting and away messages | - |
 | Cron Schedule Generator | ✅ | Free targets: a Cloudflare Worker (`wrangler.toml`), GitHub Actions and crontab. Free-plan limits listed: Cloudflare allows 5 cron triggers per account; GitHub schedules run at most every 5 minutes; Make runs at most every 15 minutes | - |
 | Hook Line Generator | ✅ | AI hooks from the real offer; claims checked | - |

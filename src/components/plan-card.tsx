@@ -38,9 +38,9 @@ export function PlanCard({ plan, show, badge }: { plan: Plan; show?: number; bad
         </p>
         <dl className="mt-5 grid grid-cols-3 divide-x-2 divide-line rounded-[12px] border-2 border-line text-center">
           {[
-            [CalendarClock, plan.period, "course"],
             [Layers, `${lessonsOf(plan.id)} lessons`, "with tasks"],
-            [ShieldCheck, `${plan.accessDays} days`, "access"],
+            [CalendarClock, "Self-paced", "learn anytime"],
+            [ShieldCheck, "Lifetime", "access"],
           ].map(([Icon, v, k]) => {
             const I = Icon as typeof Layers;
             return (

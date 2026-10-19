@@ -154,7 +154,7 @@ const lesson: Lesson = {
     { q: "Who pays for the client's domain, and in whose name?", options: ["You, in your name, forever", "The client, in their own name", "Cloudflare", "Nobody"], answer: 1, why: "It's the business's asset. You'll check ownership of every account at handover.", from: 5, aim: "deliver-get-paid" },
   ],
   celebrate: {
-    title: "Day 13 complete: open for business",
+    title: "Lesson 13 complete: open for business",
     proved: "You can turn your skills into a clear, priced offer and start real conversations with business owners who need it.",
     badge: "First pitches",
     badgeDesc: "Packaged an offer and sent 10 pitches",

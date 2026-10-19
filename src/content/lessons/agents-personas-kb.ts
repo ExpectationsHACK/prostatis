@@ -79,7 +79,7 @@ const lesson: Lesson = {
         {
           t: "scenario",
           title: "“Help customers book a fitting”, broken down",
-          text: "1) Understand which outfit → answer from the price list. 2) They want a date → send the Cal.com booking link (Day 8). 3) They ask about the deposit → explain the rule from the knowledge base. 4) They mention a skin reaction to a fabric → **hand over to Bisi**. 5) They're upset about a late order → **hand over to Bisi**. Suddenly a vague job is five clear steps, and you can see exactly where the risk lives.",
+          text: "1) Understand which outfit → answer from the price list. 2) They want a date → send the Cal.com booking link (Lesson 8). 3) They ask about the deposit → explain the rule from the knowledge base. 4) They mention a skin reaction to a fabric → **hand over to Bisi**. 5) They're upset about a late order → **hand over to Bisi**. Suddenly a vague job is five clear steps, and you can see exactly where the risk lives.",
         },
       ],
     },
@@ -142,11 +142,11 @@ const lesson: Lesson = {
     { q: "What is the knowledge base for?", options: ["Storing passwords", "The approved facts the assistant may use, its only source of truth", "Designing the logo", "Hosting the website"], answer: 1, why: "It keeps answers accurate and stops invented ones.", from: 0, aim: "core" },
     { q: "A customer asks something that isn't in the knowledge base. What should the assistant do?", options: ["Guess confidently", "Say it doesn't know and offer to connect them to a person", "Make up a price", "Ignore the question"], answer: 1, why: "An honest handoff protects the business. Tomorrow the same rule runs on WhatsApp and the website.", from: 1, aim: "whatsapp-bots-cs-agents" },
     { q: "Which message must always go to a person?", options: ["“What time do you open?”", "An upset complaint, a refund request or a skin reaction", "“Where are you located?”", "“How much is a boubou?”"], answer: 1, why: "Sensitive situations need human judgement. Tomorrow you'll build the handoff itself.", from: 2, aim: "whatsapp-bots-cs-agents" },
-    { q: "Why keep a 20-question test script?", options: ["For fun", "To re-test the assistant every time the instructions or facts change", "The law requires it", "It isn't needed"], answer: 1, why: "Changes can break answers that used to work. Re-running it is part of the weekly checks on Day 19.", from: 3, aim: "monitoring-handover" },
-    { q: "What's the number-one reason AI assistants fail in real businesses?", options: ["The wrong font", "Out-of-date facts", "Too many emojis", "The domain name"], answer: 1, why: "Agree who updates the facts and when; on Day 19 it goes into the system's instruction manual.", from: 4, aim: "monitoring-handover" },
+    { q: "Why keep a 20-question test script?", options: ["For fun", "To re-test the assistant every time the instructions or facts change", "The law requires it", "It isn't needed"], answer: 1, why: "Changes can break answers that used to work. Re-running it is part of the weekly checks on Lesson 19.", from: 3, aim: "monitoring-handover" },
+    { q: "What's the number-one reason AI assistants fail in real businesses?", options: ["The wrong font", "Out-of-date facts", "Too many emojis", "The domain name"], answer: 1, why: "Agree who updates the facts and when; on Lesson 19 it goes into the system's instruction manual.", from: 4, aim: "monitoring-handover" },
   ],
   celebrate: {
-    title: "Day 16 complete: an assistant you can trust",
+    title: "Lesson 16 complete: an assistant you can trust",
     proved: "You can turn a general AI into a business assistant that sticks to approved facts, admits what it doesn't know, and calls the owner when it should.",
     badge: "Agent trainer",
     badgeDesc: "Built and tested an AI assistant",

@@ -1,10 +1,10 @@
-import { CalendarPlus, Check, CircleAlert, FlaskConical, Lock, Sparkles } from "lucide-react";
+import { BadgeCheck, Check, CircleAlert, FlaskConical, Lock, PlayCircle, Sparkles } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { LogoMark } from "@/components/brand";
 import { btn, size } from "@/components/ui";
-import { getMySubscription, getPlan, hasAccess } from "@/lib/membership";
+import { getMySubscription, getPlan, hasAccess, includesPlan } from "@/lib/membership";
 import { isTestKey, paymentsMode } from "@/lib/paystack";
 import { formatNgn, plans } from "@/lib/site";
 import { getCurrentUser } from "@/lib/supabase/server";
@@ -20,8 +20,6 @@ const errors: Record<string, string> = {
   record: "The payment went through but we couldn't update your account. Please try again, or message us and we'll fix it right away.",
 };
 
-const longDate = (d: Date) => d.toLocaleDateString("en-NG", { day: "numeric", month: "long", year: "numeric", timeZone: "Africa/Lagos" });
-
 export default async function CheckoutPage({ params, searchParams }: { params: Promise<{ plan: string }>; searchParams: Promise<{ error?: string }> }) {
   const plan = getPlan((await params).plan);
   if (!plan) notFound();
@@ -33,25 +31,21 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
   const mode = paymentsMode();
   const active = hasAccess(sub);
   const current = active && sub ? getPlan(sub.plan) : undefined;
-  const end = active && sub ? new Date(sub.current_period_end) : null;
-
-  // Members can buy again: an upgrade, or more time. Buying always adds days to the current
-  // end date (see recordSuccessfulPayment), so it's never wasted, but say exactly what happens.
-  const note = !current
-    ? null
-    : sub?.permanent
-      ? { icon: CalendarPlus, title: "This is a permanent account", text: "It already has the Main Track for good. Paying here would charge your card for real and change nothing, so to test payments use a different account." }
-    : current.id === plan.id
-      ? { icon: CalendarPlus, title: `You already have the ${plan.name}`, text: `Your access runs until ${longDate(end!)}. Paying again adds ${plan.accessDays} days to that date.` }
-      : plan.id === "main_track"
-        ? { icon: Sparkles, title: "Upgrade to the Main Track", text: `You keep all your Fast Track progress. The Main Track opens straight away, and ${plan.accessDays} days are added to your current end date (${longDate(end!)}).` }
-        : { icon: CalendarPlus, title: "You already have the Main Track", text: `It includes everything in the Fast Track. Buying the Fast Track would only add ${plan.accessDays} days to your access (now until ${longDate(end!)}).` };
+  // Access is lifetime, so a track you already have (the Main Track includes the Fast Track) is
+  // never sold again: the page shows the way back to the course instead of a pay button.
+  const owned = includesPlan(sub, plan.id);
+  const slug = (sub?.plan === "main_track" || plan.id === "main_track") && owned ? "main-track" : "fast-track";
+  const note = owned
+    ? { icon: BadgeCheck, title: current?.id === plan.id ? `You already own the ${plan.name}` : "The Main Track already includes this", text: "Your access is lifetime, so there's nothing to pay. Pick up where you left off." }
+    : current && plan.id === "main_track"
+      ? { icon: Sparkles, title: "Upgrade to the Main Track", text: "You keep all your Fast Track progress, and the Main Track opens straight away, with lifetime access." }
+      : null;
 
   return (
     <div className="mx-auto max-w-[480px] px-4 py-12 sm:py-14">
       <div className="flex flex-col items-center text-center">
         <LogoMark size={44} />
-        <h1 className="display mt-5 text-[28px] leading-tight text-ink sm:text-[40px]">{current?.id === plan.id ? `Add time to the ${plan.name}` : current && plan.id === "main_track" ? "Upgrade to the Main Track" : `Enroll in the ${plan.name}`}</h1>
+        <h1 className="display mt-5 text-[28px] leading-tight text-ink sm:text-[40px]">{owned ? `You have the ${plan.name}` : current && plan.id === "main_track" ? "Upgrade to the Main Track" : `Enroll in the ${plan.name}`}</h1>
         <p className="mt-1 break-all font-mono text-[13px] text-muted">Signed in as {user.email}</p>
       </div>
 
@@ -88,7 +82,7 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
           <span className="display text-[21px] sm:text-[24px] text-ink">{plan.name}</span>
           <span className="tabular text-right">
             <span className="display text-[24px] sm:text-[28px] text-ink">{formatNgn(plan.priceNgn)}</span>
-            <span className="block font-mono text-[12px] text-muted">one payment · {plan.period}</span>
+            <span className="block font-mono text-[12px] text-muted">one payment · lifetime access</span>
           </span>
         </div>
         <ul className="mt-5 space-y-2.5 border-t border-line pt-5">
@@ -107,7 +101,11 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
           </p>
         )}
 
-        {mode === "disabled" ? (
+        {owned ? (
+          <Link href={`/learn/${slug}`} className={`${btn.primary} ${size.lg} mt-6 w-full`}>
+            <PlayCircle className="size-5" aria-hidden /> Start Learning
+          </Link>
+        ) : mode === "disabled" ? (
           <p className="mt-6 rounded-[12px] border border-edge bg-sunk px-3 py-3 text-center text-[14px] text-ink">Payments aren&apos;t open yet. Check back soon.</p>
         ) : (
           <form action={startCheckout} className="mt-6">
@@ -117,7 +115,7 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
             </button>
           </form>
         )}
-        <p className="mt-3 text-center text-[13px] text-muted">Card, bank transfer or USSD. One payment · {plan.accessDays} days of access · nothing renews.</p>
+        {!owned && <p className="mt-3 text-center text-[13px] text-muted">Card, bank transfer or USSD. One payment · {plan.period} · lifetime access · nothing renews.</p>}
 
         {mode === "paystack" && isTestKey() && (
           <p className="mt-5 flex items-start gap-2 rounded-[12px] border border-edge bg-brand-wash px-3 py-2.5 text-[13px] text-ink">

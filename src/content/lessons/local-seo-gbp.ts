@@ -6,9 +6,9 @@ const lesson: Lesson = {
   minutes: 100,
   outcome: "Bisi's Google Business Profile complete and submitted for verification, her name, address and phone written identically everywhere online, a simple system that asks every happy customer for a review, and a month of profile updates planned.",
   intro:
-    "Search “tailor near me” anywhere in Yaba and look at the top of the results: before any website, Google shows a **map with three businesses**. Getting Bisi into those three can bring more calls than her website ever will. On Day 11 you started her free Google Business Profile. Today you finish it properly, make her details match everywhere, and set up the review habit that keeps her climbing. It's one of the most valuable things you can do for any local business, and it costs nothing.",
+    "Search “tailor near me” anywhere in Yaba and look at the top of the results: before any website, Google shows a **map with three businesses**. Getting Bisi into those three can bring more calls than her website ever will. On Lesson 11 you started her free Google Business Profile. Today you finish it properly, make her details match everywhere, and set up the review habit that keeps her climbing. It's one of the most valuable things you can do for any local business, and it costs nothing.",
   core: "Google ranks local businesses by relevance, distance and prominence: a complete, accurate profile and a steady flow of genuine reviews are the parts you control.",
-  youNeed: ["The owner's cooperation (they must verify and own the profile)", "The profile you started on Day 11, or the owner's Google account", "10+ real photos of the business", "The exact business name, address, phone and opening hours"],
+  youNeed: ["The owner's cooperation (they must verify and own the profile)", "The profile you started on Lesson 11, or the owner's Google account", "10+ real photos of the business", "The exact business name, address, phone and opening hours"],
   sections: [
     {
       heading: "What decides the three businesses on the map",
@@ -34,7 +34,7 @@ const lesson: Lesson = {
         {
           t: "steps",
           items: [
-            { title: "Open the profile with the owner", detail: "On the owner's phone or laptop, signed into **their** Google account, go to `business.google.com`. Open the profile you started on Day 11, or search for the business and claim it." },
+            { title: "Open the profile with the owner", detail: "On the owner's phone or laptop, signed into **their** Google account, go to `business.google.com`. Open the profile you started on Lesson 11, or search for the business and claim it." },
             { title: "Choose the primary category", detail: "The most important field. For Bisi: **Tailor**. Add one or two extra categories only if true, e.g. **Dressmaker**." },
             { title: "Verify the business", detail: "Google often asks for a short **video** recorded in one continuous take on a phone: the street or signboard outside, the inside with the sewing machines, and the owner managing the shop (unlocking the door, using the equipment). Follow the on-screen instructions exactly." },
             { title: "Add yourself as a helper", detail: "After verification, the owner opens **Business Profile settings** → **People and access** → **Add**, and adds your email as a **Manager**. The owner stays the owner." },
@@ -151,7 +151,7 @@ const lesson: Lesson = {
     { q: "Why not name the profile “Stitches by Bisi: Best Tailor Yaba Lagos”?", options: ["It's too long to type", "It breaks Google's rules and can get the profile suspended", "It costs money", "Customers can't read it"], answer: 1, why: "The name must match the real-world business name. You'll explain this to every local client.", from: 4, aim: "client-work" },
   ],
   celebrate: {
-    title: "Day 12 complete: Bisi is on the map",
+    title: "Lesson 12 complete: Bisi is on the map",
     proved: "You can put a local business on Google Maps properly, make its details match everywhere, and set up the review habit that keeps it climbing.",
     badge: "On the map",
     badgeDesc: "Completed a Google Business Profile",

@@ -70,10 +70,10 @@ const lesson: Lesson = {
           like: "the bill a tailor writes on her order book: what was ordered, how much, when it's due and where to pay.",
           meaning: "A clear document asking for payment: your details, the client's, a reference number, what it's for, the amount, the due date and how to pay. Many people call it an invoice.",
         },
-        { t: "tool", slug: "invoice-generator", why: "The Get Paid Generator creates a clean naira (or dollar) payment request with your bank, Paystack or other payment details. Save it as a PDF or print it." },
+        { t: "tool", slug: "invoice-generator", why: "The Invoice Generator creates a clean naira (or dollar) payment request with your bank, Paystack or other payment details. Save it as a PDF or print it." },
         { t: "list", items: ["Every request shows: your details, the client's details, a **reference number**, what it's for, the amount, the **due date** and **how to pay**.", "Make paying easy: bank transfer, plus a Paystack payment link for card, transfer or USSD.", "Send it the same day each stage is reached."] },
-        { t: "tip", text: "The Paystack payment page you made on Day 8 works for your own business too: create one called “Website deposit” in your own Paystack account and put its link on every payment request. Paystack takes its fee only when someone pays." },
-        { t: "try", title: "Make your first payment request", minutes: 10, steps: ["Open the Get Paid Generator.", "Fill it in for your practice project's 50% deposit, due 3 days from today.", "Save it as a PDF. Read it as the client: would you pay it? Is anything unclear?"] },
+        { t: "tip", text: "The Paystack payment page you made on Lesson 8 works for your own business too: create one called “Website deposit” in your own Paystack account and put its link on every payment request. Paystack takes its fee only when someone pays." },
+        { t: "try", title: "Make your first payment request", minutes: 10, steps: ["Open the Invoice Generator.", "Fill it in for your practice project's 50% deposit, due 3 days from today.", "Save it as a PDF. Read it as the client: would you pay it? Is anything unclear?"] },
         { t: "win", title: "Your first payment request is ready", proved: "you can ask for money clearly and professionally, the habit that separates freelancers who get paid on time from those who chase for months.", cue: "Keep the template: every project from now on uses it. Finish your mission for the **Paid in full** badge." },
       ],
     },
@@ -110,7 +110,7 @@ const lesson: Lesson = {
   ],
   task: {
     title: "Set up delivery and getting paid",
-    steps: ["Create your kick-off checklist from the requirements questionnaire.", "Create a payment request template with the Get Paid Generator.", "Create a Paystack payment page for your own deposits (test mode is fine).", "Write your four reminder messages and set up a Google Sheet to track unpaid requests.", "Write your handover checklist, your reply for extra requests, and your care-plan offer."],
+    steps: ["Create your kick-off checklist from the requirements questionnaire.", "Create a payment request template with the Invoice Generator.", "Create a Paystack payment page for your own deposits (test mode is fine).", "Write your four reminder messages and set up a Google Sheet to track unpaid requests.", "Write your handover checklist, your reply for extra requests, and your care-plan offer."],
     done: ["No work starts before a deposit", "My payment request shows a reference, due date and how to pay", "I have a reminder ready for every stage", "My handover checklist puts every account in the client's name", "I have a ready reply for extra requests"],
   },
   recap: [

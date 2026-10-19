@@ -43,7 +43,7 @@ export default async function TrackPage({ params }: { params: Promise<{ track: s
               <Link href={`/checkout/${track.id}`} className={`${btn.primary} ${size.lg}`}>
                 Enroll Now · {formatNgn(plan.priceNgn)} <ArrowRight className="size-4" aria-hidden />
               </Link>
-              <span className="text-[13.5px] text-muted">One-time · {plan.accessDays} days access</span>
+              <span className="text-[13.5px] text-muted">One-time payment · lifetime access · self-paced</span>
             </div>
           </div>
           <div className="ink-block bg-card p-6">

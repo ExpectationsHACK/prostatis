@@ -7,7 +7,7 @@ export const contentType = "image/png";
 
 export default function Image() {
   return new ImageResponse(
-    <OgCard kicker="If you can type it, you can build it" title="Learn to build websites with AI. Turn it into income." sub="14-day fast track · 50 free tools · WhatsApp community · paid in naira" />,
+    <OgCard kicker="If you can type it, you can build it" title="Learn to build websites with AI. Turn it into income." sub="14-lesson Fast Track · lifetime access · 50 free tools · paid in naira" />,
     size,
   );
 }

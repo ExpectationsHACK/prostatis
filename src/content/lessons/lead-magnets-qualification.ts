@@ -8,7 +8,7 @@ const lesson: Lesson = {
   intro:
     "Messages to business owners who don't know you work much better when you open with something **useful and free**. You already know how to make the best free gift for a business owner: the website check-up you wrote in Week 2. Today you'll turn it into an offer with its own page, and learn four questions that make sure you spend your time on people who can actually buy, so every conversation you start next week has a clear, generous first step.",
   core: "Lead with a quick, specific free offer that shows your skill, then ask about budget, authority, need and timeline before writing any proposal.",
-  youNeed: ["Your website check-up report from Week 2", "Your portfolio site (the offer page can live there)", "Your free Cal.com account from Day 8 (or a new one)", "Your prospect list"],
+  youNeed: ["Your website check-up report from Week 2", "Your portfolio site (the offer page can live there)", "Your free Cal.com account from Lesson 8 (or a new one)", "Your prospect list"],
   sections: [
     {
       heading: "Step 1: Choose your free offer",
@@ -17,7 +17,7 @@ const lesson: Lesson = {
           t: "define",
           term: "Proposal",
           like: "a builder's quotation, written so the customer understands it without being a builder.",
-          meaning: "A short document that explains the client's situation, what you'll deliver, the timeline, the price, and exactly how to say yes. You'll write one properly on Day 24; today is about deciding who deserves one.",
+          meaning: "A short document that explains the client's situation, what you'll deliver, the timeline, the price, and exactly how to say yes. You'll write one properly on Lesson 24; today is about deciding who deserves one.",
         },
         {
           t: "define",
@@ -40,7 +40,7 @@ const lesson: Lesson = {
     {
       heading: "Step 2: A page for your offer",
       blocks: [
-        { t: "p", text: "Build a landing page for the offer, exactly like Day 5, as `offer.html` on your portfolio site: a headline, what they get, a sample check-up, and one button (a WhatsApp message or a short form). Link to it from your bio, your messages and your posts." },
+        { t: "p", text: "Build a landing page for the offer, exactly like Lesson 5, as `offer.html` on your portfolio site: a headline, what they get, a sample check-up, and one button (a WhatsApp message or a short form). Link to it from your bio, your messages and your posts." },
         { t: "tool", slug: "landing-page-copy-generator", why: "Writes the words for your free-offer page." },
         { t: "tool", slug: "landing-page-checklist", why: "Paste your live offer page to check it against what makes pages convert." },
         { t: "tool", slug: "hook-line-generator", why: "Opening lines for posts and messages that promote the free check-up." },
@@ -112,7 +112,7 @@ const lesson: Lesson = {
     { q: "When should you write a full proposal?", options: ["For everyone who replies", "After checking budget, authority, need and timeline", "Before speaking to them", "Never"], answer: 1, why: "Proposals take time: spend it on qualified buyers.", from: 4, aim: "proposals-pricing" },
   ],
   celebrate: {
-    title: "Day 22 complete: your offer is out there",
+    title: "Lesson 22 complete: your offer is out there",
     proved: "You can open conversations by giving something genuinely useful, and quickly spot who is ready to buy.",
     badge: "Lead engine",
     badgeDesc: "Launched a free offer and a qualification script",

@@ -8,7 +8,7 @@ const lesson: Lesson = {
   intro:
     "Besides sewing to measure, Bisi sells eight ready-to-wear pieces: kimonos, boubous and tops in standard sizes. Every sale is a long chat: “How much? Which sizes? Send account number. Did you see my transfer?” She can't sell while she sleeps, and last month a buyer sent a fake transfer screenshot. Today you'll give her two ways to sell online with Nigerian payments (card, bank transfer and USSD): first a free ready-made shop she can run from her phone, then a shop inside her own website. You'll also learn the one rule of online payments that separates professionals from beginners.",
   core: "Never trust the customer's side: your own private code must check every payment with Paystack before an order is confirmed.",
-  youNeed: ["Your GitHub-connected site from Day 7 and your Paystack test account from Day 8", "4 to 8 products: names, prices in naira, sizes and photos (placeholders are fine)", "About 2 hours: this is a big build", "Patience for one new idea: the private side of a website"],
+  youNeed: ["Your GitHub-connected site from Lesson 7 and your Paystack test account from Lesson 8", "4 to 8 products: names, prices in naira, sizes and photos (placeholders are fine)", "About 2 hours: this is a big build", "Patience for one new idea: the private side of a website"],
   sections: [
     {
       heading: "Option 1: a free shop in minutes (Paystack Storefront)",
@@ -20,7 +20,7 @@ const lesson: Lesson = {
             { title: "Open Storefront", detail: "In the Paystack dashboard (still in **Test Mode**), find **Storefront** in the menu (it may sit under **Commerce**) and click **Create storefront**." },
             { title: "Name and style it", detail: "Name: “Stitches by Bisi”. Add the logo and pick the brand colour (#7A1F3D). Choose a short link like `stitchesbybisi`." },
             { title: "Add the products", detail: "For each piece: name, price in naira, a clear photo, the sizes as options, and how many are in stock." },
-            { title: "Publish and test", detail: "Publish it, open its link on your phone, buy one item using Paystack's **test card** from Day 8, and check the order appears in the dashboard." },
+            { title: "Publish and test", detail: "Publish it, open its link on your phone, buy one item using Paystack's **test card** from Lesson 8, and check the order appears in the dashboard." },
             { title: "Link it from the website", detail: "Ask the AI to add a “Shop ready-to-wear” link to the menu in `site.js`, pointing to the Storefront link. Upload and commit." },
           ],
         },
@@ -192,7 +192,7 @@ const lesson: Lesson = {
     { q: "What is a Paystack webhook for?", options: ["Designing products", "Paystack telling your server about a payment the moment it happens, even if the customer closed the tab", "Sending adverts", "Making photos smaller"], answer: 1, why: "Like a credit alert. In the Main Track, webhooks start the tasks that run by themselves after every payment.", from: 5, aim: "automations-make-zapier-n8n" },
   ],
   celebrate: {
-    title: "Day 9 complete: a shop that can't be fooled",
+    title: "Lesson 9 complete: a shop that can't be fooled",
     proved: "You can give a seller two ways to take payments online, and make sure no order is ever confirmed until the money is real.",
     badge: "Safe checkout",
     badgeDesc: "Built a shop with server-checked payments",

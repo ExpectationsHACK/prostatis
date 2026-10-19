@@ -67,7 +67,7 @@ const lesson: Lesson = {
         {
           t: "steps",
           items: [
-            { title: "Sign up", detail: "Go to `supabase.com` and click **Start your project**. The easiest sign-up is **Continue with GitHub**, using the account you made on Day 7." },
+            { title: "Sign up", detail: "Go to `supabase.com` and click **Start your project**. The easiest sign-up is **Continue with GitHub**, using the account you made on Lesson 7." },
             { title: "Create an organisation", detail: "Give it a name (your name is fine) and choose the **Free** plan." },
             { title: "Create the project", detail: "Click **New project**. Name: `bisi-portal`. **Database password**: click **Generate a password**, copy it and save it somewhere safe (not in your `site` folder). Region: the closest one offered to Nigeria, usually a Europe region such as London or Frankfurt. Click **Create new project** and wait a minute or two." },
             { title: "Find the address and the safe key", detail: "Open **Project Settings** → **API Keys** (or click **Connect** at the top). Copy the **Project URL** and the **publishable** key into your notes." },
@@ -158,7 +158,7 @@ const lesson: Lesson = {
         { t: "tip", text: "Ask your AI assistant: “Here are my RLS policies: [paste]. Try to find any way a customer could read or change another customer's data.” AI is good at spotting holes when you ask it to look for them." },
         { t: "win", title: "Two customers, two private views", proved: "you can build a web app where people sign in and see only their own records, and prove the privacy rules hold before any real customer uses it.", cue: "Screenshot customer A's and customer B's portals side by side. Finish your mission for the **Data guardian** badge." },
         { t: "mistakes", items: [{ wrong: "Switching RLS off “just to test”", right: "Keeping RLS on and writing a policy for exactly what's needed" }, { wrong: "Using the secret key in a page so “it just works”", right: "Pages use the publishable key; the secret key never leaves Supabase's dashboard and your server" }, { wrong: "Testing with one account only", right: "Testing with two customers and a signed-out visitor" }] },
-        { t: "p", text: "**Stretch goal:** remember the custom booking system from Day 8? With sign-in, a database and RLS you can now build one: staff, opening hours, free slots, and a booking table only the owner can read." },
+        { t: "p", text: "**Stretch goal:** remember the custom booking system from Lesson 8? With sign-in, a database and RLS you can now build one: staff, opening hours, free slots, and a booking table only the owner can read." },
       ],
     },
   ],
@@ -190,7 +190,7 @@ const lesson: Lesson = {
     { q: "How do you prove the privacy rules work?", options: ["Trust the AI", "Test with two customers and a signed-out visitor, and check nobody sees anyone else's records", "Ask the owner", "Look at the home page"], answer: 1, why: "Only a real test proves it. It belongs on your checklist before every handover.", from: 4, aim: "deliver-get-paid" },
   ],
   celebrate: {
-    title: "Day 10 complete: private by design",
+    title: "Lesson 10 complete: private by design",
     proved: "You can build a web app where people sign in and see only their own records, and prove the privacy rules hold before any customer uses it.",
     badge: "Data guardian",
     badgeDesc: "Built a portal with tested privacy rules",

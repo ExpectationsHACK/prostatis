@@ -241,10 +241,10 @@ function Block({ b, i, lessonId, track }: { b: LessonBlock; i: number; lessonId:
   }
 }
 
-/** "Day 9 · Online stores" in the learner's track, or the lesson's title when there's no track. */
+/** "Lesson 9 · Online stores" in the learner's track, or the lesson's title when there's no track. */
 function laterAt(lessonId: string, track?: Track) {
   const inTrack = track?.modules.find((m) => m.lesson === lessonId);
-  if (inTrack) return `Day ${inTrack.day}, ${inTrack.title}`;
+  if (inTrack) return `Lesson ${inTrack.day}, ${inTrack.title}`;
   const any = tracks.flatMap((t) => t.modules).find((m) => m.lesson === lessonId);
   return any?.title ?? "";
 }

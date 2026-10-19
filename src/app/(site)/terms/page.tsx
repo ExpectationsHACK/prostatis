@@ -7,12 +7,12 @@ export const metadata: Metadata = { title: "Terms", description: `The terms for 
 
 export default function TermsPage() {
   return (
-    <LegalPage title="Terms" updated="4 October 2026" intro={`${site.name} is a product of ${site.company}, which owns and runs it ("we", "us"). These terms apply when you use ${site.name}, its free tools and its courses. By creating an account or paying for a track, you agree to them.`}>
+    <LegalPage title="Terms" updated="19 October 2026" intro={`${site.name} is a product of ${site.company}, which owns and runs it ("we", "us"). These terms apply when you use ${site.name}, its free tools and its courses. By creating an account or paying for a track, you agree to them.`}>
       <Section title="Your access">
         <ul>
           {plans.map((p) => (
             <li key={p.id}>
-              The <strong>{p.name}</strong> is a one-time payment that opens the course for {p.accessDays} days from the day you pay.
+              The <strong>{p.name}</strong> ({p.period}) is a one-time payment that gives you lifetime access to that track: it never expires, and you learn at your own pace. &ldquo;Lifetime&rdquo; means for as long as {site.name} runs; if we ever close it, we&apos;ll give you notice and a way to keep your certificate.
             </li>
           ))}
           <li>Your account is for you alone. Please don&apos;t share your login or the course content.</li>

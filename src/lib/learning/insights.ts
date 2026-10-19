@@ -70,18 +70,16 @@ export function todos(input: {
   state: LearnerState;
   next: Module | null;
   allDone: boolean;
-  /** Whole days of access left, or null for permanent access. */
-  daysLeft: number | null;
   today?: string;
 }): Todo[] {
-  const { track, slug, state, next, allDone, daysLeft } = input;
+  const { track, slug, state, next, allDone } = input;
   const list: Todo[] = [];
   const trackTag: TodoTag = { label: track.name, tone: "plain" };
 
   if (next) {
     const row = state.lessons[next.lesson];
     const href = `/learn/${slug}/${next.day}`;
-    const day: TodoTag = { label: `Day ${next.day}`, tone: "orange" };
+    const day: TodoTag = { label: `Lesson ${next.day}`, tone: "orange" };
     if (row?.quiz_passed_at && !row.task_done_at) list.push({ id: "task", text: `Finish the practical task in “${next.title}”`, href, tags: [day, { label: "Task", tone: "plain" }] });
     else if (row?.task_done_at && !row.quiz_passed_at) list.push({ id: "quiz", text: `Pass the quiz in “${next.title}” (70% to pass)`, href, tags: [day, { label: "Quiz", tone: "plain" }] });
     else list.push({ id: "lesson", text: `Read “${next.title}”, pass its quiz and do the task`, href, tags: [day, trackTag] });
@@ -96,14 +94,6 @@ export function todos(input: {
     list.push({ id: "streak", text: `Keep your ${st.current}-day streak: pass a quiz or finish a task today`, href: next ? `/learn/${slug}/${next.day}` : `/learn/${slug}`, tags: [{ label: "Streak", tone: "orange" }] });
   }
 
-  if (daysLeft !== null && daysLeft <= 7) {
-    list.push({
-      id: "access",
-      text: daysLeft === 0 ? "Your access ends today. Add time to keep learning" : `Your access ends in ${daysLeft} ${daysLeft === 1 ? "day" : "days"}. Add time to keep going`,
-      href: "/dashboard/billing",
-      tags: [{ label: "Billing", tone: "red" }],
-    });
-  }
   return list;
 }
 

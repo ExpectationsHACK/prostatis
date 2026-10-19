@@ -81,10 +81,10 @@ describe("student affairs", () => {
     expect(kinds).toContain("stuck_quiz");
   });
 
-  it("flags access ending soon and expired-unfinished", () => {
+  it("never warns about lifetime access running out, but flags access an admin closed", () => {
     const state = emptyState();
     state.days = ["2026-09-29"];
-    expect(flagsFor({ ...base, state, accessEnd: "2026-10-02T00:00:00Z" }, now).map((f) => f.kind)).toContain("expiring");
+    expect(flagsFor({ ...base, state, accessEnd: "9999-12-31T00:00:00Z" }, now).map((f) => f.kind)).not.toContain("expiring");
     expect(flagsFor({ ...base, state, accessEnd: "2026-09-01T00:00:00Z" }, now).map((f) => f.kind)).toEqual(["expired_unfinished"]);
   });
 

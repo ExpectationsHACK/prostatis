@@ -76,7 +76,7 @@ export default async function ReceiptPage({ params }: { params: Promise<{ refere
             <tr className="border-b border-line">
               <td className="py-3 text-ink">
                 {plan?.name ?? p.plan}: one-time payment
-                {plan && <span className="block text-[12.5px] text-muted">{plan.accessDays} days of course access, community and certificate on passing the final</span>}
+                {plan && <span className="block text-[12.5px] text-muted">{plan.period}, lifetime course access, community and certificate on passing the final</span>}
               </td>
               <td className="py-3 text-right text-ink">{money(p.amount_kobo, p.currency)}</td>
             </tr>

@@ -11,8 +11,8 @@ export function SiteHeader() {
 }
 
 const learn = [
-  { href: "/tracks/fast-track", label: "Fast Track · 14 days" },
-  { href: "/tracks/main-track", label: "Main Track · 1 month" },
+  { href: "/tracks/fast-track", label: "Fast Track · 14 lessons" },
+  { href: "/tracks/main-track", label: "Main Track · 26 lessons" },
   { href: "/pricing", label: "Pricing" },
   { href: "/tools", label: "Free tools" },
   { href: "/blog", label: "Blog" },

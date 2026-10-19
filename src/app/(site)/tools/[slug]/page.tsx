@@ -152,7 +152,7 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
               </div>
               <div className="flex flex-1 flex-col p-5">
                 <p className="label text-brand-text">
-                  {track.name} · Day {m.day} · Week {m.week}
+                  {track.name} · Lesson {m.day} · Part {m.week}
                 </p>
                 <h3 className="display mt-2 text-[20px] sm:text-[22px] text-ink">{m.title}</h3>
                 <p className="mt-1.5 flex-1 font-mono text-[13px] leading-relaxed text-muted">{m.summary}</p>

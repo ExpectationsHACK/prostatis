@@ -42,21 +42,20 @@ const emailConfirmed = cache(async (userId: string, email: string) => {
   return !error && Boolean(data.user?.email_confirmed_at) && data.user?.email?.toLowerCase() === email.toLowerCase();
 });
 
-const PERMANENT_END = "9999-12-31T00:00:00.000Z";
+/** The end date of lifetime access. */
+export const LIFETIME_END = "9999-12-31T00:00:00.000Z";
+const PERMANENT_END = LIFETIME_END;
 
-/** An access row that never ends (an admin or the owner set its end date to 9999-12-31). */
+/** An access row that never ends: every paid track (lifetime access), and the owner's test accounts. */
 export function isPermanentEnd(periodEnd: string) {
   return new Date(periodEnd).getUTCFullYear() >= 9999;
 }
 
-// Grace period so a renewal that lands a little late doesn't lock members out.
-const GRACE_MS = 3 * 86400_000;
-
-// Access runs to the end of the paid period whatever the status: a member who cancels
-// keeps what they paid for.
+// Paid access never ends (the end date is 9999-12-31). An admin can still close access, e.g.
+// after a refund, by setting an end date in the past.
 export function hasAccess(sub: Subscription | null) {
   if (!sub) return false;
-  return new Date(sub.current_period_end).getTime() + GRACE_MS > Date.now();
+  return new Date(sub.current_period_end).getTime() > Date.now();
 }
 
 /**
@@ -80,13 +79,13 @@ export const getMySubscription = cache(async (): Promise<Subscription | null> =>
   return row ? { ...row, permanent: isPermanentEnd(row.current_period_end) } : null;
 });
 
-function addAccess(from: Date, plan: PlanId) {
-  const days = getPlan(plan)?.accessDays ?? 30;
-  return new Date(from.getTime() + days * 86400_000);
+/** Whether this access already includes `plan` (the Main Track includes the Fast Track). */
+export function includesPlan(sub: Subscription | null, plan: PlanId) {
+  return hasAccess(sub) && (rank[sub!.plan] ?? 0) >= (rank[plan] ?? 0);
 }
 
 /**
- * Record a verified successful payment and extend membership. Idempotent per reference:
+ * Record a verified successful payment and grant lifetime access to the track. Idempotent per reference:
  * the Paystack callback and webhook can both call this for the same payment safely.
  */
 export async function recordSuccessfulPayment(p: {
@@ -126,13 +125,9 @@ export async function recordSuccessfulPayment(p: {
     .eq("user_id", p.userId)
     .maybeSingle();
 
-  // One-time purchase: access runs from the later of now or the current end, so buying again
-  // (or buying the Main Track after the Fast Track) never shortens access.
-  const stillActive = existing && new Date(existing.current_period_end) > new Date();
-  const base = stillActive ? new Date(existing.current_period_end) : new Date();
-  // A permanent account keeps its "never ends" date (adding days would overflow year 9999).
-  const periodEnd = existing && isPermanentEnd(existing.current_period_end) ? new Date(existing.current_period_end) : addAccess(base, p.plan);
-  const plan = stillActive && (rank[existing.plan] ?? 0) > (rank[p.plan] ?? 0) ? (existing.plan as PlanId) : p.plan;
+  // One-time purchase, lifetime access: every paid track stays open for good. Buying the Main
+  // Track after the Fast Track upgrades; a lower track never replaces a higher one.
+  const plan = existing && (rank[existing.plan] ?? 0) > (rank[p.plan] ?? 0) ? (existing.plan as PlanId) : p.plan;
 
   const { error: subErr } = await db.from("subscriptions").upsert(
     {
@@ -141,7 +136,7 @@ export async function recordSuccessfulPayment(p: {
       plan,
       paystack_ref: p.reference,
       ...(p.customerCode ? { paystack_customer_code: p.customerCode } : {}),
-      current_period_end: periodEnd.toISOString(),
+      current_period_end: PERMANENT_END,
       updated_at: new Date().toISOString(),
     },
     { onConflict: "user_id" },

@@ -37,7 +37,7 @@ export default async function FinalPage({ params }: { params: Promise<{ track: s
             </p>
             {prog.next && (
               <Link href={`/learn/${slug}/${prog.next.day}`} className={`${btn.primary} ${size.md} mt-5`}>
-                Continue with Day {prog.next.day}
+                Continue with Lesson {prog.next.day}
               </Link>
             )}
           </div>

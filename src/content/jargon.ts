@@ -7,7 +7,7 @@
  * avoid everyday meanings (a "function" at a party, a POS "agent", "lead with benefits").
  */
 export const jargon: { term: string; match: RegExp }[] = [
-  // Day 1: brand and the AI chat
+  // Lesson 1: brand and the AI chat
   { term: "AI", match: /\bAI\b/ },
   { term: "Prompt", match: /\bprompts?\b/i },
   { term: "Browser", match: /\bbrowsers?\b/i },
@@ -17,7 +17,7 @@ export const jargon: { term: string; match: RegExp }[] = [
   { term: "Pixel", match: /\b\d+\s?px\b|\bpixels?\b/i },
   { term: "Contrast ratio", match: /\bcontrast\b/i },
   { term: "WCAG", match: /\bWCAG\b/ },
-  // Day 2: planning and words
+  // Lesson 2: planning and words
   { term: "Wireframe", match: /\bwireframes?\b/i },
   { term: "Mobile-first", match: /\bmobile-first\b/i },
   { term: "Hero", match: /\bhero\b/i },
@@ -26,7 +26,7 @@ export const jargon: { term: string; match: RegExp }[] = [
   { term: "Conversion", match: /\bconversions?\b|\bconverts\b/i },
   { term: "Placeholder", match: /\bplaceholders?\b/i },
   { term: "Design brief", match: /\bdesign brief\b/i },
-  // Day 3: files, hosting, the build loop
+  // Lesson 3: files, hosting, the build loop
   { term: "File and folder", match: /\bfolders?\b/i },
   { term: "File size", match: /\b\d+(\.\d+)?\s?(KB|MB|GB)\b|\bkilobytes?\b|\bmegabytes?\b/ },
   { term: "HTML", match: /\bHTML\b/ },
@@ -40,17 +40,17 @@ export const jargon: { term: string; match: RegExp }[] = [
   { term: "Subdomain", match: /\bsubdomains?\b/i },
   { term: "Hosting", match: /\bhost(ing|ed|s)?\b/i },
   { term: "Deploy", match: /\bdeploy(s|ed|ing|ments?)?\b/i },
-  // Day 4: the full site
+  // Lesson 4: the full site
   { term: "Component", match: /\bcomponents?\b/i },
   { term: "JavaScript", match: /\bJavaScript\b|\bJS\b/ },
   { term: "Form service", match: /\bform services?\b/i },
   { term: "Access key", match: /\baccess keys?\b/i },
-  // Day 5: landing pages
+  // Lesson 5: landing pages
   { term: "Landing page", match: /\blanding pages?\b/i },
   { term: "Objection", match: /\bobjections?\b/i },
   { term: "Risk reversal", match: /\brisk reversal\b/i },
   { term: "Above the fold", match: /\b(above|below) the fold\b/i },
-  // Day 6: speed and access
+  // Lesson 6: speed and access
   { term: "Responsive design", match: /\bresponsive\b/i },
   { term: "Developer tools", match: /\bdeveloper tools\b|\bdevtools\b|\bF12\b/i },
   { term: "Page weight", match: /\bpage weight\b/i },
@@ -61,7 +61,7 @@ export const jargon: { term: string; match: RegExp }[] = [
   { term: "Screen reader", match: /\bscreen readers?\b/i },
   { term: "Alt text", match: /\balt text\b|\balt=/i },
   { term: "Heading levels", match: /\bH[1-6]s?\b/ },
-  // Day 7: going live properly
+  // Lesson 7: going live properly
   { term: "Repository", match: /\brepositor(y|ies)\b|\brepos?\b/i },
   { term: "Commit", match: /\bcommit(s|ted|ting)?\b/i },
   { term: "Git", match: /\bGit\b/ },
@@ -72,13 +72,13 @@ export const jargon: { term: string; match: RegExp }[] = [
   { term: "DNS record", match: /\b(A|CNAME|TXT|MX) records?\b|\bDNS records?\b/ },
   { term: "HTTPS", match: /\bHTTPS\b|\bSSL\b/ },
   { term: "Propagation", match: /\bpropagat(e|es|ion|ing)\b/i },
-  // Day 8: bookings
+  // Lesson 8: bookings
   { term: "Booking system", match: /\bbooking systems?\b/i },
   { term: "No-show", match: /\bno-shows?\b/i },
   { term: "Embed", match: /\bembed(s|ded|ding)?\b/i },
   { term: "Payment page", match: /\bpayment pages?\b/i },
   { term: "Test mode", match: /\btest mode\b|\btest cards?\b|\btest keys?\b/i },
-  // Day 9: stores and the server
+  // Lesson 9: stores and the server
   { term: "Server", match: /\bservers?\b/i },
   { term: "Serverless function", match: /\bserverless\b|\b(Cloudflare|Pages) Functions?\b|\bfunctions folder\b/i },
   { term: "API", match: /\bAPIs?\b/ },
@@ -86,7 +86,7 @@ export const jargon: { term: string; match: RegExp }[] = [
   { term: "Environment variable", match: /\benvironment variables?\b|\bVariables and Secrets\b/i },
   { term: "Kobo", match: /\bkobo\b/i },
   { term: "Webhook", match: /\bwebhooks?\b/i },
-  // Day 10: web apps
+  // Lesson 10: web apps
   { term: "Web app", match: /\bweb apps?\b/i },
   { term: "Authentication", match: /\bauthenticat(e|es|ed|ion)\b/i },
   { term: "Authorisation", match: /\bauthori[sz]ation\b/i },
@@ -94,7 +94,7 @@ export const jargon: { term: string; match: RegExp }[] = [
   { term: "SQL", match: /\bSQL\b/ },
   { term: "Row Level Security", match: /\bRow Level Security\b|\bRLS\b/ },
   { term: "Publishable key", match: /\bpublishable keys?\b/i },
-  // Day 11: Google
+  // Lesson 11: Google
   { term: "SEO", match: /\bSEO\b/ },
   { term: "Keyword", match: /\bkeywords?\b/i },
   { term: "Search intent", match: /\bsearch intent\b|\bintent\b/i },

@@ -1,6 +1,6 @@
 import type { Lesson } from "./types";
 
-/** The "Start here" orientation page: read before Day 1 of either track. */
+/** The "Start here" orientation page: read before Lesson 1 of either track. */
 export const startHere: Pick<Lesson, "id" | "sections"> = {
   id: "start-here",
   sections: [
@@ -11,7 +11,7 @@ export const startHere: Pick<Lesson, "id" | "sections"> = {
         {
           t: "steps",
           items: [
-            { title: "Choose how you build, once", detail: "On Day 3 you set up your AI builder. The default is **Google Antigravity**, free. If you can afford it, you can choose **Claude Code** (Claude Pro) instead. On an older laptop, or in a week when Antigravity's free allowance runs out, use the **free chat** backup. Building steps have three tabs; pick yours and the course remembers it." },
+            { title: "Choose how you build, once", detail: "On Lesson 3 you set up your AI builder. The default is **Google Antigravity**, free. If you can afford it, you can choose **Claude Code** (Claude Pro) instead. On an older laptop, or in a week when Antigravity's free allowance runs out, use the **free chat** backup. Building steps have three tabs; pick yours and the course remembers it." },
             { title: "Read, with pictures and plain words", detail: "Short sections with hand-drawn **sketches**. Every new word gets a **Jargon buster** box that starts with something you already know from everyday life (“Think of it like…”) before the plain-English meaning. Orange **Real-life scenario** boxes show the idea at work in a Nigerian business." },
             { title: "Try it now", detail: "Boxes that ask you to do something small straight away: open a website, write three sentences, test a link on your phone. Doing beats reading. Tick “I did this” when you finish." },
             { title: "Quick checks and screen messages", detail: "Dotted boxes ask one practice question with instant feedback (not marked, so guess freely). Red **If you see this on screen** boxes explain the error messages you might meet, and exactly what to do." },
@@ -51,7 +51,7 @@ export const startHere: Pick<Lesson, "id" | "sections"> = {
       heading: "What you'll need",
       blocks: [
         { t: "table", columns: ["Item", "Why", "Notes"], rows: [["A laptop or desktop", "You build on a computer", "Windows or Mac; an older laptop with 4–8GB RAM is fine. A phone is great for reading lessons and testing sites, but not for building."], ["Internet", "Setting up and publishing", "The first setup downloads a few hundred megabytes once. After that, a normal day uses far less."], ["Your phone", "Testing sites like a customer", "Most of your clients' customers will visit on a phone."], ["An email you check", "Free accounts and notifications", "Use one email for all course accounts so nothing gets lost."], ["1.5–3 hours a day", "One lesson a day", "Can't manage that? Take two days per lesson: your access lasts longer than the track."]] },
-        { t: "tip", text: "Power cuts happen. Keep your laptop charged and save often. From Day 3 every version you publish is kept online, and from Day 7 every change is saved with a date, so a sudden shutdown never costs you more than a few minutes." },
+        { t: "tip", text: "Power cuts happen. Keep your laptop charged and save often. From Lesson 3 every version you publish is kept online, and from Lesson 7 every change is saved with a date, so a sudden shutdown never costs you more than a few minutes." },
       ],
     },
     {
@@ -65,7 +65,7 @@ export const startHere: Pick<Lesson, "id" | "sections"> = {
     {
       heading: "Optional upgrades, once you're earning",
       blocks: [
-        { t: "p", text: "Blue **Optional upgrade** boxes in the lessons point to paid tools that can make you faster or give clients more. You never need them to finish a lesson. The one choice you can make from Day 3 is your builder: Claude Code instead of Antigravity, if you can afford it. Everything else, consider after your first paid project, and charge clients for upgrades that are theirs (like their domain)." },
+        { t: "p", text: "Blue **Optional upgrade** boxes in the lessons point to paid tools that can make you faster or give clients more. You never need them to finish a lesson. The one choice you can make from Lesson 3 is your builder: Claude Code instead of Antigravity, if you can afford it. Everything else, consider after your first paid project, and charge clients for upgrades that are theirs (like their domain)." },
         { t: "table", columns: ["Upgrade", "What it adds", "Who pays"], rows: [["Claude Pro, which includes Claude Code", "A strong paid alternative to Antigravity, with a bigger allowance; use it from the Claude desktop app's Code tab", "You, if you can afford it (about $20 a month, or $17 a month paid yearly)"], ["A domain name (e.g. .com.ng)", "The business's own address", "The client, in their own name"], ["Supabase Pro", "A client portal that never pauses", "The client, when it's in daily use"], ["A paid AI plan", "Privacy for personal details and more conversations", "The client, when the assistant is busy"], ["Make paid plan", "More automation runs each month", "The client, when the free credits run out"]] },
         { t: "p", text: "Many Nigerian debit cards are declined by foreign websites for subscriptions. When you're ready to upgrade:" },
         {

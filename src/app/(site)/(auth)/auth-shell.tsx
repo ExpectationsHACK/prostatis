@@ -10,9 +10,9 @@ const panels: Record<AuthArtKind, { eyebrow: string; title: string; points: stri
     points: ["Your progress, XP and streak are saved", "Lessons open in order as you finish them", "Your certificate lives in your dashboard"],
   },
   signup: {
-    eyebrow: "Your first 14 days",
+    eyebrow: "Your first 14 lessons",
     title: "From sign-up to your first paid website.",
-    points: ["Pay once in naira: card, transfer or USSD", "Your first page is live on Day 3, with free tools", "A verified certificate when you finish"],
+    points: ["Pay once in naira: card, transfer or USSD", "Your first page goes live in lesson 3, with free tools", "A verified certificate when you finish"],
   },
   reset: {
     eyebrow: "Account help",

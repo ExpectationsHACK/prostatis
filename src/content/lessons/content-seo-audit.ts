@@ -60,7 +60,7 @@ const lesson: Lesson = {
     {
       heading: "Part 3: Check a real website",
       blocks: [
-        { t: "p", text: "Now turn your SEO audit skill (Day 11) into a full check-up of a real local business's website, in four areas:" },
+        { t: "p", text: "Now turn your SEO audit skill (Lesson 11) into a full check-up of a real local business's website, in four areas:" },
         { t: "table", columns: ["Area", "Check with", "Look for"], rows: [["Technical", "Speed checklist + PageSpeed Insights", "Slow loading, not phone-friendly, broken pages"], ["On-page", "On-page SEO audit", "Missing titles, no H1, no alt text, no schema"], ["Local", "Local SEO checklist + their Google profile", "No or weak profile, mismatched NAP, few reviews"], ["Content", "Google searches for their services", "Missing service pages, no answers to common questions"]] },
         {
           t: "sketch",

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/admin/auth";
 import { addNote, audit, endAccess, getStudent, setAccess, updateProfile } from "@/lib/admin/data";
+import { LIFETIME_END } from "@/lib/membership";
 import { deletePost, getPostById, listAllPosts, type PostInput, savePost, slugify } from "@/lib/blog";
 import { emailCertificate } from "@/lib/certificate-delivery";
 import { getCertificate, updateCertificate } from "@/lib/certificates";
@@ -135,20 +136,16 @@ export async function addNoteAction(userId: string, _: Result, fd: FormData): Pr
   }
 }
 
-export async function extendAccessAction(userId: string, _: Result, fd: FormData): Promise<Result> {
+/** Tracks are lifetime; this reopens access an admin closed earlier (e.g. a refund reversed). */
+export async function restoreAccessAction(userId: string): Promise<Result> {
   const admin = await requireAdmin();
-  const days = Math.round(Number(fd.get("days")));
-  if (!(days >= 1 && days <= 365)) return { ok: false, msg: "Days must be between 1 and 365." };
   try {
     const found = await getStudent(userId);
     if (!found?.student.plan) return { ok: false, msg: "This person has no track yet. Use “Grant a track” instead." };
-    const current = found.student.accessEnd ? new Date(found.student.accessEnd) : new Date();
-    const base = current > new Date() ? current : new Date();
-    const end = new Date(base.getTime() + days * 86400_000);
-    await setAccess(userId, found.student.plan, end);
-    await audit(admin.email, "student.extend", userId, { days, until: end.toISOString() });
+    await setAccess(userId, found.student.plan, new Date(LIFETIME_END));
+    await audit(admin.email, "student.restore", userId, { plan: found.student.plan });
     revalidatePath(`/admin/students/${userId}`);
-    return { ok: true, msg: `Access extended by ${days} days, to ${end.toDateString()}.` };
+    return { ok: true, msg: "Lifetime access restored." };
   } catch (e) {
     return fail(e);
   }

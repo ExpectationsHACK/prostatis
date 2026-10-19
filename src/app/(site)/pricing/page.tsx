@@ -6,13 +6,13 @@ import { Eyebrow } from "@/components/eyebrow";
 
 export const metadata: Metadata = {
   title: "Pricing: Fast Track ₦15,000 · Main Track ₦30,000",
-  description: "Pay once in naira. The 14-day Fast Track takes you from zero to your first paid website; the one-month Main Track adds SEO, automation, AI agents and lead generation.",
+  description: "Pay once in naira and keep lifetime access. The 14-lesson Fast Track takes you from beginner to your first website; the 26-lesson Main Track adds SEO, automation, AI agents and lead generation.",
 };
 
 const pricingFaqs = [
   { q: "How do I pay?", a: "Once, in naira, through Paystack: card, bank transfer or USSD. No subscription and no dollar card needed." },
   { q: "What happens right after I pay?", a: "Your dashboard and first lesson unlock immediately, and you get the invite to the WhatsApp community." },
-  { q: "How long do I keep access?", a: "The Fast Track stays open for 30 days and the Main Track for 60: the track itself plus time to catch up." },
+  { q: "How long do I keep access?", a: "For life. Every track is self-paced: there are no deadlines, your progress is saved, and you can come back to any lesson whenever you need it." },
   { q: "Do I get a certificate?", a: "Yes, on both tracks. Pass every lesson and the final assessment and your certificate is ready to download, emailed to you, and verifiable on a public page." },
   { q: "Can I upgrade later?", a: "Yes. Everything in the Fast Track is part of the Main Track, so nothing you've learned is wasted." },
   { q: "What if it's not for me?", a: "Read the refund policy before you pay. It explains when you can get your money back and how." },
@@ -28,7 +28,7 @@ export default function PricingPage() {
         <Eyebrow>Pricing</Eyebrow>
         <h1 className="display mx-auto mt-3 max-w-3xl text-balance text-[32px] text-ink sm:text-[60px]">Pay once. Keep everything you build.</h1>
         <p className="mx-auto mt-4 max-w-xl text-[16.5px] leading-relaxed text-muted">
-          Start with the Fast Track to build and sell websites in 14 days. Choose the Main Track to sell SEO, automation and AI agents on top.
+          Start with the Fast Track to build and sell websites in 14 lessons. Choose the Main Track to sell SEO, automation and AI agents on top.
         </p>
       </header>
 

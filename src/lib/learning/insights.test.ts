@@ -42,7 +42,7 @@ describe("activity heatmap", () => {
 });
 
 describe("to-do list", () => {
-  const base = { track: fastTrack, slug: "fast-track", allDone: false, daysLeft: null, today: "2026-10-07" };
+  const base = { track: fastTrack, slug: "fast-track", allDone: false, today: "2026-10-07" };
   const first = fastTrack.modules[0];
 
   it("points at the next lesson, and at the half that's missing", () => {
@@ -66,12 +66,8 @@ describe("to-do list", () => {
     expect(ids([])).not.toContain("streak");
   });
 
-  it("flags access ending within a week, never permanent access", () => {
-    const access = (daysLeft: number | null) => todos({ ...base, state: emptyState(), next: first, daysLeft }).find((t) => t.id === "access");
-    expect(access(3)?.text).toContain("3 days");
-    expect(access(0)?.text).toContain("today");
-    expect(access(20)).toBeUndefined();
-    expect(access(null)).toBeUndefined();
+  it("never warns about access running out: tracks are lifetime", () => {
+    expect(todos({ ...base, state: emptyState(), next: fastTrack.modules[0] }).some((t) => t.id === "access")).toBe(false);
   });
 });
 

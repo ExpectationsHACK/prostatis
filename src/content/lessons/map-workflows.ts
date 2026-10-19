@@ -131,7 +131,7 @@ const lesson: Lesson = {
     { q: "What's the first step before automating anything for a client?", options: ["Buy a paid tool", "Interview the owner and map their real tasks", "Build a chatbot", "Write a blog post"], answer: 1, why: "You can't automate well what you don't understand. Your final client project starts the same way.", from: 4, aim: "capstone" },
   ],
   celebrate: {
-    title: "Day 14 complete: you found the lost hours",
+    title: "Lesson 14 complete: you found the lost hours",
     proved: "You can look at any small business, find exactly where its time goes, and put a number on it the owner understands.",
     badge: "Time finder",
     badgeDesc: "Mapped a business's workflows and savings",

@@ -44,15 +44,12 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
   const final = state.finals[track.id];
   const next = prog.next;
   const nextRow = next ? state.lessons[next.lesson] : undefined;
-  const end = new Date(sub.current_period_end);
-  const daysLeft = sub.permanent ? null : Math.max(0, Math.ceil((end.getTime() - now.getTime()) / 86_400_000));
-  const accessDays = getPlan(sub.plan)?.accessDays ?? 30;
   const first = name.split(" ")[0];
   const fastProg = track.id === "main_track" ? trackProgress(fastTrack, state) : null;
 
   const grid = activityGrid(state.days, events, today, WEEKS);
   const weekXp = xpThisWeek(events, today);
-  const todo = todos({ track, slug, state, next, allDone: prog.allDone, daysLeft, today });
+  const todo = todos({ track, slug, state, next, allDone: prog.allDone, today });
   const titles = new Map([...fastTrack.modules, ...mainTrack.modules].map((m) => [m.lesson as string, m.title]));
   titles.set("fast_track", "Fast Track final").set("main_track", "Main Track final");
   const recent = recentActivity(events, (ref) => titles.get(ref) ?? ref);
@@ -129,7 +126,7 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
                 <div className="min-w-0">
                   <p className="flex flex-wrap items-center gap-2">
                     <span className="label text-brand-text">
-                      {prog.completed ? "Up next" : "Start here"} · Day {next.day}
+                      {prog.completed ? "Up next" : "Start here"} · Lesson {next.day}
                     </span>
                     <PillarTag pillar={next.pillar} />
                   </p>
@@ -243,11 +240,11 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
                       </span>
                       <div className="min-w-0 flex-1">
                         <p className="flex items-center gap-2 truncate text-[14.5px] font-bold text-ink">
-                          <span className="truncate">Week {w.week}: {w.title}</span>
+                          <span className="truncate">Part {w.week}: {w.title}</span>
                           {current && <Tag tag={{ label: "This week", tone: "orange" }} />}
                         </p>
                         <div className="mt-1.5 flex items-center gap-3">
-                          <div className="flex-1"><Bar pct={(done / days.length) * 100} tone="bg-success" label={`Week ${w.week} progress`} /></div>
+                          <div className="flex-1"><Bar pct={(done / days.length) * 100} tone="bg-success" label={`Part ${w.week} progress`} /></div>
                           <span className="text-[12.5px] font-semibold tabular-nums text-muted">{done}/{days.length}</span>
                         </div>
                       </div>
@@ -258,12 +255,12 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
                           <li key={m.day}>
                             {status === "locked" ? (
                               <span className="flex items-center gap-2 rounded-[8px] px-2 py-2 text-[13.5px] text-muted">
-                                <Lock className="size-3.5 shrink-0" aria-hidden /> <span className="truncate">Day {m.day}: {m.title}</span>
+                                <Lock className="size-3.5 shrink-0" aria-hidden /> <span className="truncate">Lesson {m.day}: {m.title}</span>
                               </span>
                             ) : (
                               <Link href={`/learn/${slug}/${m.day}`} className="flex items-center gap-2 rounded-[8px] px-2 py-2 text-[13.5px] text-ink hover:bg-wash">
                                 {status === "done" ? <Check className="size-4 shrink-0 text-success" strokeWidth={3} aria-hidden /> : <PlayCircle className="size-4 shrink-0 text-brand-text" aria-hidden />}
-                                <span className="truncate">Day {m.day}: {m.title}</span>
+                                <span className="truncate">Lesson {m.day}: {m.title}</span>
                               </Link>
                             )}
                           </li>
@@ -313,14 +310,7 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
 
           <SideCard title="Access" icon={CalendarClock} hue="blue">
             <p className="font-bold text-ink">{getPlan(sub.plan)?.name}</p>
-            {daysLeft === null ? (
-              <p className="text-[13px] text-muted">Permanent: access never ends on this account</p>
-            ) : (
-              <>
-                <div className="mt-2"><Bar pct={(daysLeft / accessDays) * 100} tone={daysLeft <= 5 ? "bg-danger" : "bg-hue-blue"} label="Access left" /></div>
-                <p className="mt-1.5 text-[12.5px] text-muted">{daysLeft} {daysLeft === 1 ? "day" : "days"} left · until {end.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Africa/Lagos" })}</p>
-              </>
-            )}
+            <p className="text-[13px] text-muted">Lifetime access: learn at your own pace, it never expires.</p>
             <Link href="/dashboard/billing" className={`${btn.secondary} ${size.sm} mt-3`}>Billing</Link>
           </SideCard>
 

@@ -1,4 +1,4 @@
-import { ArrowRight, BadgeCheck, CalendarClock, Check, CircleHelp, Receipt, ReceiptText, RotateCcw, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, BadgeCheck, Check, CircleHelp, Infinity as Lifetime, Receipt, ReceiptText, ShieldCheck, Sparkles } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -10,8 +10,6 @@ import { getPlan, hasAccess } from "@/lib/membership";
 import { formatNgn, plans, refund, site } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Billing", robots: { index: false } };
-
-const DAY = 86400_000;
 
 function Section({ title, icon: Icon, children, className = "" }: { title: string; icon: typeof Receipt; children: React.ReactNode; className?: string }) {
   return (
@@ -33,7 +31,6 @@ export default async function BillingPage() {
   const payments = await myPayments();
   const paid = payments.filter((p) => p.status === "success");
   const end = sub ? new Date(sub.current_period_end) : null;
-  const daysLeft = end ? Math.max(0, Math.ceil((end.getTime() - new Date().getTime()) / DAY)) : 0;
   const lastPaid = paid.find((p) => p.plan === sub?.plan);
   const mainTrack = plans.find((p) => p.id === "main_track")!;
   const onFast = active && sub?.plan === "fast_track";
@@ -42,7 +39,7 @@ export default async function BillingPage() {
     <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:py-8">
       <h1 className="display text-[26px] leading-tight text-ink sm:text-[40px]">Billing</h1>
       <p className="mt-1 max-w-xl font-mono text-[13px] leading-relaxed text-muted">
-        You pay once per track. There&apos;s no subscription, so nothing renews and your card is never charged again.
+        You pay once per track and keep it for life. There&apos;s no subscription, so nothing renews and your card is never charged again.
       </p>
 
       {/* Access */}
@@ -59,24 +56,15 @@ export default async function BillingPage() {
                 {plan.id === "main_track" && " · includes the Fast Track"}
               </p>
               <p className="mt-4 flex items-center gap-2 text-[15px] text-ink">
-                <CalendarClock className="size-4 shrink-0 text-brand-text" aria-hidden />
-                {sub.permanent ? (
+                <Lifetime className="size-4 shrink-0 text-hue-green" aria-hidden />
+                {active ? (
                   <span>
-                    <strong>Permanent access.</strong> This account never expires.
-                  </span>
-                ) : active ? (
-                  <span>
-                    Access until <strong>{longDate(end!.toISOString())}</strong> · {daysLeft} day{daysLeft === 1 ? "" : "s"} left
+                    <strong>Lifetime access.</strong> Learn at your own pace: it never expires.
                   </span>
                 ) : (
-                  <span>Access ended on {longDate(end!.toISOString())}. Your progress is saved: buy again to pick up where you stopped.</span>
+                  <span>Access was closed on {longDate(end!.toISOString())}. Your progress is saved. If you think this is a mistake, contact us.</span>
                 )}
               </p>
-              {active && !sub.permanent && (
-                <div className="mt-3 h-2.5 max-w-md rounded-[12px] border border-edge bg-paper" role="progressbar" aria-label="Access time left" aria-valuenow={daysLeft} aria-valuemin={0} aria-valuemax={plan.accessDays}>
-                  <div className={"h-full " + (daysLeft <= 7 ? "bg-danger" : "bg-brand")} style={{ width: `${Math.min(100, (daysLeft / plan.accessDays) * 100)}%` }} />
-                </div>
-              )}
             </div>
             {active && (
               <Link href="/learn" className={`${btn.primary} ${size.md}`}>
@@ -96,7 +84,7 @@ export default async function BillingPage() {
       {onFast && (
         <Section title="Upgrade to the Main Track" icon={Sparkles} className="mt-5">
           <p className="max-w-2xl text-[15px] leading-relaxed text-ink">
-            Keep everything you&apos;ve done and add the services businesses pay for every month. Your access is extended by {mainTrack.accessDays} days from your current end date.
+            Keep everything you&apos;ve done and add the services businesses pay for every month, with lifetime access to the Main Track too.
           </p>
           <ul className="mt-3 grid gap-1.5 sm:grid-cols-2">
             {mainTrack.results.slice(1, 5).map((r) => (
@@ -111,16 +99,6 @@ export default async function BillingPage() {
         </Section>
       )}
 
-      {active && !sub?.permanent && !onFast && daysLeft <= 14 && (
-        <Section title="Need more time?" icon={RotateCcw} className="mt-5">
-          <p className="text-[15px] text-ink">
-            Buying the track again adds {plan?.accessDays} days to your current end date, so you never lose days you&apos;ve paid for.
-          </p>
-          <Link href={`/checkout/${sub!.plan}`} className={`${btn.secondary} ${size.md} mt-4`}>
-            Add {plan?.accessDays} days · {formatNgn(plan?.priceNgn ?? 0)}
-          </Link>
-        </Section>
-      )}
 
       {!active && (
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -130,9 +108,9 @@ export default async function BillingPage() {
               <p className="display mt-1 text-[21px] sm:text-[24px] text-ink">{p.name}</p>
               <p className="mt-1 text-[14px] leading-snug text-muted">{p.blurb}</p>
               <p className="display mt-3 text-[24px] sm:text-[28px] text-ink">{formatNgn(p.priceNgn)}</p>
-              <p className="font-mono text-[12px] text-muted">one payment · {p.accessDays} days of access</p>
+              <p className="font-mono text-[12px] text-muted">one payment · lifetime access</p>
               <Link href={`/checkout/${p.id}`} className={`${btn.primary} ${size.md} mt-4`}>
-                {sub ? "Buy again" : "Enroll Now"}
+                Enroll Now
               </Link>
             </div>
           ))}

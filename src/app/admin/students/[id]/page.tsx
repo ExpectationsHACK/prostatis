@@ -8,7 +8,7 @@ import { getStudent } from "@/lib/admin/data";
 import { fastTrack, mainTrack } from "@/lib/curriculum";
 import { levelFor, streaks, trackProgress } from "@/lib/learning/engine";
 import { plans } from "@/lib/site";
-import { addNoteAction, certificateAction, endAccessAction, extendAccessAction, grantTrackAction, updateProfileAction } from "../../actions";
+import { addNoteAction, certificateAction, endAccessAction, restoreAccessAction, grantTrackAction, updateProfileAction } from "../../actions";
 import { SetupError, safe } from "../../setup-error";
 
 const label = "label mb-1 block text-muted";
@@ -122,10 +122,14 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
 
         <Panel title="Membership">
           <div className="space-y-5">
-            <ActionForm action={extendAccessAction.bind(null, s.id)} className="flex flex-wrap items-end gap-2">
-              <label className="block"><span className={label}>Extend access by (days)</span><input name="days" type="number" min={1} max={365} defaultValue={7} className={afield + " w-32"} /></label>
-              <button className={`${ab.primary}`}>Extend</button>
-            </ActionForm>
+            {s.plan && !s.active ? (
+              <ActionForm action={restoreAccessAction.bind(null, s.id)} className="flex flex-wrap items-center gap-2" confirm="Restore lifetime access for this student?">
+                <p className="font-mono text-[12px] text-muted">Access was closed. Tracks are lifetime, so you can reopen it.</p>
+                <button className={`${ab.primary} ${ab.sm}`}>Restore lifetime access</button>
+              </ActionForm>
+            ) : (
+              <p className="font-mono text-[12px] text-muted">{s.plan ? "Lifetime access: nothing to extend." : "No track yet."}</p>
+            )}
             <ActionForm action={grantTrackAction.bind(null, s.id)} className="space-y-2 border-t-2 border-dashed border-line pt-4" confirm="Grant this track and record the payment?">
               <p className="font-mono text-[12px] text-muted">Grant a track, e.g. after a bank transfer outside Paystack. It&apos;s recorded as a manual payment.</p>
               <div className="flex flex-wrap gap-2">

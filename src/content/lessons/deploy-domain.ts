@@ -40,7 +40,7 @@ const lesson: Lesson = {
         {
           t: "errors",
           items: [
-            { see: "You see `index.html` at the top instead of a `site` folder", means: "You dragged the files inside `site` rather than the folder itself.", fix: "That works too: in Step 2, leave the build output directory empty. (On Day 9 you'll add a folder beside `site`, so the folder layout is a little tidier.)" },
+            { see: "You see `index.html` at the top instead of a `site` folder", means: "You dragged the files inside `site` rather than the folder itself.", fix: "That works too: in Step 2, leave the build output directory empty. (On Lesson 9 you'll add a folder beside `site`, so the folder layout is a little tidier.)" },
             { see: "“Yowza, that's a lot of files” or an upload limit message", means: "GitHub's web upload takes up to 100 files at a time.", fix: "Upload in two batches, committing each one." },
           ],
         },
@@ -50,7 +50,7 @@ const lesson: Lesson = {
     {
       heading: "Step 2: Connect GitHub to Cloudflare",
       blocks: [
-        { t: "p", text: "Your Day 3 project was made by dragging files, and Cloudflare can't switch a dragged project to GitHub. So you'll create a new, GitHub-connected project. If you want to keep the same address, first delete the old project: **Workers & Pages** → old project → **Settings** → **Delete project**." },
+        { t: "p", text: "Your Lesson 3 project was made by dragging files, and Cloudflare can't switch a dragged project to GitHub. So you'll create a new, GitHub-connected project. If you want to keep the same address, first delete the old project: **Workers & Pages** → old project → **Settings** → **Delete project**." },
         {
           t: "steps",
           items: [
@@ -211,13 +211,13 @@ const lesson: Lesson = {
   ],
   quiz: [
     { q: "You change a price in `services.html` on GitHub and commit. What happens next?", options: ["Nothing until you upload the whole site again", "Cloudflare updates the live site by itself, usually within a minute", "The domain expires", "GitHub emails every customer"], answer: 1, why: "That's the point of connecting GitHub to Cloudflare: every commit goes live by itself.", from: 0, aim: "core" },
-    { q: "Why is a commit history useful?", options: ["It makes the site faster", "Every saved, dated version is kept, so you can always go back to one that worked", "Google ranks it", "It replaces backups of photos"], answer: 1, why: "On Day 9 you'll add new files for a store; if anything breaks, the history gets you back.", from: 1, aim: "online-store-paystack" },
+    { q: "Why is a commit history useful?", options: ["It makes the site faster", "Every saved, dated version is kept, so you can always go back to one that worked", "Google ranks it", "It replaces backups of photos"], answer: 1, why: "On Lesson 9 you'll add new files for a store; if anything breaks, the history gets you back.", from: 1, aim: "online-store-paystack" },
     { q: "You attached a client's domain 10 minutes ago and it doesn't open yet. What do you do?", options: ["Change the nameservers again", "Wait: DNS changes can take minutes up to 48 hours to spread", "Delete the project", "Buy another domain"], answer: 1, why: "Changing things again restarts the wait. You'll meet this with every client domain.", from: 2, aim: "client-work" },
     { q: "Who should buy and own a client's domain?", options: ["You, in your name, so they can't leave", "The client, in their own name; you're added as a helper", "Cloudflare", "Nobody"], answer: 1, why: "It's the client's business asset. Ownership is part of every handover.", from: 3, aim: "deliver-get-paid" },
-    { q: "Which of these must never be uploaded to GitHub?", options: ["index.html", "The images folder", "Passwords and private notes", "styles.css"], answer: 2, why: "Anything on GitHub can leak. On Day 9 you'll keep a private payment key out of GitHub on purpose.", from: 4, aim: "online-store-paystack" },
+    { q: "Which of these must never be uploaded to GitHub?", options: ["index.html", "The images folder", "Passwords and private notes", "styles.css"], answer: 2, why: "Anything on GitHub can leak. On Lesson 9 you'll keep a private payment key out of GitHub on purpose.", from: 4, aim: "online-store-paystack" },
   ],
   celebrate: {
-    title: "Day 7 complete: the site runs itself",
+    title: "Lesson 7 complete: the site runs itself",
     proved: "You can run a website like a professional: every change saved and dated, live within minutes, visitors counted, and a domain ready to connect.",
     badge: "Auto-pilot publisher",
     badgeDesc: "Connected GitHub so the site updates itself",

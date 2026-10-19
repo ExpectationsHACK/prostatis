@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { getPlan, newReference } from "@/lib/membership";
+import { getMySubscription, getPlan, includesPlan, newReference } from "@/lib/membership";
 import { initializeTransaction, paymentsMode } from "@/lib/paystack";
 import { site } from "@/lib/site";
 import { getCurrentUser } from "@/lib/supabase/server";
@@ -12,6 +12,10 @@ export async function startCheckout(form: FormData) {
 
   const user = await getCurrentUser();
   if (!user) redirect(`/signup?next=${encodeURIComponent(`/checkout/${plan.id}`)}`);
+
+  // Lifetime access: never charge for a track this account already has (the page hides the
+  // button too, but the server is what counts).
+  if (includesPlan(await getMySubscription(), plan.id)) redirect(`/checkout/${plan.id}`);
 
   const mode = paymentsMode();
   const reference = newReference(user.id);

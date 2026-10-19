@@ -10,10 +10,9 @@ const KINDS: Record<string, string> = {
   inactive: "Inactive",
   stuck_quiz: "Stuck on a quiz",
   task_pending: "Mission pending",
-  expiring: "Access ending soon",
   ready_final: "Ready for the final",
   failed_final: "Final not passed",
-  expired_unfinished: "Ended unfinished",
+  expired_unfinished: "Access closed",
 };
 
 // Ready-made WhatsApp nudges, so following up takes seconds.
@@ -22,10 +21,9 @@ const NUDGE: Record<string, (first: string) => string> = {
   inactive: (n) => `Hi ${n}! We noticed you've paused the course. Anything blocking you? Reply here and we'll help you get moving again.`,
   stuck_quiz: (n) => `Hi ${n}! That quiz can be tricky. Re-read the lesson's recap at the bottom, then try again. Want us to explain any question?`,
   task_pending: (n) => `Hi ${n}! You passed the quiz, nice! Confirm your mission to unlock the next lesson. Need a hand with it?`,
-  expiring: (n) => `Hi ${n}! Your course access ends soon. Want to finish strong? Tell us what you need to get to the final.`,
   ready_final: (n) => `Hi ${n}! You've finished every lesson. The final assessment is open: pass it to get your certificate!`,
   failed_final: (n) => `Hi ${n}! You're close on the final. Review the lesson recaps and try again: you need 75%.`,
-  expired_unfinished: (n) => `Hi ${n}! Your access ended before you finished. Would you like a short extension to complete the track?`,
+  expired_unfinished: (n) => `Hi ${n}! Your course access was closed. If that's a mistake, reply and we'll reopen it straight away.`,
 };
 
 export default async function AffairsPage({ searchParams }: { searchParams: Promise<{ kind?: string }> }) {
@@ -40,13 +38,13 @@ export default async function AffairsPage({ searchParams }: { searchParams: Prom
 
   return (
     <div className="space-y-6">
-      <PageHead title="Student affairs" crumbs={[{ label: "Students" }]} sub="Who needs help, a nudge or an extension, worked out from their progress. Tap WhatsApp to send a ready-made message." />
+      <PageHead title="Student affairs" crumbs={[{ label: "Students" }]} sub="Who needs help or a nudge, worked out from their progress. Tap WhatsApp to send a ready-made message." />
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <Stat icon={HeartHandshake} label="Need attention" value={new Set(queue.map((x) => x.student.id)).size} tone="accent" />
         <Stat icon={Hourglass} label="Paid, not started" value={count("not_started")} href="/admin/affairs?kind=not_started" />
         <Stat icon={Moon} label="Inactive 5+ days" value={count("inactive")} href="/admin/affairs?kind=inactive" />
-        <Stat icon={CalendarClock} label="Access ending" value={count("expiring")} href="/admin/affairs?kind=expiring" />
+        <Stat icon={CalendarClock} label="Access closed" value={count("expired_unfinished")} href="/admin/affairs?kind=expired_unfinished" />
       </div>
 
       <div className="flex flex-wrap gap-2">

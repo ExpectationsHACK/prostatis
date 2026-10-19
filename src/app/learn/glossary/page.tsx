@@ -51,7 +51,7 @@ export default async function Glossary() {
                 <dd className="mt-2 text-[15.5px] leading-relaxed text-ink/90"><span className="font-semibold">In plain English: </span><Rich text={e.meaning} /></dd>
                 <dd className="mt-2">
                   <Link href={`/learn/${slugOf(t)}/${d}#term-${slugTerm(e.term)}`} className="label text-brand-text underline">
-                    Taught in Day {d}: {e.title}
+                    Taught in lesson {d}: {e.title}
                   </Link>
                 </dd>
               </div>

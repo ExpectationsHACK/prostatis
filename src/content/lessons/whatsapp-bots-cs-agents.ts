@@ -168,10 +168,10 @@ const lesson: Lesson = {
     { q: "What do many small businesses really need first on WhatsApp?", options: ["A custom AI platform", "The free WhatsApp Business app, set up properly", "An unofficial bot", "A second phone"], answer: 1, why: "Profile, greeting, away message, quick replies and a catalog solve a lot. It's a cheap, quick item to include in your packages.", from: 0, aim: "proposals-pricing" },
     { q: "A customer last messaged 30 hours ago. What may a business on the Platform send her?", options: ["Anything it likes", "Only an approved template, and only if she opted in", "Nothing ever again", "A voice note"], answer: 1, why: "That's the 24-hour rule. Tomorrow's reminder messages are designed to respect it.", from: 1, aim: "connect-the-system" },
     { q: "What makes a good handoff?", options: ["The customer repeats everything", "The customer is told a person is coming, and the owner gets a summary", "Ending the chat", "Sending a sticker"], answer: 1, why: "No repeating yourself: that's what builds trust. Tomorrow, handoffs also update the customer list.", from: 3, aim: "connect-the-system" },
-    { q: "Where does the Gemini API key for the website assistant live?", options: ["In chat.js, so it works faster", "Only on the server, as a Cloudflare secret", "In the WhatsApp greeting", "In the sitemap"], answer: 1, why: "Keys in a page can be copied and abused. On Day 19 you'll add spending limits as a second protection.", from: 4, aim: "monitoring-handover" },
+    { q: "Where does the Gemini API key for the website assistant live?", options: ["In chat.js, so it works faster", "Only on the server, as a Cloudflare secret", "In the WhatsApp greeting", "In the sitemap"], answer: 1, why: "Keys in a page can be copied and abused. On Lesson 19 you'll add spending limits as a second protection.", from: 4, aim: "monitoring-handover" },
   ],
   celebrate: {
-    title: "Day 17 complete: open day and night",
+    title: "Lesson 17 complete: open day and night",
     proved: "You can organise a business's WhatsApp and put a safe, free AI assistant on its website, with a person always one tap away.",
     badge: "Always open",
     badgeDesc: "Set up WhatsApp Business and a website assistant",

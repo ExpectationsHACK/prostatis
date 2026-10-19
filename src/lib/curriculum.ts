@@ -42,13 +42,13 @@ export type Track = {
   modules: Module[];
 };
 
-// ---------- Fast Track: 14 days, ~55% of the Main Track ----------
+// ---------- Fast Track: 14 lessons, ~55% of the Main Track ----------
 export const fastTrack: Track = {
   id: "fast_track",
   name: "Fast Track",
-  headline: "Go from beginner to building your first website in 14 days",
-  length: "14 days",
-  blurb: "One lesson a day, free tools only. Your first page is live on Day 3 and a full business website by Day 4. By Day 14 you have built a store, a booking system and a web app, launched your portfolio and pitched real businesses.",
+  headline: "Go from beginner to building your first website in 14 lessons",
+  length: "14 lessons",
+  blurb: "14 hands-on lessons at your own pace, free tools only. Your first page goes live in lesson 3 and a full business website in lesson 4. By the last lesson you have built a store, a booking system and a web app, launched your portfolio and pitched real businesses.",
   weeks: [
     { week: 1, title: "Design & build websites", blurb: "Brand, page plan, your free AI build kit, a five-page business site and a landing page, live on the internet and updating itself." },
     { week: 2, title: "Web solutions, SEO & shipping", blurb: "Bookings with deposits, an online store and a web app, then Google, your portfolio, your price and your first pitches." },
@@ -71,13 +71,13 @@ export const fastTrack: Track = {
   ],
 };
 
-// ---------- Main Track: one month, the full offer ----------
+// ---------- Main Track: 26 lessons, the full offer ----------
 export const mainTrack: Track = {
   id: "main_track",
   name: "Main Track",
   headline: "Master 4 digital skills businesses are willing to pay for",
-  length: "1 month",
-  blurb: "In one month, learn website development, SEO, business automation and AI agent deployment. Build practical solutions you can offer to businesses without spending money on expensive software.",
+  length: "26 lessons",
+  blurb: "In 26 lessons, learn website development, SEO, business automation and AI agent deployment. Build practical solutions you can offer to businesses without spending money on expensive software.",
   weeks: [
     { week: 1, title: "Design & build", blurb: "Brand, page plan, your free AI build kit, a business website and landing pages, live and updating itself." },
     { week: 2, title: "Web solutions & SEO", blurb: "Bookings, online stores and web apps, then the SEO and Google profile that make Google show them." },

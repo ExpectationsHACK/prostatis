@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ track: st
   const { track: slug, day } = await params;
   const mod = trackSlugs[slug]?.modules.find((m) => m.day === Number(day));
   const lesson = mod && getLesson(mod.lesson);
-  return { title: lesson ? `Day ${mod.day}: ${lesson.title}` : "Lesson" };
+  return { title: lesson ? `Lesson ${mod.day}: ${lesson.title}` : "Lesson" };
 }
 
 export default async function LessonPage({ params }: { params: Promise<{ track: string; day: string }> }) {
@@ -41,11 +41,11 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
     return (
       <div className="mx-auto max-w-xl px-4 py-14 sm:py-20 text-center">
         <Lock className="mx-auto size-10 text-ink" aria-hidden />
-        <h1 className="display mt-4 text-[26px] sm:text-[32px] text-ink">Day {day} is locked</h1>
-        <p className="mt-2 font-mono text-[14px] text-muted">Lessons open in order so each one builds on the last. Finish Day {prog.next?.day} first.</p>
+        <h1 className="display mt-4 text-[26px] sm:text-[32px] text-ink">Lesson {day} is locked</h1>
+        <p className="mt-2 font-mono text-[14px] text-muted">Lessons open in order so each one builds on the last. Finish Lesson {prog.next?.day} first.</p>
         {prog.next && (
           <Link href={`/learn/${slug}/${prog.next.day}`} className={`${btn.primary} ${size.lg} mt-6`}>
-            Go to Day {prog.next.day}
+            Go to Lesson {prog.next.day}
           </Link>
         )}
       </div>
@@ -73,7 +73,7 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
         <header className="mt-5">
           <p className="flex flex-wrap items-center gap-2">
             <span className="label text-brand-text">
-              Day {day} of {track.modules.length}
+              Lesson {day} of {track.modules.length}
             </span>
             <PillarTag pillar={mod.pillar} />
           </p>
@@ -203,16 +203,16 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
         <nav className="mt-10 sm:mt-14 flex items-center justify-between gap-3 border-t border-edge pt-6" aria-label="Lesson navigation">
           {prev ? (
             <Link href={`/learn/${slug}/${prev.day}`} className={`${btn.secondary} ${size.md}`}>
-              <ArrowLeft className="size-4" aria-hidden /> Day {prev.day}
+              <ArrowLeft className="size-4" aria-hidden /> Lesson {prev.day}
             </Link>
           ) : <span />}
           {next ? (
             done ? (
               <Link href={`/learn/${slug}/${next.day}`} className={`${btn.primary} ${size.md}`}>
-                Day {next.day} <ArrowRight className="size-4" aria-hidden />
+                Lesson {next.day} <ArrowRight className="size-4" aria-hidden />
               </Link>
             ) : (
-              <span className="label inline-flex items-center gap-1.5 text-muted"><Lock className="size-3.5" aria-hidden /> Day {next.day} opens when this one is complete</span>
+              <span className="label inline-flex items-center gap-1.5 text-muted"><Lock className="size-3.5" aria-hidden /> Lesson {next.day} opens when this one is complete</span>
             )
           ) : (
             <Link href={`/learn/${slug}/final`} className={`${btn.primary} ${size.md}`}>
