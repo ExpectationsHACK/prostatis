@@ -57,3 +57,15 @@ next-env.d.ts
 
 # Netlify
 .netlify
+
+# Rendered ad videos (large binaries)
+marketing/ads/*.mp4
+marketing/ads/render/node_modules/
+marketing/ads/render/silent/
+marketing/ads/render/music/
+marketing/ads/render/voice/
+marketing/ads/render/vo/*.wav
+marketing/ads/render/vo/trim/
+marketing/ads/render/*.png
+marketing/ads/sales/*.mp4
+marketing/ads/render/sales/

@@ -132,7 +132,7 @@ const T: Record<string, () => ReactNode> = {
   "tech-stack-picker": () => (
     <Stage d={8} className="gap-3">
       <div className="w-[152px] space-y-1.5">
-        {[["N", "Next.js", "Framework", "#151515"], ["~", "Tailwind", "Styling", "#0ea5e9"], ["S", "Supabase", "Logins + data", "#16a34a"], ["▲", "Vercel", "Hosting", "#151515"]].map(([ic, n, r, c], i) => (
+        {[["N", "Next.js", "Framework", "#151515"], ["~", "Tailwind", "Styling", "#0ea5e9"], ["S", "Supabase", "Logins + data", "#16a34a"], ["C", "Cloudflare", "Hosting", "#f38020"]].map(([ic, n, r, c], i) => (
           <Box key={n} className={"flex items-center gap-1.5 px-1.5 py-1 " + m("left")} style={at(0.2 + i * 0.3)}>
             <span className="grid size-[14px] place-items-center rounded-[4px] text-[8px] font-bold text-white" style={{ background: c }}>{ic}</span>
             <span className={`${t.sm} font-semibold`}>{n}</span>

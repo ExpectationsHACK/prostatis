@@ -18,7 +18,7 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
 
   return (
     <div className="space-y-6">
-      <PageHead title="Visitors" sub="Counted without cookies and without storing IP addresses. Location comes from your host (Vercel) and shows “Unknown” when running locally.">
+      <PageHead title="Visitors" sub="Counted without cookies and without storing IP addresses. Location comes from your host (Netlify, Vercel or Cloudflare) and shows “Unknown” when running locally.">
         {RANGES.map((r) => (
           <Link key={r} href={`/admin/analytics?days=${r}`} className={"rounded-lg border px-3 py-1.5 text-[13px] " + (r === days ? "border-[var(--a-accent)] bg-[var(--a-accent-soft)] font-medium text-[var(--a-accent-text)]" : "border-[var(--a-border)] bg-white hover:bg-[var(--a-head)]")}>
             {r === 1 ? "Today" : `${r} days`}

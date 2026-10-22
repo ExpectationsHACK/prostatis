@@ -5,7 +5,8 @@ export const site = {
   company: "Stynark",
   /** How the two appear together (footer, emails, certificates, legal pages). */
   byline: "Prostatis by Stynark",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  // Trailing slashes trimmed: "https://x.com/" + "/pricing" would give "//pricing" in the sitemap and emails.
+  url: (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").trim().replace(/\/+$/, ""),
   tagline: "Learn to build websites with AI and turn it into a source of income.",
   subhead:
     "Build business websites, online stores and booking systems with AI in 14 hands-on lessons, then learn exactly what to charge and how to land paying clients. Learn at your own pace, no coding background needed.",

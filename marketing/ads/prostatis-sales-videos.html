@@ -1,0 +1,340 @@
+<title>Prostatis Sales Videos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Geist:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a 9:16 phone-ad stage on the left, the script for the current ad on the right (stacks on phones).
+   One committed brand look (Prostatis: warm paper, ink outlines, hard shadows, one orange). */
+:root {
+  --paper: #faf8f4; --card: #ffffff; --sunk: #f3f0ea; --ink: #151515; --muted: #5f5b53; --line: #e6e1d8;
+  --brand: #eb5e28; --brand-text: #b8400f; --brand-wash: #fdeee6;
+  --blue: #2f5bd3; --blue-wash: #e8eefc; --green: #16794a; --green-wash: #e3f5e9;
+  --purple: #6b3fc4; --purple-wash: #efe8fc; --yellow: #f2c230; --yellow-wash: #fdf3d0; --teal: #0f766e; --teal-wash: #ddf3f0;
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --body: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 40px; }
+h1, h2, h3 { font-family: var(--display); font-stretch: 110%; letter-spacing: -0.03em; text-wrap: balance; margin: 0; }
+.wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 20px; }
+.top { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; }
+.top h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.05; }
+.top p { margin: 4px 0 0; color: var(--muted); max-width: 60ch; }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.tab { font: 600 13px/1 var(--body); border: 2px solid var(--ink); background: var(--card); color: var(--ink); border-radius: 999px; padding: 9px 14px; cursor: pointer; box-shadow: 2px 2px 0 var(--ink); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); }
+.tab:focus-visible, .btn:focus-visible, .chip-s:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.main { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 860px) { .main { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- The stage (1080x1920 drawn at 360x640, scaled to fit) ---------- */
+.stage-col { display: grid; gap: 12px; justify-items: center; }
+.frame { width: 100%; max-width: 420px; aspect-ratio: 9 / 16; border: 2px solid var(--ink); border-radius: 22px; box-shadow: 5px 5px 0 var(--ink); overflow: hidden; position: relative; background: var(--paper); container-type: inline-size; }
+.stage { position: absolute; inset: 0; overflow: hidden; font-family: var(--body); }
+.scene { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 4.6cqw; padding: 21cqw 8cqw 34cqw; }
+.scene.dark { background: var(--ink); color: var(--paper); }
+.scene.orange { background: var(--brand); color: var(--ink); }
+.scene.paper { background: var(--paper); color: var(--ink); }
+.scene.blue { background: var(--blue-wash); color: var(--ink); }
+.big { font-family: var(--display); font-stretch: 112%; font-weight: 800; font-size: 11.5cqw; line-height: 0.98; letter-spacing: -0.035em; }
+.mid { font-family: var(--display); font-stretch: 108%; font-weight: 700; font-size: 7.6cqw; line-height: 1.05; letter-spacing: -0.03em; }
+.small { font-size: 4.3cqw; line-height: 1.35; font-weight: 500; }
+.o { color: var(--brand); } .scene.orange .o { color: var(--card); }
+.cap { position: absolute; left: 6cqw; right: 6cqw; bottom: 5cqw; background: rgba(21,21,21,.86); color: #fff; font-size: 3.7cqw; line-height: 1.35; padding: 2.4cqw 3cqw; border-radius: 2.6cqw; text-align: center; z-index: 5; }
+.cap[hidden] { display: none !important; }
+.logo { position: absolute; top: 5cqw; left: 6cqw; display: flex; align-items: center; gap: 2cqw; font-family: var(--display); font-weight: 700; font-size: 4.4cqw; z-index: 4; }
+.logo svg { width: 7cqw; height: 8cqw; }
+
+/* Building blocks */
+.card { background: var(--card); color: var(--ink); border: .6cqw solid var(--ink); border-radius: 3.6cqw; box-shadow: 1.2cqw 1.2cqw 0 var(--ink); padding: 4cqw; }
+.dark .card { box-shadow: 1.2cqw 1.2cqw 0 var(--brand); }
+.row { display: flex; flex-wrap: wrap; gap: 2.4cqw; }
+.chip { display: inline-flex; align-items: center; gap: 1.6cqw; border: .5cqw solid var(--ink); border-radius: 99px; padding: 1.6cqw 3.2cqw; font-weight: 700; font-size: 4cqw; background: var(--card); color: var(--ink); }
+.chip i { width: 2.2cqw; height: 2.2cqw; border-radius: 50%; display: inline-block; }
+.phone { width: 46cqw; aspect-ratio: 9/14; border: .8cqw solid var(--ink); border-radius: 6cqw; background: var(--card); box-shadow: 1.4cqw 1.4cqw 0 var(--ink); padding: 3.4cqw 2.6cqw; display: grid; align-content: start; gap: 2cqw; align-self: center; overflow: hidden; }
+.bar { height: 2.6cqw; border-radius: 99px; background: var(--sunk); }
+.blk { border-radius: 2cqw; background: var(--sunk); }
+.stamp { display: inline-grid; place-items: center; border: .8cqw solid var(--green); color: var(--green); border-radius: 3cqw; font-family: var(--display); font-weight: 800; font-size: 6cqw; padding: 1.4cqw 4cqw; transform: rotate(-8deg); background: var(--card); }
+.counter { font-family: var(--display); font-weight: 900; font-stretch: 115%; font-size: 30cqw; line-height: .85; letter-spacing: -0.05em; }
+.shops { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3cqw; }
+.shop { border: .6cqw solid var(--ink); border-radius: 3cqw; background: var(--card); padding: 3cqw 2cqw; text-align: center; font-weight: 700; font-size: 3.6cqw; color: var(--ink); }
+.shop b { display: block; font-size: 8cqw; line-height: 1.2; }
+.bubble { background: var(--card); color: var(--ink); border: .5cqw solid var(--ink); border-radius: 4cqw 4cqw 4cqw 1cqw; padding: 3cqw 4cqw; font-size: 4.4cqw; font-weight: 500; max-width: 80%; }
+.bubble.me { align-self: flex-end; background: var(--green-wash); border-radius: 4cqw 4cqw 1cqw 4cqw; }
+.cta { display: inline-flex; align-items: center; justify-content: center; gap: 2cqw; background: var(--brand); color: var(--ink); border: .7cqw solid var(--ink); border-radius: 3.4cqw; box-shadow: 1.2cqw 1.2cqw 0 var(--ink); font-family: var(--display); font-weight: 800; font-size: 7cqw; padding: 3.4cqw 6cqw; }
+.dark .cta { box-shadow: 1.2cqw 1.2cqw 0 var(--brand); background: var(--brand); }
+.tick { color: var(--green); font-weight: 900; }
+.strike { position: relative; } .strike::after { content: ""; position: absolute; left: -2%; right: -2%; top: 52%; height: 1.1cqw; background: var(--brand); transform-origin: left; animation: grow-x .5s cubic-bezier(.3,.7,.2,1) both; animation-delay: var(--sd, 1s); }
+.note { font-size: 3.2cqw; opacity: .8; }
+
+/* Motion kit: every element starts from its finished frame (reduced motion shows the end state). */
+@keyframes rise { from { opacity: 0; transform: translateY(8cqw); } to { opacity: 1; transform: none; } }
+@keyframes drop { from { opacity: 0; transform: translateY(-14cqw) rotate(-4deg); } to { opacity: 1; transform: none; } }
+@keyframes pop { 0% { opacity: 0; transform: scale(.4); } 70% { transform: scale(1.08); } 100% { opacity: 1; transform: none; } }
+@keyframes grow-x { from { transform: scaleX(0); } to { transform: none; } }
+@keyframes slam { 0% { opacity: 0; transform: scale(2.4) rotate(-8deg); } 60% { opacity: 1; transform: scale(.92) rotate(-8deg); } 100% { transform: rotate(-8deg); } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pulse { 0%,100% { transform: none; } 50% { transform: scale(1.05); } }
+@keyframes rain { from { opacity: 0; transform: translateY(-40cqw); } 30% { opacity: .45; } to { opacity: .12; transform: translateY(60cqw); } }
+@keyframes wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+.a-rise { animation: rise .6s cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--d, 0s); }
+.a-drop { animation: drop .55s cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--d, 0s); }
+.a-pop { animation: pop .5s cubic-bezier(.3,.7,.2,1.3) both; animation-delay: var(--d, 0s); }
+.a-grow { transform-origin: left; animation: grow-x .7s cubic-bezier(.3,.7,.2,1) both; animation-delay: var(--d, 0s); }
+.a-slam { animation: slam .55s cubic-bezier(.3,.7,.2,1) both; animation-delay: var(--d, 0s); }
+.a-fade { animation: fade .6s ease both; animation-delay: var(--d, 0s); }
+.a-wipe { animation: wipe .8s cubic-bezier(.6,0,.2,1) both; animation-delay: var(--d, 0s); }
+.a-pulse { animation: pulse 1.2s ease-in-out infinite; animation-delay: var(--d, 0s); }
+.a-rain { position: absolute; font-family: var(--display); font-weight: 800; font-size: 6cqw; animation: rain 2.6s linear infinite; animation-delay: var(--d, 0s); }
+.stage.paused, .stage.paused * { animation-play-state: paused !important; }
+@media (prefers-reduced-motion: reduce) { .stage * { animation-duration: .01s !important; animation-iteration-count: 1 !important; } }
+
+/* ---------- Controls and script ---------- */
+.controls { width: 100%; max-width: 420px; display: grid; gap: 10px; }
+.progress { position: relative; height: 10px; border-radius: 99px; background: var(--sunk); border: 2px solid var(--ink); overflow: hidden; }
+.progress span { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--brand); }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { font: 600 14px/1 var(--body); border: 2px solid var(--ink); border-radius: 12px; padding: 10px 14px; background: var(--card); color: var(--ink); cursor: pointer; box-shadow: 2px 2px 0 var(--ink); }
+.btn.primary { background: var(--brand); }
+.time { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px; }
+.chips-s { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip-s { font: 600 12px/1 var(--body); border: 1.5px solid var(--ink); border-radius: 99px; padding: 6px 10px; background: var(--card); color: var(--ink); cursor: pointer; }
+.chip-s[aria-current="true"] { background: var(--brand-wash); border-color: var(--brand-text); color: var(--brand-text); }
+.script { min-width: 0; display: grid; gap: 14px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { font: 600 12px/1 var(--body); border-radius: 99px; padding: 7px 11px; background: var(--sunk); }
+.pill.hook { background: var(--brand-wash); color: var(--brand-text); }
+.pill.music { background: var(--purple-wash); color: var(--purple); }
+.beat { border: 2px solid var(--ink); border-radius: 14px; background: var(--card); padding: 14px 16px; display: grid; gap: 8px; }
+.beat.on { box-shadow: 4px 4px 0 var(--brand); border-color: var(--brand-text); }
+.beat h3 { font-size: 16px; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.beat h3 small { font: 600 12px var(--body); color: var(--muted); font-variant-numeric: tabular-nums; }
+.beat dl { margin: 0; display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 6px 12px; }
+.beat dt { font: 700 11px/1.6 var(--body); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.beat dd { margin: 0; min-width: 0; }
+.beat dd.vo { font-weight: 600; }
+.foot { color: var(--muted); font-size: 13px; max-width: 70ch; }
+.clean .cap { display: none; }
+</style>
+<style>
+/* Extra pieces for the sales set */
+.tick-row { display: flex; gap: 3cqw; align-items: flex-start; }
+.tick-row .t { flex: 0 0 auto; width: 7cqw; height: 7cqw; border-radius: 50%; display: grid; place-items: center; background: var(--green); color: #fff; font-weight: 900; font-size: 4.4cqw; border: .5cqw solid var(--ink); }
+.tick-row .x { font-size: 4.6cqw; font-weight: 600; line-height: 1.3; }
+.dark .tick-row .x { color: var(--paper); }
+.toast { display: flex; gap: 3cqw; align-items: center; background: var(--card); color: var(--ink); border: .5cqw solid var(--ink); border-radius: 3.4cqw; padding: 3cqw 3.6cqw; box-shadow: 1cqw 1cqw 0 var(--ink); font-size: 4.2cqw; }
+.toast b { display: block; font-size: 3.4cqw; color: var(--muted); font-weight: 600; }
+.toast .ic { width: 9cqw; height: 9cqw; border-radius: 2.6cqw; display: grid; place-items: center; font-size: 5cqw; flex: 0 0 auto; }
+.path { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1.6cqw; }
+.path span { aspect-ratio: 1; border-radius: 50%; border: .5cqw solid var(--ink); display: grid; place-items: center; font-weight: 800; font-size: 3.6cqw; background: var(--card); color: var(--ink); }
+.path span.on { background: var(--green); color: #fff; }
+.cert { background: var(--card); color: var(--ink); border: .7cqw solid var(--ink); border-radius: 3cqw; padding: 5cqw; text-align: center; box-shadow: 1.4cqw 1.4cqw 0 var(--brand); }
+.cert .n { font-family: var(--display); font-weight: 800; font-size: 7cqw; margin-top: 2cqw; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 3cqw; }
+.vs .card { text-align: center; }
+.kicker { font-weight: 700; font-size: 4cqw; letter-spacing: .08em; text-transform: uppercase; opacity: .8; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Prostatis: sales videos</h1>
+      <p>Ten emotional sales ads for Nigerians aged 15 to 40, plus the pinned Welcome video. Pick one, press Play, and read the script beside it.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Choose a video" id="tabs"></div>
+  </header>
+  <div class="main">
+    <div class="stage-col">
+      <div class="frame" id="frame"><div class="stage" id="stage"></div></div>
+      <div class="controls">
+        <div class="progress" aria-hidden="true"><span id="bar"></span></div>
+        <div class="btns">
+          <button class="btn primary" id="play" type="button">Pause</button>
+          <button class="btn" id="restart" type="button">Restart</button>
+          <button class="btn" id="captions" type="button" aria-pressed="true">Captions on</button>
+          <span class="time" id="time">0.0s</span>
+        </div>
+        <div class="chips-s" id="scenes" aria-label="Jump to a scene"></div>
+      </div>
+    </div>
+    <section class="script" id="script" aria-live="polite"></section>
+  </div>
+  <p class="foot">Every claim matches the live course: lesson counts, prices, lifetime access, the practice client, the certificate, free tools and the community. No video promises income; the "earn" ideas are framed as learning a skill businesses pay for.</p>
+</div>
+
+<script>
+/*TIMINGS*/const TIMINGS = {"0":{"beats":[[0,4.7],[4.7,11.1],[11.1,19],[19,26.1],[26.1,33]],"total":33},"1":{"beats":[[0,4.9],[4.9,11.5],[11.5,20.4],[20.4,26.2],[26.2,32.3]],"total":32.3},"2":{"beats":[[0,3.3],[3.3,9.6],[9.6,15.9],[15.9,23.9],[23.9,32.8]],"total":32.8},"3":{"beats":[[0,3.2],[3.2,9.5],[9.5,15.9],[15.9,23],[23,31]],"total":31},"4":{"beats":[[0,3.2],[3.2,10],[10,18.3],[18.3,24.8],[24.8,31.2]],"total":31.2},"5":{"beats":[[0,3.2],[3.2,9.2],[9.2,18.6],[18.6,23.9],[23.9,29.1]],"total":29.1},"6":{"beats":[[0,4.7],[4.7,11],[11,20.2],[20.2,24.2],[24.2,29.9]],"total":29.9},"7":{"beats":[[0,3.3],[3.3,8.1],[8.1,15.2],[15.2,20.7],[20.7,25.2]],"total":25.2},"8":{"beats":[[0,3.4],[3.4,11.2],[11.2,17.3],[17.3,23.6],[23.6,28.9]],"total":28.9},"9":{"beats":[[0,3.9],[3.9,9.8],[9.8,17.7],[17.7,22.6],[22.6,28.5]],"total":28.5},"10":{"beats":[[0,3.2],[3.2,9.9],[9.9,17.3],[17.3,25.5],[25.5,36],[36,41.8],[41.8,47.1],[47.1,53.4],[53.4,60.5]],"total":60.5}};/*END*/
+const LOGO = `<svg viewBox="-31 -35.5 62 71" aria-hidden="true"><g stroke="currentColor" fill="currentColor"><path d="M13.15 -25.41L0 -33L-28.58 -16.5L0 0L28.58 -16.5L28.58 16.5L0 33L-28.58 16.5L-28.58 4.9" fill="none" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M-13.75 4.11L-2 10.9L-2 15.75L-13.75 8.96Z" stroke="none"/><path d="M-10.75 14.35L-2 19.4L-2 24.25L-10.75 19.2Z" stroke="none"/></g></svg>`;
+const brand = (dark) => `<div class="logo" style="color:${dark ? "#faf8f4" : "#151515"}">${LOGO}Prostatis</div>`;
+const ds = (s) => `--d:${s.toFixed(2)}s`;
+
+// ---- Scene templates. `D` is the scene's length in seconds, so reveals spread across it. ----
+const T = {
+  hook: (lines, bg = "dark", o = [1]) => (D) => `<div class="scene ${bg}">${brand(bg === "dark")}<div class="big">${lines.map((l, i) => `<span class="a-drop${o.includes(i) ? " o" : ""}" style="display:inline-block;${ds(i * Math.min(.55, D / (lines.length + 2)))}">${l}</span>`).join("<br>")}</div></div>`,
+  ticks: (title, items, bg = "paper") => (D) => `<div class="scene ${bg}">${brand(bg === "dark")}<div class="mid a-rise" style="${ds(0)}">${title}</div>${items.map((x, i) => `<div class="tick-row a-rise" style="${ds(.5 + i * ((D - 1.4) / items.length))}"><span class="t">✓</span><span class="x">${x}</span></div>`).join("")}</div>`,
+  cards: (title, items, bg = "paper", mark = "") => (D) => `<div class="scene ${bg}">${brand(bg === "dark")}${title ? `<div class="mid a-rise" style="${ds(0)}">${title}</div>` : ""}${items.map((x, i) => `<div class="card a-drop" style="${ds(.4 + i * ((D - 1.5) / items.length))}"><span class="mid" style="font-size:5.8cqw">${mark}${x}</span></div>`).join("")}</div>`,
+  statement: (top, big, sub = "", bg = "paper") => (D) => `<div class="scene ${bg}">${brand(bg === "dark")}${top ? `<div class="kicker a-fade" style="${ds(0)}">${top}</div>` : ""}<div class="big a-rise" style="${ds(.2)};font-size:10cqw">${big}</div>${sub ? `<div class="small a-fade" style="${ds(Math.min(2, D * .4))}">${sub}</div>` : ""}</div>`,
+  phone: (title, line, chips, accent = "#2f5bd3", bg = "blue") => (D) => `<div class="scene ${bg}">${brand(false)}<div class="mid a-rise" style="${ds(0)}">${line}</div>${phone(title, accent)}<div class="row">${chips.map((c, i) => `<span class="chip a-pop" style="${ds(1.5 + i * ((D - 2.5) / chips.length))}"><i style="background:${accent}"></i>${c}</span>`).join("")}</div></div>`,
+  chat: (msgs, after = "", bg = "paper") => (D) => `<div class="scene ${bg}">${brand(bg === "dark")}${msgs.map((m, i) => `<div class="bubble ${m[0] === "me" ? "me" : ""} a-rise" style="${ds(.3 + i * ((D - 1.5) / msgs.length))}">${m[1]}</div>`).join("")}${after ? `<div class="mid a-rise o" style="${ds(D - 1.6)}">${after}</div>` : ""}</div>`,
+  toasts: (title, items, bg = "paper") => (D) => `<div class="scene ${bg}">${brand(bg === "dark")}${title ? `<div class="mid a-rise">${title}</div>` : ""}${items.map((t, i) => `<div class="toast a-rise" style="${ds(.4 + i * ((D - 1.4) / items.length))}"><span class="ic" style="background:${t[2]}">${t[0]}</span><span><b>${t[3] || "Prostatis"}</b>${t[1]}</span></div>`).join("")}</div>`,
+  path: (n, title, sub) => (D) => `<div class="scene paper">${brand(false)}<div class="mid a-rise">${title}</div><div class="path">${Array.from({ length: n }, (_, i) => `<span class="a-pop on" style="${ds(.4 + i * ((D - 2) / n))}">${i + 1}</span>`).join("")}</div><div class="small a-fade" style="${ds(D - 1.4)}">${sub}</div></div>`,
+  cert: (top, sub) => (D) => `<div class="scene blue">${brand(false)}<div class="mid a-rise">${top}</div><div class="cert a-pop" style="${ds(.6)}"><div class="kicker">Certificate of completion</div><div class="n">Your name here</div><div class="small" style="margin-top:2cqw">Prostatis · verified</div><div style="margin-top:3cqw"><span class="stamp a-slam" style="${ds(1.6)}">VERIFIED</span></div></div><div class="small a-fade" style="${ds(2.4)}">${sub}</div></div>`,
+  shops: (title, names, sub) => (D) => `<div class="scene dark">${brand(true)}<div class="big" style="font-size:10cqw">${title}</div><div class="shops">${names.map((s, i) => `<div class="shop a-pop" style="${ds(.6 + i * .5)}"><b>${s[0]}</b>${s[1]}</div>`).join("")}</div>${sub ? `<div class="small a-fade" style="${ds(2.4)};color:var(--paper)">${sub}</div>` : ""}</div>`,
+  vs: (a, b, title, bg = "paper") => (D) => `<div class="scene ${bg}">${brand(bg === "dark")}<div class="mid a-rise">${title}</div><div class="vs"><div class="card a-drop" style="${ds(.6)};background:var(--sunk)"><div class="kicker">${a[0]}</div><div class="mid" style="font-size:6cqw;margin-top:2cqw">${a[1]}</div></div><div class="card a-drop" style="${ds(1.4)};background:var(--green-wash)"><div class="kicker">${b[0]}</div><div class="mid" style="font-size:6cqw;margin-top:2cqw">${b[1]}</div></div></div></div>`,
+  end: (line, sub) => (D) => `<div class="scene dark">${brand(true)}<div class="mid a-rise">${line}</div><div class="a-pop" style="${ds(.6)}"><span class="cta a-pulse" style="${ds(1.4)}">prostatis.com</span></div><div class="small a-fade" style="${ds(1)};opacity:.85">${sub}</div></div>`,
+  logo: () => (D) => `<div class="scene orange" style="align-items:center;text-align:center"><div class="a-pop" style="${ds(.2)};width:30cqw;height:34cqw;color:#151515">${LOGO}</div><div class="big a-rise" style="${ds(.9)}">Welcome to<br>Prostatis.</div><div class="small a-fade" style="${ds(1.8)};font-weight:700">by Stynark</div></div>`,
+};
+function phone(title, accent) {
+  return `<div class="phone a-rise" style="${ds(.3)}"><div class="bar a-grow" style="${ds(.6)};width:45%;background:${accent}"></div><div class="a-fade" style="${ds(.9)};font-family:var(--display);font-weight:800;font-size:5cqw;line-height:1.05">${title}</div><div class="blk a-grow" style="${ds(1.2)};height:14cqw;background:${accent};opacity:.25"></div><div class="bar a-grow" style="${ds(1.5)}"></div><div class="bar a-grow" style="${ds(1.7)};width:80%"></div><div class="blk a-pop" style="${ds(2)};height:7cqw;width:60%;background:${accent};border:.5cqw solid #151515"></div></div>`;
+}
+const GREEN = "#16794a", BLUE = "#2f5bd3", ORANGE = "#eb5e28", PURPLE = "#6b3fc4", TEAL = "#0f766e";
+
+// Each video: beats in order; the first is the hook, the last the call to action.
+const VIDEOS = [
+  { slug: "in-school", name: "In school", hook: "Still in school? Learn a skill before you graduate", audience: "15–24, students", mood: 0, music: "Bright Afro-house that builds as the solution lands",
+    beats: [
+      { label: "Hook", vo: "Still in school? Here's a skill you can start learning before you graduate.", ost: "STILL IN SCHOOL?", vis: "Dark screen, the question drops in line by line.", html: T.hook(["Still in", "school?"], "dark", [1]) },
+      { label: "Problem", vo: "Lectures, assignments, and one question that never goes away. What will I actually do after school?", ost: "What will I do after school?", vis: "Three cards drop: Lectures, Assignments, “What next?”.", html: T.cards("", ["Lectures 📚", "Assignments ✍🏾", "…and then what? 🤔"]) },
+      { label: "Solution", vo: "With Prostatis, you learn to build real websites with AI, at your own pace, between classes. No coding background needed.", ost: "Build websites with AI · Your pace · No coding", vis: "A phone builds a business website; chips pop in.", html: T.phone("Stitches by Bisi", "Build real websites<br>with <span style='color:#2f5bd3'>AI</span>.", ["Your own pace", "Between classes", "No coding"]) },
+      { label: "Value", vo: "In fourteen lessons you'll build a business website, a booking system and an online store, then learn how to price and pitch your work.", ost: "14 lessons: website · bookings · store · pricing · pitching", vis: "Ticks appear one by one.", html: T.ticks("In 14 lessons you'll:", ["Build a full business website", "Build a booking system", "Build an online store", "Price and pitch your work"]) },
+      { label: "CTA", vo: "Graduate with a skill, not just a certificate. Start at prostatis dot com.", ost: "Graduate with a skill · prostatis.com", vis: "End card.", html: T.end("Graduate with<br><span class='o'>a skill.</span>", "₦15,000 once · lifetime access") },
+    ] },
+  { slug: "no-high-paid-skill", name: "No high-paying skill", hook: "Don't have a high-paying skill yet?", audience: "18–35", mood: 4, music: "Upbeat Afropop with a confident log-drum bass",
+    beats: [
+      { label: "Hook", vo: "Don't have a high-paying skill yet? Start with one businesses actually need.", ost: "NO HIGH-PAYING SKILL YET?", vis: "Orange screen, bold question.", html: T.hook(["No high-paying", "skill yet?"], "orange", [1]) },
+      { label: "Problem", vo: "Everyone's talking about tech skills. But nobody shows you where to start, and the courses look expensive.", ost: "Where do I even start?", vis: "Chat bubbles of confusion.", html: T.chat([["", "Learn tech, they said 🙄"], ["me", "But where do I start?"], ["", "And why is everything so expensive?"]]) },
+      { label: "Solution", vo: "Prostatis teaches you website building with AI, in plain English, step by step. Fifteen thousand naira, paid once, with lifetime access.", ost: "Plain English · ₦15,000 once · Lifetime access", vis: "Phone builds a site; price chips.", html: T.phone("Glow Salon", "Website building<br>with AI, step by step.", ["Plain English", "₦15,000 once", "Lifetime access"], ORANGE, "paper") },
+      { label: "Proof", vo: "Every lesson ends with a real task and a quiz, and you finish with a portfolio and a verified certificate.", ost: "Task + quiz every lesson · Portfolio · Certificate", vis: "Certificate with a VERIFIED stamp.", html: T.cert("Finish with proof.", "A real portfolio, and a certificate anyone can check.") },
+      { label: "CTA", vo: "Your first high-value skill starts here. prostatis dot com.", ost: "Your first high-value skill · prostatis.com", vis: "End card.", html: T.end("Your first high-value<br><span class='o'>skill starts here.</span>", "Fast Track · 14 lessons · ₦15,000") },
+    ] },
+  { slug: "after-fast-track", name: "After the Fast Track", hook: "What you'll be able to do after 14 lessons", audience: "15–40", mood: 0, music: "Driving Afro-house; a lift on each new skill",
+    beats: [
+      { label: "Hook", vo: "Here's what you'll be able to do after fourteen lessons.", ost: "AFTER 14 LESSONS, YOU CAN…", vis: "Dark screen, a 1→14 path lights up.", html: T.hook(["After 14", "lessons,", "you can…"], "dark", [2]) },
+      { label: "Design & build", vo: "Design a brand for a real business. Build a full five-page website, and put it live on the internet.", ost: "Brand · 5-page website · Live online", vis: "Phone builds a site; ticks.", html: T.phone("Stitches by Bisi", "Design it.<br>Build it. <span style='color:#16794a'>Launch it.</span>", ["Brand kit", "5-page website", "Live online"], GREEN, "blue") },
+      { label: "Web solutions", vo: "Create landing pages that sell, booking systems that take deposits, and online stores with Paystack checkout.", ost: "Landing pages · Bookings + deposits · Paystack stores", vis: "Ticks appear one by one.", html: T.ticks("Then build what businesses pay for:", ["Landing pages that sell", "Booking systems with deposits", "Online stores with Paystack checkout", "Web apps with logins"]) },
+      { label: "Get paid", vo: "Get a business found on Google. Build your own portfolio. Then price your work, pitch real businesses, and get paid.", ost: "Google · Portfolio · Price · Pitch · Get paid", vis: "Lesson path 1→14 fills green.", html: T.path(14, "Google · portfolio · pricing · pitching", "All 14 lessons, at your own pace.") },
+      { label: "CTA", vo: "The Fast Track. Fourteen lessons, fifteen thousand naira, yours for life. prostatis dot com.", ost: "Fast Track · 14 lessons · ₦15,000 · prostatis.com", vis: "End card.", html: T.end("The Fast Track.<br><span class='o'>14 lessons. ₦15,000.</span>", "Pay once · lifetime access") },
+    ] },
+  { slug: "after-main-track", name: "After the Main Track", hook: "Twenty-six lessons from now", audience: "18–40", mood: 2, music: "Cinematic minimal beat; each skill adds a layer",
+    beats: [
+      { label: "Hook", vo: "Twenty-six lessons from now, this could be you.", ost: "26 LESSONS FROM NOW…", vis: "Dark screen, a big 26.", html: T.statement("", "<span class='o'>26 lessons</span><br>from now…", "", "dark") },
+      { label: "Websites + SEO", vo: "Everything in the Fast Track, plus SEO that gets businesses found on Google, including their Google Business Profile.", ost: "Everything in Fast Track + SEO + Google Business Profile", vis: "Ticks.", html: T.ticks("Skill 1 + 2: websites and SEO", ["Everything in the Fast Track", "SEO that ranks on Google", "Google Business Profile set up"]) },
+      { label: "Automation + AI", vo: "Automations that save a business hours every week, and AI chat agents that answer customers on WhatsApp and their website.", ost: "Automations · AI chat agents on WhatsApp + website", vis: "WhatsApp-style chat with an AI agent answering.", html: T.chat([["", "Hi, do you sew asoebi? How much?"], ["me", "🤖 Yes! Prices start from… Want to book a fitting?"], ["", "Yes please, Saturday?"]], "Skill 3 + 4: automation and AI agents") },
+      { label: "Clients", vo: "Then find clients, write proposals, price monthly packages, and deliver a full client project from start to finish.", ost: "Find clients · Proposals · Monthly packages · Full project", vis: "Ticks build a client pipeline.", html: T.ticks("Then win and deliver real work:", ["Find and reach the right clients", "Write proposals that win", "Price monthly packages", "Deliver a full client project"], "blue") },
+      { label: "CTA", vo: "The Main Track. Four skills businesses pay for, one payment. prostatis dot com.", ost: "Main Track · 26 lessons · ₦30,000 · prostatis.com", vis: "End card.", html: T.end("Four skills.<br><span class='o'>One payment.</span>", "Main Track · 26 lessons · ₦30,000 · lifetime access") },
+    ] },
+  { slug: "waiting-for-a-job", name: "Waiting for a job", hook: "Finished school and still waiting?", audience: "21–30, graduates", mood: 3, music: "Soft lo-fi that warms up when the plan appears",
+    beats: [
+      { label: "Hook", vo: "Finished school, and still waiting for that job?", ost: "STILL WAITING FOR THAT JOB?", vis: "Dark, slow drop.", html: T.hook(["Still waiting", "for that job?"], "dark", [1]) },
+      { label: "Problem", vo: "Sending CVs. Waiting for replies. Scrolling job posts. The waiting is the hardest part.", ost: "Sending CVs… waiting… scrolling…", vis: "Notifications that say ‘No reply yet’.", html: T.toasts("", [["📄", "CV sent. No reply yet.", "#ece7de", "Inbox"], ["⏳", "Application under review…", "#ece7de", "Job portal"], ["📭", "Still nothing this week.", "#ece7de", "Inbox"]]) },
+      { label: "Solution", vo: "Use the waiting time to build something. Prostatis teaches you to build websites with AI, and how to offer them to businesses, at your own pace.", ost: "Use the waiting time to build", vis: "Phone builds a site.", html: T.phone("Mama's Kitchen", "Use the waiting<br>time to <span style='color:#eb5e28'>build</span>.", ["Websites with AI", "Offer them to businesses", "Your pace"], ORANGE, "paper") },
+      { label: "Proof", vo: "You'll have real projects, a live portfolio and a verified certificate to show. Not just a CV.", ost: "Real projects · Live portfolio · Certificate", vis: "CV vs Portfolio comparison.", html: T.vs(["Just a CV", "“Please consider me”"], ["Your portfolio", "Live sites you built"], "Show what you can do.") },
+      { label: "CTA", vo: "Stop waiting. Start building. prostatis dot com.", ost: "Stop waiting. Start building. · prostatis.com", vis: "End card.", html: T.end("Stop waiting.<br><span class='o'>Start building.</span>", "Self-paced · lifetime access · ₦15,000 once") },
+    ] },
+  { slug: "salary-finishes", name: "Salary finishes", hook: "Salary finishes before month end?", audience: "25–40, workers", mood: 4, music: "Groovy Afropop, confident and calm",
+    beats: [
+      { label: "Hook", vo: "Salary finishes before the month ends?", ost: "SALARY FINISHES BEFORE MONTH END?", vis: "Orange, bold.", html: T.hook(["Salary finishes", "before month end?"], "orange", [1]) },
+      { label: "Problem", vo: "You work hard all month, and by the twentieth it's already gone. You need more than one way to earn.", ost: "You need more than one way to earn", vis: "A calendar card counts to the 20th.", html: T.statement("By the 20th…", "It's already<br><span class='o'>gone.</span>", "You need more than one way to earn.") },
+      { label: "Solution", vo: "Prostatis teaches you a side skill on your own time. Building websites with AI for businesses. Self-paced, lifetime access, no coding needed.", ost: "A side skill on your own time", vis: "Phone builds a site; chips.", html: T.phone("Glow Salon", "A side skill on<br><span style='color:#2f5bd3'>your own time</span>.", ["Evenings & weekends", "Lifetime access", "No coding"]) },
+      { label: "Value", vo: "Learn how to price your work, write proposals, and set up monthly packages for clients.", ost: "Pricing · Proposals · Monthly packages", vis: "Ticks.", html: T.ticks("And how to sell it:", ["Price your work with confidence", "Write proposals", "Set up monthly client packages"]) },
+      { label: "CTA", vo: "Build your side skill. prostatis dot com.", ost: "Build your side skill · prostatis.com", vis: "End card.", html: T.end("Build your<br><span class='o'>side skill.</span>", "Self-paced · lifetime access") },
+    ] },
+  { slug: "scroll-to-build", name: "Scroll to build", hook: "You scroll for hours every day", audience: "15–30", mood: 3, music: "Chilled lo-fi Afrobeats with phone-tap percussion",
+    beats: [
+      { label: "Hook", vo: "You scroll for hours every day. What if some of that time built something?", ost: "YOU SCROLL FOR HOURS…", vis: "Dark, the line drops; a timer counts.", html: T.hook(["You scroll", "for hours", "every day."], "dark", [1]) },
+      { label: "Problem", vo: "Same reels. Same timeline. Every day. And nothing to show for it.", ost: "Same reels. Nothing to show.", vis: "Three identical cards stack.", html: T.cards("", ["Reel… 📱", "Reel… 📱", "Reel… 📱"], "paper") },
+      { label: "Solution", vo: "With Prostatis, read a short lesson on your phone, take a quick quiz, and keep your streak going. When it's time to build, you use free AI tools on a laptop.", ost: "Short lessons on your phone · Build on a laptop", vis: "Notifications: lesson, quiz passed, streak.", html: T.toasts("", [["📖", "Lesson 3 is ready: your first live page", "#e8eefc"], ["✅", "Quiz passed: 5/5", "#e3f5e9"], ["🔥", "5-day streak! Keep it going", "#fdeee6"], ["💻", "Build time: open your laptop", "#efe8fc"]]) },
+      { label: "Proof", vo: "XP, streaks and badges make learning a habit, not a chore.", ost: "XP · Streaks · Badges", vis: "Chips pop.", html: T.ticks("Make it a habit:", ["Earn XP for every quiz and task", "Keep your daily streak", "Collect a badge for every win"], "blue") },
+      { label: "CTA", vo: "Trade some scrolling for building. prostatis dot com.", ost: "Trade scrolling for building · prostatis.com", vis: "End card.", html: T.end("Trade some scrolling<br><span class='o'>for building.</span>", "Start on your phone · build on a laptop") },
+    ] },
+  { slug: "ai-is-here", name: "AI is here", hook: "AI isn't coming. It's already here.", audience: "16–40", mood: 2, music: "Tense minimal pulse that resolves into a confident beat",
+    beats: [
+      { label: "Hook", vo: "A I isn't coming. It's already here.", ost: "AI ISN'T COMING. IT'S HERE.", vis: "Dark; bold statement.", html: T.hook(["AI isn't coming.", "It's already", "here."], "dark", [2]) },
+      { label: "Problem", vo: "Some people fear it will take their jobs. Others are learning to use it to build.", ost: "Fear it, or use it?", vis: "Two sides compared.", html: T.vs(["Some people", "Fear it 😟"], ["Others", "Build with it 🚀"], "Which one are you?") },
+      { label: "Solution", vo: "Prostatis shows you how to use free A I tools to build real websites, online stores, even A I chat agents for businesses.", ost: "Websites · Stores · AI chat agents", vis: "Phone builds a site; chips.", html: T.phone("Glow Salon · Book now", "Use AI to<br><span style='color:#6b3fc4'>build</span>.", ["Websites", "Online stores", "AI chat agents"], PURPLE, "paper") },
+      { label: "Proof", vo: "Plain English, one practice client, and a real task in every lesson, so you learn by doing.", ost: "Plain English · Practice client · Task every lesson", vis: "Ticks.", html: T.ticks("Learn by doing:", ["Plain English, no jargon", "One practice client: Stitches by Bisi", "A real task in every lesson"], "blue") },
+      { label: "CTA", vo: "Be the one who uses A I. prostatis dot com.", ost: "Be the one who uses AI · prostatis.com", vis: "End card.", html: T.end("Be the one who<br><span class='o'>uses AI.</span>", "Fast Track ₦15,000 · Main Track ₦30,000") },
+    ] },
+  { slug: "the-one-they-call", name: "The one they call", hook: "Be the person every business calls", audience: "18–40", mood: 4, music: "Proud, upbeat Afropop with a ‘ding’ on the win",
+    beats: [
+      { label: "Hook", vo: "Imagine being the person every business on your street calls.", ost: "BE THE ONE THEY CALL.", vis: "Shop cards pop in.", html: T.shops("Be the one<br>they call.", [["✂", "Salon"], ["🍲", "Restaurant"], ["🧵", "Tailor"]]) },
+      { label: "Problem", vo: "The salon needs a booking page. The restaurant needs online orders. The tailor wants customers to find her on Google.", ost: "Bookings · Online orders · Found on Google", vis: "Messages from businesses.", html: T.chat([["", "✂ Salon: can you set up online booking?"], ["", "🍲 Restaurant: we need online orders!"], ["", "🧵 Tailor: how do customers find me on Google?"]]) },
+      { label: "Solution", vo: "Prostatis teaches you to build all of that with A I. Then how to pitch it, price it and deliver it.", ost: "Build it · Pitch it · Price it · Deliver it", vis: "Phone builds a site; chips.", html: T.phone("Stitches by Bisi", "Build it all<br>with <span style='color:#0f766e'>AI</span>.", ["Pitch", "Price", "Deliver"], TEAL) },
+      { label: "Proof", vo: "You practise on one client from the first page to the final handover. Stitches by Bisi, in Yaba.", ost: "Practice client: Stitches by Bisi, Yaba", vis: "Path from first page to handover.", html: T.path(7, "Stitches by Bisi, Yaba", "Your practice client, from first page to handover.") },
+      { label: "CTA", vo: "Become the go-to person. prostatis dot com.", ost: "Become the go-to person · prostatis.com", vis: "End card.", html: T.end("Become the<br><span class='o'>go-to person.</span>", "Learn a skill businesses pay for") },
+    ] },
+  { slug: "spend-or-invest", name: "Spend or invest", hook: "₦15,000: spend it, or invest it?", audience: "15–40", mood: 1, music: "Playful marimba; a whoosh when the choice is made",
+    beats: [
+      { label: "Hook", vo: "Fifteen thousand naira. What could it really change?", ost: "₦15,000. WHAT COULD IT CHANGE?", vis: "Big price drops in.", html: T.statement("", "<span class='o'>₦15,000.</span><br>What could it change?", "", "dark") },
+      { label: "Problem", vo: "Spent once, it's gone in a weekend. Invested once, it can teach you a skill for life.", ost: "Spend it once · Or invest it once", vis: "Two cards compared.", html: T.vs(["Spend it", "Gone by Monday"], ["Invest it", "A skill for life"], "Same money. Different story.") },
+      { label: "Value", vo: "For fifteen thousand naira, paid once: fourteen lessons, free tools for every build, the WhatsApp community, and lifetime access.", ost: "14 lessons · Free tools · Community · Lifetime access", vis: "Ticks stack the value.", html: T.ticks("₦15,000, once, gets you:", ["14 hands-on lessons", "Free tools for every build", "The WhatsApp community", "Lifetime access"]) },
+      { label: "Proof", vo: "You'll also learn to price your work in naira and dollars, and pitch clients near and far.", ost: "Price in naira and dollars · Pitch near and far", vis: "Naira and dollar chips.", html: T.cards("Plus:", ["Price in ₦ and $", "Pitch clients near and far"], "blue") },
+      { label: "CTA", vo: "Invest in yourself, once. prostatis dot com.", ost: "Invest in yourself · prostatis.com", vis: "End card.", html: T.end("Invest in<br><span class='o'>yourself, once.</span>", "Card, transfer or USSD · 7-day refund window") },
+    ] },
+  { slug: "welcome", name: "Welcome (pinned)", hook: "Welcome to Prostatis", audience: "Everyone who finds us", mood: 5, welcome: true, music: "Warm, hopeful Afro-soul: soft keys, gentle drums, a lift at the tracks",
+    beats: [
+      { label: "Welcome", vo: "Welcome to Prostatis.", ost: "Welcome to Prostatis", vis: "Orange screen, the logo draws in, then the words.", html: T.logo() },
+      { label: "Who we are", vo: "We're a Nigerian online school that teaches you to build websites with A I, and to turn that skill into work businesses pay for.", ost: "Build websites with AI. Turn it into work businesses pay for.", vis: "Phone builds a business site.", html: T.phone("Stitches by Bisi", "Build websites with AI.<br><span style='color:#eb5e28'>Get paid for it.</span>", ["Made in Nigeria", "Paid in naira"], ORANGE, "paper") },
+      { label: "No coding", vo: "No coding background? No problem. Every lesson is in plain English, with everyday Nigerian examples.", ost: "No coding background needed · Plain English", vis: "Analogy card.", html: T.cards("No coding background? No problem.", ["Plain English 🗣", "Everyday Nigerian examples"], "blue") },
+      { label: "Learn by doing", vo: "You learn by doing. Each lesson has a real task and a short quiz, and you build everything for one practice client, Stitches by Bisi in Yaba.", ost: "A task and a quiz every lesson · Practice client", vis: "Ticks.", html: T.ticks("You learn by doing:", ["A real task in every lesson", "A short quiz to lock it in", "One practice client: Stitches by Bisi"]) },
+      { label: "Two tracks", vo: "Choose your path. The Fast Track: fourteen lessons from beginner to your first website. The Main Track: twenty-six lessons that add SEO, automation and A I agents.", ost: "Fast Track · 14 lessons | Main Track · 26 lessons", vis: "Two plan cards side by side.", html: T.vs(["Fast Track", "14 lessons · ₦15,000"], ["Main Track", "26 lessons · ₦30,000"], "Choose your path.") },
+      { label: "How it works", vo: "Pay once in naira with card, transfer or U S S D. Learn at your own pace, with lifetime access.", ost: "Pay once · Your pace · Lifetime access", vis: "Ticks.", html: T.ticks("Simple and fair:", ["Pay once in naira", "Card, transfer or USSD", "Learn at your own pace", "Lifetime access"], "blue") },
+      { label: "Finish strong", vo: "Finish with a verified certificate and a portfolio, and join our WhatsApp community along the way.", ost: "Verified certificate · Portfolio · Community", vis: "Certificate.", html: T.cert("Finish strong.", "Plus your portfolio, and the WhatsApp community.") },
+      { label: "Free tools", vo: "Not ready to enroll yet? Try our fifty-six free tools today. No sign-up needed.", ost: "56 free tools · no sign-up", vis: "Tool chips.", html: T.cards("Not ready yet?", ["56 free tools 🛠", "No sign-up needed ✨"], "paper") },
+      { label: "CTA", vo: "Follow us, turn on notifications, and start at prostatis dot com. Welcome to the family.", ost: "Follow us · prostatis.com · Welcome to the family", vis: "End card with the logo and the address.", html: T.end("Welcome to<br><span class='o'>the family.</span>", "Follow us · Prostatis by Stynark") },
+    ] },
+];
+
+// ---- Timing: filled in by the render pipeline from the voiceover; even spacing before that. ----
+function timesFor(v) {
+  if (TIMINGS && TIMINGS[v]) return TIMINGS[v];
+  const n = VIDEOS[v].beats.length, len = VIDEOS[v].welcome ? 60 : 32;
+  return { beats: VIDEOS[v].beats.map((_, i) => [i * len / n, (i + 1) * len / n]), total: len };
+}
+const $ = (id) => document.getElementById(id);
+const stage = $("stage");
+let cur = 0, t = 0, playing = true, last = 0, beatIx = -1, captions = true;
+
+function beatAt(v, sec) { const b = timesFor(v).beats; let i = b.findIndex((x) => sec >= x[0] && sec < x[1]); return i < 0 ? b.length - 1 : i; }
+function drawBeat(v, i) {
+  const [s, e] = timesFor(v).beats[i], b = VIDEOS[v].beats[i];
+  stage.innerHTML = b.html(e - s) + `<div class="cap" ${captions ? "" : "hidden"}>${b.vo.replace(/A I/g, "AI").replace(/U S S D/g, "USSD").replace(/prostatis dot com/g, "prostatis.com")}</div>`;
+}
+window.__meta = () => VIDEOS.map((v, i) => ({ slug: v.slug, total: timesFor(i).total }));
+window.__lines = () => VIDEOS.flatMap((v, vi) => v.beats.map((b, bi) => ({ v: vi, i: bi, label: b.label, vo: b.vo })));
+
+if (location.hash === "#export") {
+  document.body.innerHTML = ""; document.body.style.cssText = "margin:0;padding:0;background:#151515";
+  const f = document.createElement("div"); f.className = "frame"; f.style.cssText = "width:1080px;max-width:none;height:1920px;border:0;border-radius:0;box-shadow:none";
+  f.appendChild(stage); document.body.appendChild(f);
+  window.__render = async (v, sec) => {
+    if (v !== cur) { cur = v; beatIx = -1; }
+    const i = beatAt(v, sec);
+    if (i !== beatIx) { beatIx = i; drawBeat(v, i); }
+    const local = (sec - timesFor(v).beats[i][0]) * 1000;
+    for (const an of stage.getAnimations({ subtree: true })) { an.pause(); an.currentTime = local; }
+    await document.fonts.ready; return true;
+  };
+} else {
+  const renderTabs = () => { $("tabs").innerHTML = VIDEOS.map((v, i) => `<button class="tab" role="tab" type="button" aria-selected="${i === cur}" data-i="${i}">${i < 10 ? i + 1 + " · " : ""}${v.name}</button>`).join(""); $("tabs").querySelectorAll(".tab").forEach((b) => (b.onclick = () => select(Number(b.dataset.i)))); };
+  const renderScript = () => {
+    const v = VIDEOS[cur], tm = timesFor(cur);
+    $("script").innerHTML = `<div class="meta"><span class="pill hook">Hook: ${v.hook}</span><span class="pill">Audience: ${v.audience}</span><span class="pill music">Music: ${v.music}</span><span class="pill">${tm.total.toFixed(0)}s · 9:16</span></div>` +
+      v.beats.map((b, i) => `<article class="beat" id="beat${i}"><h3>${b.label}<small>${tm.beats[i][0].toFixed(1)}–${tm.beats[i][1].toFixed(1)}s</small></h3><dl><dt>Voiceover</dt><dd class="vo">${b.vo.replace(/A I/g, "AI").replace(/U S S D/g, "USSD").replace(/prostatis dot com/g, "prostatis.com")}</dd><dt>On screen</dt><dd>${b.ost}</dd><dt>Visual</dt><dd>${b.vis}</dd></dl></article>`).join("");
+    $("scenes").innerHTML = v.beats.map((b, i) => `<button class="chip-s" type="button" data-i="${i}">${b.label}</button>`).join("");
+    $("scenes").querySelectorAll(".chip-s").forEach((c) => (c.onclick = () => { t = timesFor(cur).beats[Number(c.dataset.i)][0] + .001; beatIx = -1; tick(); }));
+  };
+  const tick = () => {
+    const i = beatAt(cur, t);
+    if (i !== beatIx) { beatIx = i; drawBeat(cur, i); document.querySelectorAll(".beat").forEach((el, j) => el.classList.toggle("on", j === i)); document.querySelectorAll(".chip-s").forEach((el, j) => el.setAttribute("aria-current", j === i ? "true" : "false")); }
+    const tot = timesFor(cur).total; $("bar").style.width = `${(t / tot) * 100}%`; $("time").textContent = `${t.toFixed(1)} / ${tot.toFixed(0)}s`;
+  };
+  const loop = (now) => { if (playing) { t += Math.min(.1, (now - last) / 1000); if (t >= timesFor(cur).total) { t = 0; beatIx = -1; } tick(); } last = now; requestAnimationFrame(loop); };
+  const select = (i) => { cur = i; t = 0; beatIx = -1; renderTabs(); renderScript(); tick(); };
+  $("play").onclick = () => { playing = !playing; stage.classList.toggle("paused", !playing); $("play").textContent = playing ? "Pause" : "Play"; };
+  $("restart").onclick = () => { t = 0; beatIx = -1; playing = true; stage.classList.remove("paused"); $("play").textContent = "Pause"; tick(); };
+  $("captions").onclick = () => { captions = !captions; $("captions").textContent = captions ? "Captions on" : "Captions off"; const c = stage.querySelector(".cap"); if (c) c.hidden = !captions; };
+  renderTabs(); renderScript(); tick(); requestAnimationFrame((n) => { last = n; requestAnimationFrame(loop); });
+}
+</script>

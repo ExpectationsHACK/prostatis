@@ -36,6 +36,13 @@ Nigeria-first: naira pricing, Paystack, WhatsApp, Lagos time, ₦→$ maths buil
 
 No real testimonials, member counts or client results yet. Content-parity numbers (650+ lessons, 8,000+ members) are targets and must not be presented as facts. Example builds must be labelled as examples.
 
+## Marketing
+
+- Five 30-second vertical video ads live in `marketing/ads/` (2026-10-21), one per angle: the skill, no coding needed, cost vs bootcamps, start on your phone, and businesses still needing websites. Each has a full version (voiceover + original music) and a music-only version for recording a real voice. The current voiceover is a synthetic guide voice (Microsoft George, en-GB); a Nigerian voice actor is the intended final voice.
+- A second set (2026-10-21, `marketing/ads/sales/`): ten emotional sales ads for ages 15–40 (in school, no high-paying skill, after the Fast Track, after the Main Track, waiting for a job, salary finishes, scroll to build, AI is here, the one they call, spend or invest) and a 60-second **Welcome to Prostatis** video to pin on every social profile. "Passive income" is deliberately not promised: client work is active; the Main Track teaches monthly retainer packages, which are recurring.
+- Ad copy follows the honesty rules: "learn a skill businesses pay for", never income promises, no competitor prices or statistics we can't source, and the phone angle says building happens on a laptop or desktop.
+- The ads point to prostatis.com, which must be connected to the live site (currently prostatis.netlify.app) before they run.
+
 ## Product Principles
 
 1. Free value first: tools work fully with no signup.

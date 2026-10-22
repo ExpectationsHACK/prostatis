@@ -4,6 +4,22 @@ Nigeria-first club that teaches website building with AI, plus web solutions, SE
 
 **Status:** marketing site; all 50 free tools (+6 bonus) live and tested; Supabase auth; Paystack one-time payments (test/demo); the full written course (27 lessons with illustrations, tasks, resources and quizzes); progress, XP, levels and streaks; final assessments and certificates.
 
+## How the system fits together
+
+| Part | What it does | Where |
+|---|---|---|
+| Website and app | Next.js 16 (App Router) on **Netlify**: marketing pages, 56 free tools, sign-in, checkout, the course, dashboard, admin | `src/app`, `netlify.toml` |
+| Accounts and data | **Supabase**: sign-in (email, magic link, Google), Postgres with row-level security; progress, payments and access are written only by the server | `src/lib/supabase`, `supabase/migrations` |
+| Payments | **Paystack** one-time charges in naira. Every payment is re-checked with Paystack server-to-server (callback, webhook, `/checkout/status`) before access opens; access is lifetime | `src/lib/paystack.ts`, `src/lib/settle-payment.ts`, `src/lib/membership.ts` |
+| Email | **Resend**: account emails, certificates, newsletter (needs a verified sending domain) | `src/lib/email*.ts` |
+| Analytics | Built-in cookieless visitor counts, plus optional **PostHog** (EU) | `src/lib/analytics*.ts`, `src/lib/observability` |
+| Errors | Optional **Sentry** (EU): browser and server errors | `src/instrumentation*.ts` |
+| AI writing in tools | Optional **Anthropic** API; off without a key | `src/app/api/tools/ai` |
+| Offline | A service worker serves an offline page that reloads itself | `public/sw.js`, `public/offline.html` |
+| Marketing | Five video ads and their render pipeline | `marketing/ads` |
+
+The flow that matters most: **sign up → pay with Paystack → the server verifies the payment → lifetime access to the track → lessons (quiz + task each) → final assessment → verified certificate**. `/admin/system` checks every service live and shows what's missing.
+
 ## Run locally
 
 ```bash
@@ -66,7 +82,7 @@ Edit or add a file in `src/content/lessons/`, register new ones in `index.ts`, a
 
 | Path | What |
 |---|---|
-| `src/lib/site.ts` | Name, tagline, the two plans (price, access days, results) |
+| `src/lib/site.ts` | Name, tagline, the two plans (price, lesson count, results); access is lifetime |
 | `src/lib/curriculum.ts` | 7 pillars; Fast Track (14 lessons) and Main Track (26 lessons), self-paced |
 | `src/lib/tools.ts` | Registry: 50 core + 6 bonus tools — pillar, copy, illustration |
 | `src/lib/tool-defs/*.ts` | Tool logic per pillar (pure functions, unit-tested) |

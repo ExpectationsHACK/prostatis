@@ -1,0 +1,10 @@
+{
+  "name": "prostatis-ad-render",
+  "private": true,
+  "type": "module",
+  "description": "Renders the Prostatis video ads: frames from ../prostatis-ads.html, voiceover, original music, final MP4s.",
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "1.1.0",
+    "puppeteer-core": "24.10.0"
+  }
+}

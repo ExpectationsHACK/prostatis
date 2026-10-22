@@ -1,0 +1,306 @@
+<title>Prostatis Video Ads</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Geist:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a 9:16 phone-ad stage on the left, the script for the current ad on the right (stacks on phones).
+   One committed brand look (Prostatis: warm paper, ink outlines, hard shadows, one orange). */
+:root {
+  --paper: #faf8f4; --card: #ffffff; --sunk: #f3f0ea; --ink: #151515; --muted: #5f5b53; --line: #e6e1d8;
+  --brand: #eb5e28; --brand-text: #b8400f; --brand-wash: #fdeee6;
+  --blue: #2f5bd3; --blue-wash: #e8eefc; --green: #16794a; --green-wash: #e3f5e9;
+  --purple: #6b3fc4; --purple-wash: #efe8fc; --yellow: #f2c230; --yellow-wash: #fdf3d0; --teal: #0f766e; --teal-wash: #ddf3f0;
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --body: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 40px; }
+h1, h2, h3 { font-family: var(--display); font-stretch: 110%; letter-spacing: -0.03em; text-wrap: balance; margin: 0; }
+.wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 20px; }
+.top { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; }
+.top h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.05; }
+.top p { margin: 4px 0 0; color: var(--muted); max-width: 60ch; }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.tab { font: 600 13px/1 var(--body); border: 2px solid var(--ink); background: var(--card); color: var(--ink); border-radius: 999px; padding: 9px 14px; cursor: pointer; box-shadow: 2px 2px 0 var(--ink); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); }
+.tab:focus-visible, .btn:focus-visible, .chip-s:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.main { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 860px) { .main { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- The stage (1080x1920 drawn at 360x640, scaled to fit) ---------- */
+.stage-col { display: grid; gap: 12px; justify-items: center; }
+.frame { width: 100%; max-width: 420px; aspect-ratio: 9 / 16; border: 2px solid var(--ink); border-radius: 22px; box-shadow: 5px 5px 0 var(--ink); overflow: hidden; position: relative; background: var(--paper); container-type: inline-size; }
+.stage { position: absolute; inset: 0; overflow: hidden; font-family: var(--body); }
+.scene { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 4.6cqw; padding: 21cqw 8cqw 34cqw; }
+.scene.dark { background: var(--ink); color: var(--paper); }
+.scene.orange { background: var(--brand); color: var(--ink); }
+.scene.paper { background: var(--paper); color: var(--ink); }
+.scene.blue { background: var(--blue-wash); color: var(--ink); }
+.big { font-family: var(--display); font-stretch: 112%; font-weight: 800; font-size: 11.5cqw; line-height: 0.98; letter-spacing: -0.035em; }
+.mid { font-family: var(--display); font-stretch: 108%; font-weight: 700; font-size: 7.6cqw; line-height: 1.05; letter-spacing: -0.03em; }
+.small { font-size: 4.3cqw; line-height: 1.35; font-weight: 500; }
+.o { color: var(--brand); } .scene.orange .o { color: var(--card); }
+.cap { position: absolute; left: 6cqw; right: 6cqw; bottom: 5cqw; background: rgba(21,21,21,.86); color: #fff; font-size: 3.7cqw; line-height: 1.35; padding: 2.4cqw 3cqw; border-radius: 2.6cqw; text-align: center; z-index: 5; }
+.cap[hidden] { display: none !important; }
+.logo { position: absolute; top: 5cqw; left: 6cqw; display: flex; align-items: center; gap: 2cqw; font-family: var(--display); font-weight: 700; font-size: 4.4cqw; z-index: 4; }
+.logo svg { width: 7cqw; height: 8cqw; }
+
+/* Building blocks */
+.card { background: var(--card); color: var(--ink); border: .6cqw solid var(--ink); border-radius: 3.6cqw; box-shadow: 1.2cqw 1.2cqw 0 var(--ink); padding: 4cqw; }
+.dark .card { box-shadow: 1.2cqw 1.2cqw 0 var(--brand); }
+.row { display: flex; flex-wrap: wrap; gap: 2.4cqw; }
+.chip { display: inline-flex; align-items: center; gap: 1.6cqw; border: .5cqw solid var(--ink); border-radius: 99px; padding: 1.6cqw 3.2cqw; font-weight: 700; font-size: 4cqw; background: var(--card); color: var(--ink); }
+.chip i { width: 2.2cqw; height: 2.2cqw; border-radius: 50%; display: inline-block; }
+.phone { width: 46cqw; aspect-ratio: 9/14; border: .8cqw solid var(--ink); border-radius: 6cqw; background: var(--card); box-shadow: 1.4cqw 1.4cqw 0 var(--ink); padding: 3.4cqw 2.6cqw; display: grid; align-content: start; gap: 2cqw; align-self: center; overflow: hidden; }
+.bar { height: 2.6cqw; border-radius: 99px; background: var(--sunk); }
+.blk { border-radius: 2cqw; background: var(--sunk); }
+.stamp { display: inline-grid; place-items: center; border: .8cqw solid var(--green); color: var(--green); border-radius: 3cqw; font-family: var(--display); font-weight: 800; font-size: 6cqw; padding: 1.4cqw 4cqw; transform: rotate(-8deg); background: var(--card); }
+.counter { font-family: var(--display); font-weight: 900; font-stretch: 115%; font-size: 30cqw; line-height: .85; letter-spacing: -0.05em; }
+.shops { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3cqw; }
+.shop { border: .6cqw solid var(--ink); border-radius: 3cqw; background: var(--card); padding: 3cqw 2cqw; text-align: center; font-weight: 700; font-size: 3.6cqw; color: var(--ink); }
+.shop b { display: block; font-size: 8cqw; line-height: 1.2; }
+.bubble { background: var(--card); color: var(--ink); border: .5cqw solid var(--ink); border-radius: 4cqw 4cqw 4cqw 1cqw; padding: 3cqw 4cqw; font-size: 4.4cqw; font-weight: 500; max-width: 80%; }
+.bubble.me { align-self: flex-end; background: var(--green-wash); border-radius: 4cqw 4cqw 1cqw 4cqw; }
+.cta { display: inline-flex; align-items: center; justify-content: center; gap: 2cqw; background: var(--brand); color: var(--ink); border: .7cqw solid var(--ink); border-radius: 3.4cqw; box-shadow: 1.2cqw 1.2cqw 0 var(--ink); font-family: var(--display); font-weight: 800; font-size: 7cqw; padding: 3.4cqw 6cqw; }
+.dark .cta { box-shadow: 1.2cqw 1.2cqw 0 var(--brand); background: var(--brand); }
+.tick { color: var(--green); font-weight: 900; }
+.strike { position: relative; } .strike::after { content: ""; position: absolute; left: -2%; right: -2%; top: 52%; height: 1.1cqw; background: var(--brand); transform-origin: left; animation: grow-x .5s cubic-bezier(.3,.7,.2,1) both; animation-delay: var(--sd, 1s); }
+.note { font-size: 3.2cqw; opacity: .8; }
+
+/* Motion kit: every element starts from its finished frame (reduced motion shows the end state). */
+@keyframes rise { from { opacity: 0; transform: translateY(8cqw); } to { opacity: 1; transform: none; } }
+@keyframes drop { from { opacity: 0; transform: translateY(-14cqw) rotate(-4deg); } to { opacity: 1; transform: none; } }
+@keyframes pop { 0% { opacity: 0; transform: scale(.4); } 70% { transform: scale(1.08); } 100% { opacity: 1; transform: none; } }
+@keyframes grow-x { from { transform: scaleX(0); } to { transform: none; } }
+@keyframes slam { 0% { opacity: 0; transform: scale(2.4) rotate(-8deg); } 60% { opacity: 1; transform: scale(.92) rotate(-8deg); } 100% { transform: rotate(-8deg); } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pulse { 0%,100% { transform: none; } 50% { transform: scale(1.05); } }
+@keyframes rain { from { opacity: 0; transform: translateY(-40cqw); } 30% { opacity: .45; } to { opacity: .12; transform: translateY(60cqw); } }
+@keyframes wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+.a-rise { animation: rise .6s cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--d, 0s); }
+.a-drop { animation: drop .55s cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--d, 0s); }
+.a-pop { animation: pop .5s cubic-bezier(.3,.7,.2,1.3) both; animation-delay: var(--d, 0s); }
+.a-grow { transform-origin: left; animation: grow-x .7s cubic-bezier(.3,.7,.2,1) both; animation-delay: var(--d, 0s); }
+.a-slam { animation: slam .55s cubic-bezier(.3,.7,.2,1) both; animation-delay: var(--d, 0s); }
+.a-fade { animation: fade .6s ease both; animation-delay: var(--d, 0s); }
+.a-wipe { animation: wipe .8s cubic-bezier(.6,0,.2,1) both; animation-delay: var(--d, 0s); }
+.a-pulse { animation: pulse 1.2s ease-in-out infinite; animation-delay: var(--d, 0s); }
+.a-rain { position: absolute; font-family: var(--display); font-weight: 800; font-size: 6cqw; animation: rain 2.6s linear infinite; animation-delay: var(--d, 0s); }
+.stage.paused, .stage.paused * { animation-play-state: paused !important; }
+@media (prefers-reduced-motion: reduce) { .stage * { animation-duration: .01s !important; animation-iteration-count: 1 !important; } }
+
+/* ---------- Controls and script ---------- */
+.controls { width: 100%; max-width: 420px; display: grid; gap: 10px; }
+.progress { position: relative; height: 10px; border-radius: 99px; background: var(--sunk); border: 2px solid var(--ink); overflow: hidden; }
+.progress span { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--brand); }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { font: 600 14px/1 var(--body); border: 2px solid var(--ink); border-radius: 12px; padding: 10px 14px; background: var(--card); color: var(--ink); cursor: pointer; box-shadow: 2px 2px 0 var(--ink); }
+.btn.primary { background: var(--brand); }
+.time { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px; }
+.chips-s { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip-s { font: 600 12px/1 var(--body); border: 1.5px solid var(--ink); border-radius: 99px; padding: 6px 10px; background: var(--card); color: var(--ink); cursor: pointer; }
+.chip-s[aria-current="true"] { background: var(--brand-wash); border-color: var(--brand-text); color: var(--brand-text); }
+.script { min-width: 0; display: grid; gap: 14px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { font: 600 12px/1 var(--body); border-radius: 99px; padding: 7px 11px; background: var(--sunk); }
+.pill.hook { background: var(--brand-wash); color: var(--brand-text); }
+.pill.music { background: var(--purple-wash); color: var(--purple); }
+.beat { border: 2px solid var(--ink); border-radius: 14px; background: var(--card); padding: 14px 16px; display: grid; gap: 8px; }
+.beat.on { box-shadow: 4px 4px 0 var(--brand); border-color: var(--brand-text); }
+.beat h3 { font-size: 16px; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.beat h3 small { font: 600 12px var(--body); color: var(--muted); font-variant-numeric: tabular-nums; }
+.beat dl { margin: 0; display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 6px 12px; }
+.beat dt { font: 700 11px/1.6 var(--body); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.beat dd { margin: 0; min-width: 0; }
+.beat dd.vo { font-weight: 600; }
+.foot { color: var(--muted); font-size: 13px; max-width: 70ch; }
+.clean .cap { display: none; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Prostatis: five 30-second ads</h1>
+      <p>Vertical 9:16 motion graphics for Reels, TikTok, Shorts and WhatsApp Status. Pick an ad, press Play, and read the script beside it.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Choose an ad" id="tabs"></div>
+  </header>
+
+  <div class="main">
+    <div class="stage-col">
+      <div class="frame" id="frame"><div class="stage" id="stage"></div></div>
+      <div class="controls">
+        <div class="progress" aria-hidden="true"><span id="bar"></span></div>
+        <div class="btns">
+          <button class="btn primary" id="play" type="button">Pause</button>
+          <button class="btn" id="restart" type="button">Restart</button>
+          <button class="btn" id="captions" type="button" aria-pressed="true">Captions on</button>
+          <button class="btn" id="full" type="button">Full screen</button>
+          <span class="time" id="time">0.0 / 30s</span>
+        </div>
+        <div class="chips-s" id="scenes" aria-label="Jump to a scene"></div>
+      </div>
+    </div>
+    <section class="script" id="script" aria-live="polite"></section>
+  </div>
+
+  <p class="foot">To export a video: open Full screen, start a screen recorder (your phone's built-in recorder or OBS on a computer), press Restart and record 30 seconds. Captions show the voiceover; turn them off to record a clean version and add your own voice. Every claim here matches the live course: lesson counts, prices, lifetime access, the practice client, the certificate and the 7-day refund window. Nothing promises income.</p>
+</div>
+
+<script>
+const LOGO = `<svg viewBox="-31 -35.5 62 71" aria-hidden="true"><g stroke="currentColor" fill="currentColor"><path d="M13.15 -25.41L0 -33L-28.58 -16.5L0 0L28.58 -16.5L28.58 16.5L0 33L-28.58 16.5L-28.58 4.9" fill="none" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M-13.75 4.11L-2 10.9L-2 15.75L-13.75 8.96Z" stroke="none"/><path d="M-10.75 14.35L-2 19.4L-2 24.25L-10.75 19.2Z" stroke="none"/></g></svg>`;
+const brand = (dark) => `<div class="logo" style="color:${dark ? "#faf8f4" : "#151515"}">${LOGO}Prostatis</div>`;
+const d = (s) => `style="--d:${s}s"`;
+const phoneSite = (title, accent) => `
+  <div class="phone a-rise" ${d(.3)}>
+    <div class="bar a-grow" style="--d:${.6}s;width:45%;background:${accent}"></div>
+    <div class="a-fade" style="--d:${.9}s;font-family:var(--display);font-weight:800;font-size:5.2cqw;line-height:1.05">${title}</div>
+    <div class="blk a-grow" style="--d:${1.3}s;height:16cqw;background:${accent};opacity:.25"></div>
+    <div class="bar a-grow" ${d(1.6)}></div><div class="bar a-grow" style="--d:${1.8}s;width:80%"></div>
+    <div class="blk a-pop" style="--d:${2.1}s;height:7cqw;width:60%;background:${accent};border:.5cqw solid #151515"></div>
+    <div class="row a-fade" ${d(2.5)}><div class="blk" style="height:10cqw;flex:1"></div><div class="blk" style="height:10cqw;flex:1"></div></div>
+  </div>`;
+const endCard = (line, sub) => `
+  <div class="scene dark">${brand(true)}
+    <div class="mid a-rise" ${d(.1)}>${line}</div>
+    <div class="a-pop" ${d(.6)}><span class="cta a-pulse" ${d(1.4)}>prostatis.com</span></div>
+    <div class="small a-fade" style="--d:${1}s;opacity:.85">${sub}</div>
+  </div>`;
+
+// Each ad: 5 beats (hook 0-3s, problem, solution, proof, CTA 26-30s). `vo` is spoken, `ost` is the text on screen.
+const ADS = [
+  { name: "1 · The skill", angle: "The skill angle", music: "Confident Afro-house, about 118 BPM; builds from a single kick to a full groove at the solution beat",
+    beats: [
+      { t: [0, 3.7], label: "Hook", vo: "One skill. Every business on your street needs it.", ost: "ONE SKILL. EVERY BUSINESS NEEDS IT.", vis: "Black screen; the words slam in one by one, then a row of shopfronts lights up behind them.",
+        html: () => `<div class="scene dark">${brand(true)}<div class="big"><span class="a-drop" style="--d:${0}s;display:inline-block">One skill.</span><br><span class="a-drop o" style="--d:${.6}s;display:inline-block">Every business</span><br><span class="a-drop" style="--d:${1.1}s;display:inline-block">needs it.</span></div><div class="shops">${["Salon","Clinic","Tailor"].map((s,i)=>`<div class="shop a-pop" ${d(1.6+i*.2)}><b>${["✂","✚","🧵"][i]}</b>${s}</div>`).join("")}</div></div>` },
+      { t: [3.7, 10], label: "Problem", vo: "Certificates pile up. CVs go unanswered. Nobody asks what you can actually build.", ost: "Lots of courses. Little to show.", vis: "Grey certificate cards stack up and fade; a CV card gets a 'No reply' tag.",
+        html: () => `<div class="scene paper">${brand(false)}<div class="mid a-rise" ${d(0)}>Lots of courses.<br><span class="o">Little to show.</span></div>${[0,1,2].map(i=>`<div class="card a-drop" style="--d:${.5+i*.35}s;opacity:.55;transform:rotate(${(i-1)*3}deg)"><div class="bar" style="width:60%"></div><div class="small" style="margin-top:2cqw;color:var(--muted)">Certificate of attendance</div></div>`).join("")}<div class="chip a-pop" style="--d:${2.2}s;align-self:flex-start;background:var(--sunk)">CV · No reply</div></div>` },
+      { t: [10, 18.9], label: "Solution", vo: "Prostatis teaches you to build websites with AI, step by step. Then how to price them, pitch them and get paid by real businesses.", ost: "Build → Price → Pitch → Get paid", vis: "A phone shows a business website assembling block by block; four step chips pop in underneath.",
+        html: () => `<div class="scene blue">${brand(false)}<div class="mid a-rise" ${d(0)}>Build websites<br>with <span style="color:var(--blue)">AI</span>.</div>${phoneSite("Stitches by Bisi", "#2f5bd3")}<div class="row">${["Build","Price","Pitch","Get paid"].map((s,i)=>`<span class="chip a-pop" ${d(3+i*.5)}>${i? "→ ":""}${s}</span>`).join("")}</div></div>` },
+      { t: [18.9, 24.9], label: "Proof", vo: "Fourteen hands-on lessons, one practice client, and a verified certificate when you pass.", ost: "14 lessons · 1 practice client · Verified certificate", vis: "A counter rolls up to 14, a client card for Stitches by Bisi flips in, a VERIFIED stamp slams onto a certificate.",
+        html: () => `<div class="scene paper">${brand(false)}<div class="row" style="align-items:end"><span class="counter a-pop o" ${d(0)}>14</span><span class="mid a-fade" ${d(.5)}>hands-on<br>lessons</span></div><div class="card a-rise" ${d(1)}><div class="small" style="font-weight:700">Practice client</div><div class="mid">Stitches by Bisi, Yaba</div></div><div class="card a-rise" style="--d:${1.8}s;display:flex;justify-content:space-between;align-items:center"><div><div class="small" style="font-weight:700">Certificate</div><div class="small" style="color:var(--muted)">when you pass the final</div></div><span class="stamp a-slam" ${d(2.6)}>VERIFIED</span></div></div>` },
+      { t: [24.9, 30], label: "CTA", vo: "Learn a skill businesses pay for. Start at prostatis dot com.", ost: "Learn a skill businesses pay for · prostatis.com", vis: "Dark end card, logo, orange button pulsing with the address.",
+        html: () => endCard(`Learn a skill<br><span class="o">businesses pay for.</span>`, "Fast Track ₦15,000 · pay once · lifetime access") },
+    ] },
+  { name: "2 · No coding", angle: "The “no coding needed” angle", music: "Light, playful marimba over a soft Afrobeat groove; a small whoosh when the code disappears",
+    beats: [
+      { t: [0, 3], label: "Hook", vo: "You don't need to know code to build a website.", ost: "NO CODE. REAL WEBSITES.", vis: "A wall of code text gets wiped away by an orange swipe, leaving the headline.",
+        html: () => `<div class="scene dark">${brand(true)}<div class="a-fade" style="font-family:monospace;font-size:3.4cqw;opacity:.35;line-height:1.4">&lt;div class="hero"&gt;<br>&nbsp;&nbsp;function render() {<br>&nbsp;&nbsp;&nbsp;&nbsp;return &lt;Page /&gt;<br>&nbsp;&nbsp;}<br>&lt;/div&gt;</div><div class="big"><span class="a-wipe" style="--d:${.5}s;display:inline-block">No code.</span><br><span class="a-wipe o" style="--d:${1.1}s;display:inline-block">Real websites.</span></div></div>` },
+      { t: [3, 7.5], label: "Problem", vo: "Most tutorials throw jargon at you and assume you're already a programmer.", ost: "Too much jargon.", vis: "Tech words rain down the screen (API, DNS, deploy, repo) around a confused face emoji.",
+        html: () => `<div class="scene paper">${brand(false)}${["API","DNS","deploy","repo","npm","SSL","JSON"].map((w,i)=>`<span class="a-rain" style="--d:${i*.35}s;left:${8+i*12}%;top:10%;color:${i%2?"#b8400f":"#5f5b53"}">${w}</span>`).join("")}<div class="big a-rise" style="--d:${.4}s;position:relative;z-index:2">Too much<br>jargon? 😵</div></div>` },
+      { t: [7.5, 18.3], label: "Solution", vo: "Prostatis explains everything in plain English, with everyday Nigerian comparisons. You describe what you want, free AI tools write the code, and you put it live.", ost: "Plain English · Free AI tools · Your site, live", vis: "A chat: 'Make a home page for a tailor in Yaba' → a site appears in a phone. An 'Think of it like…' card explains hosting as renting a shop.",
+        html: () => `<div class="scene paper">${brand(false)}<div class="bubble me a-rise" ${d(.2)}>Make a home page for a tailor in Yaba, with a WhatsApp button.</div><div class="bubble a-rise" ${d(1.2)}>Done. Here's your page ✨</div>${phoneSite("Stitches by Bisi", "#16794a")}<div class="card a-rise" style="--d:${4.5}s;background:var(--brand-wash)"><div class="small"><b>Think of it like:</b> hosting is renting a shop on the internet, open day and night.</div></div></div>` },
+      { t: [18.3, 24.6], label: "Proof", vo: "Every lesson ends with a practical task and a five-question quiz, so you know you've really got it.", ost: "Task + 5-question quiz, every lesson", vis: "A checklist ticks itself; a quiz score climbs to 5/5 with a badge popping out.",
+        html: () => `<div class="scene blue">${brand(false)}<div class="mid a-rise">Every lesson ends with</div>${["Practical task done","Quiz passed: 5 / 5","Badge earned"].map((s,i)=>`<div class="card a-rise" style="--d:${.6+i*.6}s;display:flex;gap:3cqw;align-items:center"><span class="tick" style="font-size:7cqw">✓</span><span class="mid" style="font-size:5.6cqw">${s}</span></div>`).join("")}</div>` },
+      { t: [24.6, 30], label: "CTA", vo: "No coding background needed. Start at prostatis dot com.", ost: "No coding background needed · prostatis.com", vis: "End card with the address button.",
+        html: () => endCard(`No coding<br><span class="o">background needed.</span>`, "Plain English · free tools · lifetime access") },
+    ] },
+  { name: "3 · Cost", angle: "Cost vs bootcamps", music: "Smart, minimal beat with a ticking clock that stops dead at the solution",
+    beats: [
+      { t: [0, 3.4], label: "Hook", vo: "Before you pay for an expensive bootcamp, watch this.", ost: "BEFORE YOU PAY FOR A BOOTCAMP…", vis: "A huge price tag swings into frame and freezes; text slams in.",
+        html: () => `<div class="scene orange">${brand(false)}<div class="big"><span class="a-drop" style="--d:${0}s;display:inline-block">Before you pay</span><br><span class="a-drop" style="--d:${.5}s;display:inline-block">for a bootcamp…</span></div><div class="card a-slam" style="--d:${1.2}s;align-self:flex-start;font-family:var(--display);font-weight:800;font-size:9cqw">How much?</div></div>` },
+      { t: [3.4, 8.5], label: "Problem", vo: "Many tech programmes cost a lot, run on a fixed timetable, and lock you out when they end.", ost: "Big fees · Fixed timetable · Access ends", vis: "Three cards drop in; a padlock snaps shut on the last one.",
+        html: () => `<div class="scene paper">${brand(false)}${["Big fees","Fixed timetable","Access ends 🔒"].map((s,i)=>`<div class="card a-drop" ${d(i*.6)}><span class="mid">${s}</span></div>`).join("")}</div>` },
+      { t: [8.5, 17.4], label: "Solution", vo: "Prostatis is fifteen thousand naira, paid once. Learn at your own pace, keep lifetime access, and build everything with free tools.", ost: "₦15,000 once · Self-paced · Lifetime access · Free tools", vis: "The old cards are crossed out; a ₦15,000 tag stamps down, then three green chips light up.",
+        html: () => `<div class="scene paper">${brand(false)}<div class="counter a-pop o" style="--d:${.2}s;font-size:17cqw">₦15,000</div><div class="mid a-fade" ${d(1)}>paid once.</div><div class="row">${["Self-paced","Lifetime access","Free tools"].map((s,i)=>`<span class="chip a-pop" ${d(2+i*.6)}><i style="background:var(--green)"></i>${s}</span>`).join("")}</div><div class="small a-fade" style="--d:${4}s;color:var(--muted)">Pay with card, bank transfer or USSD.</div></div>` },
+      { t: [17.4, 25.4], label: "Proof", vo: "Want the full package? The Main Track adds SEO, automation and AI agents: twenty-six lessons for thirty thousand naira.", ost: "Main Track: 26 lessons · ₦30,000", vis: "Two plan cards slide in side by side, Fast Track orange, Main Track blue.",
+        html: () => `<div class="scene paper">${brand(false)}<div class="card a-rise" style="--d:${0}s;background:var(--brand)"><div class="mid">Fast Track</div><div class="small" style="font-weight:700">14 lessons · ₦15,000</div></div><div class="card a-rise" style="--d:${.7}s;background:var(--blue-wash)"><div class="mid">Main Track</div><div class="small" style="font-weight:700">26 lessons · ₦30,000</div><div class="small">+ SEO · automation · AI agents</div></div></div>` },
+      { t: [25.4, 30], label: "CTA", vo: "Pay once, keep it for life. prostatis dot com.", ost: "Pay once, keep it for life · prostatis.com · 7-day refund window", vis: "End card; small print shows the refund window.",
+        html: () => endCard(`Pay once.<br><span class="o">Keep it for life.</span>`, "7-day refund window · see the refund policy") },
+    ] },
+  { name: "4 · Phone", angle: "Start on your phone", music: "Chilled lo-fi Afrobeats with a soft phone-tap percussion",
+    beats: [
+      { t: [0, 3.1], label: "Hook", vo: "Your phone is enough to start.", ost: "START ON YOUR PHONE.", vis: "A phone rises into frame and its screen lights up with a lesson.",
+        html: () => `<div class="scene orange">${brand(false)}<div class="big a-drop">Start on<br>your phone.</div><div class="phone a-rise" style="--d:${.8}s;width:40cqw"><div class="bar a-grow" style="--d:${1.2}s;width:50%;background:#eb5e28"></div><div class="small a-fade" style="--d:${1.4}s;font-weight:700">Lesson 1</div><div class="bar a-grow" ${d(1.6)}></div><div class="bar a-grow" style="--d:${1.8}s;width:70%"></div></div></div>` },
+      { t: [3.1, 9.6], label: "Problem", vo: "No time for classes? Data running low? Most courses expect you at a desk for hours.", ost: "No time? Low data?", vis: "Danfo window view; a data meter drains to a low bar.",
+        html: () => `<div class="scene paper">${brand(false)}<div class="big a-rise">No time?<br><span class="o">Low data?</span></div><div class="card a-rise" ${d(.8)}><div class="small" style="font-weight:700">Data left</div><div class="bar" style="height:4cqw;margin-top:2cqw;background:var(--sunk)"><div class="a-grow" style="--d:${1}s;height:100%;width:12%;background:var(--brand);border-radius:99px"></div></div></div><div class="small a-fade" ${d(1.6)}>…and most courses want you at a desk for hours.</div></div>` },
+      { t: [9.6, 18.6], label: "Solution", vo: "Prostatis lessons are light and written for phones. Read on the bus, take the quiz, use fifty-six free tools, and pick up exactly where you stopped.", ost: "Light lessons · 56 free tools · Saves your place", vis: "Phone screen scrolls a lesson, flips to a quiz, then to a free tool; a 'Saved' toast pops.",
+        html: () => `<div class="scene blue">${brand(false)}<div class="mid a-rise">Read on the bus.<br>Quiz in the queue.</div><div class="row">${["Light lessons","56 free tools","Saves your place"].map((s,i)=>`<span class="chip a-pop" ${d(1+i*.7)}><i style="background:var(--blue)"></i>${s}</span>`).join("")}</div>${phoneSite("Lesson 3: First live page", "#2f5bd3")}</div>` },
+      { t: [18.6, 25.9], label: "Proof", vo: "XP, streaks and badges keep you going. When it's time to build, you'll use free tools on a laptop or desktop.", ost: "XP · Streaks · Badges", vis: "A streak flame grows, XP counter climbs; small honest note: building happens on a computer.",
+        html: () => `<div class="scene paper">${brand(false)}<div class="row">${["🔥 5-day streak","⚡ 1,240 XP","🏅 Badge"].map((s,i)=>`<span class="chip a-pop" style="--d:${i*.5}s;font-size:5cqw">${s}</span>`).join("")}</div><div class="card a-rise" ${d(1.8)}><div class="mid" style="font-size:5.6cqw">Ready to build?</div><div class="small">You build on a laptop or desktop, with free tools.</div></div></div>` },
+      { t: [25.9, 30], label: "CTA", vo: "Start learning on your phone at prostatis dot com.", ost: "Start on your phone · prostatis.com", vis: "End card.",
+        html: () => endCard(`Start learning<br><span class="o">on your phone.</span>`, "Self-paced · lifetime access · ₦15,000 once") },
+    ] },
+  { name: "5 · Businesses", angle: "Businesses still need websites", music: "Upbeat Afropop with street-market energy; a cash-register 'ding' on the Paystack beat",
+    beats: [
+      { t: [0, 3], label: "Hook", vo: "Look around. The salon. The clinic. The tailor down the road.", ost: "SALON. CLINIC. TAILOR.", vis: "Three shop signs pop up in rhythm with the voiceover.",
+        html: () => `<div class="scene dark">${brand(true)}<div class="big">Look around.</div><div class="shops">${["Salon","Clinic","Tailor"].map((s,i)=>`<div class="shop a-pop" ${d(.6+i*.6)}><b>${["✂","✚","🧵"][i]}</b>${s}</div>`).join("")}</div></div>` },
+      { t: [3, 9.6], label: "Problem", vo: "Many still have no website, no booking page and no way to take payment online. Someone has to build it.", ost: "No website · No bookings · No online payments", vis: "Question-mark bubbles appear over each shop; the last line lands: 'Someone has to build it.'",
+        html: () => `<div class="scene paper">${brand(false)}${["No website","No booking page","No online payments"].map((s,i)=>`<div class="card a-drop" ${d(i*.5)}><span class="mid" style="font-size:6cqw">✕ ${s}</span></div>`).join("")}<div class="mid a-rise o" ${d(2)}>Someone has to build it.</div></div>` },
+      { t: [9.6, 19.1], label: "Solution", vo: "Prostatis teaches you to build exactly that: business websites, booking systems with deposits and Paystack stores. Then how to price and pitch your work.", ost: "Websites · Bookings · Paystack stores · Pricing & pitching", vis: "The salon gets a site, then a booking calendar, then a checkout with a Paystack button; chips stack under it.",
+        html: () => `<div class="scene blue">${brand(false)}${phoneSite("Glow Salon · Book now", "#eb5e28")}<div class="row">${["Websites","Bookings + deposits","Paystack stores","Pricing & pitching"].map((s,i)=>`<span class="chip a-pop" ${d(3+i*.6)}>${s}</span>`).join("")}</div></div>` },
+      { t: [19.1, 25.7], label: "Proof", vo: "You practise on one client from start to finish: Stitches by Bisi in Yaba, from first page to final handover.", ost: "1 practice client · first page → handover", vis: "A timeline bar fills from 'First page' to 'Handover' under the client card.",
+        html: () => `<div class="scene paper">${brand(false)}<div class="card a-rise"><div class="small" style="font-weight:700">Your practice client</div><div class="mid">Stitches by Bisi, Yaba</div></div><div class="card a-rise" ${d(.8)}><div class="small" style="display:flex;justify-content:space-between;font-weight:700"><span>First page</span><span>Handover</span></div><div style="height:3.4cqw;margin-top:2cqw;border:.5cqw solid #151515;border-radius:99px;overflow:hidden"><div class="a-grow" style="--d:${1.2}s;height:100%;background:var(--green)"></div></div></div><div class="small a-fade" style="--d:${2.6}s;color:var(--muted)">An illustrative client, so you practise like it's real work.</div></div>` },
+      { t: [25.7, 30], label: "CTA", vo: "Learn a skill businesses pay for. prostatis dot com.", ost: "Learn a skill businesses pay for · prostatis.com", vis: "End card.",
+        html: () => endCard(`Learn a skill<br><span class="o">businesses pay for.</span>`, "Fast Track 14 lessons · Main Track 26 lessons") },
+    ] },
+];
+
+const $ = (id) => document.getElementById(id);
+const stage = $("stage"), bar = $("bar"), time = $("time");
+let ad = 0, t = 0, playing = true, last = 0, beatIx = -1, captions = true;
+try { const saved = Number(localStorage.getItem("prostatis-ad")); if (saved >= 0 && saved < ADS.length) ad = saved; } catch {}
+
+function renderTabs() {
+  $("tabs").innerHTML = ADS.map((a, i) => `<button class="tab" role="tab" type="button" aria-selected="${i === ad}" data-i="${i}">${a.name}</button>`).join("");
+  $("tabs").querySelectorAll(".tab").forEach((b) => b.onclick = () => select(Number(b.dataset.i)));
+}
+function renderScript() {
+  const a = ADS[ad];
+  $("script").innerHTML = `<div class="meta"><span class="pill hook">Hook angle: ${a.angle}</span><span class="pill music">Music: ${a.music}</span><span class="pill">30 seconds · 9:16</span></div>` +
+    a.beats.map((b, i) => `<article class="beat" id="beat${i}"><h3>${b.label}<small>${b.t[0].toFixed(1)}–${b.t[1].toFixed(1)}s</small></h3><dl><dt>Voiceover</dt><dd class="vo">${b.vo}</dd><dt>On screen</dt><dd>${b.ost}</dd><dt>Visual</dt><dd>${b.vis}</dd></dl></article>`).join("");
+  $("scenes").innerHTML = a.beats.map((b, i) => `<button class="chip-s" type="button" data-i="${i}">${b.label}</button>`).join("");
+  $("scenes").querySelectorAll(".chip-s").forEach((c) => c.onclick = () => { t = ADS[ad].beats[Number(c.dataset.i)].t[0] + 0.001; beatIx = -1; tick(true); });
+}
+function showBeat(i) {
+  const b = ADS[ad].beats[i];
+  stage.innerHTML = b.html() + `<div class="cap" ${captions ? "" : "hidden"}>${b.vo}</div>`;
+  document.querySelectorAll(".beat").forEach((el, j) => el.classList.toggle("on", j === i));
+  document.querySelectorAll(".chip-s").forEach((el, j) => el.setAttribute("aria-current", j === i ? "true" : "false"));
+}
+function tick(force) {
+  const beats = ADS[ad].beats;
+  const i = Math.max(0, beats.findIndex((b) => t >= b.t[0] && t < b.t[1]));
+  if (i !== beatIx || force === true) { beatIx = i; showBeat(i); }
+  bar.style.width = `${(t / 30) * 100}%`;
+  time.textContent = `${t.toFixed(1)} / 30s`;
+}
+function loop(now) {
+  if (playing) {
+    t += Math.min(0.1, (now - last) / 1000);
+    if (t >= 30) { t = 0; beatIx = -1; }
+    tick();
+  }
+  last = now;
+  requestAnimationFrame(loop);
+}
+function select(i) { ad = i; t = 0; beatIx = -1; try { localStorage.setItem("prostatis-ad", String(i)); } catch {} renderTabs(); renderScript(); tick(true); }
+$("play").onclick = () => { playing = !playing; stage.classList.toggle("paused", !playing); $("play").textContent = playing ? "Pause" : "Play"; };
+$("restart").onclick = () => { t = 0; beatIx = -1; playing = true; stage.classList.remove("paused"); $("play").textContent = "Pause"; tick(true); };
+$("captions").onclick = () => { captions = !captions; $("captions").setAttribute("aria-pressed", String(captions)); $("captions").textContent = captions ? "Captions on" : "Captions off"; const c = stage.querySelector(".cap"); if (c) c.hidden = !captions; };
+$("full").onclick = () => { const f = $("frame"); (f.requestFullscreen ? f.requestFullscreen() : Promise.reject()).catch(() => { $("full").textContent = "Full screen not available here"; }); };
+// Export mode (#export): only the stage, at 1080×1920, drawn at an exact moment for frame-by-frame video rendering.
+if (location.hash === "#export") {
+  document.body.innerHTML = "";
+  document.body.style.cssText = "margin:0;padding:0;background:#151515";
+  const f = document.createElement("div");
+  f.className = "frame";
+  f.style.cssText = "width:1080px;max-width:none;height:1920px;border:0;border-radius:0;box-shadow:none";
+  f.appendChild(stage);
+  document.body.appendChild(f);
+  window.__render = async (adIndex, sec, withCaptions = true) => {
+    if (adIndex !== ad) { ad = adIndex; beatIx = -1; }
+    captions = withCaptions;
+    const beats = ADS[ad].beats;
+    const i = Math.max(0, beats.findIndex((b) => sec >= b.t[0] && sec < b.t[1]));
+    if (i !== beatIx) { beatIx = i; stage.innerHTML = beats[i].html() + `<div class="cap" ${captions ? "" : "hidden"}>${beats[i].vo}</div>`; }
+    const local = (sec - beats[i].t[0]) * 1000;
+    for (const an of stage.getAnimations({ subtree: true })) { an.pause(); an.currentTime = local; }
+    await document.fonts.ready;
+    return true;
+  };
+} else {
+  renderTabs(); renderScript(); tick(true); requestAnimationFrame((n) => { last = n; requestAnimationFrame(loop); });
+}
+</script>

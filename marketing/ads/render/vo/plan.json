@@ -1,0 +1,187 @@
+[
+ [
+  {
+   "label": "Hook",
+   "start": 0,
+   "end": 3.7,
+   "voAt": 0.25,
+   "voDur": 2.87
+  },
+  {
+   "label": "Problem",
+   "start": 3.7,
+   "end": 10,
+   "voAt": 3.95,
+   "voDur": 5.53
+  },
+  {
+   "label": "Solution",
+   "start": 10,
+   "end": 18.9,
+   "voAt": 10.25,
+   "voDur": 7.13
+  },
+  {
+   "label": "Proof",
+   "start": 18.9,
+   "end": 24.9,
+   "voAt": 19.15,
+   "voDur": 4.55
+  },
+  {
+   "label": "CTA",
+   "start": 24.9,
+   "end": 30,
+   "voAt": 25.15,
+   "voDur": 3.68
+  }
+ ],
+ [
+  {
+   "label": "Hook",
+   "start": 0,
+   "end": 3,
+   "voAt": 0.25,
+   "voDur": 1.96
+  },
+  {
+   "label": "Problem",
+   "start": 3,
+   "end": 7.5,
+   "voAt": 3.25,
+   "voDur": 3.25
+  },
+  {
+   "label": "Solution",
+   "start": 7.5,
+   "end": 18.3,
+   "voAt": 7.75,
+   "voDur": 8.64
+  },
+  {
+   "label": "Proof",
+   "start": 18.3,
+   "end": 24.6,
+   "voAt": 18.55,
+   "voDur": 4.52
+  },
+  {
+   "label": "CTA",
+   "start": 24.6,
+   "end": 30,
+   "voAt": 24.85,
+   "voDur": 3.61
+  }
+ ],
+ [
+  {
+   "label": "Hook",
+   "start": 0,
+   "end": 3.4,
+   "voAt": 0.25,
+   "voDur": 2.6
+  },
+  {
+   "label": "Problem",
+   "start": 3.4,
+   "end": 8.5,
+   "voAt": 3.65,
+   "voDur": 4.31
+  },
+  {
+   "label": "Solution",
+   "start": 8.5,
+   "end": 17.4,
+   "voAt": 8.75,
+   "voDur": 7.45
+  },
+  {
+   "label": "Proof",
+   "start": 17.4,
+   "end": 25.4,
+   "voAt": 17.65,
+   "voDur": 6.75
+  },
+  {
+   "label": "CTA",
+   "start": 25.4,
+   "end": 30,
+   "voAt": 25.65,
+   "voDur": 3.35
+  }
+ ],
+ [
+  {
+   "label": "Hook",
+   "start": 0,
+   "end": 3.1,
+   "voAt": 0.25,
+   "voDur": 2.25
+  },
+  {
+   "label": "Problem",
+   "start": 3.1,
+   "end": 9.6,
+   "voAt": 3.35,
+   "voDur": 5.72
+  },
+  {
+   "label": "Solution",
+   "start": 9.6,
+   "end": 18.6,
+   "voAt": 9.85,
+   "voDur": 8.06
+  },
+  {
+   "label": "Proof",
+   "start": 18.6,
+   "end": 25.9,
+   "voAt": 18.85,
+   "voDur": 6.26
+  },
+  {
+   "label": "CTA",
+   "start": 25.9,
+   "end": 30,
+   "voAt": 26.15,
+   "voDur": 2.18
+  }
+ ],
+ [
+  {
+   "label": "Hook",
+   "start": 0,
+   "end": 3,
+   "voAt": 0.25,
+   "voDur": 1.19
+  },
+  {
+   "label": "Problem",
+   "start": 3,
+   "end": 9.6,
+   "voAt": 3.25,
+   "voDur": 5.84
+  },
+  {
+   "label": "Solution",
+   "start": 9.6,
+   "end": 19.1,
+   "voAt": 9.85,
+   "voDur": 8.36
+  },
+  {
+   "label": "Proof",
+   "start": 19.1,
+   "end": 25.7,
+   "voAt": 19.35,
+   "voDur": 5.57
+  },
+  {
+   "label": "CTA",
+   "start": 25.7,
+   "end": 30,
+   "voAt": 25.95,
+   "voDur": 3.29
+  }
+ ]
+]

@@ -1,0 +1,177 @@
+[
+ {
+  "ad": 0,
+  "start": 0,
+  "end": 3,
+  "label": "Hook",
+  "vo": "One skill. Every business on your street needs it."
+ },
+ {
+  "ad": 0,
+  "start": 3,
+  "end": 9,
+  "label": "Problem",
+  "vo": "Certificates pile up. CVs go unanswered. Nobody asks what you can actually build."
+ },
+ {
+  "ad": 0,
+  "start": 9,
+  "end": 20,
+  "label": "Solution",
+  "vo": "Prostatis teaches you to build websites with AI, step by step. Then how to price them, pitch them and get paid by real businesses."
+ },
+ {
+  "ad": 0,
+  "start": 20,
+  "end": 26,
+  "label": "Proof",
+  "vo": "Fourteen hands-on lessons, one practice client, and a verified certificate when you pass."
+ },
+ {
+  "ad": 0,
+  "start": 26,
+  "end": 30,
+  "label": "CTA",
+  "vo": "Learn a skill businesses pay for. Start at prostatis dot com."
+ },
+ {
+  "ad": 1,
+  "start": 0,
+  "end": 3,
+  "label": "Hook",
+  "vo": "You don't need to know code to build a website."
+ },
+ {
+  "ad": 1,
+  "start": 3,
+  "end": 9,
+  "label": "Problem",
+  "vo": "Most tutorials throw jargon at you and assume you're already a programmer."
+ },
+ {
+  "ad": 1,
+  "start": 9,
+  "end": 20,
+  "label": "Solution",
+  "vo": "Prostatis explains everything in plain English, with everyday Nigerian comparisons. You describe what you want, free AI tools write the code, and you put it live."
+ },
+ {
+  "ad": 1,
+  "start": 20,
+  "end": 26,
+  "label": "Proof",
+  "vo": "Every lesson ends with a practical task and a five-question quiz, so you know you've really got it."
+ },
+ {
+  "ad": 1,
+  "start": 26,
+  "end": 30,
+  "label": "CTA",
+  "vo": "No coding background needed. Start at prostatis dot com."
+ },
+ {
+  "ad": 2,
+  "start": 0,
+  "end": 3,
+  "label": "Hook",
+  "vo": "Before you pay for an expensive bootcamp, watch this."
+ },
+ {
+  "ad": 2,
+  "start": 3,
+  "end": 9,
+  "label": "Problem",
+  "vo": "Many tech programmes cost a lot, run on a fixed timetable, and lock you out when they end."
+ },
+ {
+  "ad": 2,
+  "start": 9,
+  "end": 20,
+  "label": "Solution",
+  "vo": "Prostatis is fifteen thousand naira, paid once. Learn at your own pace, keep lifetime access, and build everything with free tools."
+ },
+ {
+  "ad": 2,
+  "start": 20,
+  "end": 26,
+  "label": "Proof",
+  "vo": "Want the full package? The Main Track adds SEO, automation and AI agents: twenty-six lessons for thirty thousand naira."
+ },
+ {
+  "ad": 2,
+  "start": 26,
+  "end": 30,
+  "label": "CTA",
+  "vo": "Pay once, keep it for life. prostatis dot com."
+ },
+ {
+  "ad": 3,
+  "start": 0,
+  "end": 3,
+  "label": "Hook",
+  "vo": "Your phone is enough to start learning web design today."
+ },
+ {
+  "ad": 3,
+  "start": 3,
+  "end": 9,
+  "label": "Problem",
+  "vo": "No time for classes? Data running low? Most courses expect you at a desk for hours."
+ },
+ {
+  "ad": 3,
+  "start": 9,
+  "end": 20,
+  "label": "Solution",
+  "vo": "Prostatis lessons are light and written for phones. Read on the bus, take the quiz, use fifty-six free tools, and pick up exactly where you stopped."
+ },
+ {
+  "ad": 3,
+  "start": 20,
+  "end": 26,
+  "label": "Proof",
+  "vo": "XP, streaks and badges keep you going. When it's time to build, you'll use free tools on a laptop or desktop."
+ },
+ {
+  "ad": 3,
+  "start": 26,
+  "end": 30,
+  "label": "CTA",
+  "vo": "Start learning on your phone at prostatis dot com."
+ },
+ {
+  "ad": 4,
+  "start": 0,
+  "end": 3,
+  "label": "Hook",
+  "vo": "Your phone is enough to start."
+ },
+ {
+  "ad": 4,
+  "start": 3,
+  "end": 9,
+  "label": "Problem",
+  "vo": "Many still have no website, no booking page and no way to take payment online. Someone has to build it."
+ },
+ {
+  "ad": 4,
+  "start": 9,
+  "end": 20,
+  "label": "Solution",
+  "vo": "Prostatis teaches you to build exactly that: business websites, booking systems with deposits and Paystack stores. Then how to price and pitch your work."
+ },
+ {
+  "ad": 4,
+  "start": 20,
+  "end": 26,
+  "label": "Proof",
+  "vo": "You practise on one client from start to finish: Stitches by Bisi in Yaba, from first page to final handover."
+ },
+ {
+  "ad": 4,
+  "start": 26,
+  "end": 30,
+  "label": "CTA",
+  "vo": "Learn a skill businesses pay for. prostatis dot com."
+ }
+]

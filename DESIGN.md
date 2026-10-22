@@ -25,7 +25,7 @@ Section rhythm: paper and `sunk` alternate, with ink hairlines between; two dark
 
 - **Headlines:** `.display`, Archivo (wide, weight 600, tight tracking).
 - **Everything you read:** Geist, 15–17px (lessons 16–17px at line-height 1.75).
-- **Eyebrows:** `.label`, small capitals with a little tracking. Use sparingly.
+- **Eyebrows:** `.label`, small capitals with a little tracking. Page and section labels are always the `Eyebrow` pill (`components/eyebrow.tsx`: coloured wash + matching text, one hue per section); never plain orange caps.
 - **Code only:** Geist Mono (`pre`, `code`, `kbd`, and the `font-code` utility). `font-mono` maps to Geist so older markup reads as normal text. The navbar keeps its mono capitals on purpose.
 
 ## Surfaces
@@ -33,6 +33,9 @@ Section rhythm: paper and `sunk` alternate, with ink hairlines between; two dark
 - `.ink-block`: 2px ink outline, 16px radius, 4px hard offset shadow, clips its content. `.block-press` lifts on hover and presses in on click. On the dark band, cards get an orange shadow instead.
 - Buttons (`src/components/ui.ts`): `btn.primary` orange, `btn.secondary` white, `btn.accent` near-black; all with the ink outline and a small hard shadow; `btn.ghost` for quiet links. 12px radius, sentence case.
 - `.scribble`: an orange hand-drawn underline under one word in a heading.
+- **Corners:** nothing bordered is square. Cards and panels 12–16px, chips and small labels are pills (`rounded-full`), tiny swatches and dots 4px.
+- **Callouts** ("Think of it like…", quotes, tips) are soft tinted rounded boxes. No thick left stripe (`border-l-4`) on anything.
+- **Numbered steps** are round badges coloured from `cycle` (homepage "How it works", tool "How to use it"). Course skills are shown with `PillarTag`, never plain text.
 
 ## Brand
 
@@ -56,7 +59,7 @@ All art is coded, drawn on a fixed 320×200 `Artboard` scaled to the card, and *
 - **Navbar**: the floating pill (ink outline, hard shadow) with What's inside · Tracks · Free tools · Who it's for · Pricing · Blog, then Sign in and Enroll Now. Full-screen sheet on phones.
 - **Hero (minimal)**: off-white with one soft orange glow; pill eyebrow; headline with "websites" and "income" in orange; Enroll Now + Start Learning; three facts; a fanned stack of three animated website mock-ups.
 - **Homepage**: hero → websites businesses pay for (six LiveSites) → how it works (four illustrated cards) → the two tracks (two `PlanCard`s side by side, each linking to its full curriculum page; the week-by-week curriculum lives only on `/tracks/[track]`, to keep the homepage short) → who it's for → six free tools → Fast Track vs Main Track table → FAQ → dark call-to-action card → orange footer.
-- **`PlanCard`** (`components/plan-card.tsx`): header band (orange for the Fast Track), price, three key facts (length, lessons, access), what you'll walk away with, what's included, one button and the payment small print. Used on the homepage and `/pricing`.
+- **`PlanCard`** (`components/plan-card.tsx`): header band (orange for the Fast Track), price, three key facts (lessons, self-paced, lifetime access), what you'll walk away with, what's included, one button and the payment small print. Used on the homepage and `/pricing`.
 - **Footer**: orange, three columns (brand, blurb, Enroll Now and email signup · Learn · Company and legal).
 - **Legal**: `/privacy`, `/terms`, `/refund-policy` share `components/legal.tsx`; contact from `NEXT_PUBLIC_CONTACT_EMAIL`.
 
@@ -77,3 +80,9 @@ Fields are light: a hairline border at rest; on focus the border fades and a sof
 - One orange button per view where possible.
 - Everything that moves respects `prefers-reduced-motion`, and animated art pauses off screen.
 - No horizontal page scroll at 360px; tap targets ≥ 44px; body text ≥ 16px in lessons.
+- Course length is shown in lessons, never days: "Lesson N", "Part N", "14 lessons"; access is "Lifetime" and the pace "Self-paced".
+- Long text never shares a row with tags or buttons on phones: put the tags under the text (see the dashboard to-do rows).
+
+## Video ads (`marketing/ads/`)
+
+Vertical 9:16 (1080×1920), 30 seconds, five beats: hook (≈3s), problem, solution, proof, call to action. Built from the same system as the site: warm paper, ink-outlined cards with hard shadows, Archivo headlines, orange for the one key phrase and the CTA button, supporting hues for chips; dark scenes for hooks and the end card. The logo top-left, captions in a dark rounded bar at the bottom (videos are watched muted). Motion uses the site's kit (rise, drop, pop, grow, slam, wipe) and ends every ad on the dark card with the pulsing prostatis.com button. Each scene's length follows its voiceover line.
