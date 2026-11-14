@@ -25,7 +25,7 @@ const websiteKinds: { kind: SiteKind; title: string; body: string; day: number }
 
 const steps: { step: Step; title: string; body: string }[] = [
   { step: "enroll", title: "Enroll today, start today", body: "Pay once in naira by card, transfer or USSD. Your lessons, dashboard and WhatsApp community unlock the moment you make payment." },
-  { step: "build", title: "Build a real website every day", body: "Short, practical lessons. Learn to use AI to write code, ship a real web page, online store, booking system or e-commerce site, and host it on the internet with free tools." },
+  { step: "build", title: "Build a real website in every lesson", body: "Short, practical lessons. Learn to use AI to write code, ship a real web page, online store, booking system or e-commerce site, and host it on the internet with free tools." },
   { step: "pitch", title: "Pitch and sell to businesses that need your services", body: "A ready-to-use proposal template, pricing calculator and message scripts to reach small and large businesses. You'll know what to charge and exactly what to say." },
   { step: "paid", title: "Get certified", body: "Go through the course properly, deliver your projects, then pass the final assessment for a verified certificate you can show every future client." },
 ];
