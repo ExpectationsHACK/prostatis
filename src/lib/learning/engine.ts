@@ -1,5 +1,5 @@
 import type { Question } from "@/content/types";
-import type { Track } from "@/lib/curriculum";
+import type { Pillar, Track } from "@/lib/curriculum";
 
 /* ---------- XP rules (the server is the only thing that awards XP) ---------- */
 export const XP = {
@@ -176,7 +176,7 @@ export function certificateId(userId: string, track: Track["id"], at: Date) {
 }
 
 /* ---------- Badges ---------- */
-export type Badge = { id: string; name: string; desc: string; icon: "spark" | "target" | "flame" | "trophy" | "flag" | "award" | "star" | "medal"; earned: boolean };
+export type Badge = { id: string; name: string; desc: string; icon: "spark" | "target" | "flame" | "trophy" | "flag" | "award" | "star" | "medal"; earned: boolean; pillar?: Pillar };
 
 /** A lesson's own milestone badge ("Live on the internet"), earned when that lesson is complete. */
 export type Milestone = { lesson: string; name: string; desc: string };
@@ -207,7 +207,7 @@ export function badges(track: Track, state: LearnerState, milestones: Milestone[
   const byLesson = new Map(milestones.map((m) => [m.lesson, m]));
   const mile: Badge[] = track.modules.flatMap((m) => {
     const ms = byLesson.get(m.lesson);
-    return ms ? [{ id: `m:${m.lesson}`, name: ms.name, desc: ms.desc, icon: "medal" as const, earned: Boolean(state.lessons[m.lesson]?.completed_at) }] : [];
+    return ms ? [{ id: `m:${m.lesson}`, name: ms.name, desc: ms.desc, icon: "medal" as const, earned: Boolean(state.lessons[m.lesson]?.completed_at), pillar: m.pillar }] : [];
   });
   return [...list, ...mile];
 }

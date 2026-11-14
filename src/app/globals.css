@@ -433,3 +433,14 @@ textarea {
   100% { opacity: 0; transform: translate(var(--x), var(--y)) rotate(var(--r)) scale(1); }
 }
 @media (prefers-reduced-motion: reduce) { .confetti { display: none; } }
+
+/* Badges: an earned badge lights up from black and white into its colour once, then wears a
+   medal ring and the hard ink shadow. Unearned badges stay grey (src/components/learn/badges.tsx). */
+.badge-lit { box-shadow: 3px 3px 0 var(--color-edge); animation: badge-light 800ms ease-out both; }
+.badge-glow { box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--color-edge); }
+@keyframes badge-light {
+  0% { filter: grayscale(1); opacity: 0.6; transform: scale(0.94); }
+  60% { filter: grayscale(0); opacity: 1; transform: scale(1.03); }
+  100% { filter: none; transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) { .badge-lit { animation: none; } }

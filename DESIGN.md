@@ -26,6 +26,7 @@ Section rhythm: paper and `sunk` alternate, with ink hairlines between; two dark
 - **Headlines:** `.display`, Archivo (wide, weight 600, tight tracking).
 - **Everything you read:** Geist, 15–17px (lessons 16–17px at line-height 1.75).
 - **Eyebrows:** `.label`, small capitals with a little tracking. Page and section labels are always the `Eyebrow` pill (`components/eyebrow.tsx`: coloured wash + matching text, one hue per section); never plain orange caps.
+- **Badges** (`components/learn/badges.tsx`): every badge is always visible. Unearned ones are black and white with how to earn them; earned ones light up once in their own hue (a lesson milestone takes its skill's colour, part badges the `cycle`), with a medal ring, a tick and the hard ink shadow. Earned badges lead the shelf.
 - **Code only:** Geist Mono (`pre`, `code`, `kbd`, and the `font-code` utility). `font-mono` maps to Geist so older markup reads as normal text. The navbar keeps its mono capitals on purpose.
 
 ## Surfaces
