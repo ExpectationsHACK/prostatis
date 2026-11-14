@@ -32,7 +32,7 @@ export function PostEditor({ post, siteUrl, onDelete }: { post: Post | null; sit
     seo_keywords: post?.seo_keywords.join(", ") ?? "",
     canonical_url: post?.canonical_url ?? "",
     og_image: post?.og_image ?? "",
-    author_name: post?.author_name ?? "Prostatis",
+    author_name: post?.author_name ?? "Stynark",
     status: post?.status ?? "draft",
     published_at: toLocal(post?.published_at ?? null),
   });

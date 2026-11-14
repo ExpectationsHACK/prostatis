@@ -37,8 +37,7 @@ export function SiteFooter() {
           <Link href="/" className="flex items-center gap-2.5" aria-label={`${site.name} home`}>
             <LogoMark size={36} />
             <span className="flex flex-col leading-none">
-              <Wordmark className="text-[20px] sm:text-[22px]" />
-              <span className="mt-1 font-mono text-[11.5px] font-bold text-ink/75">by {site.company}</span>
+              <Wordmark tone="ink" className="text-[20px] sm:text-[22px]" />
             </span>
           </Link>
           <p className="mt-4 max-w-sm text-[15px] font-medium leading-relaxed text-ink/85">
@@ -79,7 +78,7 @@ export function SiteFooter() {
       <div className="border-t-2 border-ink">
         <p className="mx-auto flex max-w-6xl flex-wrap justify-between gap-2 px-4 py-5 text-[13.5px] font-medium text-ink/80">
           <span>
-            {site.byline} · © {new Date().getFullYear()} {site.company}. All rights reserved.
+            © {new Date().getFullYear()} {site.company}. All rights reserved.
           </span>
           <span>Payments secured by Paystack</span>
         </p>

@@ -73,7 +73,7 @@ describe("account setup rules", async () => {
   it("only accepts a real sender address in EMAIL_FROM", () => {
     expect(emailSender("STEINARK")).toBeNull();
     expect(emailSender("")).toBeNull();
-    expect(emailSender("Prostatis <hello@prostatis.com>")).toEqual({ name: "Prostatis", address: "hello@prostatis.com" });
+    expect(emailSender("Stynark <hello@prostatis.com>")).toEqual({ name: "Stynark", address: "hello@prostatis.com" });
     expect(emailSender("hello@prostatis.com")?.address).toBe("hello@prostatis.com");
   });
   it("reads permanent student emails case-insensitively", () => {

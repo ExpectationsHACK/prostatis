@@ -3,7 +3,7 @@ import { LOGO } from "@/lib/logo";
 import { site } from "@/lib/site";
 
 /**
- * The Prostatis mark on a transparent background. It takes the text colour (ink by
+ * The Stynark mark on a transparent background. It takes the text colour (ink by
  * default), so it works on light pages, the orange footer and dark panels alike.
  */
 export function LogoMark({ size = 36, className = "text-ink" }: { size?: number; className?: string }) {
@@ -17,9 +17,9 @@ export function LogoMark({ size = 36, className = "text-ink" }: { size?: number;
   );
 }
 
-/** The product name in the headline face. */
-export function Wordmark({ className = "" }: { className?: string }) {
-  return <span className={"display text-ink " + className}>{site.name}</span>;
+/** The name in the headline face: brand orange in headers, ink where the background is orange (the footer). */
+export function Wordmark({ className = "", tone = "brand" }: { className?: string; tone?: "brand" | "ink" }) {
+  return <span className={"display " + (tone === "brand" ? "text-brand" : "text-ink") + " " + className}>{site.name}</span>;
 }
 
 export function Brand({ size = 32, name = true }: { size?: number; name?: boolean }) {

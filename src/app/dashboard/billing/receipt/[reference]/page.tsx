@@ -57,7 +57,7 @@ export default async function ReceiptPage({ params }: { params: Promise<{ refere
           </div>
           <div>
             <dt className="label text-muted">Paid with</dt>
-            <dd className="mt-0.5 text-ink">{p.provider === "paystack" ? "Paystack" : "Recorded by Prostatis (bank transfer or other)"}</dd>
+            <dd className="mt-0.5 text-ink">{p.provider === "paystack" ? "Paystack" : "Recorded by Stynark (bank transfer or other)"}</dd>
           </div>
           <div>
             <dt className="label text-muted">Status</dt>

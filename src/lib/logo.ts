@@ -1,5 +1,5 @@
 /**
- * The Prostatis mark: an isometric box drawn as one unbroken line that reads as an "S"
+ * The Stynark mark: an isometric box drawn as one unbroken line that reads as an "S"
  * (for Stynark), with two dashes on the front face. One source of truth for every place
  * the logo is drawn: the site header, icons, share images, certificates and emails.
  *
@@ -26,7 +26,7 @@ export function logoSvg({ color = LOGO.ink, square = false, adaptive = false, st
   // heavier `stroke` so the line survives at 16px.
   const style = adaptive ? `<style>.m{stroke:${color};fill:${color}}@media (prefers-color-scheme:dark){.m{stroke:#fff;fill:#fff}}</style>` : "";
   const paint = adaptive ? `class="m"` : `stroke="${color}" fill="${color}"`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${square ? LOGO.squareViewBox : LOGO.viewBox}" role="img" aria-label="Prostatis">${style}<g ${paint}><path d="${LOGO.outline}" fill="none" stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round"/>${LOGO.dashes
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${square ? LOGO.squareViewBox : LOGO.viewBox}" role="img" aria-label="Stynark">${style}<g ${paint}><path d="${LOGO.outline}" fill="none" stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round"/>${LOGO.dashes
     .map((d) => `<path d="${d}" stroke="none"/>`)
     .join("")}</g></svg>`;
 }

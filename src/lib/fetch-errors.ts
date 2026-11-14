@@ -13,7 +13,7 @@ export function fetchProblem(input: { error?: unknown; status?: number; message?
   if (!online) return { kind: "offline", message: "You're offline. Check your data or Wi-Fi, then try again. Nothing you typed is lost." };
   if (status === undefined && error !== undefined) {
     const text = error instanceof Error ? `${error.name} ${error.message}` : String(error);
-    if (NETWORK.test(text)) return { kind: "network", message: "We couldn't reach Prostatis. Your connection may be weak: try again in a moment." };
+    if (NETWORK.test(text)) return { kind: "network", message: "We couldn't reach Stynark. Your connection may be weak: try again in a moment." };
   }
   if (status === 401) return { kind: "session", message: "Your session has expired. Sign in again to continue." };
   if (status === 429) return { kind: "busy", message: message || "That's a lot of tries in a short time. Wait a minute, then try again." };

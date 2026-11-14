@@ -1,4 +1,4 @@
-// Branded Prostatis emails: one table-based layout that works in Gmail, Outlook and phone
+// Branded Stynark emails: one table-based layout that works in Gmail, Outlook and phone
 // mail apps, plus the auth, welcome and newsletter messages built on it. Pure functions
 // (tested in email-templates.test.ts).
 import { site } from "./site";

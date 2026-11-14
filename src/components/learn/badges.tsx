@@ -44,7 +44,7 @@ export function BadgeShelf({ list }: { list: Badge[] }) {
       <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-wash" role="progressbar" aria-label="Badges earned" aria-valuenow={got} aria-valuemin={0} aria-valuemax={list.length}>
         <div className="h-full rounded-full bg-ink" style={{ width: `${list.length ? (got / list.length) * 100 : 0}%` }} />
       </div>
-      <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+      <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
         {sorted.map((b) => {
           const Icon = badgeIcon(b.id);
           return (

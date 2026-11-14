@@ -1,4 +1,4 @@
-# Prostatis by Stynark
+# Stynark by Stynark
 
 Nigeria-first club that teaches website building with AI, plus web solutions, SEO, automation, lead generation and AI agents. Two one-time tracks — **Fast Track** (14 lessons, ₦15,000) and **Main Track** (26 lessons, ₦30,000), self-paced with lifetime access — a WhatsApp community, and 50 free public tools.
 

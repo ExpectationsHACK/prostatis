@@ -71,7 +71,7 @@ export async function signUp(_: AuthState, form: FormData): Promise<AuthState> {
   const limited = await throttled("signup");
   if (limited) return { ...limited, values };
 
-  // Branded Prostatis email once the sending domain is verified; Supabase's mailer otherwise.
+  // Branded Stynark email once the sending domain is verified; Supabase's mailer otherwise.
   if (brandedAuthEmails()) {
     const sent = await sendAuthEmail("signup", { email, password, next, name, data: { name, whatsapp } });
     if (!sent.ok && sent.reason === "exists") return { error: "An account with this email already exists. Sign in instead, or reset your password.", fields: { email: "This email already has an account." }, values };

@@ -31,10 +31,7 @@ export function certificateImage(c: Certificate) {
         <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", background: "#ffffff", border: `2px solid ${og.line}`, borderRadius: 24, padding: "64px 96px 44px", color: og.ink }}>
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             <Mark size={64} />
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <div style={{ display: "flex", fontSize: 36, fontWeight: 700, letterSpacing: -0.5 }}>{site.name}</div>
-              <div style={{ display: "flex", fontSize: 18, color: og.muted }}>by {site.company}</div>
-            </div>
+            <div style={{ display: "flex", fontSize: 36, fontWeight: 700, letterSpacing: -0.5, color: og.orange }}>{site.name}</div>
           </div>
           <div style={{ display: "flex", marginTop: 56, fontSize: 22, letterSpacing: 6, color: og.label, fontWeight: 600 }}>CERTIFICATE OF COMPLETION</div>
           <div style={{ display: "flex", marginTop: 30, fontSize: 26, color: og.muted }}>This certifies that</div>

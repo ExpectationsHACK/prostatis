@@ -25,7 +25,7 @@ export const levels = [
   { at: 2800, name: "Automator" },
   { at: 3600, name: "Agent Builder" },
   { at: 4500, name: "Closer" },
-  { at: 5400, name: "Prostatis Legend" },
+  { at: 5400, name: "Stynark Legend" },
 ] as const;
 
 export function levelFor(xp: number) {

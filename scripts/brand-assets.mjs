@@ -1,4 +1,4 @@
-// Regenerates the Prostatis logo files from src/lib/logo.ts (run: node scripts/brand-assets.mjs).
+// Regenerates the Stynark logo files from src/lib/logo.ts (run: node scripts/brand-assets.mjs).
 // SVGs are written directly; PNGs are rendered from those SVGs with sharp (bundled with Next.js).
 import { writeFileSync } from "node:fs";
 import sharp from "sharp";

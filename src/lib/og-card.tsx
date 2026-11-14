@@ -10,10 +10,7 @@ export function OgCard({ kicker, title: rawTitle, sub: rawSub }: { kicker: strin
     <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", background: og.paper, padding: "64px 72px", color: og.ink }}>
       <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
         <Mark size={62} />
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", fontSize: 34, fontWeight: 700, letterSpacing: -0.5 }}>{site.name}</div>
-          <div style={{ display: "flex", fontSize: 18, color: og.muted }}>by {site.company}</div>
-        </div>
+        <div style={{ display: "flex", fontSize: 34, fontWeight: 700, letterSpacing: -0.5, color: og.orange }}>{site.name}</div>
       </div>
       <div style={{ display: "flex", flexDirection: "column", marginTop: "auto" }}>
         <div style={{ display: "flex", fontSize: 26, color: og.label, fontWeight: 600 }}>{kicker}</div>

@@ -41,7 +41,7 @@ Section rhythm: paper and `sunk` alternate, with ink hairlines between; two dark
 ## Brand
 
 - The mark: an isometric box drawn as one unbroken line that reads as an "S" (for Stynark), with two dashes on the front face. Transparent background, ink line (it takes the text colour, so it can go white on dark panels). Geometry lives in one place, `src/lib/logo.ts`, used by `LogoMark` (`src/components/brand.tsx`), `Mark` (`src/lib/og-mark.tsx`: share images, certificates, Apple icon) and `scripts/brand-assets.mjs`, which regenerates `public/brand/*` (SVG + transparent PNGs), the adaptive `src/app/icon.svg` favicon (white on dark tabs) and `src/app/favicon.ico`.
-- The wordmark: **Prostatis** in Archivo (`Wordmark`); the company line "by Stynark" sits under it in the footer and on share images and certificates.
+- The wordmark: **Stynark** in Archivo (`Wordmark`); the company line "by Stynark" sits under it in the footer and on share images and certificates.
 
 ## Illustrations: every thumbnail is animated
 

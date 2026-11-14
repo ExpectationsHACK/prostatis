@@ -30,7 +30,7 @@ export async function checkEmail(): Promise<ServiceCheck> {
     return {
       ok: false,
       title: "Email sender (EMAIL_FROM)",
-      detail: `EMAIL_FROM "${process.env.EMAIL_FROM ?? ""}" isn't an email address. Set it to e.g. "Prostatis <hello@yourdomain.com>" on a domain verified in Resend. Until then the site uses Supabase's mailer for account emails.`,
+      detail: `EMAIL_FROM "${process.env.EMAIL_FROM ?? ""}" isn't an email address. Set it to e.g. "Stynark <hello@yourdomain.com>" on a domain verified in Resend. Until then the site uses Supabase's mailer for account emails.`,
     };
   }
   const domain = sender.address.split("@")[1]?.toLowerCase() ?? "";

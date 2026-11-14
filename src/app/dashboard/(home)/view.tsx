@@ -266,8 +266,6 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
               })}
             </ol>
           </section>
-
-          <BadgeShelf list={badges(track, state, milestones)} />
         </div>
 
         {/* Side column */}
@@ -324,6 +322,9 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
           </SideCard>
         </aside>
       </div>
+
+      {/* Full width below both columns, so the whole badge collection reads as one shelf. */}
+      <BadgeShelf list={badges(track, state, milestones)} />
     </div>
   );
 }

@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "Terms", description: `The terms for 
 
 export default function TermsPage() {
   return (
-    <LegalPage title="Terms" updated="19 October 2026" intro={`${site.name} is a product of ${site.company}, which owns and runs it ("we", "us"). These terms apply when you use ${site.name}, its free tools and its courses. By creating an account or paying for a track, you agree to them.`}>
+    <LegalPage title="Terms" updated="19 October 2026" intro={`${site.company} ("we", "us") owns and runs this website. These terms apply when you use ${site.name}, its free tools and its courses. By creating an account or paying for a track, you agree to them.`}>
       <Section title="Your access">
         <ul>
           {plans.map((p) => (

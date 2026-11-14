@@ -24,10 +24,10 @@ const websiteKinds: { kind: SiteKind; title: string; body: string; day: number }
 ];
 
 const steps: { step: Step; title: string; body: string }[] = [
-  { step: "enroll", title: "Enroll today, start today", body: "Pay once in naira by card, transfer or USSD. Your lessons, dashboard and WhatsApp community unlock the moment your payment clears." },
-  { step: "build", title: "Build a real website every day", body: "Short, practical lessons. You describe what you want, AI writes the code, and you ship a real page, store or booking system you can show clients." },
-  { step: "pitch", title: "Pitch businesses near you", body: "Use the pricing calculator, proposal template and message scripts to reach local businesses. You'll know what to charge and exactly what to say." },
-  { step: "paid", title: "Get paid and get certified", body: "Deliver the project, collect your payment, then pass the final assessment for a verified certificate you can show every future client." },
+  { step: "enroll", title: "Enroll today, start today", body: "Pay once in naira by card, transfer or USSD. Your lessons, dashboard and WhatsApp community unlock the moment you make payment." },
+  { step: "build", title: "Build a real website every day", body: "Short, practical lessons. Learn to use AI to write code, ship a real web page, online store, booking system or e-commerce site, and host it on the internet with free tools." },
+  { step: "pitch", title: "Pitch and sell to businesses that need your services", body: "A ready-to-use proposal template, pricing calculator and message scripts to reach small and large businesses. You'll know what to charge and exactly what to say." },
+  { step: "paid", title: "Get certified", body: "Go through the course properly, deliver your projects, then pass the final assessment for a verified certificate you can show every future client." },
 ];
 
 const compare: [string, boolean | string, boolean | string][] = [
@@ -74,7 +74,7 @@ function Tracks() {
   return (
     <section id="tracks" className="scroll-mt-24 px-4 py-14 sm:py-28">
       <div className="mx-auto max-w-6xl">
-        <Heading hue="green" eyebrow="Two tracks, paid once" sub="Start with the Fast Track for your first paid website, or take the Main Track to sell the full package.">
+        <Heading hue="green" eyebrow="Two tracks, paid once" sub="Start with the Fast Track to learn how to build your first website, or take the Main Track to learn to build websites, AI agents and AI automation systems.">
           Pick the track that fits your goal
         </Heading>
         <div className="mt-10 grid grid-cols-[minmax(0,1fr)] items-start gap-16 sm:mt-14 md:grid-cols-2 md:gap-x-16 lg:gap-x-32">
@@ -109,8 +109,8 @@ export default function Home() {
       {/* What you'll build and sell */}
       <section id="inside" className="scroll-mt-24 px-4 py-14 sm:py-28">
         <div className="mx-auto max-w-6xl">
-          <Heading eyebrow="What you'll build" sub="Six kinds of websites, each one a real project in the course. Build it with AI, put it live, then sell it to businesses around you.">
-            Websites businesses <span className="scribble">pay for</span>
+          <Heading eyebrow="What you'll build" sub="Learn to build different kinds of websites. You'll build six kinds of website as real projects in the course. Build each one with AI, put it live, then sell it to businesses that need it.">
+            Learn to build websites businesses <span className="scribble">pay for</span>
           </Heading>
           <div className="mt-10 sm:mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
             {websiteKinds.map((w) => (
@@ -167,7 +167,7 @@ export default function Home() {
       {/* Who it's for */}
       <section id="who" className="scroll-mt-24 px-4 py-14 sm:py-28">
         <div className="mx-auto max-w-6xl">
-          <Heading hue="purple" eyebrow="Who it's for" sub="You don't need a tech background. You need a laptop, a few hours a day and the will to pitch real businesses.">
+          <Heading hue="purple" eyebrow="Who it's for" sub="You don't need a tech background. You need a laptop, a few hours a day and the will to go through the course to the end.">
             Built for people who want to earn with a real skill
           </Heading>
           <div className="mt-10 sm:mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

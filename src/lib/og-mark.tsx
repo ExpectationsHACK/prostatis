@@ -1,6 +1,6 @@
 import { LOGO } from "./logo";
 
-// The Prostatis mark as plain SVG, for generated icons, share images and certificates.
+// The Stynark mark as plain SVG, for generated icons, share images and certificates.
 export function Mark({ size, color = "#151515" }: { size: number; color?: string }) {
   return (
     <svg viewBox={LOGO.viewBox} width={(size * 62) / 71} height={size}>

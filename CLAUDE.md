@@ -1,8 +1,8 @@
 @AGENTS.md
 
-# Prostatis — project guide for Claude
+# Stynark — project guide for Claude
 
-**Prostatis** (the product) **by Stynark** (the company that owns it): a Nigeria-first platform that teaches people to build and sell websites with AI. Two one-time paid tracks, self-paced with lifetime access (Fast Track: 14 lessons, ₦15,000 · Main Track: 26 lessons, ₦30,000), a written in-app course with assessments, XP and streaks, 50 free public tools (+6 bonus), Paystack payments and a WhatsApp community.
+**Stynark** (product and company; renamed from Prostatis on 2026-11-14): a Nigeria-first platform that teaches people to build and sell websites with AI. Two one-time paid tracks, self-paced with lifetime access (Fast Track: 14 lessons, ₦15,000 · Main Track: 26 lessons, ₦30,000), a written in-app course with assessments, XP and streaks, 50 free public tools (+6 bonus), Paystack payments and a WhatsApp community.
 
 Read before changing things: `PRODUCT.md` (who it's for, principles, honesty rules), `DESIGN.md` (visual system — follow it), `README.md` (setup, payments, course architecture).
 
@@ -61,7 +61,7 @@ Before calling work done: typecheck, lint, tests and build must pass, and anythi
 | `marketing/ads/` | Five 30-second vertical video ads (MP4, voiceover + original music, plus music-only versions), the HTML motion-graphics player they're rendered from, and the render pipeline (`render/`): see `marketing/ads/README.md` |
 | `src/lib/service-checks.ts` | Live read-only Paystack and Resend checks shown on /admin/system |
 | `src/app/dashboard/billing/`, `src/lib/billing.ts` | Billing for one-time, lifetime tracks: lifetime-access status, Main Track upgrade, payment history, printable receipts (`receipt/[reference]`, own payments only via RLS), refund help |
-| `src/lib/email-templates.ts`, `src/lib/auth-email.ts` | Branded Prostatis emails (one table-based layout). Account emails (confirm, reset, sign-in link) are sent by us via Supabase `generateLink` + Resend once `EMAIL_FROM` is on a verified domain (`canEmailAnyone()`); before that Supabase's mailer is used. Matching templates to paste into Supabase live in `supabase/email-templates/`. |
+| `src/lib/email-templates.ts`, `src/lib/auth-email.ts` | Branded Stynark emails (one table-based layout). Account emails (confirm, reset, sign-in link) are sent by us via Supabase `generateLink` + Resend once `EMAIL_FROM` is on a verified domain (`canEmailAnyone()`); before that Supabase's mailer is used. Matching templates to paste into Supabase live in `supabase/email-templates/`. |
 | `src/lib/newsletter.ts`, `/admin/newsletter`, `/unsubscribe` | Newsletter: subscribers are the `waitlist` table (status + private token), issues in `newsletter_issues`. Welcome email on signup, one-click unsubscribe (link + `List-Unsubscribe` headers), batch sending through Resend, claim-before-send so an issue can't go out twice. |
 | `supabase/migrations/` | SQL, run in order |
 

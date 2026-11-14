@@ -50,7 +50,7 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
       <aside className="sticky top-0 hidden h-screen w-[248px] shrink-0 flex-col border-r border-edge bg-card px-3 py-5 lg:flex print:hidden">
         <Link href="/" className="flex items-center gap-2.5 px-2" aria-label={`${site.name} home`}>
           <LogoMark size={30} />
-          <span className="display text-[16px] sm:text-[17px] text-ink">{site.name}</span>
+          <span className="display text-[16px] sm:text-[17px] text-brand">{site.name}</span>
         </Link>
         <SideNav whatsapp={site.whatsappInviteUrl} active={active} />
         {tracks.length > 0 && (
@@ -92,7 +92,7 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
         <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-edge bg-paper/95 px-4 backdrop-blur-sm lg:hidden print:hidden">
           <Link href="/" className="flex items-center gap-2" aria-label={`${site.name} home`}>
             <LogoMark size={28} />
-            <span className="display text-[16px] text-ink">{site.name}</span>
+            <span className="display text-[16px] text-brand">{site.name}</span>
           </Link>
           <SignOutForm action={signOut}>
             <button className={`${btn.ghost} ${size.sm}`}>

@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Privacy policy", description: `How $
 
 export default function PrivacyPage() {
   return (
-    <LegalPage title="Privacy policy" updated="8 October 2026" intro={`${site.name} is run by ${site.company} ("we", "us"), which is responsible for your personal data. This explains what we collect, why, who helps us process it, and the rights you have under the Nigeria Data Protection Act 2023.`}>
+    <LegalPage title="Privacy policy" updated="8 October 2026" intro={`${site.company} ("we", "us") runs this website and is responsible for your personal data. This explains what we collect, why, who helps us process it, and the rights you have under the Nigeria Data Protection Act 2023.`}>
       <Section title="What we collect">
         <ul>
           <li><strong>Your account:</strong> your name, email address and, if you give it, your WhatsApp number.</li>
