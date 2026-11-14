@@ -140,28 +140,21 @@ export type LearnerState = {
 
 export const emptyState = (): LearnerState => ({ lessons: {}, finals: {}, xp: 0, days: [] });
 
-export type DayStatus = "done" | "open" | "locked";
+export type DayStatus = "done" | "open";
 
 /**
- * Lessons open in order: a day unlocks when the day before it is complete. Lessons shared
- * between tracks count wherever they were finished. `unlockAll` (local preview only) lets
- * the owner read every lesson; the final still needs every lesson complete.
+ * Every lesson in a track is open from the start, so a member can skip around or skip what
+ * doesn't interest them. Lessons shared between tracks count wherever they were finished.
+ * The final (and so the certificate) still needs every lesson complete.
  */
-export function trackProgress(track: Track, state: LearnerState, { unlockAll = false } = {}) {
-  let prevDone = true;
+export function trackProgress(track: Track, state: LearnerState) {
   const days = track.modules.map((m) => {
-    const done = Boolean(state.lessons[m.lesson]?.completed_at);
-    const status: DayStatus = done ? "done" : prevDone || unlockAll ? "open" : "locked";
-    prevDone = done;
+    const status: DayStatus = state.lessons[m.lesson]?.completed_at ? "done" : "open";
     return { module: m, status };
   });
   const completed = days.filter((d) => d.status === "done").length;
   const next = days.find((d) => d.status !== "done")?.module ?? null;
   return { days, completed, total: days.length, pct: Math.round((completed / days.length) * 100), next, allDone: completed === days.length };
-}
-
-export function statusOf(track: Track, state: LearnerState, day: number, opts?: { unlockAll?: boolean }): DayStatus {
-  return trackProgress(track, state, opts).days.find((d) => d.module.day === day)?.status ?? "locked";
 }
 
 /**

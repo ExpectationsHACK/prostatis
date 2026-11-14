@@ -7,7 +7,7 @@ const panels: Record<AuthArtKind, { eyebrow: string; title: string; points: stri
   signin: {
     eyebrow: "Welcome back",
     title: "Your next lesson is waiting.",
-    points: ["Your progress, XP and streak are saved", "Lessons open in order as you finish them", "Your certificate lives in your dashboard"],
+    points: ["Your progress, XP and streak are saved", "Every lesson in your track is open: start anywhere", "Your certificate lives in your dashboard"],
   },
   signup: {
     eyebrow: "Your first 14 lessons",

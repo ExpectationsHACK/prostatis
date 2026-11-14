@@ -36,7 +36,7 @@ Before calling work done: typecheck, lint, tests and build must pass, and anythi
 | `src/lib/site.ts` | Name, copy, the two plans (price, `period` = lesson count, results list). Access is lifetime, so nothing here is measured in days |
 | `src/lib/curriculum.ts` | Pillars and both tracks; each day's `lesson` id points into `src/content/lessons/` |
 | `src/content/lessons/*.ts` | One file per written lesson (typed by `src/content/types.ts`), registered in `index.ts` |
-| `src/lib/learning/` | `engine.ts` (grading, XP, levels, streaks, unlocks — pure), `store.ts` (Supabase), `access.ts` |
+| `src/lib/learning/` | `engine.ts` (grading, XP, levels, streaks, progress — pure; every lesson is open, only the final waits for all lessons), `store.ts` (Supabase), `access.ts` |
 | `src/app/learn/` | Course UI + server actions that grade quizzes and award XP |
 | `src/lib/tools.ts`, `src/lib/tool-defs/` | Free tool registry and pure tool logic (definition-driven tools) |
 | `src/lib/tool-guides.ts` | The app wrapper for every tool: problem, steps, result, next actions |

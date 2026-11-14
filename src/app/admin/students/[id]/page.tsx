@@ -78,11 +78,11 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
         const final = s.state.finals[t.id];
         return (
           <Panel key={t.id} title={`${t.name} progress`} action={<ProgressBar pct={p.pct} />}>
-            <Table head={["Day", "Lesson", "Quiz (best)", "Mission", "Completed"]}>
+            <Table head={["#", "Lesson", "Quiz (best)", "Mission", "Completed"]}>
               {p.days.map(({ module: m, status }) => {
                 const row = s.state.lessons[m.lesson];
                 return (
-                  <tr key={m.day} className={status === "locked" ? "opacity-50" : ""}>
+                  <tr key={m.day} className={row ? "" : "opacity-50"}>
                     <td className={td + " tabular"}>{m.day}</td>
                     <td className={td}>{m.title}</td>
                     <td className={td}>

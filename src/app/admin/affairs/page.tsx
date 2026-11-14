@@ -20,7 +20,7 @@ const NUDGE: Record<string, (first: string) => string> = {
   not_started: (n) => `Hi ${n}! Welcome to Prostatis. Your first lesson is waiting: it takes about an hour. Need help getting started?`,
   inactive: (n) => `Hi ${n}! We noticed you've paused the course. Anything blocking you? Reply here and we'll help you get moving again.`,
   stuck_quiz: (n) => `Hi ${n}! That quiz can be tricky. Re-read the lesson's recap at the bottom, then try again. Want us to explain any question?`,
-  task_pending: (n) => `Hi ${n}! You passed the quiz, nice! Confirm your mission to unlock the next lesson. Need a hand with it?`,
+  task_pending: (n) => `Hi ${n}! You passed the quiz, nice! Confirm your mission to complete the lesson. Need a hand with it?`,
   ready_final: (n) => `Hi ${n}! You've finished every lesson. The final assessment is open: pass it to get your certificate!`,
   failed_final: (n) => `Hi ${n}! You're close on the final. Review the lesson recaps and try again: you need 75%.`,
   expired_unfinished: (n) => `Hi ${n}! Your course access was closed. If that's a mistake, reply and we'll reopen it straight away.`,

@@ -132,7 +132,7 @@ export function Quiz({
           <p className="mt-1 font-mono text-[13px] text-ink/80">
             {graded.passed
               ? result.completed
-                ? "Lesson complete. The next one is unlocked."
+                ? "Lesson complete. On to the next one."
                 : day === undefined
                   ? "You passed the final assessment."
                   : "Now confirm the practical task below to complete the lesson."

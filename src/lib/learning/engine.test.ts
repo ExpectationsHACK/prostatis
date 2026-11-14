@@ -64,17 +64,27 @@ describe("streaks", () => {
 });
 
 describe("trackProgress", () => {
-  it("opens lessons in order", () => {
+  it("opens every lesson from the start and tracks what's done", () => {
     const s = emptyState();
     let p = trackProgress(fastTrack, s);
-    expect(p.days.map((d) => d.status).slice(0, 3)).toEqual(["open", "locked", "locked"]);
+    expect(p.days.map((d) => d.status).slice(0, 3)).toEqual(["open", "open", "open"]);
     expect(p.next?.day).toBe(1);
 
     s.lessons[fastTrack.modules[0].lesson] = { lesson_id: "x", quiz_best: 5, quiz_total: 5, quiz_passed_at: "t", task_done_at: "t", completed_at: "t" };
     p = trackProgress(fastTrack, s);
-    expect(p.days.map((d) => d.status).slice(0, 3)).toEqual(["done", "open", "locked"]);
+    expect(p.days.map((d) => d.status).slice(0, 3)).toEqual(["done", "open", "open"]);
     expect(p.completed).toBe(1);
     expect(p.pct).toBe(7);
+    expect(p.allDone).toBe(false);
+  });
+
+  it("counts lessons finished out of order, and the final still waits for all of them", () => {
+    const s = emptyState();
+    s.lessons[fastTrack.modules[2].lesson] = { lesson_id: "x", quiz_best: 5, quiz_total: 5, quiz_passed_at: "t", task_done_at: "t", completed_at: "t" };
+    const p = trackProgress(fastTrack, s);
+    expect(p.days.map((d) => d.status).slice(0, 3)).toEqual(["open", "open", "done"]);
+    expect(p.completed).toBe(1);
+    expect(p.next?.day).toBe(1);
     expect(p.allDone).toBe(false);
   });
 

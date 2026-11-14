@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowRight, Award, Check, Lock, PlayCircle } from "lucide-react";
+import { ArrowRight, Award, Check, PlayCircle } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LessonThumb } from "@/components/art/lesson-thumb";
@@ -35,7 +35,7 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
             <p className="label text-brand-text">{track.length} · {track.modules.length} lessons</p>
             <h1 className="display mt-2 text-[32px] text-ink sm:text-[56px]">{track.name}</h1>
             <p className="mt-2 max-w-xl font-mono text-[14px] leading-relaxed text-muted">
-              {`Welcome back, ${learner.name.split(" ")[0]}. `}Each lesson opens when you finish the one before it: pass its quiz (70%+) and confirm its practical task.
+              {`Welcome back, ${learner.name.split(" ")[0]}. `}Every lesson is open, so start anywhere or skip what you don't need. A lesson counts as complete when you pass its quiz (70%+) and confirm its practical task.
             </p>
           </div>
           {prog.next ? (
@@ -81,9 +81,6 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
                     <>
                       <div className="relative w-32 shrink-0 rounded-[12px] border border-edge sm:w-40">
                         <LessonThumb thumb={m.thumb} index={m.day + i} />
-                        {status === "locked" && (
-                          <span className="absolute inset-0 grid place-items-center bg-paper/70"><Lock className="size-6 text-ink" aria-hidden /></span>
-                        )}
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="flex flex-wrap items-center gap-2">
@@ -95,12 +92,10 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
                         <p className="mt-2">
                           {status === "done" ? (
                             <span className="label inline-flex items-center gap-1 bg-[#e3f5e9] px-1.5 py-0.5 text-success"><Check className="size-3" strokeWidth={3} aria-hidden /> Done · quiz {row?.quiz_best}/{row?.quiz_total}</span>
-                          ) : status === "open" ? (
+                          ) : (
                             <span className="label inline-flex items-center gap-1 bg-brand px-1.5 py-0.5 text-ink">
                               {row?.quiz_passed_at ? "Quiz passed · task left" : row?.task_done_at ? "Task done · quiz left" : m.day === prog.next?.day ? "Up next" : "Open"}
                             </span>
-                          ) : (
-                            <span className="label text-muted">Locked</span>
                           )}
                         </p>
                       </div>
@@ -108,11 +103,7 @@ export default async function TrackHome({ params }: { params: Promise<{ track: s
                   );
                   return (
                     <li key={m.day}>
-                      {status === "locked" ? (
-                        <div className="flex gap-4 border border-line bg-card/60 p-3 opacity-80" aria-label={`Lesson ${m.day}: locked`}>{inner}</div>
-                      ) : (
-                        <Link href={`/learn/${slug}/${m.day}`} className="ink-block block-press flex gap-4 bg-card p-3">{inner}</Link>
-                      )}
+                      <Link href={`/learn/${slug}/${m.day}`} className="ink-block block-press flex gap-4 bg-card p-3">{inner}</Link>
                     </li>
                   );
                 })}

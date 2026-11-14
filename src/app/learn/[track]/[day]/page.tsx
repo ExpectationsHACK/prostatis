@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowLeft, ArrowRight, BookA, BookOpen, CheckCircle2, Clock, ExternalLink, KeyRound, Lock, Package, Sparkles, Target } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookA, BookOpen, CheckCircle2, Clock, ExternalLink, KeyRound, Package, Sparkles, Target } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LessonBody, Rich, slugTerm } from "@/components/learn/lesson-body";
@@ -32,25 +32,9 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
 
   const state = await getStore().load(learner.id);
   const prog = trackProgress(track, state);
-  const status = prog.days.find((d) => d.module.day === day)!.status;
   const prev = track.modules.find((m) => m.day === day - 1);
   const next = track.modules.find((m) => m.day === day + 1);
   const row = state.lessons[lesson.id];
-
-  if (status === "locked") {
-    return (
-      <div className="mx-auto max-w-xl px-4 py-14 sm:py-20 text-center">
-        <Lock className="mx-auto size-10 text-ink" aria-hidden />
-        <h1 className="display mt-4 text-[26px] sm:text-[32px] text-ink">Lesson {day} is locked</h1>
-        <p className="mt-2 font-mono text-[14px] text-muted">Lessons open in order so each one builds on the last. Finish Lesson {prog.next?.day} first.</p>
-        {prog.next && (
-          <Link href={`/learn/${slug}/${prog.next.day}`} className={`${btn.primary} ${size.lg} mt-6`}>
-            Go to Lesson {prog.next.day}
-          </Link>
-        )}
-      </div>
-    );
-  }
 
   const done = Boolean(row?.completed_at);
   const steps = [
@@ -207,13 +191,10 @@ export default async function LessonPage({ params }: { params: Promise<{ track: 
             </Link>
           ) : <span />}
           {next ? (
-            done ? (
-              <Link href={`/learn/${slug}/${next.day}`} className={`${btn.primary} ${size.md}`}>
-                Lesson {next.day} <ArrowRight className="size-4" aria-hidden />
-              </Link>
-            ) : (
-              <span className="label inline-flex items-center gap-1.5 text-muted"><Lock className="size-3.5" aria-hidden /> Lesson {next.day} opens when this one is complete</span>
-            )
+            // Every lesson is open, so the next one is always a tap away; it's highlighted once this one is done.
+            <Link href={`/learn/${slug}/${next.day}`} className={`${done ? btn.primary : btn.secondary} ${size.md}`}>
+              Lesson {next.day} <ArrowRight className="size-4" aria-hidden />
+            </Link>
           ) : (
             <Link href={`/learn/${slug}/final`} className={`${btn.primary} ${size.md}`}>
               Final assessment <ArrowRight className="size-4" aria-hidden />

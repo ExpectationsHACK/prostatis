@@ -1,4 +1,4 @@
-import { ArrowRight, Award, BookOpen, ChevronRight, CalendarClock, Check, CircleCheck, Circle, Compass, Flame, History, ListTodo, Lock, MessageCircle, PlayCircle, Route, Sparkles, Wrench, Zap } from "lucide-react";
+import { ArrowRight, Award, BookOpen, ChevronRight, CalendarClock, Check, CircleCheck, Circle, Compass, Flame, History, ListTodo, MessageCircle, PlayCircle, Route, Sparkles, Wrench, Zap } from "lucide-react";
 import Link from "next/link";
 import { LessonThumb } from "@/components/art/lesson-thumb";
 import { BadgeShelf } from "@/components/learn/badges";
@@ -253,16 +253,10 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
                       <ul className="grid gap-1 px-3 pb-3 sm:grid-cols-2 sm:px-4">
                         {days.map(({ module: m, status }) => (
                           <li key={m.day}>
-                            {status === "locked" ? (
-                              <span className="flex items-center gap-2 rounded-[8px] px-2 py-2 text-[13.5px] text-muted">
-                                <Lock className="size-3.5 shrink-0" aria-hidden /> <span className="truncate">Lesson {m.day}: {m.title}</span>
-                              </span>
-                            ) : (
-                              <Link href={`/learn/${slug}/${m.day}`} className="flex items-center gap-2 rounded-[8px] px-2 py-2 text-[13.5px] text-ink hover:bg-wash">
+                            <Link href={`/learn/${slug}/${m.day}`} className="flex items-center gap-2 rounded-[8px] px-2 py-2 text-[13.5px] text-ink hover:bg-wash">
                                 {status === "done" ? <Check className="size-4 shrink-0 text-success" strokeWidth={3} aria-hidden /> : <PlayCircle className="size-4 shrink-0 text-brand-text" aria-hidden />}
                                 <span className="truncate">Lesson {m.day}: {m.title}</span>
                               </Link>
-                            )}
                           </li>
                         ))}
                       </ul>
