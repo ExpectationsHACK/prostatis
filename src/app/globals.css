@@ -43,6 +43,13 @@
   --hue-teal-wash: #ddf3f0;
 }
 
+/* The naira sign (₦) sits outside the Latin subset of our fonts, so every price used to make the
+   browser fetch the "latin-ext" files (about 100 KB) for one character. This face draws only ₦,
+   from the device's own font; if none of these is installed, the browser falls back to the web
+   font as before. */
+@font-face { font-family: "Naira"; src: local("Roboto"), local("Roboto-Regular"), local("Arial"), local("ArialMT"), local("Helvetica Neue"), local("Segoe UI"); font-weight: 100 599; unicode-range: U+20A6; }
+@font-face { font-family: "Naira"; src: local("Roboto Bold"), local("Roboto-Bold"), local("Arial Bold"), local("Arial-BoldMT"), local("Helvetica Neue Bold"), local("Segoe UI Bold"); font-weight: 600 900; unicode-range: U+20A6; }
+
 @theme inline {
   --color-paper: var(--paper);
   --color-card: var(--card);
@@ -76,11 +83,11 @@
   --color-hue-teal-wash: var(--hue-teal-wash);
   --color-danger: var(--danger);
   --color-success: var(--success);
-  --font-sans: var(--font-geist), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: var(--font-archivo), "Arial Narrow", sans-serif;
-  --font-serif: var(--font-geist), system-ui, sans-serif;
+  --font-sans: "Naira", var(--font-geist), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Naira", var(--font-archivo), "Arial Narrow", sans-serif;
+  --font-serif: "Naira", var(--font-geist), system-ui, sans-serif;
   /* "font-mono" reads as normal text; real code uses font-code (and pre/code/kbd below). */
-  --font-mono: var(--font-geist), system-ui, sans-serif;
+  --font-mono: "Naira", var(--font-geist), system-ui, sans-serif;
   --font-code: var(--font-geist-mono), ui-monospace, monospace;
 }
 
@@ -164,7 +171,7 @@ textarea {
 
 /* Headlines: Archivo, wide and heavy. */
 .display {
-  font-family: var(--font-archivo), "Arial Narrow", sans-serif;
+  font-family: "Naira", var(--font-archivo), "Arial Narrow", sans-serif;
   font-stretch: 108%;
   font-weight: 600;
   letter-spacing: -0.03em;
@@ -173,7 +180,7 @@ textarea {
 
 /* Eyebrows and small labels: short, capitals, a little air. Use sparingly. */
 .label {
-  font-family: var(--font-geist), system-ui, sans-serif;
+  font-family: "Naira", var(--font-geist), system-ui, sans-serif;
   font-size: 11.5px;
   font-weight: 600;
   letter-spacing: 0.09em;
@@ -401,11 +408,11 @@ textarea {
   --a-head: #f6f3ee;
   background: #faf8f4;
   color: #151515;
-  font-family: var(--font-geist), system-ui, sans-serif;
+  font-family: "Naira", var(--font-geist), system-ui, sans-serif;
 }
 .admin-ui .font-mono,
-.admin-ui .label { font-family: var(--font-geist), system-ui, sans-serif; }
-.admin-ui .display { font-family: var(--font-archivo), "Arial Narrow", sans-serif; font-stretch: 108%; font-weight: 600; letter-spacing: -0.03em; }
+.admin-ui .label { font-family: "Naira", var(--font-geist), system-ui, sans-serif; }
+.admin-ui .display { font-family: "Naira", var(--font-archivo), "Arial Narrow", sans-serif; font-stretch: 108%; font-weight: 600; letter-spacing: -0.03em; }
 .admin-ui .label { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
 .admin-ui .bg-brand { background-color: var(--a-accent); color: #151515; }
 .admin-ui .text-brand-text { color: var(--a-accent-text); }

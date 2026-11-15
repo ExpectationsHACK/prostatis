@@ -41,6 +41,21 @@ export async function proxy(request: NextRequest) {
   return response;
 }
 
+// Only routes that read the signed-in user. Public pages are static: running the proxy (an Edge
+// Function plus a session check) in front of them stopped Netlify serving them straight from its
+// cache and added about half a second to every visit.
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|api/webhooks|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)"],
+  matcher: [
+    "/dashboard/:path*",
+    "/learn/:path*",
+    "/checkout/:path*",
+    "/welcome",
+    "/admin/:path*",
+    "/login",
+    "/signup",
+    "/forgot-password",
+    "/reset-password",
+    "/auth/:path*",
+    "/api/track",
+  ],
 };

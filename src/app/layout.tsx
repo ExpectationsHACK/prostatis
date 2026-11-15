@@ -9,7 +9,9 @@ import "./globals.css";
 // Archivo's width axis gives the condensed, heavy uppercase display voice.
 const archivo = Archivo({ variable: "--font-archivo", subsets: ["latin"], axes: ["wdth"] });
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+// Only small code snippets use the mono face, so it loads when needed instead of competing with
+// the page's first paint.
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], preload: false });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
