@@ -18,6 +18,8 @@ export const metadata: Metadata = {
   title: { default: `${site.name}: ${site.tagline}`, template: `%s · ${site.name}` },
   description: site.description,
   openGraph: { siteName: site.name, type: "website", locale: "en_NG" },
+  // Google Search Console's "HTML tag" check: a netlify.app address can't be verified by DNS.
+  verification: process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : undefined,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -66,7 +66,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       dateModified: post.updated_at,
       image: [abs(post.og_image || post.cover_image || `/api/og/blog/${post.slug}`)],
       author: { "@type": "Organization", name: post.author_name, url: site.url },
-      publisher: { "@type": "Organization", name: site.name, url: site.url, logo: { "@type": "ImageObject", url: `${site.url}/icon` } },
+      publisher: { "@type": "Organization", name: site.name, url: site.url, // Google needs a raster (PNG/JPG) logo for article markup; /icon is an SVG.
+      logo: { "@type": "ImageObject", url: `${site.url}/brand/prostatis-mark.png` } },
       mainEntityOfPage: { "@type": "WebPage", "@id": url },
       keywords: post.seo_keywords.join(", ") || undefined,
       articleSection: post.tags[0],
