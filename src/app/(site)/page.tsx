@@ -204,10 +204,10 @@ export default function Home() {
                 <tr>
                   <td className="px-3 py-2.5 sm:px-6 sm:py-5" />
                   <td className="bg-brand-wash/60 px-1 py-2.5 text-center sm:px-2 sm:py-5">
-                    <Link href="/checkout/fast_track" className={`${btn.primary} h-9 w-full max-w-[150px] px-1.5 text-[12px] sm:text-[13px]`}>Enroll Now</Link>
+                    <Link href="/checkout/fast_track" className={`${btn.primary} h-9 w-full max-w-[150px] px-1.5 text-[12px] sm:text-[13px]`}>Enroll</Link>
                   </td>
                   <td className="px-1 py-2.5 text-center sm:px-2 sm:py-5">
-                    <Link href="/checkout/main_track" className={`${btn.accent} h-9 w-full max-w-[150px] px-1.5 text-[12px] sm:text-[13px]`}>Enroll Now</Link>
+                    <Link href="/checkout/main_track" className={`${btn.accent} h-9 w-full max-w-[150px] px-1.5 text-[12px] sm:text-[13px]`}>Enroll</Link>
                   </td>
                 </tr>
               </tbody>
