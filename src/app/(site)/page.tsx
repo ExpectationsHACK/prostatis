@@ -5,11 +5,9 @@ import { StepArt, type Step } from "@/components/art/step-art";
 import { Hero } from "@/components/home/hero";
 import { personas } from "@/components/nav-data";
 import { PlanCard } from "@/components/plan-card";
-import { ToolCard } from "@/components/tool-card";
 import { btn, size } from "@/components/ui";
 import { fastTrack, mainTrack } from "@/lib/curriculum";
 import { formatNgn, plans } from "@/lib/site";
-import { coreTools } from "@/lib/tools";
 import { cycle, hueClass, type Hue } from "@/lib/hues";
 import { Eyebrow } from "@/components/eyebrow";
 
@@ -32,17 +30,16 @@ const steps: { step: Step; title: string; body: string }[] = [
 
 const compare: [string, boolean | string, boolean | string][] = [
   ["Price, paid once", formatNgn(plans[0].priceNgn), formatNgn(plans[1].priceNgn)],
-  ["Length", "14 lessons", "26 lessons"],
-  ["Pace and access", "Self-paced, lifetime access", "Self-paced, lifetime access"],
-  ["Lessons with practical tasks", String(fastTrack.modules.length), String(mainTrack.modules.length)],
-  ["Business websites and landing pages", true, true],
-  ["Online stores, booking systems and web apps", true, true],
-  ["SEO basics, portfolio, pricing and pitching", true, true],
-  ["Full and local SEO that ranks", false, true],
-  ["Automations that save clients hours", false, true],
+  ["Lessons, each with a task", `${fastTrack.modules.length} lessons`, `${mainTrack.modules.length} lessons`],
+  ["Self-paced, lifetime access", true, true],
+  ["Business sites and landing pages", true, true],
+  ["Stores, bookings and web apps", true, true],
+  ["SEO basics, portfolio, pitching", true, true],
+  ["Full and local SEO", false, true],
+  ["Business automations", false, true],
   ["AI chatbots and WhatsApp bots", false, true],
   ["A lead-generation system", false, true],
-  ["Verified certificate and WhatsApp community", true, true],
+  ["Certificate and WhatsApp group", true, true],
 ];
 
 const faqs = [
@@ -55,8 +52,6 @@ const faqs = [
   { q: "Do I get a certificate?", a: "Yes. Pass every lesson and the final assessment to get a certificate of completion: download it, receive a copy by email, and share its public proof page so clients can check it's real." },
   { q: "Can I start with the Fast Track and upgrade later?", a: "Yes. Everything in the Fast Track is part of the Main Track, so nothing you learn is wasted." },
 ];
-
-const featuredTools = ["website-speed-checklist", "on-page-seo-audit", "client-pricing-calculator", "proposal-generator", "cold-dm-script-generator", "invoice-generator"];
 
 function Heading({ eyebrow, children, sub, light = false, hue = "orange" }: { eyebrow?: string; children: React.ReactNode; sub?: string; light?: boolean; hue?: Hue }) {
   // Each section's eyebrow is a small coloured pill, so the long page reads as distinct parts.
@@ -72,20 +67,20 @@ function Heading({ eyebrow, children, sub, light = false, hue = "orange" }: { ey
 /** The two tracks side by side: price, facts and outcomes. Each full curriculum has its own page. */
 function Tracks() {
   return (
-    <section id="tracks" className="scroll-mt-24 px-4 py-14 sm:py-28">
+    <section id="tracks" className="scroll-mt-24 px-4 py-12 sm:py-28">
       <div className="mx-auto max-w-6xl">
         <Heading hue="green" eyebrow="Two tracks, paid once" sub="Start with the Fast Track to learn how to build your first website, or take the Main Track to learn to build websites, AI agents and AI automation systems.">
           Pick the track that fits your goal
         </Heading>
-        <div className="mt-10 grid grid-cols-[minmax(0,1fr)] items-start gap-16 sm:mt-14 md:grid-cols-2 md:gap-x-16 lg:gap-x-32">
+        <div className="mt-8 grid grid-cols-[minmax(0,1fr)] items-start gap-10 sm:mt-14 md:grid-cols-2 md:gap-x-16 lg:gap-x-32">
           {[fastTrack, mainTrack].map((track) => {
             const plan = plans.find((p) => p.id === track.id)!;
             const slug = track.id === "main_track" ? "main-track" : "fast-track";
             return (
               <div key={track.id} id={slug} className="scroll-mt-28">
-                <h3 className="display mb-5 text-balance text-center text-[22px] leading-tight text-ink sm:text-[26px]">{track.headline}</h3>
-                <PlanCard plan={plan} show={5} />
-                <p className="mt-4 text-center text-[14px] text-muted">
+                <h3 className="display mb-3 text-balance text-center text-[17px] leading-tight text-ink sm:mb-5 sm:text-[26px]">{track.headline}</h3>
+                <PlanCard plan={plan} show={3} compact />
+                <p className="mt-2 text-center text-[13.5px] text-muted sm:mt-4">
                   <Link href={`/tracks/${slug}`} className="font-semibold text-ink underline">
                     See the full {track.name} curriculum
                   </Link>
@@ -100,8 +95,6 @@ function Tracks() {
 }
 
 export default function Home() {
-  const featured = featuredTools.map((slug) => coreTools.find((t) => t.slug === slug)).filter((t) => t !== undefined);
-
   return (
     <div>
       <Hero />
@@ -112,17 +105,20 @@ export default function Home() {
           <Heading eyebrow="What you'll build" sub="Learn to build different kinds of websites. You'll build six kinds of website as real projects in the course. Build each one with AI, put it live, then sell it to businesses that need it.">
             Learn to build websites businesses <span className="scribble">pay for</span>
           </Heading>
-          <div className="mt-10 sm:mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+          {/* One card per row on phones, picture beside the text, so two cards fit on one screen. */}
+          <div className="mt-8 grid gap-3 sm:mt-14 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3">
             {websiteKinds.map((w) => (
-              <article key={w.kind} className="ink-block block-press flex flex-col bg-card">
-                <div className="border-b-2 border-ink bg-sunk">
-                  <LiveSite kind={w.kind} />
+              <article key={w.kind} className="ink-block block-press flex flex-row bg-card sm:flex-col">
+                <div className="flex w-[44%] shrink-0 items-center border-r-2 border-ink bg-sunk sm:block sm:w-auto sm:border-b-2 sm:border-r-0">
+                  <div className="w-full">
+                    <LiveSite kind={w.kind} />
+                  </div>
                 </div>
-                <div className="flex flex-1 flex-col p-5">
-                  <h3 className="display text-[20px] sm:text-[22px] text-ink">{w.title}</h3>
-                  <p className="mt-1.5 flex-1 text-[15px] leading-relaxed text-muted">{w.body}</p>
-                  <p className="mt-4 inline-flex w-fit items-center gap-1.5 rounded-full bg-brand-wash px-2.5 py-1 text-[12.5px] font-semibold text-brand-text">
-                    Built in lesson {w.day} of the Fast Track
+                <div className="flex flex-1 flex-col p-3 sm:p-5">
+                  <h3 className="display text-[16px] leading-tight text-ink sm:text-[22px]">{w.title}</h3>
+                  <p className="mt-1 flex-1 text-[12.5px] leading-snug text-muted sm:mt-1.5 sm:text-[15px] sm:leading-relaxed">{w.body}</p>
+                  <p className="mt-2.5 inline-flex w-fit items-center gap-1.5 rounded-full bg-brand-wash px-2 py-0.5 text-[11px] font-semibold text-brand-text sm:mt-4 sm:px-2.5 sm:py-1 sm:text-[12.5px]">
+                    Lesson {w.day}<span className="hidden sm:inline">&nbsp;of the Fast Track</span>
                   </p>
                 </div>
               </article>
@@ -137,22 +133,25 @@ export default function Home() {
           <Heading hue="blue" eyebrow="How it works" sub="No coding background, no expensive laptop, no guesswork. Here's exactly what happens after you enroll.">
             From first lesson to building your first website
           </Heading>
-          <ol className="mt-10 sm:mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
+          {/* On phones the picture sits beside the text, so two steps fit on one screen. */}
+          <ol className="mt-8 grid gap-3 sm:mt-14 sm:grid-cols-2 sm:gap-7 lg:grid-cols-4">
             {steps.map((s, i) => (
-              <li key={s.step} className="ink-block flex flex-col bg-card">
-                <div className="relative border-b-2 border-ink">
-                  <StepArt step={s.step} />
-                  <span className={`absolute left-3 top-3 grid size-9 place-items-center rounded-full border-2 border-ink text-[15px] font-bold shadow-[2px_2px_0_var(--ink)] ${hueClass[cycle[i % cycle.length]].wash} ${hueClass[cycle[i % cycle.length]].text}`}>{i + 1}</span>
+              <li key={s.step} className="ink-block flex flex-row bg-card sm:flex-col">
+                <div className="relative flex w-[38%] shrink-0 items-center border-r-2 border-ink bg-sunk sm:block sm:w-auto sm:border-b-2 sm:border-r-0">
+                  <div className="w-full">
+                    <StepArt step={s.step} />
+                  </div>
+                  <span className={`absolute left-2 top-2 grid size-7 place-items-center rounded-full border-2 border-ink text-[13px] font-bold shadow-[2px_2px_0_var(--ink)] sm:left-3 sm:top-3 sm:size-9 sm:text-[15px] ${hueClass[cycle[i % cycle.length]].wash} ${hueClass[cycle[i % cycle.length]].text}`}>{i + 1}</span>
                 </div>
-                <div className={`flex-1 p-5 ${hueClass[cycle[i % cycle.length]].wash}`}>
-                  <h3 className="display text-[18px] sm:text-[20px] leading-tight text-ink">{s.title}</h3>
-                  <p className="mt-2 text-[14.5px] leading-relaxed text-ink/80">{s.body}</p>
+                <div className={`flex-1 p-3 sm:p-5 ${hueClass[cycle[i % cycle.length]].wash}`}>
+                  <h3 className="display text-[15px] leading-tight text-ink sm:text-[20px]">{s.title}</h3>
+                  <p className="mt-1 text-[12.5px] leading-snug text-ink/80 sm:mt-2 sm:text-[14.5px] sm:leading-relaxed">{s.body}</p>
                 </div>
               </li>
             ))}
           </ol>
-          <div className="mt-12 flex flex-wrap justify-center gap-4">
-            <Link href="/pricing" className={`${btn.primary} ${size.lg}`}>
+          <div className="mt-8 flex flex-wrap justify-center gap-4 sm:mt-12">
+            <Link href="/#tracks" className={`${btn.primary} ${size.lg}`}>
               Enroll Now <ArrowRight className="size-4" aria-hidden />
             </Link>
             <Link href="/tracks/fast-track" className={`${btn.secondary} ${size.lg}`}>
@@ -164,88 +163,50 @@ export default function Home() {
 
       <Tracks />
 
-      {/* Who it's for */}
-      <section id="who" className="scroll-mt-24 px-4 py-14 sm:py-28">
-        <div className="mx-auto max-w-6xl">
-          <Heading hue="purple" eyebrow="Who it's for" sub="You don't need a tech background. You need a laptop, a few hours a day and the will to go through the course to the end.">
-            Built for people who want to earn with a real skill
-          </Heading>
-          <div className="mt-10 sm:mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {personas.map((p, i) => (
-              <div key={p.id} id={p.id} className="ink-block relative scroll-mt-28 bg-card p-6 pt-7">
-                <span className={`absolute inset-x-0 top-0 h-1.5 ${hueClass[cycle[i % cycle.length]].solid}`} aria-hidden />
-                <span className={`grid size-10 place-items-center rounded-[12px] border-2 border-ink text-[15px] font-bold ${hueClass[cycle[i % cycle.length]].wash} ${hueClass[cycle[i % cycle.length]].text}`}>{String(i + 1).padStart(2, "0")}</span>
-                <h3 className="display mt-4 text-[19px] sm:text-[21px] text-ink">{p.label}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-muted">{p.blurb}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Free tools */}
-      <section className="border-y-2 border-ink bg-sunk px-4 py-14 sm:py-28">
-        <div className="mx-auto max-w-6xl">
-          <Heading hue="teal" eyebrow="Free, no signup" sub="Check a website's speed and SEO, work out your price, write the proposal and the cold message, then send the invoice. Use them today, even before you enroll.">
-            {coreTools.length} free tools that do the work for you
-          </Heading>
-          <div className="mt-10 sm:mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((t) => (
-              <ToolCard key={t.slug} tool={t} />
-            ))}
-          </div>
-          <div className="mt-12 flex justify-center">
-            <Link href="/tools" className={`${btn.secondary} ${size.lg}`}>
-              See all {coreTools.length} free tools <ArrowRight className="size-4" aria-hidden />
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* Compare */}
-      <section id="compare" className="scroll-mt-24 px-4 py-14 sm:py-28">
+      <section id="compare" className="scroll-mt-20 border-y-2 border-ink bg-sunk px-4 py-8 sm:py-28">
         <div className="mx-auto max-w-4xl">
-          <Heading hue="pink" eyebrow="Compare" sub="Start with the Fast Track to build and sell websites. Choose the Main Track to sell monthly services on top.">
+          <Heading hue="pink" eyebrow="Compare">
             Fast Track or Main Track?
           </Heading>
-          <div className="ink-block mt-12 bg-card">
+          <div className="ink-block mt-6 bg-card sm:mt-12">
             <table className="w-full table-fixed border-collapse text-left">
               <thead>
                 <tr className="border-b-2 border-ink">
-                  <th className="px-3 py-4 text-[13px] font-semibold text-muted sm:px-6">What you get</th>
-                  <th className="w-[27%] bg-brand px-1.5 py-4 text-center sm:px-6">
-                    <span className="display block text-[15px] text-ink sm:text-[22px]">Fast Track</span>
-                    <span className="text-[12px] font-semibold text-ink/80">Start here</span>
+                  <th className="px-3 py-2 text-[12px] font-semibold text-muted sm:px-6 sm:py-4 sm:text-[13px]">What you get</th>
+                  <th className="w-[24%] bg-brand px-1 py-2 text-center sm:w-[27%] sm:px-6 sm:py-4">
+                    <span className="display block text-[14px] leading-tight text-ink sm:text-[22px]">Fast Track</span>
+                    <span className="text-[11px] font-semibold text-ink/80 sm:text-[12px]">Start here</span>
                   </th>
-                  <th className="w-[27%] px-1.5 py-4 text-center sm:px-6">
-                    <span className="display block text-[15px] text-ink sm:text-[22px]">Main Track</span>
-                    <span className="text-[12px] font-medium text-muted">Everything</span>
+                  <th className="w-[24%] px-1 py-2 text-center sm:w-[27%] sm:px-6 sm:py-4">
+                    <span className="display block text-[14px] leading-tight text-ink sm:text-[22px]">Main Track</span>
+                    <span className="text-[11px] font-medium text-muted sm:text-[12px]">Everything</span>
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {compare.map(([row, a, b]) => (
                   <tr key={row} className="border-b border-line last:border-0">
-                    <td className="px-3 py-3.5 text-[13.5px] text-ink sm:px-6 sm:text-[14.5px]">{row}</td>
+                    <td className="px-3 py-1.5 text-[12.5px] leading-snug text-ink sm:px-6 sm:py-3.5 sm:text-[14.5px]">{row}</td>
                     {[a, b].map((v, i) => (
-                      <td key={i} className={"px-1.5 py-3.5 text-center sm:px-3 " + (i === 0 ? "bg-brand-wash/60" : "")}>
+                      <td key={i} className={"px-1 py-1.5 text-center sm:px-3 sm:py-3.5 " + (i === 0 ? "bg-brand-wash/60" : "")}>
                         {typeof v === "string" ? (
-                          <span className="text-[13px] font-semibold text-ink sm:text-[14.5px]">{v}</span>
+                          <span className="text-[12px] font-semibold leading-tight text-ink sm:text-[14.5px]">{v}</span>
                         ) : v ? (
-                          <Check className="mx-auto size-5 text-success" strokeWidth={3} aria-label="Included" />
+                          <Check className="mx-auto size-4 text-success sm:size-5" strokeWidth={3} aria-label="Included" />
                         ) : (
-                          <Minus className="mx-auto size-5 text-faint" aria-label="Not included" />
+                          <Minus className="mx-auto size-4 text-faint sm:size-5" aria-label="Not included" />
                         )}
                       </td>
                     ))}
                   </tr>
                 ))}
                 <tr>
-                  <td className="px-4 py-5 sm:px-6" />
-                  <td className="bg-brand-wash/60 px-2 py-5 text-center">
+                  <td className="px-3 py-2.5 sm:px-6 sm:py-5" />
+                  <td className="bg-brand-wash/60 px-1 py-2.5 text-center sm:px-2 sm:py-5">
                     <Link href="/checkout/fast_track" className={`${btn.primary} h-9 w-full max-w-[150px] px-1.5 text-[12px] sm:text-[13px]`}>Enroll Now</Link>
                   </td>
-                  <td className="px-2 py-5 text-center">
+                  <td className="px-1 py-2.5 text-center sm:px-2 sm:py-5">
                     <Link href="/checkout/main_track" className={`${btn.accent} h-9 w-full max-w-[150px] px-1.5 text-[12px] sm:text-[13px]`}>Enroll Now</Link>
                   </td>
                 </tr>
@@ -254,6 +215,26 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Who it's for: a list */}
+      <section id="who" className="scroll-mt-24 px-4 py-12 sm:py-28">
+        <div className="mx-auto max-w-4xl">
+          <Heading hue="purple" eyebrow="Who it's for" sub="You don't need a tech background. You need a laptop, a few hours a day and the will to go through the course to the end.">
+            Built for people who want to earn with a real skill
+          </Heading>
+          <ul className="mt-8 grid gap-x-10 sm:mt-12 md:grid-cols-2">
+            {personas.map((p, i) => (
+              <li key={p.id} id={p.id} className="flex scroll-mt-28 gap-3 border-b border-line py-4">
+                <span className={`mt-0.5 grid size-7 shrink-0 place-items-center rounded-full text-[12px] font-bold ${hueClass[cycle[i % cycle.length]].wash} ${hueClass[cycle[i % cycle.length]].text}`}>{i + 1}</span>
+                <p className="text-[15px] leading-relaxed text-muted">
+                  <span className="font-semibold text-ink">{p.label}.</span> {p.blurb}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
 
       {/* FAQ */}
       <section className="border-t-2 border-ink bg-sunk px-4 py-14 sm:py-24">

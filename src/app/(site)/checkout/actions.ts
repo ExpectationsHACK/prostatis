@@ -8,7 +8,7 @@ import { getCurrentUser } from "@/lib/supabase/server";
 
 export async function startCheckout(form: FormData) {
   const plan = getPlan(String(form.get("plan")));
-  if (!plan) redirect("/pricing");
+  if (!plan) redirect("/#tracks");
 
   const user = await getCurrentUser();
   if (!user) redirect(`/signup?next=${encodeURIComponent(`/checkout/${plan.id}`)}`);

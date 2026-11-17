@@ -38,7 +38,7 @@ export function SubscribeForm({ source = "homepage", buttonLabel = "Subscribe" }
           We'll email you new free tools and launch news. Want the full curriculum and the WhatsApp community?
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
-          <Link href="/pricing" className={`${btn.primary} ${size.md}`}>
+          <Link href="/#tracks" className={`${btn.primary} ${size.md}`}>
             Enroll Now
           </Link>
           <Link href="/tools" className={`${btn.secondary} ${size.md}`}>

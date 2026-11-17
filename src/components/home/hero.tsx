@@ -1,12 +1,10 @@
-import { ArrowRight, Award, Clock, Wallet } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { LiveSite } from "@/components/art/live-site";
 import { btn, size } from "@/components/ui";
-import { formatNgn, plans, site } from "@/lib/site";
+import { site } from "@/lib/site";
 
 export function Hero() {
-  const fast = plans.find((p) => p.id === "fast_track")!;
-
   return (
     <section className="relative overflow-hidden border-b border-line">
       {/* One soft wash of the accent behind the demo, nothing else. */}
@@ -22,18 +20,13 @@ export function Hero() {
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-pretty text-[16px] sm:text-[17px] leading-relaxed text-muted lg:mx-0">{site.subhead}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
-            <Link href="/pricing" className={`${btn.primary} ${size.lg}`}>
+            <Link href="/#tracks" className={`${btn.primary} ${size.lg}`}>
               Enroll Now <ArrowRight className="size-4" aria-hidden />
             </Link>
             <Link href="/tracks/fast-track" className={`${btn.secondary} ${size.lg}`}>
               Start Learning
             </Link>
           </div>
-          <ul className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-[13.5px] text-muted lg:justify-start">
-            <li className="flex items-center gap-1.5"><Clock className="size-4 text-ink" aria-hidden /> Fast Track: {fast.period}, self-paced</li>
-            <li className="flex items-center gap-1.5"><Wallet className="size-4 text-ink" aria-hidden /> {formatNgn(fast.priceNgn)}, paid once</li>
-            <li className="flex items-center gap-1.5"><Award className="size-4 text-ink" aria-hidden /> Lifetime access</li>
-          </ul>
         </div>
 
         {/* What you'll build: a fanned stack of three working website mock-ups */}
@@ -49,7 +42,6 @@ export function Hero() {
               <LiveSite kind="store" />
             </div>
           </div>
-          <p className="mt-4 text-center text-[12.5px] text-muted">A business site, a booking system and an online store: three of the projects you build in the Fast Track.</p>
         </div>
       </div>
     </section>

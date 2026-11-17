@@ -8,12 +8,12 @@ import { settlePayment } from "@/lib/settle-payment";
 export async function GET(request: NextRequest) {
   const reference = cleanReference(request.nextUrl.searchParams.get("reference") ?? request.nextUrl.searchParams.get("trxref"));
   const back = (path: string) => NextResponse.redirect(new URL(path, request.nextUrl.origin));
-  if (!reference) return back("/pricing");
+  if (!reference) return back("/#tracks");
   const status = `/checkout/status?ref=${encodeURIComponent(reference)}`;
 
   try {
     const { outcome, planId } = await settlePayment(reference);
-    if (!planId) return back("/pricing");
+    if (!planId) return back("/#tracks");
     return back(outcome.kind === "success" ? "/welcome" : status);
   } catch (e) {
     // Paystack unreachable or recording failed: the status page retries and explains.

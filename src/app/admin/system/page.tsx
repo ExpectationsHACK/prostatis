@@ -7,6 +7,7 @@ import { checkEmail, checkPaystack } from "@/lib/service-checks";
 import { adminConfigured } from "@/lib/supabase/admin";
 import { supabaseConfigured } from "@/lib/supabase/env";
 import { site } from "@/lib/site";
+import { whatsappInvite } from "@/lib/community";
 
 const MIGRATIONS = ["20260927000000_waitlist.sql", "20260927120000_membership.sql", "20260929120000_learning.sql", "20260930120000_admin_blog_analytics.sql", "20261001120000_auth_helpers.sql", "20261001130000_newsletter.sql", "20261004120000_rebrand_prostatis.sql"];
 
@@ -47,7 +48,7 @@ export default async function SystemPage() {
             <Check ok={env("NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN")} title="PostHog product analytics" fix="Optional. Set NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN (and NEXT_PUBLIC_POSTHOG_HOST for the EU region), then redeploy: it is read at build time." />
             <Check ok={env("NEXT_PUBLIC_SENTRY_DSN")} title={`Sentry error tracking${env("NEXT_PUBLIC_SENTRY_DSN") && !env("SENTRY_AUTH_TOKEN") ? " (no source maps: stack traces stay minified)" : ""}`} fix="Optional. Set NEXT_PUBLIC_SENTRY_DSN, then redeploy. Add SENTRY_AUTH_TOKEN, SENTRY_ORG and SENTRY_PROJECT for readable stack traces." />
             <Check ok={env("PAGESPEED_API_KEY")} title="Google PageSpeed key (speed tools)" fix="Set PAGESPEED_API_KEY. Without it the speed tools use their quick built-in check." />
-            <Check ok={Boolean(site.whatsappInviteUrl)} title="WhatsApp community invite link" fix="Set NEXT_PUBLIC_WHATSAPP_INVITE_URL." />
+            <Check ok={Boolean(whatsappInvite)} title="WhatsApp community invite link" fix="Set WHATSAPP_INVITE_URL (a default is built in)." />
             <Check ok={!site.url.includes("localhost") || process.env.NODE_ENV !== "production"} title={`Site URL: ${site.url}`} fix="Set NEXT_PUBLIC_SITE_URL to your real domain in production (used in emails, certificates and the sitemap)." />
           </ul>
         </Panel>

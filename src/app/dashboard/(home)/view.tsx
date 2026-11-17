@@ -10,7 +10,7 @@ import { slugOf } from "@/lib/learning/access";
 import { badges, lagosDay, levelFor, streaks, trackProgress, type LearnerState } from "@/lib/learning/engine";
 import { activityGrid, greeting, recentActivity, timeAgo, todos, xpThisWeek, type XpEvent } from "@/lib/learning/insights";
 import { getPlan, type Subscription } from "@/lib/membership";
-import { site } from "@/lib/site";
+import { whatsappInvite } from "@/lib/community";
 import { Bar, Chip, Heatmap, SectionHead, Tag } from "./parts";
 import { PillarTag } from "@/components/pillar-tag";
 import { hueClass, type Hue } from "@/lib/hues";
@@ -306,10 +306,10 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
             <Link href="/dashboard/billing" className={`${btn.secondary} ${size.sm} mt-3`}>Billing</Link>
           </SideCard>
 
-          {site.whatsappInviteUrl && (
+          {whatsappInvite && (
             <SideCard title="Community" icon={MessageCircle} hue="teal">
               <p className="text-[14px] leading-snug text-ink">Share builds, get unstuck, hear about client leads.</p>
-              <a href={site.whatsappInviteUrl} target="_blank" rel="noopener" className={`${btn.accent} ${size.sm} mt-3 w-full`}>Open WhatsApp group</a>
+              <a href={whatsappInvite} target="_blank" rel="noopener" className={`${btn.accent} ${size.sm} mt-3 w-full`}>Open WhatsApp group</a>
             </SideCard>
           )}
 

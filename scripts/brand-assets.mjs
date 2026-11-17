@@ -9,22 +9,18 @@ const png = (svg, size) => sharp(Buffer.from(svg), { density: 600 }).resize(size
 
 out("public/brand/prostatis-mark.svg", logoSvg() + "\n");
 out("public/brand/prostatis-mark-white.svg", logoSvg({ color: "#ffffff" }) + "\n");
-// Favicon: white on dark browser tabs, ink on light ones, heavier line for 16px.
-out("src/app/icon.svg", logoSvg({ square: true, adaptive: true, stroke: 5.6 }) + "\n");
+// Favicon: a black mark on a white rounded tile, so it's black everywhere (tabs, bookmarks,
+// Google results) and still shows on dark backgrounds. Heavier line for 16px.
+out("src/app/icon.svg", logoSvg({ color: "#000000", tile: "#ffffff", stroke: 5.6 }) + "\n");
 
 out("public/brand/prostatis-mark.png", await png(logoSvg({ square: true }), 1024));
 out("public/brand/prostatis-mark-white.png", await png(logoSvg({ square: true, color: "#ffffff" }), 1024));
 // Emails can't use SVG: a small transparent PNG, shown at 36px (2× for sharp phone screens).
 out("public/brand/prostatis-mark-email.png", await png(logoSvg({ square: true }), 72));
 
-// favicon.ico for older browsers: ink mark on the paper colour so it shows on dark tabs too.
-const tile = (size) =>
-  sharp({ create: { width: size, height: size, channels: 4, background: "#faf8f4" } })
-    .composite([{ input: Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"><rect width="${size}" height="${size}" rx="${size * 0.22}" fill="#faf8f4"/></svg>`), blend: "dest-in" }])
-    .png()
-    .toBuffer()
-    .then(async (bg) => sharp(bg).composite([{ input: await png(logoSvg({ square: true, stroke: 6 }), size) }]).png().toBuffer());
-const sizes = [16, 32, 48];
+// favicon.ico, the same black-on-white tile. Google wants favicons in multiples of 48px.
+const tile = (size) => png(logoSvg({ color: "#000000", tile: "#ffffff", stroke: 6 }), size);
+const sizes = [16, 32, 48, 96];
 const images = await Promise.all(sizes.map(tile));
 // ICO container holding PNG images (supported by every current browser).
 const header = Buffer.alloc(6 + 16 * images.length);

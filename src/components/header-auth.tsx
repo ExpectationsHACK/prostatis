@@ -35,7 +35,7 @@ export function HeaderAuth({ stacked = false }: { stacked?: boolean }) {
     );
   }
   const enroll = (
-    <Link href="/pricing" className={`${btn.primary} ${stacked ? size.lg : size.sm} ${wide}`}>
+    <Link href="/#tracks" className={`${btn.primary} ${stacked ? size.lg : size.sm} ${wide}`}>
       Enroll Now
     </Link>
   );

@@ -10,7 +10,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const tags = [...new Set(posts.flatMap((p) => p.tags.map(tagSlug)))];
   return [
     { url: site.url, priority: 1 },
-    { url: `${site.url}/pricing`, priority: 0.8 },
     { url: `${site.url}/tracks/fast-track`, priority: 0.8 },
     { url: `${site.url}/tracks/main-track`, priority: 0.8 },
     { url: `${site.url}/tools`, priority: 0.9 },

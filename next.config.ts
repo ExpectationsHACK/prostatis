@@ -4,6 +4,11 @@ import { withSentryConfig } from "@sentry/nextjs/config";
 const nextConfig: NextConfig = {
   // authInterrupts: forbidden() and its 403 page (src/app/forbidden.tsx).
   experimental: { authInterrupts: true },
+  // The pricing page was folded into the homepage's tracks section; old links (ads, emails,
+  // shared posts) still land in the right place.
+  async redirects() {
+    return [{ source: "/pricing", destination: "/#tracks", permanent: true }];
+  },
   // The service worker must never be cached, or a fix to it could take days to reach phones.
   async headers() {
     return [

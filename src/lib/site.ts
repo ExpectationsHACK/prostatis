@@ -1,3 +1,11 @@
+// The site's public address. Trailing slashes are trimmed ("https://x.com/" + "/blog" would give
+// "//blog"), and a retired Netlify address left in the environment is replaced by the live
+// domain, so share images, the sitemap and canonical links never point at a dead host.
+function siteUrl() {
+  const raw = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").trim().replace(/\/+$/, "");
+  return /\/\/(prostatis|stynark)\.netlify\.app$/.test(raw) ? "https://stynark.com" : raw;
+}
+
 export const site = {
   /** The product. */
   name: "Stynark",
@@ -5,14 +13,12 @@ export const site = {
   company: "Stynark",
   /** How the two appear together (footer, emails, certificates, legal pages). */
   byline: "Stynark",
-  // Trailing slashes trimmed: "https://x.com/" + "/pricing" would give "//pricing" in the sitemap and emails.
-  url: (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").trim().replace(/\/+$/, ""),
+  url: siteUrl(),
   tagline: "Learn to build websites with AI and turn it into a source of income.",
   subhead:
-    "Build business websites, online stores and booking systems with AI in 14 hands-on lessons, then learn exactly what to charge and how to land paying clients. Learn at your own pace, no coding background needed.",
+    "Build business websites, online stores, landing pages, booking systems, web apps and your portfolio, then learn exactly what to charge and how to land paying clients. Learn at your own pace, no coding background needed.",
   description:
     "Learn to build websites with AI and sell them to businesses. The 14-lesson Fast Track takes you from beginner to your first website; the 26-lesson Main Track adds SEO, automation and AI agents. Pay once in naira, keep lifetime access, with 50 free tools.",
-  whatsappInviteUrl: process.env.NEXT_PUBLIC_WHATSAPP_INVITE_URL ?? "",
   /** Public support address, shown on the legal pages. */
   contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "",
 };

@@ -40,7 +40,7 @@ function Dropdown({ label, items, open, onToggle }: { label: string; items: Item
 
 /** Floating pill header: logo, dropdown menus, Enroll Now; a sheet on phones. */
 export function SiteNav() {
-  const [open, setOpen] = useState<null | "tracks" | "tools" | "who">(null);
+  const [open, setOpen] = useState<null | "tracks" | "who">(null);
   const [mobile, setMobile] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const path = usePathname();
@@ -72,7 +72,7 @@ export function SiteNav() {
     setMobile(false);
   }
 
-  const toggle = (k: "tracks" | "tools" | "who") => setOpen((o) => (o === k ? null : k));
+  const toggle = (k: "tracks" | "who") => setOpen((o) => (o === k ? null : k));
 
   return (
     <header className="sticky top-0 z-50 px-3 pt-3" ref={ref}>
@@ -87,11 +87,10 @@ export function SiteNav() {
             What&apos;s inside
           </Link>
           <Dropdown label="Tracks" items={navMenus.tracks} open={open === "tracks"} onToggle={() => toggle("tracks")} />
-          <Dropdown label="Free tools" items={navMenus.tools} open={open === "tools"} onToggle={() => toggle("tools")} />
-          <Dropdown label="Who it's for" items={navMenus.who} open={open === "who"} onToggle={() => toggle("who")} />
-          <Link href="/pricing" className="whitespace-nowrap px-1.5 py-2 font-code text-[11.5px] font-bold uppercase tracking-[0.06em] xl:px-2.5 xl:text-[12px] xl:tracking-[0.12em] text-ink hover:text-brand-text">
-            Pricing
+          <Link href="/tools" className="whitespace-nowrap px-1.5 py-2 font-code text-[11.5px] font-bold uppercase tracking-[0.06em] xl:px-2.5 xl:text-[12px] xl:tracking-[0.12em] text-ink hover:text-brand-text">
+            Free tools
           </Link>
+          <Dropdown label="Who it's for" items={navMenus.who} open={open === "who"} onToggle={() => toggle("who")} />
           <Link href="/blog" className="whitespace-nowrap px-1.5 py-2 font-code text-[11.5px] font-bold uppercase tracking-[0.06em] xl:px-2.5 xl:text-[12px] xl:tracking-[0.12em] text-ink hover:text-brand-text">
             Blog
           </Link>
@@ -120,7 +119,6 @@ export function SiteNav() {
               { href: "/tracks/fast-track", label: "Fast Track · 14 lessons" },
               { href: "/tracks/main-track", label: "Main Track · 26 lessons" },
               { href: "/tools", label: "50 free tools" },
-              { href: "/pricing", label: "Pricing" },
               { href: "/blog", label: "Blog" },
             ].map((l) => (
               <Link key={l.href} href={l.href} className="border-b border-line py-3 font-code text-[14px] font-bold uppercase tracking-[0.1em] text-ink">

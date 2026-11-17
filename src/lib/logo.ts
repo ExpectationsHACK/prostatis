@@ -21,12 +21,15 @@ export const LOGO = {
 } as const;
 
 /** The mark as a standalone SVG document (transparent background). */
-export function logoSvg({ color = LOGO.ink, square = false, adaptive = false, stroke = LOGO.stroke }: { color?: string; square?: boolean; adaptive?: boolean; stroke?: number } = {}) {
+export function logoSvg({ color = LOGO.ink, square = false, adaptive = false, stroke = LOGO.stroke, tile }: { color?: string; square?: boolean; adaptive?: boolean; stroke?: number; tile?: string } = {}) {
   // `adaptive` (favicons): white on dark browser tabs, ink on light ones. Favicons also use a
   // heavier `stroke` so the line survives at 16px.
   const style = adaptive ? `<style>.m{stroke:${color};fill:${color}}@media (prefers-color-scheme:dark){.m{stroke:#fff;fill:#fff}}</style>` : "";
   const paint = adaptive ? `class="m"` : `stroke="${color}" fill="${color}"`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${square ? LOGO.squareViewBox : LOGO.viewBox}" role="img" aria-label="Stynark">${style}<g ${paint}><path d="${LOGO.outline}" fill="none" stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round"/>${LOGO.dashes
+  // `tile` (favicons): the mark on a rounded square of this colour, so it stays visible on dark tabs
+  // and dark search results without changing colour.
+  const bg = tile ? `<rect x="-37" y="-37" width="74" height="74" rx="16" fill="${tile}"/>` : "";
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${square || tile ? LOGO.squareViewBox : LOGO.viewBox}" role="img" aria-label="Stynark">${style}${bg}<g ${paint}><path d="${LOGO.outline}" fill="none" stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round"/>${LOGO.dashes
     .map((d) => `<path d="${d}" stroke="none"/>`)
     .join("")}</g></svg>`;
 }

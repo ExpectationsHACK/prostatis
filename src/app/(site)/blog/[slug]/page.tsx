@@ -149,7 +149,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             Step-by-step lessons, real client projects and a verified certificate when you finish. From {from}, paid once.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <Link href="/pricing" className={`${btn.primary} ${size.md}`}>
+            <Link href="/#tracks" className={`${btn.primary} ${size.md}`}>
               Enroll Now <ArrowRight className="size-4" aria-hidden />
             </Link>
             <Link href="/tools" className={`${btn.secondary} ${size.md} border-white/15 bg-white/10 text-white hover:bg-white/15`}>Free tools</Link>

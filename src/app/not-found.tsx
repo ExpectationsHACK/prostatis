@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Page not found", robots: { index: fa
 
 const places = [
   { href: "/tools", icon: Wrench, title: "Free tools", text: "Tools for building and selling websites" },
-  { href: "/pricing", icon: GraduationCap, title: "The tracks", text: "Fast Track and Main Track, paid once" },
+  { href: "/#tracks", icon: GraduationCap, title: "The tracks", text: "Fast Track and Main Track, paid once" },
   { href: "/dashboard", icon: BookOpen, title: "My dashboard", text: "Your lessons, progress and certificate" },
   { href: "/blog", icon: Newspaper, title: "Blog", text: "Guides on building and selling websites" },
 ];

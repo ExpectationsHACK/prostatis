@@ -21,7 +21,7 @@ export function PreFooterCta({ from }: { from: string }) {
           Enroll now and start your first lesson in the next five minutes. From {from}, paid once in naira.
         </p>
         <div className="relative mt-9 flex flex-wrap justify-center gap-3">
-          <Link href="/pricing" className={`${btn.primary} ${size.lg}`}>
+          <Link href="/#tracks" className={`${btn.primary} ${size.lg}`}>
             Enroll Now <ArrowRight className="size-4" aria-hidden />
           </Link>
           <Link href="/tracks/fast-track" className={`${btn.secondary} ${size.lg} border-white/15 bg-white/10 text-white hover:border-white/25 hover:bg-white/15`}>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { btn, size } from "@/components/ui";
 import { getMySubscription, hasAccess } from "@/lib/membership";
+import { whatsappInvite } from "@/lib/community";
 import { site } from "@/lib/site";
 import { getCurrentUser } from "@/lib/supabase/server";
 import { WhatsAppRedirect } from "./whatsapp-redirect";
@@ -15,7 +16,7 @@ export default async function WelcomePage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login?next=/welcome");
   const sub = await getMySubscription();
-  if (!hasAccess(sub)) redirect("/pricing");
+  if (!hasAccess(sub)) redirect("/#tracks");
   const track = sub!.plan === "main_track" ? "main-track" : "fast-track";
   const first = (user.name || "").split(" ")[0];
 
@@ -37,13 +38,7 @@ export default async function WelcomePage() {
             <MessageCircle className="size-5 text-muted" aria-hidden /> Join the community
           </p>
           <p className="mb-4 mt-1 text-[15px] text-muted">Say hello, share what you're building and get unstuck.</p>
-          {site.whatsappInviteUrl ? (
-            <WhatsAppRedirect url={site.whatsappInviteUrl} />
-          ) : (
-            <p className="rounded-lg bg-sunk px-3 py-2.5 text-sm text-muted">
-              The WhatsApp invite link isn't configured yet (set NEXT_PUBLIC_WHATSAPP_INVITE_URL).
-            </p>
-          )}
+          <WhatsAppRedirect url={whatsappInvite} />
         </li>
         <li className="py-6">
           <p className="flex items-center gap-2 text-[16px] sm:text-[17px] font-semibold text-ink">

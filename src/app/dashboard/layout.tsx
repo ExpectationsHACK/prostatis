@@ -13,6 +13,7 @@ import { trackProgress } from "@/lib/learning/engine";
 import { loadLearnerState } from "@/lib/learning/store";
 import { hasAccess } from "@/lib/membership";
 import { site } from "@/lib/site";
+import { whatsappInvite } from "@/lib/community";
 import { createClient } from "@/lib/supabase/server";
 import { BottomNav, SideNav } from "./dash-nav";
 
@@ -52,7 +53,7 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
           <LogoMark size={30} />
           <span className="display text-[16px] sm:text-[17px] text-brand">{site.name}</span>
         </Link>
-        <SideNav whatsapp={site.whatsappInviteUrl} active={active} />
+        <SideNav whatsapp={whatsappInvite} active={active} />
         {tracks.length > 0 && (
           <div className="mt-5 border-t border-line px-1 pt-4">
             <p className="label px-2 text-muted">Your tracks</p>
@@ -70,7 +71,7 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
           </div>
         )}
         {/* Dark when the page below already has the orange action; orange only to enroll. */}
-        <Link href={active ? "/learn" : "/pricing"} className={`${active ? btn.accent : btn.primary} ${size.md} mx-1 mt-5`}>
+        <Link href={active ? "/learn" : "/#tracks"} className={`${active ? btn.accent : btn.primary} ${size.md} mx-1 mt-5`}>
           {active ? "Start Learning" : "Enroll Now"}
         </Link>
         <div className="mt-auto flex items-center gap-2.5 border-t border-edge px-1 pt-4">
@@ -103,7 +104,7 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
         {children}
       </div>
 
-      <BottomNav whatsapp={site.whatsappInviteUrl} active={active} />
+      <BottomNav whatsapp={whatsappInvite} active={active} />
       <MemberIdentity id={user.id} plan={active ? sub!.plan : "none"} />
     </div>
   );
