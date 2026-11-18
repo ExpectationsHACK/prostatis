@@ -4,6 +4,7 @@ import { ab, fmtDate, PageHead, Pill, Table, td } from "@/components/admin/block
 import { ActionForm } from "@/components/admin/ui";
 import { requireAdmin } from "@/lib/admin/auth";
 import { listAllPosts } from "@/lib/blog";
+import { starterPosts } from "@/content/blog-starters";
 import { addStarterPostsAction } from "../actions";
 import { SetupError, safe } from "../setup-error";
 
@@ -12,13 +13,17 @@ export default async function AdminBlogPage() {
   const res = await safe(listAllPosts);
   if (!res.ok) return <SetupError error={res.error} />;
   const posts = res.data;
+  // Starter articles not added yet (the button adds only these, as drafts).
+  const missing = starterPosts.filter((s) => !posts.some((p) => p.slug === s.slug)).length;
 
   return (
     <div className="space-y-6">
       <PageHead title="Blog" crumbs={[{ label: "Content" }]} sub="Write, schedule and publish articles. Each post has its own search title, description and share image.">
-        <ActionForm action={addStarterPostsAction}>
-          <button className={`${ab.secondary} ${ab.sm}`}>Add 3 starter drafts</button>
-        </ActionForm>
+        {missing > 0 && (
+          <ActionForm action={addStarterPostsAction}>
+            <button className={`${ab.secondary} ${ab.sm}`}>Add {missing} starter {missing === 1 ? "draft" : "drafts"}</button>
+          </ActionForm>
+        )}
         <Link href="/admin/blog/new" className={`${ab.primary} ${ab.sm}`}>
           <Plus className="size-4" aria-hidden /> New post
         </Link>
