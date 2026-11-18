@@ -58,6 +58,9 @@ export type PaystackTransaction = {
   status: string;
   reference: string;
   amount: number;
+  /** When the checkout was opened (Paystack sends both spellings). */
+  created_at?: string;
+  createdAt?: string;
   currency: string;
   metadata: Record<string, unknown> | null | string;
   customer: { email: string; customer_code: string };

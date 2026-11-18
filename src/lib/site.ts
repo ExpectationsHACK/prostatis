@@ -31,7 +31,8 @@ export const plans = [
   {
     id: "fast_track",
     name: "Fast Track",
-    priceNgn: 15000,
+    priceNgn: 23500,
+    formerPricesNgn: [15000],
     period: "14 lessons",
     highlight: true,
     blurb: "Build websites with AI and pitch your first paying clients, one lesson at a time.",
@@ -51,7 +52,8 @@ export const plans = [
   {
     id: "main_track",
     name: "Main Track",
-    priceNgn: 30000,
+    priceNgn: 46500,
+    formerPricesNgn: [30000],
     period: "26 lessons",
     highlight: false,
     blurb: "Everything in the Fast Track, plus the skills businesses pay for, such as AI automation and AI agents.",
@@ -87,4 +89,18 @@ export function formatUsd(n: number, digits = 2) {
       maximumFractionDigits: digits,
     })
   );
+}
+
+/**
+ * Prices changed on 2026-11-18. A Paystack checkout opened before then was created at the old
+ * price, so one paid a little later is still valid at that amount. New checkouts are always
+ * created on the server at the current price, so the old amount can't be started again.
+ */
+export const PRICES_CHANGED_AT = "2026-11-18T23:59:59Z";
+
+/** Amounts (in kobo) a payment for this plan may be, given when its checkout was opened. */
+export function acceptedAmountsKobo(plan: Plan, openedAt?: string | null): number[] {
+  const opened = openedAt ? Date.parse(openedAt) : NaN;
+  const former = opened < Date.parse(PRICES_CHANGED_AT) ? plan.formerPricesNgn.map((n) => n * 100) : [];
+  return [plan.priceNgn * 100, ...former];
 }

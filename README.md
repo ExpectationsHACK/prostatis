@@ -1,6 +1,6 @@
 # Stynark by Stynark
 
-Nigeria-first club that teaches website building with AI, plus web solutions, SEO, automation, lead generation and AI agents. Two one-time tracks — **Fast Track** (14 lessons, ₦15,000) and **Main Track** (26 lessons, ₦30,000), self-paced with lifetime access — a WhatsApp community, and 50 free public tools.
+Nigeria-first club that teaches website building with AI, plus web solutions, SEO, automation, lead generation and AI agents. Two one-time tracks — **Fast Track** (14 lessons, ₦23,500) and **Main Track** (26 lessons, ₦46,500), self-paced with lifetime access — a WhatsApp community, and 50 free public tools.
 
 **Status:** marketing site; all 50 free tools (+6 bonus) live and tested; Supabase auth; Paystack one-time payments (test/demo); the full written course (27 lessons with illustrations, tasks, resources and quizzes); progress, XP, levels and streaks; final assessments and certificates.
 

@@ -1,6 +1,7 @@
 import { getPlan, recordSuccessfulPayment, type PlanId } from "@/lib/membership";
 import { isValidWebhookSignature, verifyTransaction } from "@/lib/paystack";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { acceptedAmountsKobo } from "@/lib/site";
 
 // Tracks are one-time payments, so charge.success is the only event that matters.
 type PaystackEvent = { event: string; data?: { reference?: string } };
@@ -42,7 +43,7 @@ export async function POST(req: Request) {
       console.warn("paystack webhook: unmatched charge", reference);
       return new Response("ok");
     }
-    if (tx.amount !== plan.priceNgn * 100) {
+    if (!acceptedAmountsKobo(plan, tx.created_at ?? tx.createdAt).includes(tx.amount)) {
       console.error("paystack webhook: amount mismatch", reference, tx.amount);
       return new Response("ok");
     }

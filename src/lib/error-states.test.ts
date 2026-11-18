@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { fetchProblem } from "./fetch-errors";
 import { fixFields, validateNewPassword, validateSignup } from "./form-validation";
 import { classifyPayment, cleanReference, failureReason } from "./payment-status";
+import { acceptedAmountsKobo, plans } from "./site";
 
 describe("sign-up and password checks", () => {
   const ok = { name: "Ada Okafor", email: "ada@example.com", password: "longenough", whatsapp: "" };
@@ -44,6 +45,24 @@ describe("payment outcomes", () => {
   it("accepts only reference-shaped strings", () => {
     expect(cleanReference("pst_1a2b3c4d_lx9k2_ab12cd")).toBe("pst_1a2b3c4d_lx9k2_ab12cd");
     for (const bad of ["", "abc", "<script>", "a/../b/c/d", null, 42, "x".repeat(101)]) expect(cleanReference(bad)).toBeNull();
+  });
+});
+
+describe("price change", () => {
+  const fast = plans.find((p) => p.id === "fast_track")!;
+  const paid = (amount: number) => ({ status: "success", amount, currency: "NGN" });
+
+  it("charges the current price on new checkouts", () => {
+    expect(fast.priceNgn).toBe(23500);
+    expect(plans.find((p) => p.id === "main_track")!.priceNgn).toBe(46500);
+    expect(classifyPayment(paid(2_350_000), acceptedAmountsKobo(fast, "2026-12-01T10:00:00Z")).kind).toBe("success");
+  });
+
+  it("honours the old price only for a checkout opened before the change", () => {
+    expect(classifyPayment(paid(1_500_000), acceptedAmountsKobo(fast, "2026-11-18T09:00:00.000Z")).kind).toBe("success");
+    expect(classifyPayment(paid(1_500_000), acceptedAmountsKobo(fast, "2026-12-01T10:00:00Z")).kind).toBe("mismatch");
+    expect(classifyPayment(paid(1_500_000), acceptedAmountsKobo(fast, undefined)).kind).toBe("mismatch");
+    expect(classifyPayment(paid(100), acceptedAmountsKobo(fast, "2026-11-18T09:00:00Z")).kind).toBe("mismatch");
   });
 });
 

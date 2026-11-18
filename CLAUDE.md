@@ -2,7 +2,7 @@
 
 # Stynark — project guide for Claude
 
-**Stynark** (product and company; renamed from Prostatis on 2026-11-14): a Nigeria-first platform that teaches people to build and sell websites with AI. Two one-time paid tracks, self-paced with lifetime access (Fast Track: 14 lessons, ₦15,000 · Main Track: 26 lessons, ₦30,000), a written in-app course with assessments, XP and streaks, 50 free public tools (+6 bonus), Paystack payments and a WhatsApp community.
+**Stynark** (product and company; renamed from Prostatis on 2026-11-14): a Nigeria-first platform that teaches people to build and sell websites with AI. Two one-time paid tracks, self-paced with lifetime access (Fast Track: 14 lessons, ₦23,500 · Main Track: 26 lessons, ₦46,500), a written in-app course with assessments, XP and streaks, 50 free public tools (+6 bonus), Paystack payments and a WhatsApp community.
 
 Read before changing things: `PRODUCT.md` (who it's for, principles, honesty rules), `DESIGN.md` (visual system — follow it), `README.md` (setup, payments, course architecture).
 

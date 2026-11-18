@@ -2,6 +2,7 @@ import "server-only";
 import { getPlan, recordSuccessfulPayment, type PlanId } from "@/lib/membership";
 import { classifyPayment, type PaymentOutcome } from "@/lib/payment-status";
 import { verifyTransaction } from "@/lib/paystack";
+import { acceptedAmountsKobo } from "@/lib/site";
 
 export type Settled = { outcome: PaymentOutcome; planId: PlanId | null; userId: string };
 
@@ -17,7 +18,7 @@ export async function settlePayment(reference: string): Promise<Settled> {
   const userId = String(meta.user_id ?? "");
   if (!plan || !userId) return { outcome: { kind: "mismatch" }, planId: null, userId };
 
-  const outcome = classifyPayment(tx, plan.priceNgn * 100);
+  const outcome = classifyPayment(tx, acceptedAmountsKobo(plan, tx.created_at ?? tx.createdAt));
   if (outcome.kind === "mismatch") console.error("paystack: amount/currency mismatch", reference, tx.amount, tx.currency);
   if (outcome.kind === "success") {
     await recordSuccessfulPayment({

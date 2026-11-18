@@ -11,7 +11,7 @@ const scenes: Record<Step, () => React.ReactNode> = {
     <Stage d={8} className="gap-3">
       <Box className="w-[138px] p-2.5">
         <p className={`${t.xs} text-[#8a857b]`}>Stynark · Fast Track</p>
-        <p className="mt-0.5 text-[18px] font-bold">₦15,000</p>
+        <p className="mt-0.5 text-[18px] font-bold">₦23,500</p>
         <div className="mt-1.5 space-y-1">
           {["Card", "Bank transfer", "USSD"].map((x, i) => (
             <span key={x} className={`flex items-center gap-1 rounded-[4px] border border-[#e4e0d8] px-1.5 py-[2px] ${t.xs} ` + (i === 1 ? m("mark") : "")} style={i === 1 ? at(0.4, { off: "#fff", on: "#fdeee6" }) : undefined}>
@@ -19,7 +19,7 @@ const scenes: Record<Step, () => React.ReactNode> = {
             </span>
           ))}
         </div>
-        <span className={`mt-1.5 block rounded-[5px] bg-[#0ba4db] py-[3px] text-center ${t.xs} font-semibold text-white ` + m("press")} style={at(1.3)}>Pay ₦15,000</span>
+        <span className={`mt-1.5 block rounded-[5px] bg-[#0ba4db] py-[3px] text-center ${t.xs} font-semibold text-white ` + m("press")} style={at(1.3)}>Pay ₦23,500</span>
       </Box>
       <div className="space-y-1.5">
         <Box className={"flex items-center gap-1.5 bg-[#e6f4ec] px-2 py-1.5 " + m("pop")} style={at(2)}>
