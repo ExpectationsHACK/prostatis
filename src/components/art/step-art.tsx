@@ -1,6 +1,7 @@
 import { Award, Check, LayoutDashboard, Lock, MessageCircle, Sparkles } from "lucide-react";
 import { Artboard } from "./artboard";
 import { at, Box, Line, loop, m, Phone, Stage, t, Tick, Win } from "./kit";
+import { Price } from "@/components/price";
 
 /** The four "How it works" scenes, each a short animated story on the 320×200 Artboard. */
 export type Step = "enroll" | "build" | "pitch" | "paid";
@@ -11,15 +12,15 @@ const scenes: Record<Step, () => React.ReactNode> = {
     <Stage d={8} className="gap-3">
       <Box className="w-[138px] p-2.5">
         <p className={`${t.xs} text-[#8a857b]`}>Stynark · Fast Track</p>
-        <p className="mt-0.5 text-[18px] font-bold">₦23,500</p>
+        <p className="mt-0.5 text-[18px] font-bold"><Price plan="fast_track" /></p>
         <div className="mt-1.5 space-y-1">
-          {["Card", "Bank transfer", "USSD"].map((x, i) => (
+          {["Visa", "Mastercard", "Verve"].map((x, i) => (
             <span key={x} className={`flex items-center gap-1 rounded-[4px] border border-[#e4e0d8] px-1.5 py-[2px] ${t.xs} ` + (i === 1 ? m("mark") : "")} style={i === 1 ? at(0.4, { off: "#fff", on: "#fdeee6" }) : undefined}>
               <span className="size-[6px] rounded-full border border-[#8a857b]" /> {x}
             </span>
           ))}
         </div>
-        <span className={`mt-1.5 block rounded-[5px] bg-[#0ba4db] py-[3px] text-center ${t.xs} font-semibold text-white ` + m("press")} style={at(1.3)}>Pay ₦23,500</span>
+        <span className={`mt-1.5 block rounded-[5px] bg-[#0ba4db] py-[3px] text-center ${t.xs} font-semibold text-white ` + m("press")} style={at(1.3)}>Pay <Price plan="fast_track" /></span>
       </Box>
       <div className="space-y-1.5">
         <Box className={"flex items-center gap-1.5 bg-[#e6f4ec] px-2 py-1.5 " + m("pop")} style={at(2)}>
@@ -49,7 +50,7 @@ const scenes: Record<Step, () => React.ReactNode> = {
           <span className={"size-[6px] rounded-full border border-[#4ade80] border-t-transparent " + loop("spin")} /> building…
         </p>
       </Win>
-      <Win title="glowstudio.ng" className="w-[140px]" bodyClass="space-y-1 p-2">
+      <Win title="glowstudio.com" className="w-[140px]" bodyClass="space-y-1 p-2">
         <div className={m("in")} style={at(2.8)}><Line w="45%" h="h-[6px]" c="bg-[#151515]" /></div>
         <p className={"text-[10px] font-bold leading-tight " + m("in")} style={at(3.2)}>Lashes that last.</p>
         <div className={"grid grid-cols-3 gap-1 " + m("in")} style={at(3.6)}>
@@ -82,8 +83,8 @@ const scenes: Record<Step, () => React.ReactNode> = {
     <Stage d={9} className="gap-3">
       <Box className="relative w-[128px] p-2.5">
         <div className="flex justify-between"><p className={`${t.sm} font-bold`}>INVOICE</p><p className={`${t.xs} text-[#8a857b]`}>INV-001</p></div>
-        <div className="mt-1 flex justify-between border-b border-[#efece6] pb-0.5"><span className={t.xs}>Booking website</span><span className={t.xs}>₦350,000</span></div>
-        <p className="mt-1 text-right text-[14px] font-bold">₦350,000</p>
+        <div className="mt-1 flex justify-between border-b border-[#efece6] pb-0.5"><span className={t.xs}>Booking website</span><span className={t.xs}>$900</span></div>
+        <p className="mt-1 text-right text-[14px] font-bold">$900</p>
         <span className={"absolute -right-2 top-5 rounded-[4px] border-[3px] border-[#16794a] bg-white/85 px-1.5 font-code text-[12px] font-bold text-[#16794a] " + m("stamp")} style={at(0.8)}>PAID</span>
       </Box>
       <Box className={"w-[122px] p-2.5 text-center " + m("pop")} style={at(2)}>

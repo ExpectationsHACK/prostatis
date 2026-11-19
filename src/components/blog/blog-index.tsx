@@ -21,7 +21,7 @@ export function BlogIndex({ posts, allForTags, activeTag, tagName }: { posts: Po
         <Eyebrow hue="purple">{tagName ? "Topic" : "The blog"}</Eyebrow>
         <h1 className="display mx-auto mt-3 max-w-3xl text-balance text-[34px] text-ink sm:text-[62px]">{tagName ?? "Build it. Sell it. Get paid."}</h1>
         <p className="mx-auto mt-4 max-w-xl text-[16.5px] leading-relaxed text-muted">
-          Practical guides on building websites with AI, finding clients, pricing, SEO and getting paid, written for Nigeria.
+          Practical guides on building websites with AI, finding clients, pricing, SEO and getting paid, for freelancers and beginners everywhere.
         </p>
       </header>
 

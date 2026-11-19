@@ -1,7 +1,7 @@
 import { ArrowLeft, Clock, Flame, Mail, MessageCircle, Sparkles, Wallet } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ab, afield, fmtDate, ngn, Panel, Pill, planName, ProgressBar, Stat, Table, td } from "@/components/admin/blocks";
+import { ab, afield, amount, fmtDate, Panel, Pill, planName, ProgressBar, Stat, Table, td, totals } from "@/components/admin/blocks";
 import { ActionForm } from "@/components/admin/ui";
 import { requireAdmin } from "@/lib/admin/auth";
 import { getStudent } from "@/lib/admin/data";
@@ -70,7 +70,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
         <Stat icon={Sparkles} label="XP" value={s.state.xp} sub={`Level ${lvl.level}: ${lvl.name}`} />
         <Stat icon={Flame} label="Streak" value={`${st.current} days`} sub={`best ${st.longest}`} />
         <Stat icon={Clock} label="Last active" value={<span className="text-[18px] sm:text-[20px]">{fmtDate(s.lastActive)}</span>} sub={`${s.state.days.length} active days`} />
-        <Stat icon={Wallet} label="Paid" value={ngn(s.paidKobo)} sub={`${payments.length} payment${payments.length === 1 ? "" : "s"}`} />
+        <Stat icon={Wallet} label="Paid" value={totals(s.paid)} sub={`${payments.length} payment${payments.length === 1 ? "" : "s"}`} />
       </div>
 
       {tracks.map((t) => {
@@ -187,7 +187,7 @@ export default async function StudentPage({ params }: { params: Promise<{ id: st
             {payments.map((p) => (
               <li key={p.id} className="flex justify-between gap-3 py-2">
                 <span>{fmtDate(p.created_at, true)} · {planName(p.plan)} · {p.provider}</span>
-                <span className="font-bold">{ngn(p.amount_kobo)}</span>
+                <span className="font-bold">{amount(p.amount_kobo, p.currency)}</span>
               </li>
             ))}
             {!payments.length && <li className="py-2 text-muted">No payments.</li>}

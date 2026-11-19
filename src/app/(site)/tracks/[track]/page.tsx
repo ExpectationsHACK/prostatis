@@ -5,8 +5,10 @@ import { notFound } from "next/navigation";
 import { TrackLessons } from "@/components/track-lessons";
 import { btn, size } from "@/components/ui";
 import { fastTrack, mainTrack, type Track } from "@/lib/curriculum";
-import { formatNgn, plans } from "@/lib/site";
+import { plans } from "@/lib/site";
+import { priceLabel } from "@/lib/pricing";
 import { Eyebrow } from "@/components/eyebrow";
+import { Price } from "@/components/price";
 
 const bySlug: Record<string, Track> = { "fast-track": fastTrack, "main-track": mainTrack };
 
@@ -19,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ track: st
   const track = bySlug[(await params).track];
   if (!track) return {};
   const plan = plans.find((p) => p.id === track.id)!;
-  return { title: `${track.name}: ${track.length}, ${formatNgn(plan.priceNgn)}`, description: track.blurb };
+  return { title: `${track.name}: ${track.length}, ${priceLabel(plan, "USD")}`, description: track.blurb };
 }
 
 export default async function TrackPage({ params }: { params: Promise<{ track: string }> }) {
@@ -41,7 +43,7 @@ export default async function TrackPage({ params }: { params: Promise<{ track: s
             <p className="mt-4 max-w-xl text-[16.5px] leading-relaxed text-muted">{track.blurb}</p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link href={`/checkout/${track.id}`} className={`${btn.primary} ${size.lg}`}>
-                Enroll Now · {formatNgn(plan.priceNgn)} <ArrowRight className="size-4" aria-hidden />
+                Enroll Now · <Price plan={plan.id} /> <ArrowRight className="size-4" aria-hidden />
               </Link>
               <span className="text-[13.5px] text-muted">One-time payment · lifetime access · self-paced</span>
             </div>

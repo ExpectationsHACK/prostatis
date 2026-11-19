@@ -44,7 +44,7 @@ export function SiteFooter() {
             </span>
           </Link>
           <p className="mt-3 max-w-sm text-[14px] font-medium leading-snug text-ink/85 sm:mt-4 sm:text-[15px] sm:leading-relaxed">
-            Learn to build websites with AI and turn it into a source of income. Made in Nigeria, paid once in naira.
+            Learn to build websites with AI and turn it into a source of income. Self-paced, open to learners everywhere, paid once.
           </p>
           <Link href="/#tracks" className={`${btn.accent} ${size.sm} mt-4 sm:mt-6 sm:h-11 sm:px-5 sm:text-[15px]`}>
             Enroll Now <ArrowRight className="size-4" aria-hidden />

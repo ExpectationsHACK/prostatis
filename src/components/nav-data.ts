@@ -9,8 +9,8 @@ export const personas = [
 
 export const navMenus = {
   tracks: [
-    { href: "/tracks/fast-track", label: "Fast Track", note: "14 lessons · ₦23,500 · build and sell websites" },
-    { href: "/tracks/main-track", label: "Main Track", note: "26 lessons · ₦46,500 · adds SEO, automation, AI agents" },
+    { href: "/tracks/fast-track", label: "Fast Track", note: "14 lessons · build and sell websites" },
+    { href: "/tracks/main-track", label: "Main Track", note: "26 lessons · adds SEO, automation, AI agents" },
     { href: "/#compare", label: "Compare the tracks", note: "What's in each, side by side" },
   ],
   who: personas.map((p) => ({ href: `/#${p.id}`, label: p.label, note: "" })),

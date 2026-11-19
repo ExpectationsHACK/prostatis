@@ -6,7 +6,9 @@ import { LogoMark } from "@/components/brand";
 import { btn, size } from "@/components/ui";
 import { getMySubscription, getPlan, hasAccess, includesPlan } from "@/lib/membership";
 import { isTestKey, paymentsMode } from "@/lib/paystack";
-import { formatNgn, plans } from "@/lib/site";
+import { priceLabel } from "@/lib/pricing";
+import { visitorCurrency } from "@/lib/server/currency";
+import { plans } from "@/lib/site";
 import { getCurrentUser } from "@/lib/supabase/server";
 import { startCheckout } from "../actions";
 
@@ -17,6 +19,7 @@ const errors: Record<string, string> = {
   declined: "The payment didn't go through. You haven't been charged: try again or use another card.",
   verify: "We couldn't confirm that payment. If you were charged, message us with your payment reference and we'll sort it out.",
   unavailable: "Payments aren't open yet.",
+  currency: "Card payments in US dollars aren't switched on yet. Please try again soon, or message us and we'll help you enroll.",
   record: "The payment went through but we couldn't update your account. Please try again, or message us and we'll fix it right away.",
 };
 
@@ -29,6 +32,9 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
   const sub = await getMySubscription();
   const error = errors[String((await searchParams).error ?? "")];
   const mode = paymentsMode();
+  // The same country check the payment uses, so the price shown is the price charged.
+  const currency = await visitorCurrency();
+  const price = priceLabel(plan, currency);
   const active = hasAccess(sub);
   const current = active && sub ? getPlan(sub.plan) : undefined;
   // Access is lifetime, so a track you already have (the Main Track includes the Fast Track) is
@@ -81,7 +87,7 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
         <div className="flex items-baseline justify-between gap-3">
           <span className="display text-[21px] sm:text-[24px] text-ink">{plan.name}</span>
           <span className="tabular text-right">
-            <span className="display text-[24px] sm:text-[28px] text-ink">{formatNgn(plan.priceNgn)}</span>
+            <span className="display text-[24px] sm:text-[28px] text-ink">{price}</span>
             <span className="block font-mono text-[12px] text-muted">one payment · lifetime access</span>
           </span>
         </div>
@@ -111,11 +117,11 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
           <form action={startCheckout} className="mt-6">
             <input type="hidden" name="plan" value={plan.id} />
             <button className={`${btn.primary} ${size.lg} w-full`}>
-              <Lock className="size-4" aria-hidden /> Pay {formatNgn(plan.priceNgn)} with Paystack
+              <Lock className="size-4" aria-hidden /> Pay {price} with Paystack
             </button>
           </form>
         )}
-        {!owned && <p className="mt-3 text-center text-[13px] text-muted">Card, bank transfer or USSD. One payment · {plan.period} · lifetime access · nothing renews.</p>}
+        {!owned && <p className="mt-3 text-center text-[13px] text-muted">{currency === "NGN" ? "Card, bank transfer or USSD" : "Visa, Mastercard or Verve card, charged in US dollars"}. One payment · {plan.period} · lifetime access · nothing renews.</p>}
 
         {mode === "paystack" && isTestKey() && (
           <p className="mt-5 flex items-start gap-2 rounded-[12px] border border-edge bg-brand-wash px-3 py-2.5 text-[13px] text-ink">

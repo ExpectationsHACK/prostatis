@@ -29,7 +29,8 @@ export type Student = AuthUser & {
   plan: Track["id"] | null;
   accessEnd: string | null;
   active: boolean;
-  paidKobo: number;
+  /** Successful payments, per currency, in the subunit (kobo/cents). */
+  paid: Totals;
   xp: number;
   level: string;
   lessonsDone: number;
@@ -91,7 +92,7 @@ async function usersAndData() {
   return { users, subs, payments, states };
 }
 
-function toStudent(u: AuthUser, sub: Sub | undefined, state: LearnerState, paidKobo: number, now = Date.now()): Student {
+function toStudent(u: AuthUser, sub: Sub | undefined, state: LearnerState, paid: Totals, now = Date.now()): Student {
   const plan = sub?.plan ?? null;
   const track = tracksFor(plan)[0];
   const prog = track ? trackProgress(track, state) : null;
@@ -100,7 +101,7 @@ function toStudent(u: AuthUser, sub: Sub | undefined, state: LearnerState, paidK
     plan,
     accessEnd: sub?.current_period_end ?? null,
     active: Boolean(sub && new Date(sub.current_period_end).getTime() > now),
-    paidKobo,
+    paid,
     xp: state.xp,
     level: levelFor(state.xp).name,
     lessonsDone: Object.values(state.lessons).filter((l) => l.completed_at).length,
@@ -115,10 +116,15 @@ function toStudent(u: AuthUser, sub: Sub | undefined, state: LearnerState, paidK
 export async function listStudents(): Promise<{ students: Student[]; payments: Payment[] }> {
   const { users, subs, payments, states } = await usersAndData();
   const subOf = new Map(subs.map((s) => [s.user_id, s]));
-  const paid = new Map<string, number>();
-  for (const p of payments) if (p.status === "success" && p.provider !== "demo") paid.set(p.user_id, (paid.get(p.user_id) ?? 0) + p.amount_kobo);
+  const paid = new Map<string, Totals>();
+  for (const p of payments) {
+    if (p.status !== "success" || p.provider === "demo") continue;
+    const t = paid.get(p.user_id) ?? {};
+    t[p.currency] = (t[p.currency] ?? 0) + p.amount_kobo;
+    paid.set(p.user_id, t);
+  }
   const students = users
-    .map((u) => toStudent(u, subOf.get(u.id), states.get(u.id) ?? emptyState(), paid.get(u.id) ?? 0))
+    .map((u) => toStudent(u, subOf.get(u.id), states.get(u.id) ?? emptyState(), paid.get(u.id) ?? {}))
     .sort((a, b) => b.joined.localeCompare(a.joined));
   return { students, payments: payments.sort((a, b) => b.created_at.localeCompare(a.created_at)) };
 }
@@ -219,11 +225,17 @@ export async function tableStatus(): Promise<{ table: string; ok: boolean; rows:
   );
 }
 
-/** Successful, non-demo revenue in kobo over the last `days` days (optionally for one plan). */
-export function revenue(payments: Payment[], days: number, plan?: string, now = Date.now()) {
-  return payments
-    .filter((p) => p.status === "success" && p.provider !== "demo" && (!plan || p.plan === plan) && now - new Date(p.created_at).getTime() < days * 86400_000)
-    .reduce((a, p) => a + p.amount_kobo, 0);
+/** Amounts per currency (NGN in kobo, USD in cents). */
+export type Totals = Record<string, number>;
+
+/** Successful, non-demo revenue per currency over the last `days` days (optionally for one plan). */
+export function revenue(payments: Payment[], days: number, plan?: string, now = Date.now()): Totals {
+  const t: Totals = {};
+  for (const p of payments) {
+    if (p.status !== "success" || p.provider === "demo" || (plan && p.plan !== plan) || now - new Date(p.created_at).getTime() >= days * 86400_000) continue;
+    t[p.currency] = (t[p.currency] ?? 0) + p.amount_kobo;
+  }
+  return t;
 }
 
 /** An ISO date `days` ago, for "active in the last N days" comparisons. */

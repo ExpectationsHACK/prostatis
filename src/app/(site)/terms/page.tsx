@@ -20,7 +20,7 @@ export default function TermsPage() {
       </Section>
 
       <Section title="Payments">
-        <p>Prices are in naira and paid through Paystack. There is no subscription and nothing renews automatically. Refunds follow our <Link href="/refund-policy" className="font-semibold underline">refund policy</Link>.</p>
+        <p>Prices are shown in US dollars, or in naira for buyers in Nigeria, and paid through Paystack in the currency shown at checkout. There is no subscription and nothing renews automatically. Refunds follow our <Link href="/refund-policy" className="font-semibold underline">refund policy</Link>.</p>
       </Section>
 
       <Section title="What you build is yours">

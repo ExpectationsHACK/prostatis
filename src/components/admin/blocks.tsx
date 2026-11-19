@@ -3,6 +3,14 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 export const ngn = (kobo: number) => "₦" + Math.round(kobo / 100).toLocaleString("en-NG");
+/** An amount in its own currency's subunit, e.g. 2700 USD → "$27". */
+export const amount = (minor: number, currency: string) =>
+  currency === "NGN" ? ngn(minor) : currency === "USD" ? "$" + (minor / 100).toLocaleString("en-US", { maximumFractionDigits: 2 }) : `${(minor / 100).toLocaleString()} ${currency}`;
+/** Totals in several currencies, never added together: "₦70,500 · $54". */
+export const totals = (t: Record<string, number>) => {
+  const parts = Object.entries(t).filter(([, v]) => v > 0).sort(([a], [b]) => (a === "NGN" ? -1 : b === "NGN" ? 1 : a.localeCompare(b)));
+  return parts.length ? parts.map(([c, v]) => amount(v, c)).join(" · ") : "₦0";
+};
 export const fmtDate = (iso: string | null | undefined, time = false) =>
   iso
     ? new Date(iso.length === 10 ? `${iso}T12:00:00+01:00` : iso).toLocaleString("en-GB", {

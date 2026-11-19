@@ -8,15 +8,15 @@ web
 
 ## Users
 
-Nigerians (mostly on phones, often on metered 3G/4G data) who want to earn in dollars by building with AI — freelancers, students and career-switchers, many with no coding background.
+Learners everywhere, starting with Nigeria (mostly on phones, often on metered 3G/4G data) who want to earn in dollars by building with AI — freelancers, students and career-switchers, many with no coding background.
 
 ## Product Purpose
 
-Stynark teaches website building with AI, sold as two one-time tracks, both **self-paced with lifetime access** (pay once, keep it for good, no deadlines): the **Fast Track** (14 lessons, ₦23,500 — business websites, landing pages, online stores, booking systems and web apps with logins and databases, SEO basics, portfolio, pitching, getting paid) and the **Main Track** (26 lessons, ₦46,500 — all of that plus full and local SEO, automation, AI agents and lead generation). The course is written in the app: illustrated beginner lessons, a practical task and a quiz for every lesson, a final assessment and certificate, with progress, XP, levels and streaks. Fifty free public tools (+6 bonus) are the lead-generation layer. Success: a visitor uses a free tool, buys a track (naira, via Paystack), joins the WhatsApp community, finishes the lessons and ships a first paid build.
+Stynark teaches website building with AI, sold as two one-time tracks, both **self-paced with lifetime access** (pay once, keep it for good, no deadlines): the **Fast Track** (14 lessons, $27 or ₦23,500 in Nigeria — business websites, landing pages, online stores, booking systems and web apps with logins and databases, SEO basics, portfolio, pitching, getting paid) and the **Main Track** (26 lessons, $44 or ₦46,500 in Nigeria — all of that plus full and local SEO, automation, AI agents and lead generation). The course is written in the app: illustrated beginner lessons, a practical task and a quiz for every lesson, a final assessment and certificate, with progress, XP, levels and streaks. Fifty free public tools (+6 bonus) are the lead-generation layer. Success: a visitor uses a free tool, buys a track (naira, via Paystack), joins the WhatsApp community, finishes the lessons and ships a first paid build.
 
 ## Positioning
 
-Nigeria-first: naira pricing, Paystack, WhatsApp, Lagos time, ₦→$ maths built into the tools — teaching how to find clients (local and abroad) and get paid, not just how to prompt.
+Global, with Nigerian roots: US-dollar pricing worldwide and naira pricing in Nigeria, Paystack, WhatsApp, and ₦→$ maths built into some tools — teaching how to find clients (local and abroad) and get paid, not just how to prompt.
 
 ## Capabilities and Constraints
 

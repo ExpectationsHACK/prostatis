@@ -12,8 +12,8 @@ export async function GET(_: Request, { params }: { params: Promise<{ kind: stri
   if (kind === "students") {
     const { students } = await listStudents();
     body = csv([
-      ["name", "email", "whatsapp", "joined", "track", "access_until", "active", "progress_pct", "lessons_done", "xp", "last_active", "streak", "final_passed", "paid_ngn"],
-      ...students.map((s) => [s.name, s.email, s.whatsapp, s.joined, s.plan, s.accessEnd, s.active, s.pct, s.lessonsDone, s.xp, s.lastActive, s.streak, s.finalPassed, s.paidKobo / 100]),
+      ["name", "email", "whatsapp", "joined", "track", "access_until", "active", "progress_pct", "lessons_done", "xp", "last_active", "streak", "final_passed", "paid_ngn", "paid_usd"],
+      ...students.map((s) => [s.name, s.email, s.whatsapp, s.joined, s.plan, s.accessEnd, s.active, s.pct, s.lessonsDone, s.xp, s.lastActive, s.streak, s.finalPassed, (s.paid.NGN ?? 0) / 100, (s.paid.USD ?? 0) / 100]),
     ]);
   } else if (kind === "payments") {
     const { students, payments } = await listStudents();

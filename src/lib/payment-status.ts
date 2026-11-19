@@ -12,10 +12,11 @@ export type PaymentOutcome =
 /** Paystack statuses that can still turn into a success (bank transfers and USSD often sit here). */
 const PENDING = new Set(["ongoing", "pending", "processing", "queued", "send_birthday", "send_otp", "send_pin", "send_phone", "send_address", "open_url"]);
 
-export function classifyPayment(tx: { status: string; amount: number; currency: string; gateway_response?: string | null }, priceKobo: number | number[]): PaymentOutcome {
+/** `priceKobo`: the amount(s) a successful payment may be, in the subunit of `currency` (NGN unless given). */
+export function classifyPayment(tx: { status: string; amount: number; currency: string; gateway_response?: string | null }, priceKobo: number | number[], currency = "NGN"): PaymentOutcome {
   const accepted = Array.isArray(priceKobo) ? priceKobo : [priceKobo];
   const status = tx.status.toLowerCase();
-  if (status === "success") return tx.currency === "NGN" && accepted.includes(tx.amount) ? { kind: "success" } : { kind: "mismatch" };
+  if (status === "success") return tx.currency === currency && accepted.includes(tx.amount) ? { kind: "success" } : { kind: "mismatch" };
   if (PENDING.has(status)) return { kind: "pending" };
   return { kind: "failed", reason: failureReason(status, tx.gateway_response ?? ""), reversed: status === "reversed" };
 }

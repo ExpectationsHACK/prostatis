@@ -18,20 +18,22 @@ export const site = {
   subhead:
     "Build business websites, online stores, landing pages, booking systems, web apps and your portfolio, then learn exactly what to charge and how to land paying clients. Learn at your own pace, no coding background needed.",
   description:
-    "Learn to build websites with AI and sell them to businesses. The 14-lesson Fast Track takes you from beginner to your first website; the 26-lesson Main Track adds SEO, automation and AI agents. Pay once in naira, keep lifetime access, with 50 free tools.",
+    "Learn to build websites with AI and sell them to businesses. The 14-lesson Fast Track takes you from beginner to your first website; the 26-lesson Main Track adds SEO, automation and AI agents. Pay once, keep lifetime access, with 50 free tools.",
   /** Public support address, shown on the legal pages. */
   contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "",
 };
 
 /**
  * Two one-time programmes, self-paced, with lifetime access: a payment never expires, so nothing
- * here is measured in days. Prices are in naira; lesson counts come from the curriculum.
+ * here is measured in days. Visitors in Nigeria pay in naira, everyone else in US dollars
+ * (src/lib/pricing.ts); lesson counts come from the curriculum.
  */
 export const plans = [
   {
     id: "fast_track",
     name: "Fast Track",
     priceNgn: 23500,
+    priceUsd: 27,
     formerPricesNgn: [15000],
     period: "14 lessons",
     highlight: true,
@@ -44,7 +46,7 @@ export const plans = [
       "SEO basics that get a site found: keywords, titles, meta tags and a sitemap",
       "Your own portfolio website that shows clients what you can do",
       "Your website package, your price list and a proposal, plus 10 pitches sent to real businesses",
-      "The handover and get-paid steps to deliver a project and collect every naira",
+      "The handover and get-paid steps to deliver a project and collect every payment",
       "A verified certificate when you pass the final assessment: download it, get it by email, share a public proof link",
       "WhatsApp community access",
     ],
@@ -53,6 +55,7 @@ export const plans = [
     id: "main_track",
     name: "Main Track",
     priceNgn: 46500,
+    priceUsd: 44,
     formerPricesNgn: [30000],
     period: "26 lessons",
     highlight: false,
@@ -89,18 +92,4 @@ export function formatUsd(n: number, digits = 2) {
       maximumFractionDigits: digits,
     })
   );
-}
-
-/**
- * Prices changed on 2026-11-18. A Paystack checkout opened before then was created at the old
- * price, so one paid a little later is still valid at that amount. New checkouts are always
- * created on the server at the current price, so the old amount can't be started again.
- */
-export const PRICES_CHANGED_AT = "2026-11-18T23:59:59Z";
-
-/** Amounts (in kobo) a payment for this plan may be, given when its checkout was opened. */
-export function acceptedAmountsKobo(plan: Plan, openedAt?: string | null): number[] {
-  const opened = openedAt ? Date.parse(openedAt) : NaN;
-  const former = opened < Date.parse(PRICES_CHANGED_AT) ? plan.formerPricesNgn.map((n) => n * 100) : [];
-  return [plan.priceNgn * 100, ...former];
 }

@@ -7,7 +7,8 @@ import { headingsOf, Markdown } from "@/components/markdown";
 import { SharePills } from "@/components/share-pills";
 import { btn, byline, size } from "@/components/ui";
 import { getPublished, listPublished, readingMinutes, relatedPosts, seoDescription, seoTitle, tagSlug } from "@/lib/blog";
-import { formatNgn, plans, site } from "@/lib/site";
+import { site } from "@/lib/site";
+import { Price } from "@/components/price";
 
 export const revalidate = 300;
 
@@ -54,7 +55,6 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const toc = headingsOf(post.content_md).filter((h) => h.level === 2);
   const url = `${site.url}/blog/${post.slug}`;
   const updated = post.published_at && post.updated_at.slice(0, 10) > post.published_at.slice(0, 10);
-  const from = formatNgn(Math.min(...plans.map((p) => p.priceNgn)));
 
   const jsonLd = [
     {
@@ -146,7 +146,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           <p className="text-[13px] font-semibold text-brand">Learn it properly</p>
           <p className="display mt-2 text-balance text-[22px] leading-tight text-white sm:text-[30px]">Build websites with AI and turn it into income.</p>
           <p className="mt-2 text-[15px] leading-relaxed text-white/70">
-            Step-by-step lessons, real client projects and a verified certificate when you finish. From {from}, paid once.
+            Step-by-step lessons, real client projects and a verified certificate when you finish. From <Price min />, paid once.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <Link href="/#tracks" className={`${btn.primary} ${size.md}`}>

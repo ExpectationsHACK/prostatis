@@ -36,7 +36,9 @@ async function paystack<T>(path: string, init?: RequestInit): Promise<T> {
 
 export function initializeTransaction(input: {
   email: string;
+  /** In the currency's subunit: kobo for NGN, cents for USD. */
   amountKobo: number;
+  currency: "NGN" | "USD";
   reference: string;
   callbackUrl: string;
   metadata: Record<string, unknown>;
@@ -46,7 +48,7 @@ export function initializeTransaction(input: {
     body: JSON.stringify({
       email: input.email,
       amount: input.amountKobo,
-      currency: "NGN",
+      currency: input.currency,
       reference: input.reference,
       callback_url: input.callbackUrl,
       metadata: input.metadata,

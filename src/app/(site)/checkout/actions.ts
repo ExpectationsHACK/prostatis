@@ -3,6 +3,8 @@
 import { redirect } from "next/navigation";
 import { getMySubscription, getPlan, includesPlan, newReference } from "@/lib/membership";
 import { initializeTransaction, paymentsMode } from "@/lib/paystack";
+import { priceOf } from "@/lib/pricing";
+import { visitorCurrency } from "@/lib/server/currency";
 import { site } from "@/lib/site";
 import { getCurrentUser } from "@/lib/supabase/server";
 
@@ -24,19 +26,23 @@ export async function startCheckout(form: FormData) {
     redirect(`/checkout/${plan.id}?error=unavailable`);
   }
 
+  // Naira in Nigeria, US dollars everywhere else: decided here from the request, never from the form.
+  const currency = await visitorCurrency();
   let url: string;
   try {
     const tx = await initializeTransaction({
       email: user.email,
-      amountKobo: plan.priceNgn * 100,
+      amountKobo: priceOf(plan, currency) * 100,
+      currency,
       reference,
       callbackUrl: `${site.url}/api/paystack/callback`,
-      metadata: { user_id: user.id, plan: plan.id },
+      metadata: { user_id: user.id, plan: plan.id, currency },
     });
     url = tx.authorization_url;
   } catch (e) {
     console.error(e);
-    redirect(`/checkout/${plan.id}?error=init`);
+    // Paystack refuses dollar charges until USD is switched on for the account.
+    redirect(`/checkout/${plan.id}?error=${currency === "USD" && /currency/i.test(String(e)) ? "currency" : "init"}`);
   }
   redirect(url);
 }

@@ -7,7 +7,9 @@ import { btn, size } from "@/components/ui";
 import { longDate, money, myPayments } from "@/lib/billing";
 import { dashboardContext } from "@/lib/dashboard";
 import { getPlan, hasAccess } from "@/lib/membership";
-import { formatNgn, plans, refund, site } from "@/lib/site";
+import { priceLabel } from "@/lib/pricing";
+import { visitorCurrency } from "@/lib/server/currency";
+import { plans, refund, site } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Billing", robots: { index: false } };
 
@@ -23,6 +25,7 @@ function Section({ title, icon: Icon, children, className = "" }: { title: strin
 }
 
 export default async function BillingPage() {
+  const currency = await visitorCurrency();
   const { user, sub } = await dashboardContext();
   if (!user) redirect("/login?next=/dashboard/billing");
 
@@ -52,7 +55,7 @@ export default async function BillingPage() {
                 <span className={"label rounded-full border border-edge px-2 py-0.5 " + (active ? "bg-[#e3f5e9] text-ink" : "bg-danger/10 text-danger")}>{active ? "Active" : "Ended"}</span>
               </p>
               <p className="mt-1 font-mono text-[13px] text-muted">
-                {sub.permanent ? "Permanent account: no payment needed" : `Paid once${lastPaid ? `: ${money(lastPaid.amount_kobo, lastPaid.currency)} on ${longDate(lastPaid.created_at)}` : `: ${formatNgn(plan.priceNgn)}`}`}
+                {sub.permanent ? "Permanent account: no payment needed" : `Paid once${lastPaid ? `: ${money(lastPaid.amount_kobo, lastPaid.currency)} on ${longDate(lastPaid.created_at)}` : `: ${priceLabel(plan, currency)}`}`}
                 {plan.id === "main_track" && " · includes the Fast Track"}
               </p>
               <p className="mt-4 flex items-center gap-2 text-[15px] text-ink">
@@ -94,7 +97,7 @@ export default async function BillingPage() {
             ))}
           </ul>
           <Link href={`/checkout/${mainTrack.id}`} className={`${btn.primary} ${size.md} mt-4`}>
-            Enroll Now: Main Track · {formatNgn(mainTrack.priceNgn)}
+            Enroll Now: Main Track · {priceLabel(mainTrack, currency)}
           </Link>
         </Section>
       )}
@@ -107,7 +110,7 @@ export default async function BillingPage() {
               <p className="label text-brand-text">{p.period}</p>
               <p className="display mt-1 text-[21px] sm:text-[24px] text-ink">{p.name}</p>
               <p className="mt-1 text-[14px] leading-snug text-muted">{p.blurb}</p>
-              <p className="display mt-3 text-[24px] sm:text-[28px] text-ink">{formatNgn(p.priceNgn)}</p>
+              <p className="display mt-3 text-[24px] sm:text-[28px] text-ink">{priceLabel(p, currency)}</p>
               <p className="font-mono text-[12px] text-muted">one payment · lifetime access</p>
               <Link href={`/checkout/${p.id}`} className={`${btn.primary} ${size.md} mt-4`}>
                 Enroll Now

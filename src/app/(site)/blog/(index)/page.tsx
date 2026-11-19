@@ -7,7 +7,7 @@ export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Blog: building and selling websites with AI",
-  description: `Practical guides from ${site.name}: building websites with AI, finding clients, pricing, SEO and getting paid, written for Nigeria.`,
+  description: `Practical guides from ${site.name}: building websites with AI, finding clients, pricing, SEO and getting paid, for freelancers and beginners everywhere.`,
   alternates: { canonical: "/blog", types: { "application/rss+xml": "/blog/rss.xml" } },
 };
 

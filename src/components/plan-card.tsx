@@ -2,7 +2,8 @@ import { ArrowRight, Award, CalendarClock, Check, Layers, MessageCircle, ShieldC
 import Link from "next/link";
 import { btn, size } from "@/components/ui";
 import { fastTrack, mainTrack } from "@/lib/curriculum";
-import { formatNgn, type Plan } from "@/lib/site";
+import type { Plan } from "@/lib/site";
+import { Price } from "@/components/price";
 
 const lessonsOf = (id: Plan["id"]) => (id === "main_track" ? mainTrack : fastTrack).modules.length;
 
@@ -35,7 +36,7 @@ export function PlanCard({ plan, show, badge, compact = false }: { plan: Plan; s
       {/* Price and key facts */}
       <div className={px + (compact ? " pt-3" : " pt-6")}>
         <p className="flex flex-wrap items-baseline gap-x-2">
-          <span className={"display tabular leading-none text-ink " + (compact ? "text-[32px] sm:text-[40px]" : "text-[40px] sm:text-[48px]")}>{formatNgn(plan.priceNgn)}</span>
+          <span className={"display tabular leading-none text-ink " + (compact ? "text-[32px] sm:text-[40px]" : "text-[40px] sm:text-[48px]")}><Price plan={plan.id} /></span>
           <span className="text-[14px] font-medium text-muted">one-time payment</span>
         </p>
         <dl className={(compact ? "mt-3" : "mt-5") + " grid grid-cols-3 divide-x-2 divide-line rounded-[12px] border-2 border-line text-center"}>
@@ -96,9 +97,9 @@ export function PlanCard({ plan, show, badge, compact = false }: { plan: Plan; s
 
       <div className={px + (compact ? " pb-3 pt-3" : " pb-6 pt-6")}>
         <Link href={`/checkout/${plan.id}`} className={`${hi ? btn.primary : btn.accent} ${compact ? size.md : size.lg} w-full`}>
-          Enroll Now · {formatNgn(plan.priceNgn)} <ArrowRight className="size-4" aria-hidden />
+          Enroll Now · <Price plan={plan.id} /> <ArrowRight className="size-4" aria-hidden />
         </Link>
-        <p className={(compact ? "mt-1.5 text-[11.5px]" : "mt-3 text-[12px]") + " text-center text-muted"}>Pay by card, bank transfer or USSD with Paystack. No subscription.</p>
+        <p className={(compact ? "mt-1.5 text-[11.5px]" : "mt-3 text-[12px]") + " text-center text-muted"}>Secure card payment with Paystack. No subscription.</p>
       </div>
     </div>
   );

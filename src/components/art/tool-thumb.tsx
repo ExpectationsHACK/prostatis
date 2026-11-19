@@ -51,9 +51,9 @@ const T: Record<string, () => ReactNode> = {
   ),
   "hero-copy-generator": () => (
     <Stage d={8}>
-      <Win title="mamaskitchen.ng" className="w-[250px]" bodyClass="p-3">
+      <Win title="mamaskitchen.com" className="w-[250px]" bodyClass="p-3">
         <p className={"text-[19px] font-bold leading-[1.05] tracking-[-0.02em] text-[#151515] " + m("type")} style={at(0.3)}>Hot lunch at your desk.</p>
-        <p className={`${t.sm} mt-1.5 text-[#6b675f] ` + m("in")} style={at(1.6)}>Home-style meals delivered across Ikeja, from ₦3,500.</p>
+        <p className={`${t.sm} mt-1.5 text-[#6b675f] ` + m("in")} style={at(1.6)}>Home-style meals delivered across town, from $12.</p>
         <div className="mt-2.5 flex items-center gap-2">
           <span className={`rounded-full bg-[#1faa53] px-2.5 py-1 ${t.sm} font-semibold text-white ` + m("pop")} style={at(2.2)}>Order on WhatsApp</span>
           <span className={`flex items-center gap-1 ${t.xs} text-[#6b675f] ` + m("in")} style={at(2.6)}><Stars /> 4.8 · 300+ orders</span>
@@ -68,11 +68,11 @@ const T: Record<string, () => ReactNode> = {
           <div className="relative h-[62px]">
             <div className={"absolute inset-0 " + m("swap-a")} style={at(0)}>
               <p className="text-[32px] font-bold leading-none" style={{ fontFamily: h }}>Aa</p>
-              <p className="mt-1 text-[9px] leading-snug text-[#6b675f]" style={{ fontFamily: b }}>Fast websites for Lagos businesses.</p>
+              <p className="mt-1 text-[9px] leading-snug text-[#6b675f]" style={{ fontFamily: b }}>Fast websites for local businesses.</p>
             </div>
             <div className={"absolute inset-0 " + m("swap-b")} style={at(0)}>
               <p className="text-[32px] font-bold leading-none" style={{ fontFamily: b }}>Aa</p>
-              <p className="mt-1 text-[9px] leading-snug text-[#6b675f]" style={{ fontFamily: h }}>Fast websites for Lagos businesses.</p>
+              <p className="mt-1 text-[9px] leading-snug text-[#6b675f]" style={{ fontFamily: h }}>Fast websites for local businesses.</p>
             </div>
           </div>
           <p className={`${t.xs} mt-1.5 border-t border-[#efece6] pt-1 font-semibold`}>
@@ -114,7 +114,7 @@ const T: Record<string, () => ReactNode> = {
     <Stage d={9}>
       <Box className="relative w-[226px] p-3">
         <p className={t.h}>Website design brief</p>
-        {[["Goal", "More enquiries from Lekki"], ["Pages", "Home · About · Listings"], ["Look", "Premium, calm, photo-led"], ["Budget", "₦650,000 · 3 weeks"]].map(([k, v], i) => (
+        {[["Goal", "More enquiries from nearby"], ["Pages", "Home · About · Listings"], ["Look", "Premium, calm, photo-led"], ["Budget", "$1,500 · 3 weeks"]].map(([k, v], i) => (
           <div key={k} className={"mt-1.5 flex gap-2 border-b border-[#efece6] pb-1 " + m("left")} style={at(0.3 + i * 0.35)}>
             <span className={`${t.xs} w-10 text-[#8a857b]`}>{k}</span>
             <span className={`${t.xs} font-semibold`}>{v}</span>
@@ -142,7 +142,7 @@ const T: Record<string, () => ReactNode> = {
       </div>
       <Box className={"w-[88px] p-2 text-center " + m("pop")} style={at(1.8)}>
         <p className={`${t.xs} text-[#8a857b]`}>To start</p>
-        <p className="text-[20px] font-bold">₦0</p>
+        <p className="text-[20px] font-bold">$0</p>
         <p className={`${t.xs} text-[#16794a]`}>free plans</p>
       </Box>
     </Stage>
@@ -150,7 +150,7 @@ const T: Record<string, () => ReactNode> = {
   "claude-md-generator": () => (
     <Stage d={9}>
       <Win title="CLAUDE.md" dark className="w-[252px]" bodyClass="space-y-[3px] p-2.5">
-        {[["# Mama's Kitchen website", "text-white"], ["## Always", "text-[#f0946b]"], ["- Mobile-first, pages under 1MB", "text-white/70"], ["- Prices in naira: ₦4,500", "text-white/70"], ["- Ask before adding packages", "text-white/70"], ["## Decisions", "text-[#f0946b]"]].map(([l, c], i) => (
+        {[["# Mama's Kitchen website", "text-white"], ["## Always", "text-[#f0946b]"], ["- Mobile-first, pages under 1MB", "text-white/70"], ["- Prices shown: $15", "text-white/70"], ["- Ask before adding packages", "text-white/70"], ["## Decisions", "text-[#f0946b]"]].map(([l, c], i) => (
           <p key={l} className={`${t.code} ${c} ` + m("type")} style={at(0.2 + i * 0.45)}>{l}</p>
         ))}
         <span className={"inline-block h-[9px] w-[5px] bg-[#f0946b] " + loop("blink")} />
@@ -231,9 +231,9 @@ const T: Record<string, () => ReactNode> = {
       <Box className="w-[240px] p-2.5">
         <div className={`flex items-center gap-1.5 rounded-[6px] border border-[#e4e0d8] px-2 py-1 ${t.md}`}>
           <Search className="size-3 text-[#8a857b]" />
-          <span className={m("type")} style={at(0.1)}>glow beauty lagos</span>
+          <span className={m("type")} style={at(0.1)}>glow beauty studio</span>
         </div>
-        {[["glowbeauty.ng", true], ["getglow.com", true], ["glow.com", false], ["glowhq.co", true]].map(([d, ok], i) => (
+        {[["glowbeauty.com", true], ["getglow.com", true], ["glow.com", false], ["glowhq.co", true]].map(([d, ok], i) => (
           <div key={d as string} className={"mt-1.5 flex items-center justify-between border-b border-[#efece6] pb-1 " + m("left")} style={at(1.4 + i * 0.35)}>
             <span className={`relative ${t.md} font-semibold ${ok ? "" : "text-[#8a857b]"}`}>
               {d as string}
@@ -279,7 +279,7 @@ const T: Record<string, () => ReactNode> = {
         <div className="mt-1.5 flex gap-1">
           {["9:00", "11:00", "14:00"].map((s, i) => <span key={s} className={`flex-1 rounded-[4px] border border-[#e4e0d8] py-[2px] text-center ${t.xs} ` + (i === 1 ? m("mark") : "")} style={i === 1 ? at(1.4, { off: "#fff", on: "#151515", "on-ink": "#fff" }) : undefined}>{s}</span>)}
         </div>
-        <p className={`${t.sm} mt-1.5 font-semibold ` + m("type")} style={at(2.2)}>Sat 13 Oct · 11:00 · ₦5,000 deposit paid</p>
+        <p className={`${t.sm} mt-1.5 font-semibold ` + m("type")} style={at(2.2)}>Sat 13 Oct · 11:00 · $15 deposit paid</p>
       </Box>
     </Stage>
   ),
@@ -288,7 +288,7 @@ const T: Record<string, () => ReactNode> = {
       <Phone className="h-[168px] w-[100px]">
         <p className={`bg-[#075e54] px-1.5 pb-1 pt-2.5 ${t.xs} font-semibold text-white`}>Ada&apos;s Bakery · Catalog</p>
         <div className="grid grid-cols-2 gap-1 p-1">
-          {[["Cake", "₦18,000", "#f7cdb0"], ["Meat pie", "₦4,500", "#efe2cf"], ["Small chops", "₦25,000", "#f9dcc9"], ["Puff-puff", "₦2,000", "#e8d9c4"]].map(([n, p, c], i) => (
+          {[["Cake", "$45", "#f7cdb0"], ["Meat pie", "$15", "#efe2cf"], ["Small chops", "$60", "#f9dcc9"], ["Puff-puff", "$5", "#e8d9c4"]].map(([n, p, c], i) => (
             <div key={n} className={"rounded-[4px] border border-[#efece6] " + m("pop")} style={at(0.3 + i * 0.3)}>
               <div className="h-[24px] rounded-t-[4px]" style={{ background: c }} />
               <p className="px-0.5 text-[6px]">{n}</p>
@@ -309,7 +309,7 @@ const T: Record<string, () => ReactNode> = {
   "landing-page-copy-generator": () => (
     <Stage d={9}>
       <Box className="w-[252px] space-y-1 p-2.5">
-        {[["HERO", "Lose 8kg eating the food you love."], ["PROBLEM", "Diets that ignore Nigerian food"], ["BENEFITS", "Meal plans · 20-minute workouts"], ["OFFER", "₦120,000 · Start my plan"], ["GUARANTEE", "Full refund within 14 days"]].map(([k, v], i) => (
+        {[["HERO", "Lose 8kg eating the food you love."], ["PROBLEM", "Diets that ignore the food you love"], ["BENEFITS", "Meal plans · 20-minute workouts"], ["OFFER", "$300 · Start my plan"], ["GUARANTEE", "Full refund within 14 days"]].map(([k, v], i) => (
           <div key={k} className="flex gap-2 border-b border-[#efece6] pb-1">
             <span className={`w-[52px] shrink-0 ${t.xs} font-bold ${i === 0 ? "text-[#b8400f]" : "text-[#8a857b]"}`}>{k}</span>
             <span className={`${t.sm} truncate ` + m("type")} style={at(0.3 + i * 0.5)}>{v}</span>
@@ -321,7 +321,7 @@ const T: Record<string, () => ReactNode> = {
   "pricing-layout-picker": () => (
     <Stage d={8}>
       <div className="relative flex items-end gap-2">
-        {[["Starter", "₦80k", false], ["Growth", "₦150k", true], ["Pro", "₦300k", false]].map(([n, p, hi], i) => (
+        {[["Starter", "$200", false], ["Growth", "$400", true], ["Pro", "$800", false]].map(([n, p, hi], i) => (
           <div key={n as string} className={m("in")} style={at(0.2 + i * 0.25)}>
             <Box className={`w-[80px] p-2 ${hi ? "-translate-y-2.5 border-[#eb5e28] bg-[#fdeee6]" : ""}`}>
               {hi && <p className={`mb-1 rounded-full bg-[#151515] text-center text-[6px] font-bold text-white ` + m("pop")} style={at(1.2)}>MOST POPULAR</p>}
@@ -338,7 +338,7 @@ const T: Record<string, () => ReactNode> = {
   ),
   "faq-generator": () => (
     <Stage d={9} className="flex-col gap-1.5">
-      {[["How much does a repair cost?", "From ₦25,000. We confirm the price before we start."], ["How long does it take?", ""], ["Do you give a warranty?", ""]].map(([q, a], i) => (
+      {[["How much does a repair cost?", "From $60. We confirm the price before we start."], ["How long does it take?", ""], ["Do you give a warranty?", ""]].map(([q, a], i) => (
         <Box key={q} className={"w-[252px] px-2.5 py-1.5 " + m("in")} style={at(0.2 + i * 0.3)}>
           <div className="flex justify-between"><span className={`${t.md} font-semibold`}>{q}</span><span className={`${t.md} font-bold text-[#b8400f]`}>{a ? "−" : "+"}</span></div>
           {a && <p className={`${t.sm} mt-1 text-[#6b675f] ` + m("type")} style={at(1.2)}>{a}</p>}
@@ -380,8 +380,8 @@ const T: Record<string, () => ReactNode> = {
   "meta-tag-generator": () => (
     <Stage d={8}>
       <Box className="w-[268px] p-3">
-        <p className="text-[8.5px] text-[#4d5156]">glowbeauty.ng › lash-extensions</p>
-        <p className={"text-[13px] leading-tight text-[#1a0dab] " + m("type")} style={at(0.2)}>Lash Extensions in Lekki | Glow Beauty</p>
+        <p className="text-[8.5px] text-[#4d5156]">glowbeauty.com › lash-extensions</p>
+        <p className={"text-[13px] leading-tight text-[#1a0dab] " + m("type")} style={at(0.2)}>Lash Extensions Downtown | Glow Beauty</p>
         <p className={"mt-0.5 text-[9px] leading-snug text-[#4d5156] " + m("in")} style={at(1.3)}>Natural-looking lashes that last 4 weeks. Book online today and pay easily.</p>
         <div className="mt-2 flex gap-1.5">
           <span className={`flex items-center gap-1 ${chip} ${t.xs} font-semibold text-[#16794a] ` + m("pop")} style={at(2.1)}><Tick /> Title 41/60</span>
@@ -428,7 +428,7 @@ const T: Record<string, () => ReactNode> = {
   ),
   "blog-topic-generator": () => (
     <Stage d={8} className="flex-col gap-1.5">
-      {[["COST", "How much does solar cost in Abuja?"], ["MISTAKES", "7 solar mistakes that cost you money"], ["COMPARE", "Inverter vs generator: the real numbers"], ["LOCAL", "Best areas in Abuja for solar"]].map(([k, x], i) => (
+      {[["COST", "How much does solar cost at home?"], ["MISTAKES", "7 solar mistakes that cost you money"], ["COMPARE", "Inverter vs generator: the real numbers"], ["LOCAL", "Best roofs for solar panels"]].map(([k, x], i) => (
         <Box key={x} className={"flex w-[262px] items-center gap-2 px-2 py-1.5 " + m("left")} style={at(0.2 + i * 0.4)}>
           <FileText className="size-3.5 shrink-0 text-[#b8400f]" />
           <span className={`${t.sm} flex-1 truncate`}>{x}</span>
@@ -440,7 +440,7 @@ const T: Record<string, () => ReactNode> = {
   "backlink-outreach-scripts": () => (
     <Stage d={9}>
       <Win title="New message" className="w-[262px]" bodyClass="p-2.5">
-        <p className={`${t.xs} text-[#8a857b] ` + m("type")} style={at(0.2)}>To: editor@techblog.ng</p>
+        <p className={`${t.xs} text-[#8a857b] ` + m("type")} style={at(0.2)}>To: editor@techblog.com</p>
         <p className={`${t.sm} font-semibold ` + m("type")} style={at(0.9)}>Subject: Story idea: first 100 customers online</p>
         <div className="mt-1.5 space-y-1">
           {["92%", "84%", "60%"].map((w, i) => (
@@ -464,7 +464,7 @@ const T: Record<string, () => ReactNode> = {
           <span className={`${t.xs} font-semibold`}>1,400 words</span>
         </div>
         <div className="mt-1 h-[4px] rounded-full bg-[#f1ede6]"><span className={"block h-full rounded-full bg-[#16794a] " + m("grow-x")} style={at(0.2)} /></div>
-        {[["H1", "Cost of solar installation in Abuja", 0], ["H2", "What affects the price", 1], ["H2", "Typical prices (table)", 1], ["H2", "How to save money", 1], ["H2", "FAQ and schema", 1]].map(([h, l, ind], i) => (
+        {[["H1", "Cost of a home solar installation", 0], ["H2", "What affects the price", 1], ["H2", "Typical prices (table)", 1], ["H2", "How to save money", 1], ["H2", "FAQ and schema", 1]].map(([h, l, ind], i) => (
           <p key={l as string} className={`${t.sm} mt-1 ` + m("left")} style={{ ...at(0.6 + i * 0.35), marginLeft: (ind as number) * 12 }}>
             <span className="font-bold text-[#b8400f]">{h as string}</span> {l as string}
           </p>
@@ -480,7 +480,7 @@ const T: Record<string, () => ReactNode> = {
         </div>
         <div className="p-2">
           <p className={`${t.md} font-semibold ` + m("type")} style={at(0.9)}>Party trays this weekend</p>
-          <p className={`${t.xs} text-[#6b675f] ` + m("in")} style={at(1.6)}>Jollof, fried rice and small chops · Ikeja</p>
+          <p className={`${t.xs} text-[#6b675f] ` + m("in")} style={at(1.6)}>Rice bowls, wraps and small plates · Downtown</p>
           <div className="mt-1.5 flex items-center justify-between">
             <span className={`rounded-full border border-[#151515] px-2 py-[1px] ${t.xs} font-semibold ` + m("glow")} style={at(2.4)}>Order online</span>
             <span className={`${t.xs} text-[#16794a] ` + m("in")} style={at(3)}>+46 views</span>
@@ -611,7 +611,7 @@ const T: Record<string, () => ReactNode> = {
         <Gift className="size-5 text-[#b8400f]" />
         <p className="mt-1 text-[13px] font-bold leading-tight">Free 5-point website check</p>
         <div className={`mt-2 rounded-[4px] border border-[#e4e0d8] px-1.5 py-[3px] ${t.xs}`}>
-          <span className={"inline-block " + m("type")} style={at(0.3)}>ada@glowbeauty.ng</span>
+          <span className={"inline-block " + m("type")} style={at(0.3)}>ada@glowbeauty.com</span>
         </div>
         <p className={`mt-1 rounded-[4px] bg-[#eb5e28] py-[3px] text-center ${t.xs} font-semibold ` + m("press")} style={at(1.8)}>Get my check</p>
       </Box>
@@ -628,10 +628,10 @@ const T: Record<string, () => ReactNode> = {
     <Stage d={9}>
       <Box className="w-[272px] overflow-hidden">
         <div className={`flex items-center gap-1.5 border-b border-[#efece6] px-2 py-1.5 ${t.sm}`}>
-          <Search className="size-3 text-[#8a857b]" /><span className={m("type")} style={at(0.1)}>dental clinic in Lagos</span>
+          <Search className="size-3 text-[#8a857b]" /><span className={m("type")} style={at(0.1)}>dental clinic near me</span>
         </div>
         <div className={`grid grid-cols-[1.2fr_0.8fr_0.9fr_0.4fr] bg-[#f7f5f1] px-2 py-[2px] ${t.xs} font-semibold text-[#8a857b]`}><span>Business</span><span>Area</span><span>Website</span><span>Fit</span></div>
-        {[["SmileCare", "Lekki", "none", "5"], ["DentPro", "Ikeja", "outdated", "4"], ["BrightTeeth", "Yaba", "none", "5"], ["OralPlus", "VI", "good", "2"]].map((r, i) => (
+        {[["SmileCare", "Northside", "none", "5"], ["DentPro", "Downtown", "outdated", "4"], ["BrightTeeth", "Eastside", "none", "5"], ["OralPlus", "Uptown", "good", "2"]].map((r, i) => (
           <div key={r[0]} className={"grid grid-cols-[1.2fr_0.8fr_0.9fr_0.4fr] border-t border-[#efece6] px-2 py-[3px] " + m("left")} style={at(1.3 + i * 0.3)}>
             {r.map((c, j) => <span key={j} className={`${t.xs} ${j === 3 ? `font-bold ${Number(c) >= 4 ? "text-[#16794a]" : "text-[#8a857b]"}` : ""}`}>{c}</span>)}
           </div>
@@ -654,7 +654,7 @@ const T: Record<string, () => ReactNode> = {
   ),
   "web-scraper-config": () => (
     <Stage d={9} className="gap-2">
-      <Win title="directory.ng" className="relative w-[142px]" bodyClass="relative p-2">
+      <Win title="directory.com" className="relative w-[142px]" bodyClass="relative p-2">
         {[0, 1, 2].map((i) => (
           <div key={i} className="mb-1 rounded-[4px] border border-dashed border-[#eb5e28] p-1"><Line w="70%" c="bg-[#dcd6c8]" /><div className="mt-0.5"><Line w="45%" /></div></div>
         ))}
@@ -685,7 +685,7 @@ const T: Record<string, () => ReactNode> = {
   ),
   "landing-page-checklist": () => (
     <Stage d={8} className="gap-2.5">
-      <Win title="offer.ng" className="w-[160px]" bodyClass="p-2">
+      <Win title="offer.com" className="w-[160px]" bodyClass="p-2">
         {["Clear headline", "One button", "Real proof", "Fast on mobile"].map((x, i) => (
           <div key={x} className={"mb-1 flex items-center gap-1.5 " + m("in")} style={at(0.3 + i * 0.35)}><Tick /><span className={t.xs}>{x}</span></div>
         ))}
@@ -796,7 +796,7 @@ const T: Record<string, () => ReactNode> = {
       <Box className="relative w-[214px] p-3">
         <p className={`${t.xs} font-semibold tracking-[0.1em] text-[#8a857b]`}>PROPOSAL · BRIGHTSIDE DENTAL</p>
         {["1. The problem", "2. What you'll get", "3. Timeline: 2 weeks", "4. Investment"].map((l, i) => <p key={l} className={`${t.md} mt-1 ` + m("left")} style={at(0.3 + i * 0.35)}>{l}</p>)}
-        <p className={"mt-1.5 text-[19px] font-bold " + m("pop")} style={at(1.9)}>₦650,000 <span className={`${t.xs} font-normal text-[#8a857b]`}>· 50% upfront</span></p>
+        <p className={"mt-1.5 text-[19px] font-bold " + m("pop")} style={at(1.9)}>$1,500 <span className={`${t.xs} font-normal text-[#8a857b]`}>· 50% upfront</span></p>
         <span className={`absolute right-3 top-8 rounded-[4px] border-2 border-[#16794a] px-1.5 ${t.sm} font-bold text-[#16794a] ` + m("stamp")} style={at(2.8)}>ACCEPTED</span>
       </Box>
     </Stage>
@@ -816,10 +816,10 @@ const T: Record<string, () => ReactNode> = {
     <Stage d={9}>
       <Box className="relative w-[204px] p-3">
         <div className="flex justify-between"><p className={`${t.md} font-bold`}>INVOICE</p><p className={`${t.xs} text-[#8a857b]`}>INV-001</p></div>
-        {[["Website build", "₦450,000"], ["WhatsApp chat setup", "₦150,000"]].map(([a, b], i) => (
+        {[["Website build", "$1,100"], ["WhatsApp chat setup", "$400"]].map(([a, b], i) => (
           <div key={a} className={"mt-1 flex justify-between border-b border-[#efece6] pb-0.5 " + m("left")} style={at(0.3 + i * 0.4)}><span className={t.xs}>{a}</span><span className={t.xs}>{b}</span></div>
         ))}
-        <p className={"mt-1.5 text-right text-[17px] font-bold " + m("pop")} style={at(1.3)}>₦600,000</p>
+        <p className={"mt-1.5 text-right text-[17px] font-bold " + m("pop")} style={at(1.3)}>$1,500</p>
         <span className={"absolute -right-2 top-6 rounded-[4px] border-[3px] border-[#16794a] bg-white/80 px-1.5 font-code text-[13px] font-bold text-[#16794a] " + m("stamp")} style={at(2.3)}>PAID</span>
       </Box>
     </Stage>
@@ -831,7 +831,7 @@ const T: Record<string, () => ReactNode> = {
           <span className={"grid size-10 place-items-center rounded-full bg-[#eb5e28] text-[15px] font-bold " + m("pop")} style={at(0.2)}>T</span>
           <p className={`${t.md} mt-1 font-bold`}>Tolu Builds</p>
           <p className={`${t.xs} text-[#16794a]`}>Business account</p>
-          <p className={`${t.xs} mt-1.5 text-center ` + m("type")} style={at(0.8)}>AI websites for Lagos businesses.</p>
+          <p className={`${t.xs} mt-1.5 text-center ` + m("type")} style={at(0.8)}>AI websites for local businesses.</p>
           <p className={`${t.xs} text-center ` + m("type")} style={at(1.6)}>Live in 5 days. Send HI 👇</p>
           <p className={`${t.xs} mt-1.5 font-semibold text-[#16794a] ` + m("pop")} style={at(2.6)}>118/139 characters ✓</p>
         </div>
@@ -857,7 +857,7 @@ const T: Record<string, () => ReactNode> = {
       <Phone className="h-[168px] w-[94px]">
         <div className="flex h-full flex-col justify-end bg-[linear-gradient(180deg,#2a2a2a,#111)] p-1.5">
           <div className="relative h-[34px]">
-            <p className={"absolute bottom-0 rounded-[4px] bg-[#eb5e28] px-1 text-[8.5px] font-bold leading-tight " + m("swap-a")} style={at(0)}>Stop pricing websites in naira only.</p>
+            <p className={"absolute bottom-0 rounded-[4px] bg-[#eb5e28] px-1 text-[8.5px] font-bold leading-tight " + m("swap-a")} style={at(0)}>Stop pricing your websites too low.</p>
             <p className={"absolute bottom-0 rounded-[4px] bg-white px-1 text-[8.5px] font-bold leading-tight " + m("swap-b")} style={at(0)}>I built a store in 2 hours with AI.</p>
           </div>
         </div>

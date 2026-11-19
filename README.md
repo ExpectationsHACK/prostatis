@@ -1,6 +1,6 @@
 # Stynark by Stynark
 
-Nigeria-first club that teaches website building with AI, plus web solutions, SEO, automation, lead generation and AI agents. Two one-time tracks — **Fast Track** (14 lessons, ₦23,500) and **Main Track** (26 lessons, ₦46,500), self-paced with lifetime access — a WhatsApp community, and 50 free public tools.
+Global platform that teaches website building with AI, plus web solutions, SEO, automation, lead generation and AI agents. Two one-time tracks — **Fast Track** (14 lessons, $27, or ₦23,500 in Nigeria) and **Main Track** (26 lessons, $44, or ₦46,500 in Nigeria), self-paced with lifetime access — a WhatsApp community, and 50 free public tools.
 
 **Status:** marketing site; all 50 free tools (+6 bonus) live and tested; Supabase auth; Paystack one-time payments (test/demo); the full written course (27 lessons with illustrations, tasks, resources and quizzes); progress, XP, levels and streaks; final assessments and certificates.
 
@@ -10,7 +10,7 @@ Nigeria-first club that teaches website building with AI, plus web solutions, SE
 |---|---|---|
 | Website and app | Next.js 16 (App Router) on **Netlify**: marketing pages, 56 free tools, sign-in, checkout, the course, dashboard, admin | `src/app`, `netlify.toml` |
 | Accounts and data | **Supabase**: sign-in (email, magic link, Google), Postgres with row-level security; progress, payments and access are written only by the server | `src/lib/supabase`, `supabase/migrations` |
-| Payments | **Paystack** one-time charges in naira. Every payment is re-checked with Paystack server-to-server (callback, webhook, `/checkout/status`) before access opens; access is lifetime | `src/lib/paystack.ts`, `src/lib/settle-payment.ts`, `src/lib/membership.ts` |
+| Payments | **Paystack** one-time charges: naira for visitors in Nigeria, US dollars for everyone else (`src/lib/pricing.ts`). Every payment is re-checked with Paystack server-to-server (callback, webhook, `/checkout/status`) before access opens; access is lifetime | `src/lib/paystack.ts`, `src/lib/settle-payment.ts`, `src/lib/membership.ts` |
 | Email | **Resend**: account emails, certificates, newsletter (needs a verified sending domain) | `src/lib/email*.ts` |
 | Analytics | Built-in cookieless visitor counts, plus optional **PostHog** (EU) | `src/lib/analytics*.ts`, `src/lib/observability` |
 | Errors | Optional **Sentry** (EU): browser and server errors | `src/instrumentation*.ts` |

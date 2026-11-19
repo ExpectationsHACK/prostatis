@@ -7,9 +7,10 @@ import { personas } from "@/components/nav-data";
 import { PlanCard } from "@/components/plan-card";
 import { btn, size } from "@/components/ui";
 import { fastTrack, mainTrack } from "@/lib/curriculum";
-import { formatNgn, plans } from "@/lib/site";
+import { plans } from "@/lib/site";
 import { cycle, hueClass, type Hue } from "@/lib/hues";
 import { Eyebrow } from "@/components/eyebrow";
+import { Price } from "@/components/price";
 
 // Each card is a real project in the Fast Track (the day it's built is shown on the card).
 const websiteKinds: { kind: SiteKind; title: string; body: string; day: number }[] = [
@@ -22,14 +23,14 @@ const websiteKinds: { kind: SiteKind; title: string; body: string; day: number }
 ];
 
 const steps: { step: Step; title: string; body: string }[] = [
-  { step: "enroll", title: "Enroll today, start today", body: "Pay once in naira by card, transfer or USSD. Your lessons, dashboard and WhatsApp community unlock the moment you make payment." },
+  { step: "enroll", title: "Enroll today, start today", body: "Pay once by card, from anywhere in the world. Your lessons, dashboard and WhatsApp community unlock the moment you make payment." },
   { step: "build", title: "Build a real website in every lesson", body: "Short, practical lessons. Learn to use AI to write code, ship a real web page, online store, booking system or e-commerce site, and host it on the internet with free tools." },
   { step: "pitch", title: "Pitch and sell to businesses that need your services", body: "A ready-to-use proposal template, pricing calculator and message scripts to reach small and large businesses. You'll know what to charge and exactly what to say." },
   { step: "paid", title: "Get certified", body: "Go through the course properly, deliver your projects, then pass the final assessment for a verified certificate you can show every future client." },
 ];
 
-const compare: [string, boolean | string, boolean | string][] = [
-  ["Price, paid once", formatNgn(plans[0].priceNgn), formatNgn(plans[1].priceNgn)],
+const compare: [string, boolean | React.ReactNode, boolean | React.ReactNode][] = [
+  ["Price, paid once", <Price key="f" plan="fast_track" />, <Price key="m" plan="main_track" />],
   ["Lessons, each with a task", `${fastTrack.modules.length} lessons`, `${mainTrack.modules.length} lessons`],
   ["Self-paced, lifetime access", true, true],
   ["Business sites and landing pages", true, true],
@@ -47,7 +48,7 @@ const faqs = [
   { q: "Do I need to pay for any tools?", a: "No. Every lesson uses free tools: Google Antigravity to build, Cloudflare to put sites online (business use allowed), Paystack in test mode, and the free plans of the rest. Paid upgrades are always marked optional, and a client pays for their own domain." },
   { q: "Do I need a powerful laptop?", a: "No. Antigravity runs best on Windows 10 or 11 (64-bit) or a recent Mac, and any laptop with a modern browser can follow the free backup way. You can read lessons on your phone, but you build on a laptop." },
   { q: "How soon can I start earning?", a: "The Fast Track has you pricing your work and pitching real businesses in week two, with the scripts, proposal and portfolio to do it. How fast you land a client depends on how many businesses you reach, so we won't promise a date or an amount." },
-  { q: "What's the difference between the Fast Track and the Main Track?", a: "The Fast Track (14 lessons, ₦23,500) takes you from zero to building and selling websites. The Main Track (26 lessons, ₦46,500) includes all of it and adds full SEO, automation, AI agents and lead generation, so you can sell monthly services, not just one-off websites." },
+  { q: "What's the difference between the Fast Track and the Main Track?", a: "The Fast Track (14 lessons) takes you from zero to building and selling websites. The Main Track (26 lessons) includes all of it and adds full SEO, automation, AI agents and lead generation, so you can sell monthly services, not just one-off websites." },
   { q: "Is it a subscription?", a: "No. You pay once per track and keep lifetime access, so you can learn at your own pace and come back to any lesson whenever you need it." },
   { q: "Do I get a certificate?", a: "Yes. Pass every lesson and the final assessment to get a certificate of completion: download it, receive a copy by email, and share its public proof page so clients can check it's real." },
   { q: "Can I start with the Fast Track and upgrade later?", a: "Yes. Everything in the Fast Track is part of the Main Track, so nothing you learn is wasted." },
@@ -190,7 +191,7 @@ export default function Home() {
                     <td className="px-3 py-1.5 text-[12.5px] leading-snug text-ink sm:px-6 sm:py-3.5 sm:text-[14.5px]">{row}</td>
                     {[a, b].map((v, i) => (
                       <td key={i} className={"px-1 py-1.5 text-center sm:px-3 sm:py-3.5 " + (i === 0 ? "bg-brand-wash/60" : "")}>
-                        {typeof v === "string" ? (
+                        {typeof v !== "boolean" ? (
                           <span className="text-[12px] font-semibold leading-tight text-ink sm:text-[14.5px]">{v}</span>
                         ) : v ? (
                           <Check className="mx-auto size-4 text-success sm:size-5" strokeWidth={3} aria-label="Included" />

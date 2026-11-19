@@ -1,6 +1,6 @@
 import { Award, BadgeCheck, BookOpen, Eye, FileText, GraduationCap, Inbox, Radio, Rocket, UserCheck, Users, Wallet } from "lucide-react";
 import Link from "next/link";
-import { Avatar, BarList, DailyChart, deltaOf, fmtDate, ngn, PageHead, Panel, panelLink, Pill, planName, Stat } from "@/components/admin/blocks";
+import { Avatar, BarList, DailyChart, deltaOf, fmtDate, PageHead, Panel, panelLink, Pill, planName, Stat, totals } from "@/components/admin/blocks";
 import { requireAdmin } from "@/lib/admin/auth";
 import { affairsQueue, daysAgo, listStudents, listWaitlist, revenue } from "@/lib/admin/data";
 import { loadViews } from "@/lib/analytics";
@@ -20,7 +20,8 @@ export default async function AdminOverview() {
   const learning7d = active.filter((s) => s.lastActive && s.lastActive >= daysAgo(7)).length;
   const joinedIn = (from: number, to: number) => students.filter((s) => s.joined.slice(0, 10) >= daysAgo(from) && s.joined.slice(0, 10) < daysAgo(to)).length;
   const rev30 = revenue(payments, 30);
-  const revPrev = revenue(payments, 60) - rev30;
+  const ngn30 = rev30.NGN ?? 0;
+  const ngnPrev = (revenue(payments, 60).NGN ?? 0) - ngn30;
 
   const s60 = views.data ? summarize(views.data, 60) : null;
   const s30 = views.data ? summarize(views.data, 30) : null;
@@ -37,7 +38,7 @@ export default async function AdminOverview() {
         <Stat icon={Radio} label="Live now" value={s1?.live ?? 0} sub="visitors in the last 5 minutes" tone="accent" href="/admin/analytics?days=1" />
         <Stat icon={Eye} label="Visitors (30 days)" value={(s30?.visitors ?? 0).toLocaleString()} sub={`${s1?.visitors ?? 0} today · ${(s30?.views ?? 0).toLocaleString()} page views`} delta={deltaOf(s30?.visitors ?? 0, prevVisitors)} href="/admin/analytics" />
         <Stat icon={Users} label="Total students" value={paid.length} sub={`${students.length} accounts in all`} delta={deltaOf(joinedIn(30, 0), joinedIn(60, 30), "sign-ups vs prior 30 days")} href="/admin/students" />
-        <Stat icon={Wallet} label="Revenue (30 days)" value={ngn(rev30)} sub={`${ngn(revenue(payments, 36500))} all time`} delta={deltaOf(rev30, revPrev)} href="/admin/payments" />
+        <Stat icon={Wallet} label="Revenue (30 days)" value={totals(rev30)} sub={`${totals(revenue(payments, 36500))} all time`} delta={deltaOf(ngn30, ngnPrev, "naira vs prior 30 days")} href="/admin/payments" />
         <Stat icon={UserCheck} label="Active students" value={active.length} sub={`${learning7d} learned in the last 7 days`} href="/admin/students?status=active" />
         <Stat icon={Rocket} label="Fast Track" value={paid.filter((s) => s.plan === "fast_track").length} sub={`${active.filter((s) => s.plan === "fast_track").length} with access now`} href="/admin/students?track=fast_track" />
         <Stat icon={GraduationCap} label="Main Track" value={paid.filter((s) => s.plan === "main_track").length} sub={`${active.filter((s) => s.plan === "main_track").length} with access now`} href="/admin/students?track=main_track" />

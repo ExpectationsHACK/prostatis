@@ -13,8 +13,8 @@ const thumbs = {
     <Stage d={10}>
       <Win title="kemicoaching.com" className="relative w-[262px]" bodyClass="p-3">
         <p className={`${t.xs} font-semibold tracking-[0.1em] text-[#b8400f]`}>1:1 COACHING · ONLINE</p>
-        <p className={"mt-1 text-[16px] font-bold leading-[1.05] tracking-[-0.02em] " + m("type")} style={at(0.2)}>Lose 8kg eating Nigerian food.</p>
-        <p className={`${t.sm} mt-1 text-[#6b675f] ` + m("in")} style={at(1.4)}>12-week plans built around jollof, not against it.</p>
+        <p className={"mt-1 text-[16px] font-bold leading-[1.05] tracking-[-0.02em] " + m("type")} style={at(0.2)}>Lose 8kg eating the food you love.</p>
+        <p className={`${t.sm} mt-1 text-[#6b675f] ` + m("in")} style={at(1.4)}>12-week plans built around your favourite meals.</p>
         <div className="mt-2 flex items-center gap-2">
           <span className={`rounded-full bg-[#151515] px-2.5 py-1 ${t.sm} font-semibold text-white ` + m("press")} style={at(3.6)}>Book a free call</span>
           <span className={`flex items-center gap-1 ${t.xs} text-[#6b675f] ` + m("in")} style={at(2)}><Stars /> 48 clients</span>
@@ -32,7 +32,7 @@ const thumbs = {
     <Stage d={10} className="gap-3">
       <Phone className="h-[170px] w-[104px]">
         <p className={`px-2 pb-1 pt-3 ${t.sm} font-bold`}>Ada&apos;s Bakery</p>
-        {[["Chocolate cake", "₦18,000", "#7b4a36"], ["Meat pie ×6", "₦4,500", "#e0b27a"], ["Small chops", "₦25,000", "#c9793d"]].map(([n, p, c], i) => (
+        {[["Chocolate cake", "$45", "#7b4a36"], ["Meat pie ×6", "$11", "#e0b27a"], ["Small chops", "$60", "#c9793d"]].map(([n, p, c], i) => (
           <div key={n} className="flex items-center gap-1.5 border-t border-[#f1ede6] px-1.5 py-1">
             <span className="size-[20px] shrink-0 rounded-[5px]" style={{ background: c }} />
             <span className="min-w-0 flex-1">
@@ -59,8 +59,8 @@ const thumbs = {
         <Box className="w-[118px] p-2">
           <p className={`${t.xs} text-[#8a857b]`}>Cart total</p>
           <div className="relative h-[20px]">
-            <p className={"absolute text-[16px] font-bold " + m("swap-a")} style={at(0)}>₦47,500</p>
-            <p className={"absolute text-[16px] font-bold " + m("swap-b")} style={at(0)}>₦65,500</p>
+            <p className={"absolute text-[16px] font-bold " + m("swap-a")} style={at(0)}>$100</p>
+            <p className={"absolute text-[16px] font-bold " + m("swap-b")} style={at(0)}>$150</p>
           </div>
         </Box>
         <Box className={"flex w-[118px] items-center gap-1.5 bg-[#e6f4ec] p-2 " + m("pop")} style={at(6.2)}>
@@ -72,13 +72,13 @@ const thumbs = {
 
   restaurant: () => (
     <Stage d={10} className="gap-2.5">
-      <Win title="bukkaexpress.ng/menu" className="w-[170px]" bodyClass="p-2">
+      <Win title="quickbites.com/menu" className="w-[170px]" bodyClass="p-2">
         <div className="relative mb-1.5 flex gap-1">
           {["Rice", "Swallow", "Drinks"].map((c, i) => (
             <span key={c} className={`rounded-full border border-[#e4e0d8] px-1.5 ${t.xs} ` + (i === 0 ? "bg-[#151515] text-white" : "")}>{c}</span>
           ))}
         </div>
-        {[["Jollof rice + chicken", "₦3,500"], ["Fried rice + turkey", "₦4,200"], ["Ofada + ayamase", "₦3,800"]].map(([d, p], i) => (
+        {[["Rice bowl + chicken", "$9"], ["Fried rice + turkey", "$10"], ["Ofada + ayamase", "$10"]].map(([d, p], i) => (
           <div key={d} className={"flex items-center justify-between border-b border-[#f1ede6] py-1 " + m("left")} style={at(0.2 + i * 0.3)}>
             <span className={t.xs}>{d}</span>
             <span className={`${t.xs} font-semibold`}>{p}</span>
@@ -91,8 +91,8 @@ const thumbs = {
       <Phone className="h-[150px] w-[98px]">
         <p className={`bg-[#075e54] px-1.5 pb-1 pt-3 text-[7px] font-semibold text-white`}>Bukka Express</p>
         <div className="space-y-1 bg-[#efeae2] p-1.5">
-          <p className={`ml-auto w-[88%] rounded-[5px] bg-[#d9fdd3] p-1 text-[6.5px] ` + m("pop")} style={at(2.4)}>Hi! 2× Jollof rice + chicken, to Allen Ave.</p>
-          <p className={`w-[88%] rounded-[5px] bg-white p-1 text-[6.5px] ` + m("pop")} style={at(3.6)}>Got it! ₦7,000 + delivery. Pay here 👇</p>
+          <p className={`ml-auto w-[88%] rounded-[5px] bg-[#d9fdd3] p-1 text-[6.5px] ` + m("pop")} style={at(2.4)}>Hi! 2× Rice bowl + chicken, to Main Street.</p>
+          <p className={`w-[88%] rounded-[5px] bg-white p-1 text-[6.5px] ` + m("pop")} style={at(3.6)}>Got it! $18 + delivery. Pay here 👇</p>
           <p className={`w-[70%] rounded-[5px] bg-white p-1 text-[6.5px] font-semibold text-[#0ba4db] ` + m("pop")} style={at(4.4)}>paystack.com/pay/bukka</p>
         </div>
       </Phone>
@@ -105,7 +105,7 @@ const thumbs = {
         <div className="px-2 pb-2 pt-3.5">
           <p className={`${t.sm} font-bold`}>Glow Studio</p>
           <p className={`${t.xs} text-[#8a857b]`}>Book an appointment</p>
-          {[["Classic lashes", "₦18,000"], ["Knotless braids", "₦35,000"]].map(([s, p], i) => (
+          {[["Classic lashes", "$45"], ["Knotless braids", "$90"]].map(([s, p], i) => (
             <div key={s} className={`mt-1 flex justify-between rounded-[5px] border border-[#e4e0d8] px-1.5 py-1 ${t.xs} ` + (i === 0 ? m("mark") : "")} style={i === 0 ? at(0.4, { off: "#fff", on: "#fdeee6" }) : undefined}>
               <span>{s}</span>
               <span className="font-semibold">{p}</span>
@@ -117,7 +117,7 @@ const thumbs = {
               <span key={x} className={`rounded-[4px] border border-[#e4e0d8] py-[2px] text-center text-[6.5px] ` + (i === 1 ? m("mark") : "")} style={i === 1 ? at(1.4, { off: "#fff", on: "#151515", "on-ink": "#fff" }) : undefined}>{x}</span>
             ))}
           </div>
-          <span className={`mt-1.5 block rounded-[5px] bg-[#eb5e28] py-[3px] text-center text-[7px] font-semibold ` + m("press")} style={at(2.4)}>Confirm · ₦5,000 deposit</span>
+          <span className={`mt-1.5 block rounded-[5px] bg-[#eb5e28] py-[3px] text-center text-[7px] font-semibold ` + m("press")} style={at(2.4)}>Confirm · $12 deposit</span>
         </div>
         <div className={"absolute inset-0 grid place-items-center bg-white/90 " + m("in")} style={at(3)}>
           <div className="text-center">
@@ -132,7 +132,7 @@ const thumbs = {
 
   clinic: () => (
     <Stage d={10}>
-      <Win title="brightcareclinic.ng/appointments" className="relative w-[262px]" bodyClass="grid grid-cols-[1fr_1.2fr] gap-2.5 p-2.5">
+      <Win title="brightcareclinic.com/appointments" className="relative w-[262px]" bodyClass="grid grid-cols-[1fr_1.2fr] gap-2.5 p-2.5">
         <div>
           <p className={`${t.md} font-bold`}>See a doctor this week</p>
           {[["Dr. Okafor", "General"], ["Dr. Bello", "Paediatrics"]].map(([n, r], i) => (
@@ -187,9 +187,9 @@ const thumbs = {
 
   dashboard: () => (
     <Stage d={11}>
-      <Win title="shop.adire.ng/admin" className="w-[266px]" bodyClass="p-2">
+      <Win title="shop.linenco.com/admin" className="w-[266px]" bodyClass="p-2">
         <div className="grid grid-cols-3 gap-1.5">
-          {[["Sales today", "₦184,000", "₦226,500"], ["Orders", "23", "27"], ["Visitors", "1,204", "1,318"]].map(([k, a, b]) => (
+          {[["Sales today", "$450", "$550"], ["Orders", "23", "27"], ["Visitors", "1,204", "1,318"]].map(([k, a, b]) => (
             <div key={k} className="rounded-[5px] border border-[#efece6] p-1">
               <p className="text-[6px] text-[#8a857b]">{k}</p>
               <div className="relative h-[13px]">
@@ -205,9 +205,9 @@ const thumbs = {
         </svg>
         <div className="mt-1.5 rounded-[5px] border border-[#efece6]">
           <p className={"flex justify-between bg-[#fdeee6] px-1.5 py-[2px] text-[6.5px] " + m("in")} style={at(5.4)}>
-            <span className="font-semibold">#1043 · Adire dress</span><span className="font-semibold text-[#16794a]">₦25,000 paid</span>
+            <span className="font-semibold">#1043 · Linen dress</span><span className="font-semibold text-[#16794a]">$60 paid</span>
           </p>
-          <p className="flex justify-between border-t border-[#efece6] px-1.5 py-[2px] text-[6.5px]"><span>#1042 · Tote bag ×2</span><span className="text-[#16794a]">₦16,000 paid</span></p>
+          <p className="flex justify-between border-t border-[#efece6] px-1.5 py-[2px] text-[6.5px]"><span>#1042 · Tote bag ×2</span><span className="text-[#16794a]">$40 paid</span></p>
         </div>
       </Win>
     </Stage>
@@ -220,17 +220,17 @@ const thumbs = {
           {["New lead", "Proposal sent", "Won"].map((c, i) => (
             <div key={c} className="h-[112px] rounded-[6px] bg-[#f7f5f1] p-1">
               <p className={`${t.xs} mb-1 font-semibold ${i === 2 ? "text-[#16794a]" : "text-[#6b675f]"}`}>{c}</p>
-              {i === 0 && <div className="mb-1 rounded-[4px] border border-[#e4e0d8] bg-white p-1"><p className="text-[6.5px] font-semibold">SmileCare Dental</p><p className="text-[6px] text-[#8a857b]">₦650,000</p></div>}
-              {i === 1 && <div className="mb-1 rounded-[4px] border border-[#e4e0d8] bg-white p-1"><p className="text-[6.5px] font-semibold">Bukka Express</p><p className="text-[6px] text-[#8a857b]">₦400,000</p></div>}
+              {i === 0 && <div className="mb-1 rounded-[4px] border border-[#e4e0d8] bg-white p-1"><p className="text-[6.5px] font-semibold">SmileCare Dental</p><p className="text-[6px] text-[#8a857b]">$1,600</p></div>}
+              {i === 1 && <div className="mb-1 rounded-[4px] border border-[#e4e0d8] bg-white p-1"><p className="text-[6.5px] font-semibold">Bukka Express</p><p className="text-[6px] text-[#8a857b]">$1,000</p></div>}
             </div>
           ))}
         </div>
         <div className={"absolute left-[12px] top-[62px] w-[80px] rounded-[4px] border border-[#eb5e28] bg-white p-1 shadow-md " + m("scroll-x")} style={at(0.8, { sx: "176px" })}>
           <p className="text-[6.5px] font-semibold">Glow Studio</p>
-          <p className="text-[6px] text-[#8a857b]">₦350,000</p>
+          <p className="text-[6px] text-[#8a857b]">$900</p>
         </div>
         <p className={`mt-1.5 flex items-center gap-1 ${t.xs} font-semibold text-[#16794a] ` + m("pop")} style={at(3.8)}>
-          <Tick /> Won this month: ₦1,000,000
+          <Tick /> Won this month: $2,500
         </p>
       </Box>
     </Stage>
@@ -239,7 +239,7 @@ const thumbs = {
   invoicing: () => (
     <Stage d={10}>
       <Win title="Invoices" className="w-[252px]" bodyClass="p-2">
-        {[["INV-014", "Glow Studio", "₦350,000", false], ["INV-013", "Bukka Express", "₦400,000", true], ["INV-012", "SmileCare", "₦650,000", true]].map(([id, c, amt, paid]) => (
+        {[["INV-014", "Glow Studio", "$900", false], ["INV-013", "Bukka Express", "$1,000", true], ["INV-012", "SmileCare", "$1,600", true]].map(([id, c, amt, paid]) => (
           <div key={id as string} className="flex items-center gap-2 border-b border-[#f1ede6] py-1.5">
             <span className="font-code text-[7px] text-[#8a857b]">{id as string}</span>
             <span className={`${t.xs} flex-1 font-semibold`}>{c as string}</span>
@@ -257,8 +257,8 @@ const thumbs = {
         <div className="mt-2 flex items-end justify-between">
           <span className={`${t.xs} text-[#8a857b]`}>Paid this month</span>
           <span className="relative h-[16px] w-[80px] text-right">
-            <span className={"absolute right-0 text-[13px] font-bold " + m("swap-a")} style={at(0)}>₦1,050,000</span>
-            <span className={"absolute right-0 text-[13px] font-bold text-[#16794a] " + m("swap-b")} style={at(0)}>₦1,400,000</span>
+            <span className={"absolute right-0 text-[13px] font-bold " + m("swap-a")} style={at(0)}>$2,600</span>
+            <span className={"absolute right-0 text-[13px] font-bold text-[#16794a] " + m("swap-b")} style={at(0)}>$3,500</span>
           </span>
         </div>
       </Win>
@@ -275,9 +275,9 @@ const thumbs = {
           <p className={"w-[86%] rounded-[5px] bg-white p-1 " + m("in")} style={at(0.2)}>Hi! Reply with a number: 1 Menu · 2 Order · 3 Track · 4 Talk to us</p>
           <p className={"ml-auto w-fit rounded-[5px] bg-[#d9fdd3] px-1.5 py-1 " + m("in")} style={at(1.4)}>2</p>
           <p className={"w-[80%] rounded-[5px] bg-white p-1 " + m("in")} style={at(2.4)}>What would you like?</p>
-          <p className={"ml-auto w-[70%] rounded-[5px] bg-[#d9fdd3] p-1 " + m("in")} style={at(3.4)}>Jollof ×2, to Ikeja</p>
+          <p className={"ml-auto w-[70%] rounded-[5px] bg-[#d9fdd3] p-1 " + m("in")} style={at(3.4)}>Rice bowl ×2, to Downtown</p>
           <p className={"w-[86%] rounded-[5px] bg-white p-1 " + m("in")} style={at(4.6)}>
-            Total ₦7,000. Pay here: <span className="font-semibold text-[#0ba4db]">paystack.com/pay/mk</span>
+            Total $18. Pay here: <span className="font-semibold text-[#0ba4db]">paystack.com/pay/mk</span>
           </p>
         </div>
       </Phone>
@@ -287,7 +287,7 @@ const thumbs = {
   supportagent: () => (
     <Stage d={11}>
       <div className="relative h-[168px] w-[272px]">
-        <Win title="quickship.ng" className="absolute inset-0" bodyClass="space-y-1.5 p-2.5">
+        <Win title="quickship.com" className="absolute inset-0" bodyClass="space-y-1.5 p-2.5">
           <Line w="50%" h="h-[7px]" c="bg-[#dcd6c8]" />
           <Line w="80%" />
           <Line w="70%" />
@@ -297,7 +297,7 @@ const thumbs = {
           <p className="bg-[#151515] px-2 py-1 text-[7px] font-semibold text-white">QuickShip assistant</p>
           <div className="space-y-1 p-1.5 text-[6.5px]">
             <p className={"ml-auto w-fit rounded-[5px] bg-[#f1ede6] px-1.5 py-1 " + m("in")} style={at(0.8)}>Do you deliver to Ibadan?</p>
-            <p className={"w-[92%] rounded-[5px] bg-[#fdeee6] p-1 " + m("in")} style={at(2)}>Yes, in 2 working days for ₦3,500.</p>
+            <p className={"w-[92%] rounded-[5px] bg-[#fdeee6] p-1 " + m("in")} style={at(2)}>Yes, in 2 working days for $9.</p>
             <span className={"inline-block rounded-full border border-[#e4e0d8] px-1 text-[6px] text-[#8a857b] " + m("pop")} style={at(2.6)}>Source: Delivery FAQ</span>
             <span className={"block rounded-[5px] border border-[#151515] py-[2px] text-center text-[6.5px] font-semibold " + m("glow")} style={at(3.8)}>Talk to a person</span>
           </div>
@@ -308,11 +308,11 @@ const thumbs = {
 
   leadgen: () => (
     <Stage d={11} className="gap-2.5">
-      <Win title="freeaudit.tolubuilds.ng" className="w-[140px]" bodyClass="p-2">
+      <Win title="freeaudit.tolubuilds.com" className="w-[140px]" bodyClass="p-2">
         <p className="text-[10px] font-bold leading-tight">Is your website losing customers?</p>
         <p className="mt-0.5 text-[6.5px] text-[#6b675f]">Get a free 5-point check in 24 hours.</p>
         <div className="mt-1.5 rounded-[4px] border border-[#e4e0d8] px-1 py-[2px] text-[7px]">
-          <span className={"inline-block " + m("type")} style={at(0.3)}>kemi@glowbeauty.ng</span>
+          <span className={"inline-block " + m("type")} style={at(0.3)}>kemi@glowbeauty.com</span>
         </div>
         <span className={"mt-1 block rounded-[4px] bg-[#eb5e28] py-[2px] text-center text-[7px] font-semibold " + m("press")} style={at(2)}>Send my audit</span>
       </Win>
@@ -342,7 +342,7 @@ const thumbs = {
                 <span className={"absolute left-0 font-semibold text-[#16794a] " + m("swap-b")} style={at(0)}>(212 reviews)</span>
               </span>
             </p>
-            <p className="text-[7px] text-[#6b675f]">Beauty salon · Lekki Phase 1 · Open until 7pm</p>
+            <p className="text-[7px] text-[#6b675f]">Beauty salon · Northside · Open until 7pm</p>
           </div>
         </div>
         <div className="mt-1.5 flex gap-1">

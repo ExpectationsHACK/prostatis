@@ -3,13 +3,14 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Price } from "./price";
 import { btn, size } from "./ui";
 
 // Pages where an "enroll" push would be out of place.
 const HIDDEN = ["/checkout", "/login", "/signup", "/welcome", "/auth", "/forgot-password", "/reset-password", "/privacy", "/terms", "/refund-policy", "/unsubscribe"];
 
 /** The last push before the footer: one promise, one button, the honest facts. */
-export function PreFooterCta({ from }: { from: string }) {
+export function PreFooterCta() {
   const path = usePathname();
   if (HIDDEN.some((p) => path === p || path.startsWith(p + "/"))) return null;
   return (
@@ -18,7 +19,7 @@ export function PreFooterCta({ from }: { from: string }) {
         <div className="pointer-events-none absolute -top-40 left-1/2 size-[520px] -translate-x-1/2 rounded-full bg-brand/25 blur-3xl" aria-hidden />
         <h2 className="display relative mx-auto max-w-3xl text-balance text-[28px] text-white sm:text-[56px]">Your first website is 14 lessons away.</h2>
         <p className="relative mx-auto mt-4 max-w-lg text-[16.5px] leading-relaxed text-white/70">
-          Enroll now and start your first lesson in the next five minutes. From {from}, paid once in naira.
+          Enroll now and start your first lesson in the next five minutes. From <Price min />, paid once, with lifetime access.
         </p>
         <div className="relative mt-9 flex flex-wrap justify-center gap-3">
           <Link href="/#tracks" className={`${btn.primary} ${size.lg}`}>

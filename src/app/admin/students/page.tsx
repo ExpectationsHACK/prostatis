@@ -1,6 +1,6 @@
 import { CloudDownload, SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
-import { ab, Avatar, fmtDate, ngn, PageHead, Pagination, paginate, Pill, planName, ProgressBar, Table, td, withParams } from "@/components/admin/blocks";
+import { ab, Avatar, fmtDate, PageHead, Pagination, paginate, Pill, planName, ProgressBar, Table, td, totals, withParams } from "@/components/admin/blocks";
 import { SearchBox } from "@/components/admin/search-box";
 import { requireAdmin } from "@/lib/admin/auth";
 import { listStudents } from "@/lib/admin/data";
@@ -77,7 +77,7 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
             <td className={td + " tabular"}>{s.xp}</td>
             <td className={td}>{fmtDate(s.lastActive)}</td>
             <td className={td + " tabular"}>{s.streak ? `${s.streak}d` : "0d"}</td>
-            <td className={td + " tabular"}>{s.paidKobo ? ngn(s.paidKobo) : "-"}</td>
+            <td className={td + " tabular"}>{Object.keys(s.paid).length ? totals(s.paid) : "-"}</td>
           </tr>
         ))}
       </Table>

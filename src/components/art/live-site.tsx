@@ -47,7 +47,7 @@ const Stars = () => (
 /* 1. Landing page: the page scrolls to the proof, back up, a visitor taps the button and a booking lands. */
 function Landing() {
   return (
-    <Window url="glowlashes.ng">
+    <Window url="glowlashes.com">
       <div className={"absolute inset-x-0 top-0 " + a("lk-lp-scroll")}>
         <div className="flex h-[20px] items-center justify-between border-b border-[#f0eee9] px-3">
           <span className="text-[8px] font-semibold tracking-[0.06em]">GLOW LASHES</span>
@@ -55,9 +55,9 @@ function Landing() {
         </div>
         <div className="grid h-[96px] grid-cols-[1.3fr_1fr] gap-2 px-3 pt-2.5">
           <div>
-            <p className="text-[6px] font-semibold tracking-[0.1em] text-[#b8400f]">LEKKI STUDIO</p>
+            <p className="text-[6px] font-semibold tracking-[0.1em] text-[#b8400f]">GLOW STUDIO</p>
             <p className="mt-1 text-[13px] font-bold leading-[1.1] tracking-[-0.02em]">Lashes that last four weeks.</p>
-            <p className="mt-1 text-[6.5px] leading-snug text-[#6b675f]">Natural and volume sets from ₦18,000.</p>
+            <p className="mt-1 text-[6.5px] leading-snug text-[#6b675f]">Natural and volume sets from $45.</p>
             <span className={"mt-2 inline-flex h-[15px] items-center gap-1 rounded-full bg-[#1faa53] px-2 text-[6.5px] font-semibold text-white " + a("lk-lp-btn")}>
               <MessageCircle className="size-[7px]" /> Book on WhatsApp
             </span>
@@ -72,7 +72,7 @@ function Landing() {
           </div>
         </div>
         <div className="grid h-[46px] grid-cols-3 gap-1.5 px-3">
-          {[["“So natural, lasted 5 weeks.”", "Amaka"], ["“Best lash tech in Lekki.”", "Bisi"], ["“Booked in 2 minutes.”", "Zainab"]].map(([q, n]) => (
+          {[["“So natural, lasted 5 weeks.”", "Amaka"], ["“Best lash tech in town.”", "Bisi"], ["“Booked in 2 minutes.”", "Zainab"]].map(([q, n]) => (
             <div key={n} className="rounded-[6px] border border-[#eeece7] p-1.5">
               <Stars />
               <p className="mt-0.5 text-[6px] leading-snug">{q}</p>
@@ -81,7 +81,7 @@ function Landing() {
           ))}
         </div>
         <div className="flex h-[40px] items-center gap-1.5 px-3">
-          {[["Classic set", "₦18,000"], ["Volume set", "₦25,000"], ["Refill", "₦9,000"]].map(([t, p]) => (
+          {[["Classic set", "$45"], ["Volume set", "$60"], ["Refill", "$25"]].map(([t, p]) => (
             <div key={t} className="flex-1 rounded-[6px] bg-[#f7f6f3] px-1.5 py-1">
               <p className="text-[6px] text-[#6b675f]">{t}</p>
               <p className="text-[8px] font-bold">{p}</p>
@@ -106,7 +106,7 @@ function Landing() {
 /* 2. Business website: the map pin drops, then a customer asks on WhatsApp and gets a reply. */
 function Business() {
   return (
-    <Window url="mamaskitchen.ng">
+    <Window url="mamaskitchen.com">
       <div className="flex h-[20px] items-center justify-between border-b border-[#f0eee9] px-3">
         <span className="text-[8px] font-bold">Mama&apos;s Kitchen</span>
         <span className="flex gap-2 text-[6px] text-[#6b675f]">
@@ -119,7 +119,7 @@ function Business() {
       <div className="grid grid-cols-[1.35fr_1fr] gap-2 px-3 pt-2">
         <div>
           <p className="text-[12px] font-bold leading-[1.1] tracking-[-0.02em]">Hot lunch at your desk.</p>
-          <p className="mt-1 text-[6.5px] leading-snug text-[#6b675f]">Jollof, egusi and ofada, delivered around Ikeja from 11am.</p>
+          <p className="mt-1 text-[6.5px] leading-snug text-[#6b675f]">Rice bowls, pasta and wraps, delivered across town from 11am.</p>
           <span className="mt-1.5 inline-flex h-[14px] items-center gap-1 rounded-full bg-[#151515] px-2 text-[6.5px] font-semibold text-white">Order now</span>
         </div>
         <div className="relative h-[58px] overflow-hidden rounded-[8px] bg-[radial-gradient(circle_at_50%_55%,#fff_0_34%,#f1e4d6_35%)]">
@@ -131,7 +131,7 @@ function Business() {
       <div className="mt-2 grid grid-cols-[1fr_1fr] gap-2 px-3">
         <div className="rounded-[6px] border border-[#eeece7] p-1.5">
           <p className="text-[6.5px] font-bold">Today&apos;s menu</p>
-          {[["Jollof + chicken", "₦3,500"], ["Egusi + pounded yam", "₦4,000"], ["Ofada + plantain", "₦3,800"]].map(([d, p]) => (
+          {[["Rice bowl + chicken", "$12"], ["Pasta + salad", "$14"], ["Wrap + fries", "$11"]].map(([d, p]) => (
             <p key={d} className="mt-0.5 flex justify-between text-[6px]">
               <span>{d}</span>
               <span className="font-semibold">{p}</span>
@@ -145,7 +145,7 @@ function Business() {
           </svg>
           <span className={"absolute left-[46%] top-[34%] size-[14px] rounded-full bg-[#eb5e28]/30 " + a("lk-bz-ring")} />
           <MapPin className={"absolute left-[45%] top-[18%] size-[14px] fill-[#eb5e28] text-white " + a("lk-bz-pin")} />
-          <span className="absolute bottom-1 left-1 rounded-[3px] bg-white px-1 text-[5.5px]">Allen Ave, Ikeja</span>
+          <span className="absolute bottom-1 left-1 rounded-[3px] bg-white px-1 text-[5.5px]">24 Main Street</span>
         </div>
       </div>
       <div className={"absolute bottom-[26px] right-2 z-20 w-[122px] overflow-hidden rounded-[8px] border border-[#eeece7] bg-[#efeae2] shadow-[0_8px_20px_-8px_rgba(0,0,0,0.3)] " + a("lk-bz-chat")}>
@@ -174,12 +174,12 @@ function Business() {
 /* 3. Online store: add to cart, the item flies to the cart, then Paystack checkout succeeds. */
 function Store() {
   const items = [
-    { n: "Adire dress", p: "₦25,000", bg: "bg-[repeating-radial-gradient(circle_at_30%_30%,#2b3a8c_0_3px,#3f50b5_3px_6px)]" },
-    { n: "Ankara top", p: "₦17,000", bg: "bg-[repeating-linear-gradient(45deg,#e0a82e_0_4px,#c2410c_4px_8px,#1f7a4d_8px_12px)]" },
-    { n: "Tote bag", p: "₦8,000", bg: "bg-[repeating-linear-gradient(90deg,#1f2a44_0_5px,#f3efe6_5px_7px)]" },
+    { n: "Linen dress", p: "$60", bg: "bg-[repeating-radial-gradient(circle_at_30%_30%,#2b3a8c_0_3px,#3f50b5_3px_6px)]" },
+    { n: "Ankara top", p: "$42", bg: "bg-[repeating-linear-gradient(45deg,#e0a82e_0_4px,#c2410c_4px_8px,#1f7a4d_8px_12px)]" },
+    { n: "Tote bag", p: "$20", bg: "bg-[repeating-linear-gradient(90deg,#1f2a44_0_5px,#f3efe6_5px_7px)]" },
   ];
   return (
-    <Window url="adireshop.ng">
+    <Window url="linenshop.com">
       <div className="flex h-[20px] items-center justify-between border-b border-[#f0eee9] px-3">
         <span className="text-[8px] font-bold tracking-[0.04em]">ADIRE SHOP</span>
         <span className="flex h-[11px] w-[90px] items-center gap-1 rounded-full bg-[#f4f3ef] px-1.5 text-[5.5px] text-[#8a867e]">
@@ -207,7 +207,7 @@ function Store() {
       <span className={"absolute left-[131px] top-[59px] z-20 h-[26px] w-[34px] rounded-[4px] bg-[repeating-linear-gradient(45deg,#e0a82e_0_4px,#c2410c_4px_8px,#1f7a4d_8px_12px)] " + a("lk-st-fly")} />
       <div className={"absolute inset-y-0 right-0 z-20 flex w-[124px] flex-col border-l border-[#eeece7] bg-white p-2 shadow-[-10px_0_24px_-12px_rgba(0,0,0,0.25)] " + a("lk-st-drawer")}>
         <p className="text-[7.5px] font-bold">Your cart (2)</p>
-        {[["Adire dress", "₦25,000"], ["Ankara top", "₦17,000"]].map(([n, p]) => (
+        {[["Linen dress", "$60"], ["Ankara top", "$42"]].map(([n, p]) => (
           <p key={n} className="mt-1 flex justify-between border-b border-[#f0eee9] pb-1 text-[6.5px]">
             <span>{n}</span>
             <span>{p}</span>
@@ -215,7 +215,7 @@ function Store() {
         ))}
         <p className="mt-1.5 flex justify-between text-[7px] font-bold">
           <span>Total</span>
-          <span>₦42,000</span>
+          <span>$102</span>
         </p>
         <div className="relative mt-auto h-[18px]">
           <span className={"absolute inset-0 flex items-center justify-center rounded-[5px] bg-[#0ba4db] text-[6.5px] font-semibold text-white " + a("lk-st-pay")}>Pay with Paystack</span>
@@ -236,7 +236,7 @@ function Store() {
 function WebApp() {
   const bars = [38, 52, 44, 66, 58, 80, 72];
   return (
-    <Window url="app.schoolhub.ng">
+    <Window url="app.schoolhub.com">
       <div className="flex h-full">
         <div className="w-[62px] shrink-0 border-r border-[#f0eee9] bg-[#fafaf8] p-1.5">
           <p className="flex items-center gap-1 text-[7px] font-bold">
@@ -274,9 +274,9 @@ function WebApp() {
           <div className="mt-1.5 rounded-[5px] border border-[#eeece7]">
             <p className={"flex justify-between bg-[#fdeee6] px-1.5 py-[3px] text-[6px] " + a("lk-wa-row")}>
               <span className="font-semibold">Chidi O. · JSS2</span>
-              <span className="font-semibold text-[#16794a]">₦45,000 paid</span>
+              <span className="font-semibold text-[#16794a]">$450 paid</span>
             </p>
-            {[["Amina B. · SS1", "₦45,000 paid"], ["Tobi A. · JSS1", "₦40,000 paid"]].map(([n, v]) => (
+            {[["Amina B. · SS1", "$450 paid"], ["Tobi A. · JSS1", "$400 paid"]].map(([n, v]) => (
               <p key={n} className="flex justify-between border-t border-[#f0eee9] px-1.5 py-[3px] text-[6px]">
                 <span>{n}</span>
                 <span className="text-[#16794a]">{v}</span>
@@ -291,7 +291,7 @@ function WebApp() {
             <GraduationCap className="size-[10px] text-[#eb5e28]" /> Sign in to SchoolHub
           </p>
           <div className="mt-1.5 h-[13px] overflow-hidden rounded-[4px] border border-[#e2dfd8] px-1 text-[6px] leading-[12px]">
-            <span className={"inline-block overflow-hidden whitespace-nowrap align-top " + a("lk-wa-type")}>ade@schoolhub.ng</span>
+            <span className={"inline-block overflow-hidden whitespace-nowrap align-top " + a("lk-wa-type")}>ade@schoolhub.com</span>
           </div>
           <div className="mt-1 h-[13px] rounded-[4px] border border-[#e2dfd8] px-1 text-[7px] leading-[12px] tracking-[1px]">••••••••</div>
           <span className={"mt-1.5 flex h-[14px] items-center justify-center rounded-[4px] bg-[#151515] text-[6.5px] font-semibold text-white " + a("lk-wa-signin")}>Sign in</span>
@@ -305,7 +305,7 @@ function WebApp() {
 function Booking() {
   const days = Array.from({ length: 28 }, (_, i) => i + 1);
   return (
-    <Window url="braidsbytemi.ng/book">
+    <Window url="braidsbytemi.com/book">
       <div className="grid h-full grid-cols-[1.15fr_1fr] gap-2 p-2.5">
         <div>
           <p className="text-[8px] font-bold">Knotless braids · 4 hrs</p>
@@ -334,7 +334,7 @@ function Booking() {
               </span>
             ))}
           </div>
-          <span className={"mt-1.5 flex h-[15px] items-center justify-center rounded-[4px] bg-[#151515] text-[6.5px] font-semibold text-white " + a("lk-bk-pay")}>Pay ₦5,000 deposit</span>
+          <span className={"mt-1.5 flex h-[15px] items-center justify-center rounded-[4px] bg-[#151515] text-[6.5px] font-semibold text-white " + a("lk-bk-pay")}>Pay $15 deposit</span>
         </div>
       </div>
       <div className={"absolute inset-0 z-20 grid place-items-center bg-white/85 backdrop-blur-[1px] " + a("lk-bk-done")}>
