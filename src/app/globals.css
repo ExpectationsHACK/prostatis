@@ -449,3 +449,10 @@ textarea {
   to { filter: none; transform: scale(1); }
 }
 @media (prefers-reduced-motion: reduce) { .badge-lit { animation: none; } }
+
+/* Illustrations (components/art/artboard.tsx): each is hundreds of small elements. The browser
+   skips laying out and painting the ones off screen until they scroll near (their size comes
+   from the 320×200 aspect ratio, so nothing jumps), and each drawing's layout is kept to itself.
+   On slow phones this took seconds off the first paint of the homepage. */
+.art-board { content-visibility: auto; }
+.art-canvas { contain: layout paint; }

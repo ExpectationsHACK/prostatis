@@ -56,7 +56,7 @@ export function StatusPage({ code, icon: Icon, tone = "error", title, children, 
         )}
       </div>
       <h1 className="display mt-7 text-balance text-[28px] leading-tight text-ink sm:text-[38px]">{title}</h1>
-      {children && <div className="mt-3 max-w-md text-pretty text-[15.5px] leading-relaxed text-muted sm:text-[16.5px]">{children}</div>}
+      {children && <div className="mt-3 max-w-md text-[15.5px] leading-relaxed text-muted sm:text-[16.5px]">{children}</div>}
       {actions && <div className="mt-7 flex flex-wrap justify-center gap-3">{actions}</div>}
       {footnote && <div className="mt-6 max-w-md text-[13px] leading-relaxed text-muted">{footnote}</div>}
     </div>

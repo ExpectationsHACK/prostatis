@@ -18,7 +18,7 @@ export function Hero() {
           <h1 className="display mt-6 text-balance text-[32px] text-ink sm:text-[56px] lg:text-[62px]">
             Learn to build <span className="text-brand">websites</span> with AI. And turn it into a source of <span className="text-brand">income</span>.
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-pretty text-[16px] sm:text-[17px] leading-relaxed text-muted lg:mx-0">{site.subhead}</p>
+          <p className="mx-auto mt-5 max-w-xl text-[16px] sm:text-[17px] leading-relaxed text-muted lg:mx-0">{site.subhead}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
             <Link href="/#tracks" className={`${btn.primary} ${size.lg}`}>
               Enroll Now <ArrowRight className="size-4" aria-hidden />

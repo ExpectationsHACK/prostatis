@@ -59,8 +59,8 @@ function Heading({ eyebrow, children, sub, light = false, hue = "orange" }: { ey
   return (
     <div className="mx-auto max-w-3xl text-center">
       {eyebrow && (light ? <p className="label inline-block rounded-full bg-white/10 px-3 py-1 text-brand">{eyebrow}</p> : <Eyebrow hue={hue}>{eyebrow}</Eyebrow>)}
-      <h2 className={"display mt-3 text-balance text-[30px] sm:text-[52px] " + (light ? "text-white" : "text-ink")}>{children}</h2>
-      {sub && <p className={"mx-auto mt-4 max-w-2xl text-pretty text-[16.5px] leading-relaxed " + (light ? "text-white/70" : "text-muted")}>{sub}</p>}
+      <h2 className={"display mt-3 text-[30px] sm:text-[52px] " + (light ? "text-white" : "text-ink")}>{children}</h2>
+      {sub && <p className={"mx-auto mt-4 max-w-2xl text-[16.5px] leading-relaxed " + (light ? "text-white/70" : "text-muted")}>{sub}</p>}
     </div>
   );
 }
@@ -79,7 +79,7 @@ function Tracks() {
             const slug = track.id === "main_track" ? "main-track" : "fast-track";
             return (
               <div key={track.id} id={slug} className="scroll-mt-28">
-                <h3 className="display mb-3 text-balance text-center text-[17px] leading-tight text-ink sm:mb-5 sm:text-[26px]">{track.headline}</h3>
+                <h3 className="display mb-3 text-center text-[17px] leading-tight text-ink sm:mb-5 sm:text-[26px]">{track.headline}</h3>
                 <PlanCard plan={plan} show={3} compact />
                 <p className="mt-2 text-center text-[13.5px] text-muted sm:mt-4">
                   <Link href={`/tracks/${slug}`} className="font-semibold text-ink underline">

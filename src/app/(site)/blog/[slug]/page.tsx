@@ -98,7 +98,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           )}
         </nav>
         <h1 className="display mt-4 text-balance text-[30px] leading-[1.08] text-ink sm:text-[52px]">{post.title}</h1>
-        {post.excerpt && <p className="mt-4 text-pretty font-mono text-[15px] leading-relaxed text-muted">{post.excerpt}</p>}
+        {post.excerpt && <p className="mt-4 font-mono text-[15px] leading-relaxed text-muted">{post.excerpt}</p>}
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-y border-edge py-3">
           <p className={byline}>
             {post.author_name} · <time dateTime={post.published_at ?? undefined}>{postDate(post.published_at)}</time>
@@ -144,7 +144,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
         <aside className="mt-12 rounded-[16px] bg-night p-6 text-white sm:p-8">
           <p className="text-[13px] font-semibold text-brand">Learn it properly</p>
-          <p className="display mt-2 text-balance text-[22px] leading-tight text-white sm:text-[30px]">Build websites with AI and turn it into income.</p>
+          <p className="display mt-2 text-[22px] leading-tight text-white sm:text-[30px]">Build websites with AI and turn it into income.</p>
           <p className="mt-2 text-[15px] leading-relaxed text-white/70">
             Step-by-step lessons, real client projects and a verified certificate when you finish. From <Price min />, paid once.
           </p>

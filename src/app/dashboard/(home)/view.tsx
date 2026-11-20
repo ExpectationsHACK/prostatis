@@ -130,7 +130,7 @@ export function DashboardHome({ name, sub, state, events, now, passwordUpdated =
                     </span>
                     <PillarTag pillar={next.pillar} />
                   </p>
-                  <h2 className="display mt-1.5 text-balance text-[22px] leading-tight text-ink sm:text-[28px]">{next.title}</h2>
+                  <h2 className="display mt-1.5 text-[22px] leading-tight text-ink sm:text-[28px]">{next.title}</h2>
                   <p className="mt-2 line-clamp-2 text-[14.5px] leading-relaxed text-muted">{next.summary}</p>
                   <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[13px] font-semibold">
                     <li className={nextRow?.quiz_passed_at ? "text-success" : "text-muted"}>

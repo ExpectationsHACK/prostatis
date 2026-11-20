@@ -51,7 +51,7 @@ export default async function ToolPage({ params }: PageProps<"/tools/[slug]">) {
               <PillarTag pillar={tool.pillar} extra=" tools" />
             </Link>
             <h1 className="display mt-3 text-balance text-[32px] text-ink sm:text-[56px]">{tool.title}</h1>
-            <p className="mt-3 text-pretty font-mono text-[15px] leading-relaxed text-muted">{tool.description}</p>
+            <p className="mt-3 font-mono text-[15px] leading-relaxed text-muted">{tool.description}</p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
               <p className="flex items-start gap-2 rounded-[12px] border border-edge bg-card px-3 py-2.5 text-[14px] leading-snug text-ink">
                 <CircleAlert className="mt-0.5 size-4 shrink-0 text-danger" aria-hidden />

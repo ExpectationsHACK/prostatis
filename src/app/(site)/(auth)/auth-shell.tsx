@@ -35,7 +35,7 @@ export function AuthShell({ title, subtitle, children, art = "signin" }: { title
 
       <aside className="ink-block relative mx-auto w-full max-w-[560px] bg-brand p-5 sm:p-8">
         <p className="label text-ink/75">{p.eyebrow}</p>
-        <p className="display mt-2 text-balance text-[22px] leading-tight text-ink sm:text-[32px]">{p.title}</p>
+        <p className="display mt-2 text-[22px] leading-tight text-ink sm:text-[32px]">{p.title}</p>
         <div className="mt-6 overflow-hidden rounded-[14px] border-2 border-ink bg-card shadow-[4px_4px_0_var(--ink)]">
           <AuthArt kind={art} />
         </div>
