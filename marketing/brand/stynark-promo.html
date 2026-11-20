@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080">
+<title>Stynark teaser and trailer</title>
+<!-- Inter Light for the quiet phrases (the reference's voice), Archivo for the Stynark wordmark. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Inter:wght@300;400;500&family=Archivo:wdth,wght@62..125,100..900&display=block" rel="stylesheet">
+<style>
+  html, body { margin: 0; background: #000; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Geist, sans-serif; }
+  .scene { position: absolute; inset: 0; overflow: hidden; }
+  .abs { position: absolute; }
+  .t { position: absolute; left: 0; right: 0; text-align: center; font-weight: 300; letter-spacing: -0.01em; white-space: nowrap; }
+  .wm { font-family: Archivo, sans-serif; font-stretch: 108%; font-weight: 600; letter-spacing: -0.03em; }
+  #ui { position: fixed; left: 12px; bottom: 12px; display: flex; gap: 8px; align-items: center; font: 14px system-ui; color: #fff; }
+  #ui input { width: 520px; }
+  body.export #ui { display: none; }
+  body:not(.export) #stage { transform: scale(0.45); transform-origin: 0 0; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="ui"><select id="cut"><option value="trailer">Trailer</option><option value="teaser">Teaser</option><option value="tracks">Two tracks</option></select><button id="play">Play</button><input id="scrub" type="range" min="0" max="40" step="0.0333" value="0"><span id="time">0.00s</span></div>
+<script>
+/*
+ * Stynark teaser and trailer (1080×1920, 30 fps), in the website's design: paper and grid, ink
+ * outlines with hard shadows, the orange accent, course colours, Archivo + Geist. Pacing studied
+ * from a gradient opener:
+ * black space, glowing gradient light, hairlines with white nodes, one quiet phrase at a time,
+ * a flash to white with black pills joined by drawn curves, merging colour blobs, logo end card.
+ * Re-coloured in Stynark's warm palette. Every frame is drawn by render(t): nothing uses CSS
+ * animation, so the exported video is frame-exact. Each cut also lists its sound effects
+ * (window.__sfx) for the audio pass.
+ */
+const W = 1080, H = 1920;
+const C = { orange: "#EB5E28", amber: "#FF9A3C", gold: "#FFC27A", rust: "#B8400F", rose: "#FF5E7E", ink: "#0B0B0B", paper: "#FAF8F4" };
+const OUT = "M13.15 -25.41L0 -33L-28.58 -16.5L0 0L28.58 -16.5L28.58 16.5L0 33L-28.58 16.5L-28.58 4.9";
+const DASH = ["M-13.75 4.11L-2 10.9L-2 15.75L-13.75 8.96Z", "M-10.75 14.35L-2 19.4L-2 24.25L-10.75 19.2Z"];
+// The six outer corners of the box (for the ring → box morph).
+const HEX = [[0, -33], [28.58, -16.5], [28.58, 16.5], [0, 33], [-28.58, 16.5], [-28.58, -16.5]];
+
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const lerp = (a, b, x) => a + (b - a) * x;
+const eo = (x) => 1 - Math.pow(1 - x, 3);
+const eio = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const eback = (x) => { const c1 = 1.5, c3 = c1 + 1; return x <= 0 ? 0 : 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+/** In → hold → out, for phrases and elements (0–1). */
+const life = (t, a, b, fi = 0.45, fo = 0.4) => Math.min(eo(prog(t, a, a + fi)), 1 - eio(prog(t, b - fo, b)));
+
+const GRAD = `${C.rose}, ${C.orange} 40%, ${C.amber} 75%, ${C.gold}`;
+
+// ---------- site design tokens (src/app/globals.css) ----------
+const K = { paper: "#FAF8F4", card: "#FFFFFF", sunk: "#F3F0EA", wash: "#ECE7DE", line: "#E6E1D8", ink: "#151515", muted: "#5F5B53", brand: "#EB5E28", brandWash: "#FDE7DC", brandText: "#B8400F" };
+const HUE = { blue: ["#2F5BD3", "#E8EEFC"], green: ["#16794A", "#E3F5E9"], purple: ["#6B3FC4", "#EFE8FC"], yellow: ["#8A6100", "#FDF3D0", "#F2C230"], teal: ["#0F766E", "#DDF3F0"], pink: ["#BE185D", "#FCE7F3"] };
+const CYCLE = ["blue", "green", "purple", "yellow", "teal", "pink"];
+const paperBg = `background:${K.paper};background-image:linear-gradient(${K.line} 1px,transparent 1px),linear-gradient(90deg,${K.line} 1px,transparent 1px);background-size:44px 44px;background-position:center`;
+/** The site's ink block: white card, 3px ink outline, rounded, hard offset shadow. */
+const inkBlock = (shadow = K.ink, r = 28, off = 10) => `background:${K.card};border:3px solid ${K.ink};border-radius:${r}px;box-shadow:${off}px ${off}px 0 ${shadow}`;
+/** Eyebrow pill: coloured wash, matching text, small caps. */
+const eyebrow = (text, y, v, [c, w] = [K.brandText, K.brandWash]) => v <= 0 ? "" : `<div class="abs" style="left:0;right:0;top:${y + (1 - v) * 16}px;display:flex;justify-content:center;opacity:${v}"><span style="padding:12px 26px;border-radius:999px;background:${w};color:${c};font-family:Geist,sans-serif;font-size:26px;font-weight:600;letter-spacing:0.14em">${text}</span></div>`;
+
+/** A headline in the site's display face (Archivo, wide, heavy), fading up into place. */
+function phrase(text, t, a, b, { y = 960, size = 72, color = K.ink, extra = "" } = {}) {
+  const v = life(t, a, b);
+  if (v <= 0) return "";
+  return `<div class="t wm" style="top:${y - size * 0.6 + (1 - v) * 24}px;font-size:${size}px;color:${color};opacity:${v};line-height:1.08;${extra}">${text}</div>`;
+}
+const footer = (t, a, b, dark = false) => {
+  const v = life(t, a, b + 0.4);
+  return v <= 0 ? "" : `<div class="t" style="top:1750px;font-family:Geist,sans-serif;font-size:28px;font-weight:600;color:${dark ? "rgba(255,255,255,0.7)" : K.muted};opacity:${v}">stynark.com</div>`;
+};
+/** A node: white dot with an ink outline (orange when active). */
+const node = (x, y, r = 13, v = 1, fill = K.card) => v <= 0 ? "" : `<div class="abs" style="left:${x - r}px;top:${y - r}px;width:${2 * r}px;height:${2 * r}px;border-radius:50%;background:${fill};border:3px solid ${K.ink};box-sizing:border-box;transform:scale(${v})"></div>`;
+const handle = (x, y, s = 22, v = 1) => v <= 0 ? "" : `<div class="abs" style="left:${x - s / 2}px;top:${y - s / 2}px;width:${s}px;height:${s}px;background:${K.card};border:3px solid ${K.ink};box-sizing:border-box;transform:scale(${v})"></div>`;
+const softGlow = (x, y, w, h, o) => `<div class="abs" style="left:${x - w / 2}px;top:${y - h / 2}px;width:${w}px;height:${h}px;border-radius:50%;background:radial-gradient(closest-side,rgba(235,94,40,0.28),transparent);opacity:${o};filter:blur(40px)"></div>`;
+
+/** The Stynark mark in ink with orange dashes (the site's logo). */
+function mark({ size = 200, x = 540, y = 960, stroke = K.ink, dash = K.brand, sw = 4.4, draw = 1, dashes = 1, style = "" }) {
+  return `<svg class="abs" style="left:${x - size / 2}px;top:${y - size / 2}px;width:${size}px;height:${size}px;overflow:visible;${style}" viewBox="-40 -40 80 80">
+    <path d="${OUT}" fill="none" stroke="${stroke}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="${1 - clamp(draw)}"/>
+    <g fill="${dash}" opacity="${clamp(dashes)}">${DASH.map((p) => `<path d="${p}"/>`).join("")}</g></svg>`;
+}
+/** A site-style pill button with a coloured icon tile. */
+function pill(text, x, y, v, hue = "blue") {
+  if (v <= 0) return "";
+  const [c, w] = HUE[hue];
+  const s = lerp(0.7, 1, eback(v));
+  return `<div class="abs" style="left:${x}px;top:${y}px;transform:translate(-50%,-50%) scale(${s});opacity:${clamp(v * 1.6)};display:flex;align-items:center;gap:20px;padding:18px 40px 18px 18px;${inkBlock(K.ink, 999, 7)}">
+    <span style="width:68px;height:68px;border-radius:50%;background:${w};border:2px solid ${K.ink};display:grid;place-items:center"><svg width="42" height="42" viewBox="-40 -40 80 80"><path d="${OUT}" fill="none" stroke="${c}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>${DASH.map((p) => `<path d="${p}" fill="${c}"/>`).join("")}</svg></span>
+    <span class="wm" style="font-size:44px;color:${K.ink};white-space:nowrap">${text}</span></div>`;
+}
+function curve(x1, y1, x2, y2, bend, v) {
+  if (v <= 0) return "";
+  const mx = (x1 + x2) / 2 + bend, my = (y1 + y2) / 2 - Math.abs(bend) * 0.6;
+  return `<svg class="abs" style="inset:0" width="${W}" height="${H}"><path d="M${x1} ${y1} Q${mx} ${my} ${x2} ${y2}" fill="none" stroke="${K.ink}" stroke-width="3" stroke-dasharray="10 9" opacity="0.7" pathLength="${1000}" style="stroke-dashoffset:0"/><path d="M${x1} ${y1} Q${mx} ${my} ${x2} ${y2}" fill="none" stroke="${K.paper}" stroke-width="7" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="${-v}"/></svg>`;
+}
+/** A mini website in the hero's style: browser bar, a coloured hero block, text lines. */
+function siteCard(x, y, w, rot, hue, v, title) {
+  if (v <= 0) return "";
+  const [c, wsh] = HUE[hue];
+  const h = w * 0.68;
+  return `<div class="abs" style="left:${x - w / 2}px;top:${y - h / 2}px;width:${w}px;height:${h}px;transform:rotate(${rot * v}deg) translateY(${(1 - eback(v)) * 160}px);opacity:${clamp(v * 2)};${inkBlock(K.ink, 24, 10)};overflow:hidden">
+    <div style="height:46px;border-bottom:3px solid ${K.ink};display:flex;align-items:center;gap:10px;padding:0 18px;background:${K.sunk}"><i style="width:14px;height:14px;border-radius:50%;background:#ff5f57;border:2px solid ${K.ink}"></i><i style="width:14px;height:14px;border-radius:50%;background:#febc2e;border:2px solid ${K.ink}"></i><i style="width:14px;height:14px;border-radius:50%;background:#28c840;border:2px solid ${K.ink}"></i></div>
+    <div style="margin:22px;height:${h * 0.34}px;border-radius:16px;background:${wsh};border:2px solid ${K.ink};display:flex;align-items:center;padding:0 22px"><span class="wm" style="font-size:${w * 0.075}px;color:${c}">${title}</span></div>
+    <div style="margin:0 22px;height:16px;width:70%;border-radius:8px;background:${K.wash}"></div><div style="margin:14px 22px 0;height:16px;width:45%;border-radius:8px;background:${K.wash}"></div>
+    <div style="margin:18px 22px 0;height:44px;width:${w * 0.3}px;border-radius:12px;background:${K.brand};border:2px solid ${K.ink}"></div></div>`;
+}
+
+// ---------- shared scene builders (used by both cuts), in the website's design ----------
+const S = {
+  // An ink line rises out of the hero's soft orange glow, with outlined nodes; the first phrase.
+  begin(t, a, b, text = "Let's begin") {
+    const L = eio(prog(t, a, a + 1.3));
+    const top = lerp(1920, 1040, L);
+    const discs = [0, 1].map((i) => { const v = eo(prog(t, a + 1.0 + i * 0.25, a + 1.7 + i * 0.25)); if (v <= 0) return ""; const y = lerp(1720, 1230 + i * 170, v); return `<div class="abs" style="left:${540 - 170 * v}px;top:${y - 28 * v}px;width:${340 * v}px;height:${56 * v}px;border-radius:50%;background:${i ? K.brand : HUE.yellow[2]};border:3px solid ${K.ink};box-sizing:border-box"></div>`; }).join("");
+    const wave = Array.from({ length: 40 }, (_, i) => `${540 + Math.sin(i / 5 + t * 2) * 60 * (i / 40)} ${1920 - i * 23}`).join(" L");
+    return `<div class="scene" style="${paperBg}">
+      ${softGlow(540, 1900, 1000, 520, prog(t, a, a + 1.5))}
+      <svg class="abs" style="inset:0" width="${W}" height="${H}">
+        <path d="M${wave}" fill="none" stroke="${K.ink}" stroke-width="2" stroke-dasharray="8 8" opacity="0.45"/>
+        <line x1="540" y1="1920" x2="540" y2="${top}" stroke="${K.ink}" stroke-width="4"/></svg>
+      ${discs}
+      ${L > 0.9 ? node(540, top, 14, eback(prog(t, a + 1.2, a + 1.45)), K.brand) + node(566, top - 8, 10, eback(prog(t, a + 1.3, a + 1.55))) : ""}
+      ${eyebrow("STYNARK", 660, life(t, a + 0.4, b), [K.brandText, K.brandWash])}
+      ${phrase(text, t, a + 0.6, b, { y: 790, size: text.length > 14 ? 64 : 84 })}
+    </div>`;
+  },
+  // Outlined nodes find their places on an ink ring; an orange arc runs round it.
+  ring(t, a, b, text = "With an idea") {
+    const p = eio(prog(t, a, a + 0.8));
+    const R = 300, rot = (t - a) * 40;
+    const start = [[230, 430], [880, 520], [910, 1430], [170, 1310]];
+    const nodes = start.map(([sx, sy], i) => { const ang = ((i * 90 + 45 + rot) * Math.PI) / 180; return node(lerp(sx, 540 + Math.cos(ang) * R, p), lerp(sy, 960 + Math.sin(ang) * R, p), 15, 1, i === 0 ? K.brand : K.card); }).join("");
+    const draw = eio(prog(t, a + 0.5, a + 1.2));
+    const C2 = 2 * Math.PI * R;
+    return `<div class="scene" style="${paperBg}">
+      <svg class="abs" style="inset:0" width="${W}" height="${H}">
+        <circle cx="540" cy="960" r="${R}" fill="${K.card}" stroke="${K.ink}" stroke-width="5" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="${1 - draw}" fill-opacity="${draw * 0.9}"/>
+        <circle cx="540" cy="960" r="${R}" fill="none" stroke="${K.brand}" stroke-width="14" stroke-linecap="round" stroke-dasharray="${C2 * 0.18} ${C2}" transform="rotate(${rot * 3 - 90} 540 960)" opacity="${draw}"/></svg>
+      ${nodes}
+      ${phrase(text, t, a + 0.7, b, { y: 960, size: 64 })}
+    </div>`;
+  },
+  // The ring becomes Stynark's box: corner handles, then the logo drawn in ink.
+  shape(t, a, b, text = "Give it a shape") {
+    const p = eio(prog(t, a, a + 0.9));
+    const R = 300, k = 9.2;
+    const handles = HEX.map(([hx, hy], i) => { const ang = ((i * 60 - 90) * Math.PI) / 180; return handle(lerp(540 + Math.cos(ang) * R, 540 + hx * k, p), lerp(960 + Math.sin(ang) * R, 960 + hy * k, p), 26, 1 - prog(t, b - 0.5, b)); }).join("");
+    return `<div class="scene" style="${paperBg}">
+      ${softGlow(540, 960, 900, 900, 0.8 * p)}
+      <div class="abs" style="left:${540 - R}px;top:${960 - R}px;width:${2 * R}px;height:${2 * R}px;border-radius:50%;border:5px solid ${K.ink};box-sizing:border-box;opacity:${1 - p}"></div>
+      ${mark({ size: 80 * k, x: 540, y: 960, sw: 3, draw: eio(prog(t, a + 0.3, a + 1.3)), dashes: prog(t, a + 1.2, a + 1.5) })}
+      ${handles}
+      ${phrase(text, t, a + 0.8, b, { y: 1470, size: 72 })}
+    </div>`;
+  },
+  // The logo on an ink-outlined card that flips in.
+  spark(t, a, b, text = "Learn to build it with AI") {
+    const v = eio(prog(t, a, a + 0.9));
+    const ry = lerp(-75, 0, v);
+    return `<div class="scene" style="${paperBg}">
+      ${softGlow(540, 760, 700, 700, 0.8 * v)}
+      <div class="abs" style="left:350px;top:570px;width:380px;height:380px;perspective:1200px"><div class="abs" style="inset:0;transform:rotateY(${ry}deg) rotateZ(${lerp(-6, -3, v)}deg);${inkBlock(K.ink, 36, 12)}">${mark({ size: 230, x: 187, y: 187 })}</div></div>
+      ${eyebrow("LEARN WITH AI", 1050, life(t, a + 0.35, b), HUE.purple)}
+      ${phrase(text, t, a + 0.45, b, { y: 1180, size: 80 })}
+    </div>`;
+  },
+  // An orange band with ink edges sweeps in and folds into an orange card with a hard shadow.
+  band(t, a, b, title = "Build", sub = "with AI, step by step") {
+    const sweep = eio(prog(t, a, a + 0.6));
+    const fold = eio(prog(t, a + 0.75, a + 1.35));
+    const w = lerp(1140, 800, fold), h = lerp(340, 250, fold), r = lerp(0, 36, fold);
+    const x = lerp(-1140 + 1110 * sweep, 140, fold);
+    const tv = prog(t, a + 1.0, a + 1.5) * (1 - prog(t, b - 0.3, b));
+    return `<div class="scene" style="${paperBg}">
+      <div class="abs" style="left:${x}px;top:${960 - h / 2}px;width:${w}px;height:${h}px;border-radius:${r}px;background:${K.brand};border:3px solid ${K.ink};box-sizing:border-box;box-shadow:${12 * fold}px ${12 * fold}px 0 ${K.ink}">
+        <div class="abs" style="left:${lerp(120, 50, fold)}px;top:${h / 2 - 70}px;width:140px;height:140px;border-radius:28px;background:${K.card};border:3px solid ${K.ink}">${mark({ size: 110, x: 67, y: 67 })}</div>
+        <div class="abs" style="left:${lerp(300, 230, fold)}px;top:${h / 2 - 70}px;opacity:${tv};transform:translateY(${(1 - tv) * 16}px)">
+          <div class="wm" style="font-size:84px;color:${K.ink};line-height:1">${title}</div>
+          <div style="margin-top:10px;font-family:Geist,sans-serif;font-size:36px;font-weight:500;color:rgba(21,21,21,0.8)">${sub}</div></div>
+      </div>
+    </div>`;
+  },
+  // Fourteen outlined squares fill orange one by one: a lesson each.
+  lessons(t, a, b, text = "14 lessons. Your pace.") {
+    const n = 14, size = 46, gap = 58, x0 = 540 - ((n - 1) * gap) / 2, y = 960;
+    const hop = clamp((t - a - 0.6) / (b - a - 1.0)) * (n - 1);
+    const sq = Array.from({ length: n }, (_, i) => {
+      const ap = eback(prog(t, a + i * 0.035, a + 0.35 + i * 0.035));
+      const done = i <= hop;
+      const pop = done && i === Math.floor(hop) ? 1.15 : 1;
+      return ap <= 0 ? "" : `<div class="abs" style="left:${x0 + i * gap - size / 2}px;top:${y - size / 2}px;width:${size}px;height:${size}px;border-radius:12px;background:${done ? K.brand : K.card};border:3px solid ${K.ink};box-sizing:border-box;box-shadow:${done ? "4px 4px 0 " + K.ink : "none"};transform:scale(${ap * pop})"></div>`;
+    }).join("");
+    return `<div class="scene" style="${paperBg}">${eyebrow("FAST TRACK", 760, life(t, a + 0.2, b))}${sq}
+      ${phrase(text, t, a + 0.4, b, { y: 1130, size: 70 })}
+      <div class="t" style="top:1210px;font-family:Geist,sans-serif;font-size:34px;font-weight:500;color:${K.muted};opacity:${life(t, a + 0.7, b)}">Lifetime access. Learn whenever you like.</div></div>`;
+  },
+  // A bar chart of outlined bars in the course colours: skill by skill.
+  stems(t, a, b, text = "Skill by skill") {
+    const xs = [170, 330, 490, 650, 810];
+    const out = xs.map((x, i) => {
+      const v = eback(prog(t, a + i * 0.12, a + 0.8 + i * 0.12));
+      const hgt = (260 + i * 150) * v;
+      const [c, w, solid] = HUE[CYCLE[i]];
+      return v <= 0 ? "" : `<div class="abs" style="left:${x}px;top:${1460 - hgt}px;width:110px;height:${hgt}px;border-radius:18px 18px 6px 6px;background:${solid || w};border:3px solid ${K.ink};box-sizing:border-box;box-shadow:7px 7px 0 ${K.ink}"><div style="margin:14px auto 0;width:44px;height:8px;border-radius:4px;background:${c}"></div></div>`;
+    }).join("");
+    return `<div class="scene" style="${paperBg}"><div class="abs" style="left:120px;right:120px;top:1460px;height:4px;background:${K.ink};border-radius:2px"></div>${out}
+      ${phrase(text, t, a + 0.4, b, { y: 520, size: 84 })}</div>`;
+  },
+  // An orange circle with an ink rim floods the screen.
+  orb(t, a, b) {
+    const p = eio(prog(t, a, b));
+    const r = lerp(90, 1500, p);
+    return `<div class="scene" style="${paperBg}">
+      <div class="abs" style="left:${540 - r}px;top:${960 - r}px;width:${2 * r}px;height:${2 * r}px;border-radius:50%;background:${K.brand};border:${lerp(6, 14, p)}px solid ${K.ink};box-sizing:border-box"></div></div>`;
+  },
+  // Pills appear one by one, joined by dotted curves.
+  pills(t, a, b, items) {
+    const spots = [[540, 560, 0], [450, 880, -260], [630, 1200, 300], [520, 1520, -240]];
+    let out = "";
+    items.forEach((txt, i) => {
+      const at = a + 0.25 + i * ((b - a - 0.6) / items.length);
+      const [x, y, bend] = spots[i % spots.length];
+      if (i > 0) { const [px, py] = spots[i - 1]; out += curve(px, py + 60, x, y - 60, bend, eio(prog(t, at - 0.45, at))); }
+      out += pill(txt, x, y, prog(t, at, at + 0.45), CYCLE[i % CYCLE.length]);
+    });
+    return `<div class="scene" style="${paperBg}">${out}${footer(t, a, b)}</div>`;
+  },
+  // The dark band: a node runs in along a line, an orange outline draws, and a white card lands
+  // with the site's orange shadow.
+  connected(t, a, b, text = "Ready for clients") {
+    const d = eio(prog(t, a, a + 0.7));
+    const o = eio(prog(t, a + 0.55, a + 1.2));
+    const fill = eo(prog(t, a + 1.1, a + 1.45));
+    const pw = 680, ph = 170, px = 540 - pw / 2, py = 960 - ph / 2;
+    return `<div class="scene" style="background:${K.ink}">
+      <svg class="abs" style="inset:0" width="${W}" height="${H}">
+        <line x1="0" y1="960" x2="${lerp(0, px, d)}" y2="960" stroke="rgba(255,255,255,${0.6 * (1 - fill)})" stroke-width="3"/>
+        <rect x="${px}" y="${py}" width="${pw}" height="${ph}" rx="${ph / 2}" fill="${K.card}" fill-opacity="${fill}" stroke="${K.brand}" stroke-width="5" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="${1 - o}"/></svg>
+      <div class="abs" style="left:${px + 10 * fill}px;top:${py + 10 * fill}px;width:${pw}px;height:${ph}px;border-radius:${ph}px;background:${K.brand};opacity:${fill};z-index:-0"></div>
+      <div class="abs" style="left:${px}px;top:${py}px;width:${pw}px;height:${ph}px;border-radius:${ph}px;background:${K.card};border:3px solid ${K.ink};box-sizing:border-box;opacity:${fill};display:flex;align-items:center;justify-content:center"><span class="wm" style="font-size:60px;color:${K.ink}">${text}</span></div>
+      ${o < 0.3 ? node(lerp(0, px, d), 960, 14, 1, K.brand) : ""}
+      ${footer(t, a, b, true)}
+    </div>`;
+  },
+  // Websites fan in like the homepage hero: "Ideas into websites", then "Built with AI".
+  blobs(t, a, b, line1 = "Ideas into websites", line2 = "Built with AI") {
+    const cards = [[330, 1190, -7, "green", "Salon"], [760, 1130, 6, "blue", "Clinic"], [545, 1340, 0, "yellow", "Store"]]
+      .map(([x, y, r, h, ttl], i) => siteCard(x, y, 470, r, h, prog(t, a + 0.3 + i * 0.25, a + 0.9 + i * 0.25), ttl)).join("");
+    return `<div class="scene" style="${paperBg}">${softGlow(540, 1220, 900, 700, 0.9)}${cards}
+      ${phrase(line1, t, a + 0.2, a + (b - a) * 0.55, { y: 560, size: 76 })}
+      ${phrase(line2, t, a + (b - a) * 0.5, b - 0.1, { y: 560, size: 76 })}
+      ${footer(t, a, b)}</div>`;
+  },
+  // End card in the footer's style: orange, the ink logo and wordmark, the address and Enroll Now.
+  logo(t, a, b, line = "stynark.com") {
+    const dr = eio(prog(t, a, a + 0.6));
+    const letters = (i) => eo(prog(t, a + 0.25 + i * 0.04, a + 0.6 + i * 0.04));
+    const url = eo(prog(t, a + 0.7, a + 1.1));
+    const btn = eback(prog(t, a + 0.95, a + 1.4));
+    return `<div class="scene" style="background:${K.brand};background-image:linear-gradient(rgba(255,255,255,0.14) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.14) 1px,transparent 1px);background-size:44px 44px;background-position:center">
+      <div class="abs" style="left:0;right:0;top:${860 - 90}px;height:180px;display:flex;align-items:center;justify-content:center;gap:34px">
+        <svg style="width:160px;height:160px;overflow:visible" viewBox="-36 -36 72 72"><path d="${OUT}" fill="none" stroke="${K.ink}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="${1 - dr}"/>${DASH.map((p) => `<path d="${p}" fill="${K.ink}" opacity="${prog(t, a + 0.5, a + 0.65)}"/>`).join("")}</svg>
+        <span class="wm" style="font-size:132px;color:${K.ink};line-height:1">${"Stynark".split("").map((ch, i) => `<span style="display:inline-block;opacity:${letters(i)};transform:translateY(${(1 - letters(i)) * 50}px)">${ch}</span>`).join("")}</span>
+      </div>
+      <div class="t" style="top:${1010 + (1 - url) * 16}px;font-family:Geist,sans-serif;font-size:40px;font-weight:600;color:rgba(21,21,21,0.85);opacity:${url}">${line}</div>
+      ${btn > 0 ? `<div class="abs" style="left:50%;top:1140px;transform:translateX(-50%) scale(${btn});padding:28px 60px;border-radius:20px;background:${K.ink};border:3px solid ${K.ink};box-shadow:8px 8px 0 rgba(21,21,21,0.35);font-family:Geist,sans-serif;font-size:42px;font-weight:600;color:#fff;white-space:nowrap">Enroll Now →</div>` : ""}
+    </div>`;
+  },
+  // The Main Track, in the website's own design: paper, ink outlines with a hard shadow, Archivo,
+  // each skill in its course colour (SEO green, AI agents teal, automation amber), then Enroll Now.
+  mainTrack(t, a, b) {
+    const ink = "#151515";
+    const head = eo(prog(t, a + 0.15, a + 0.6));
+    const sub = eo(prog(t, a + 0.45, a + 0.9));
+    const icons = {
+      seo: (c) => `<circle cx="-4" cy="-4" r="15" fill="none" stroke="${c}" stroke-width="6"/><path d="M7 7 L20 20" stroke="${c}" stroke-width="7" stroke-linecap="round"/>`,
+      agent: (c) => `<rect x="-20" y="-14" width="40" height="30" rx="9" fill="none" stroke="${c}" stroke-width="6"/><path d="M-8 16 L-14 25 L0 16" fill="${c}"/><circle cx="-7" cy="1" r="4" fill="${c}"/><circle cx="7" cy="1" r="4" fill="${c}"/>`,
+      auto: (c) => `<path d="M4 -24 L-14 4 L0 4 L-4 24 L14 -4 L0 -4 Z" fill="${c}" stroke="${c}" stroke-width="3" stroke-linejoin="round"/>`,
+    };
+    const cards = [
+      ["seo", "Search engine optimization", "Get businesses found on Google", "#16794a", "#e3f5e9"],
+      ["agent", "AI agents", "Chatbots and WhatsApp bots for businesses", "#0f766e", "#ddf3f0"],
+      ["auto", "AI automation", "Systems that save businesses hours", "#8a6100", "#fdf3d0"],
+    ].map(([ic, title, line, hue, wash], i) => {
+      const v = prog(t, a + 0.95 + i * 0.32, a + 1.45 + i * 0.32);
+      if (v <= 0) return "";
+      const x = lerp(260, 0, eback(v)), y = 820 + i * 230;
+      return `<div class="abs" style="left:${110 + x}px;top:${y}px;width:860px;height:190px;opacity:${clamp(v * 2)};background:#fff;border:3px solid ${ink};border-radius:26px;box-shadow:9px 9px 0 ${ink};display:flex;align-items:center;gap:30px;padding:0 34px;box-sizing:border-box">
+        <div style="flex:none;width:112px;height:112px;border-radius:22px;background:${wash};border:2px solid ${ink};display:grid;place-items:center"><svg width="70" height="70" viewBox="-28 -28 56 56">${icons[ic](hue)}</svg></div>
+        <div style="min-width:0"><div class="wm" style="font-size:${title.length > 20 ? 42 : 50}px;color:${ink};line-height:1.05">${title}</div>
+        <div style="margin-top:8px;font-size:27px;font-weight:400;color:#5c574f;white-space:nowrap">${line}</div></div></div>`;
+    }).join("");
+    const btn = eback(prog(t, a + 2.15, a + 2.6));
+    const press = t > a + 3.35 && t < a + 3.6 ? 1 : 0;
+    return `<div class="scene" style="background:#FAF8F4;background-image:linear-gradient(#ebe5da 1px,transparent 1px),linear-gradient(90deg,#ebe5da 1px,transparent 1px);background-size:26px 26px">
+      <div class="abs" style="left:0;right:0;top:${430 + (1 - head) * 20}px;display:flex;justify-content:center;opacity:${head}"><span style="padding:12px 26px;border-radius:999px;background:#fde7dc;color:#b8400f;font-size:26px;font-weight:500;letter-spacing:0.14em">MAIN TRACK</span></div>
+      <div class="t wm" style="top:${500 + (1 - head) * 30}px;font-size:150px;color:${ink};opacity:${head};line-height:1.1"><span style="color:#EB5E28">26</span> lessons</div>
+      <div class="t" style="top:${690 + (1 - sub) * 16}px;font-size:40px;font-weight:400;color:#5c574f;opacity:${sub}">Everything in the Fast Track, plus:</div>
+      ${cards}
+      ${btn > 0 ? `<div class="abs" style="left:50%;top:1560px;transform:translate(calc(-50% + ${press * 5}px), ${press * 5}px) scale(${btn});padding:30px 64px;border-radius:20px;background:#EB5E28;border:3px solid ${ink};box-shadow:${press ? 3 : 8}px ${press ? 3 : 8}px 0 ${ink};font-size:44px;font-weight:500;color:${ink};white-space:nowrap;display:flex;align-items:center;gap:18px">Enroll Now <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="${ink}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>` : ""}
+      ${footer(t, a, b + 0.4, true)}
+    </div>`;
+  },
+};
+
+// ---------- "Two tracks" cut: the website's hero, steps and plan cards ----------
+const check = (c = K.brandText, w = K.brandWash) => `<span style="flex:none;width:44px;height:44px;border-radius:50%;background:${w};border:2px solid ${K.ink};display:grid;place-items:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>`;
+const plus = (c, w) => `<span style="flex:none;width:44px;height:44px;border-radius:50%;background:${w};border:2px solid ${K.ink};display:grid;place-items:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="3.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>`;
+const btnPrimary = (text, v, press = 0) => `<span style="display:inline-flex;align-items:center;gap:14px;padding:26px 46px;border-radius:18px;background:${K.brand};border:3px solid ${K.ink};box-shadow:${press ? 3 : 7}px ${press ? 3 : 7}px 0 ${K.ink};transform:translate(${press * 4}px,${press * 4}px) scale(${v});font-family:Geist,sans-serif;font-size:38px;font-weight:600;color:${K.ink}">${text} <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="${K.ink}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>`;
+const btnSecondary = (text, v) => `<span style="display:inline-flex;align-items:center;padding:26px 46px;border-radius:18px;background:${K.card};border:3px solid ${K.ink};box-shadow:7px 7px 0 ${K.ink};transform:scale(${v});font-family:Geist,sans-serif;font-size:38px;font-weight:600;color:${K.ink}">${text}</span>`;
+const fact = (text) => `<span style="padding:10px 20px;border-radius:999px;background:${K.sunk};border:2px solid ${K.ink};font-family:Geist,sans-serif;font-size:26px;font-weight:600;color:${K.ink}">${text}</span>`;
+
+/** A plan card like the website's: coloured header band, facts, a list that ticks in item by item. */
+function planCard(t, a, { name, badge, blurb, head, label, items, footerRow }) {
+  const v = eback(prog(t, a, a + 0.5));
+  const list = items.map(([txt, icon], i) => {
+    const q = eo(prog(t, a + 1.2 + i * 0.75, a + 1.55 + i * 0.75));
+    return `<div style="display:flex;gap:22px;align-items:flex-start;opacity:${q};transform:translateX(${(1 - q) * 40}px)">${icon}<span style="font-family:Geist,sans-serif;font-size:34px;font-weight:500;line-height:1.3;color:${K.ink}">${txt}</span></div>`;
+  }).join("");
+  const fr = footerRow ? eo(prog(t, a + 1.3 + items.length * 0.75, a + 1.7 + items.length * 0.75)) : 0;
+  return `<div class="abs" style="left:70px;top:${250 + (1 - v) * 200}px;width:940px;opacity:${clamp(v * 1.5)};${inkBlock(K.ink, 32, 12)};overflow:hidden">
+    <div style="background:${head};border-bottom:3px solid ${K.ink};padding:34px 40px;display:flex;justify-content:space-between;align-items:flex-start;gap:20px">
+      <div><div class="wm" style="font-size:76px;color:${K.ink};line-height:1">${name}</div><div style="margin-top:12px;font-family:Geist,sans-serif;font-size:32px;font-weight:500;color:rgba(21,21,21,0.82)">${blurb}</div></div>
+      <span style="flex:none;padding:10px 22px;border-radius:999px;background:${K.card};border:3px solid ${K.ink};font-family:Geist,sans-serif;font-size:26px;font-weight:600;color:${K.ink}">${badge}</span></div>
+    <div style="padding:30px 40px 0;display:flex;gap:14px;flex-wrap:wrap">${fact(name === "Fast Track" ? "14 lessons" : "26 lessons")}${fact("Self-paced")}${fact("Lifetime access")}</div>
+    <div style="padding:34px 40px 8px;font-family:Geist,sans-serif;font-size:26px;font-weight:600;letter-spacing:0.12em;color:${K.muted}">${label}</div>
+    <div style="padding:10px 40px 36px;display:flex;flex-direction:column;gap:22px">${list}</div>
+    ${footerRow ? `<div style="margin:0 40px;padding:24px 0 34px;border-top:3px dashed ${K.line};display:flex;justify-content:center;gap:40px;opacity:${fr};font-family:Geist,sans-serif;font-size:28px;font-weight:600;color:${K.ink}">${footerRow}</div>` : ""}
+  </div>`;
+}
+
+const T = {
+  // The website's hero, with the honest promise: a course, not a website builder.
+  hero(t, a, b) {
+    const pill = eback(prog(t, a + 0.2, a + 0.6));
+    const l1 = eo(prog(t, a + 0.5, a + 1.0)), l2 = eo(prog(t, a + 0.75, a + 1.25));
+    const s1 = eo(prog(t, a + 1.6, a + 2.0)), s2 = eo(prog(t, a + 2.1, a + 2.5));
+    const bt = eback(prog(t, a + 2.8, a + 3.2));
+    return `<div class="scene" style="${paperBg}">
+      ${softGlow(820, 420, 900, 900, 1)}
+      <div class="abs" style="left:0;right:0;top:520px;display:flex;justify-content:center;opacity:${clamp(pill)}"><span style="display:inline-flex;align-items:center;gap:14px;padding:14px 28px;border-radius:999px;background:${K.card};border:2px solid ${K.line};transform:scale(${pill});font-family:Geist,sans-serif;font-size:30px;font-weight:500;color:${K.ink}"><i style="width:12px;height:12px;border-radius:50%;background:${K.brand}"></i>If you can type it, you can build it</span></div>
+      <div class="t wm" style="top:${640 + (1 - l1) * 30}px;font-size:104px;color:${K.ink};opacity:${l1};line-height:1.05">Learn to build</div>
+      <div class="t wm" style="top:${750 + (1 - l2) * 30}px;font-size:104px;color:${K.ink};opacity:${l2};line-height:1.05"><span style="color:${K.brand}">websites</span> with AI.</div>
+      <div class="t" style="top:${930 + (1 - s1) * 16}px;font-family:Geist,sans-serif;font-size:40px;font-weight:500;color:${K.muted};opacity:${s1}">Stynark isn't a website builder.</div>
+      <div class="t" style="top:${990 + (1 - s2) * 16}px;font-family:Geist,sans-serif;font-size:40px;font-weight:600;color:${K.ink};opacity:${s2}">It's a course that teaches you the skill.</div>
+      ${bt > 0 ? `<div class="abs" style="left:0;right:0;top:1150px;display:flex;justify-content:center;gap:28px;opacity:${clamp(bt)}">${btnPrimary("Enroll Now", bt)}${btnSecondary("Start Learning", bt)}</div>` : ""}
+      ${footer(t, a, b)}
+    </div>`;
+  },
+  // "Learn to": Design, Build, Launch, Sell, as the homepage's numbered steps.
+  verbs(t, a, b) {
+    const steps = [["Design", "Brand, colours and page plans", "blue"], ["Build", "Websites, stores and bookings, with AI", "green"], ["Launch", "Live on the internet, on free hosting", "purple"], ["Sell", "Pricing, proposals and pitching clients", "yellow"]];
+    const head = eo(prog(t, a + 0.05, a + 0.4));
+    const cards = steps.map(([word, line, hue], i) => {
+      const v = prog(t, a + 0.3 + i * 0.5, a + 0.75 + i * 0.5);
+      if (v <= 0) return "";
+      const [c, w, solid] = HUE[hue];
+      return `<div class="abs" style="left:${110 + (1 - eback(v)) * 300}px;top:${520 + i * 245}px;width:860px;height:200px;opacity:${clamp(v * 2)};${inkBlock(K.ink, 28, 10)};display:flex;align-items:center;gap:30px;padding:0 34px;box-sizing:border-box">
+        <span style="flex:none;width:92px;height:92px;border-radius:50%;background:${solid || w};border:3px solid ${K.ink};box-shadow:3px 3px 0 ${K.ink};display:grid;place-items:center;font-family:Geist,sans-serif;font-size:40px;font-weight:700;color:${solid ? K.ink : c}">${i + 1}</span>
+        <div><div class="wm" style="font-size:66px;color:${K.ink};line-height:1">${word}</div><div style="margin-top:8px;font-family:Geist,sans-serif;font-size:30px;font-weight:500;color:${K.muted};white-space:nowrap">${line}</div></div></div>`;
+    }).join("");
+    return `<div class="scene" style="${paperBg}">
+      ${eyebrow("WHAT YOU'LL LEARN", 300, head, HUE.blue)}
+      <div class="t wm" style="top:${380 + (1 - head) * 20}px;font-size:92px;color:${K.ink};opacity:${head}">Learn to</div>
+      ${cards}
+      ${phrase(`websites, <span style="color:${K.brand}">with AI.</span>`, t, a + 2.5, b, { y: 1560, size: 80 })}
+      ${footer(t, a, b)}
+    </div>`;
+  },
+  // Two tracks, side by side, like the homepage.
+  twoTracks(t, a, b) {
+    const head = eo(prog(t, a + 0.1, a + 0.5));
+    const card = (i, name, lessons, color, badge, line) => {
+      const v = eback(prog(t, a + 0.5 + i * 0.3, a + 1.0 + i * 0.3));
+      if (v <= 0) return "";
+      return `<div class="abs" style="left:${80 + i * 480}px;top:${700 + (1 - v) * 260}px;width:440px;opacity:${clamp(v * 2)};${inkBlock(K.ink, 28, 10)};overflow:hidden">
+        <div style="background:${color};border-bottom:3px solid ${K.ink};padding:26px 28px"><div class="wm" style="font-size:52px;color:${K.ink}">${name}</div><span style="display:inline-block;margin-top:12px;padding:6px 16px;border-radius:999px;background:${K.card};border:2px solid ${K.ink};font-family:Geist,sans-serif;font-size:22px;font-weight:600">${badge}</span></div>
+        <div style="padding:28px"><div class="wm" style="font-size:78px;color:${K.ink};line-height:1">${lessons}</div><div style="font-family:Geist,sans-serif;font-size:28px;font-weight:500;color:${K.muted}">lessons</div>
+        <div style="margin-top:20px;font-family:Geist,sans-serif;font-size:28px;font-weight:500;color:${K.ink};line-height:1.35">${line}</div></div></div>`;
+    };
+    const foot = eo(prog(t, a + 1.6, a + 2.0));
+    return `<div class="scene" style="${paperBg}">
+      ${eyebrow("TWO TRACKS", 380, head, [K.brandText, K.brandWash])}
+      <div class="t wm" style="top:${460 + (1 - head) * 20}px;font-size:76px;color:${K.ink};opacity:${head};line-height:1.1">Pick the track<br>that fits your goal</div>
+      ${card(0, "Fast Track", "14", K.brand, "Start here", "Build and sell your first websites")}
+      ${card(1, "Main Track", "26", HUE.blue[1], "Everything", "Websites, SEO, automation and AI agents")}
+      <div class="t" style="top:${1350 + (1 - foot) * 14}px;font-family:Geist,sans-serif;font-size:38px;font-weight:600;color:${K.ink};opacity:${foot}">Self-paced. Pay once. Lifetime access.</div>
+      ${footer(t, a, b)}
+    </div>`;
+  },
+  fast(t, a, b) {
+    return `<div class="scene" style="${paperBg}">${planCard(t, a, {
+      name: "Fast Track", badge: "Start here", head: K.brand, blurb: "From beginner to building your first website", label: "WHAT YOU'LL LEARN",
+      items: [
+        ["Your first page live by lesson 3, a full business website by lesson 4", check()],
+        ["Landing pages, online stores and booking systems", check()],
+        ["Web apps with logins and databases", check()],
+        ["A brand kit and design process for every client", check()],
+        ["SEO basics: keywords, titles, meta tags, sitemap", check()],
+        ["Your own portfolio website", check()],
+        ["Your price list, a proposal and 10 real pitches", check()],
+        ["Handover and getting paid", check()],
+      ],
+      footerRow: "Verified certificate · WhatsApp community",
+    })}${footer(t, a, b)}</div>`;
+  },
+  main(t, a, b) {
+    const h = (k) => plus(HUE[k][0], HUE[k][1]);
+    return `<div class="scene" style="${paperBg}">${planCard(t, a, {
+      name: "Main Track", badge: "Everything", head: HUE.blue[1], blurb: "Everything in the Fast Track, plus:", label: "PLUS YOU'LL LEARN",
+      items: [
+        ["Full SEO: keyword research, on-page and local SEO", h("green")],
+        ["Automations that save a business hours every week", h("yellow")],
+        ["AI agents: website chatbots and WhatsApp bots", h("teal")],
+        ["A lead-generation system that keeps clients coming", h("pink")],
+        ["Proposals and pricing, including monthly retainers", h("blue")],
+        ["A complete client project, delivered and paid", h("purple")],
+        ["Weekly build reviews", plus(K.brandText, K.brandWash)],
+      ],
+      footerRow: "Verified certificate · WhatsApp community",
+    })}${footer(t, a, b)}</div>`;
+  },
+  // End card: the footer's orange, the lockup, the promise, Enroll Now.
+  end(t, a, b) {
+    const dr = eio(prog(t, a, a + 0.6));
+    const letters = (i) => eo(prog(t, a + 0.25 + i * 0.04, a + 0.6 + i * 0.04));
+    const l1 = eo(prog(t, a + 0.8, a + 1.2)), l2 = eo(prog(t, a + 1.0, a + 1.4));
+    const btn = eback(prog(t, a + 1.2, a + 1.6));
+    const press = t > a + 1.6 && t < a + 1.8 ? 1 : 0;
+    return `<div class="scene" style="background:${K.brand};background-image:linear-gradient(rgba(255,255,255,0.14) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.14) 1px,transparent 1px);background-size:44px 44px;background-position:center">
+      <div class="abs" style="left:0;right:0;top:640px;height:180px;display:flex;align-items:center;justify-content:center;gap:34px">
+        <svg style="width:160px;height:160px;overflow:visible" viewBox="-36 -36 72 72"><path d="${OUT}" fill="none" stroke="${K.ink}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="${1 - dr}"/>${DASH.map((p) => `<path d="${p}" fill="${K.ink}" opacity="${prog(t, a + 0.5, a + 0.65)}"/>`).join("")}</svg>
+        <span class="wm" style="font-size:132px;color:${K.ink};line-height:1">${"Stynark".split("").map((ch, i) => `<span style="display:inline-block;opacity:${letters(i)};transform:translateY(${(1 - letters(i)) * 50}px)">${ch}</span>`).join("")}</span>
+      </div>
+      <div class="t wm" style="top:${880 + (1 - l1) * 20}px;font-size:58px;color:${K.ink};opacity:${l1}">Learn to build websites with AI</div>
+      <div class="t" style="top:${975 + (1 - l2) * 16}px;font-family:Geist,sans-serif;font-size:36px;font-weight:600;color:rgba(21,21,21,0.82);opacity:${l2}">Two tracks · Pay once · Lifetime access</div>
+      ${btn > 0 ? `<div class="abs" style="left:0;right:0;top:1110px;display:flex;justify-content:center"><span style="display:inline-flex;align-items:center;gap:14px;padding:28px 60px;border-radius:20px;background:${K.ink};border:3px solid ${K.ink};box-shadow:${press ? 2 : 8}px ${press ? 2 : 8}px 0 rgba(21,21,21,0.35);transform:translate(${press * 5}px,${press * 5}px) scale(${btn});font-family:Geist,sans-serif;font-size:42px;font-weight:600;color:#fff">Enroll Now →</span></div>` : ""}
+      <div class="t" style="top:1290px;font-family:Geist,sans-serif;font-size:38px;font-weight:600;color:${K.ink};opacity:${l2}">stynark.com</div>
+      <div class="t" style="top:1360px;font-family:Geist,sans-serif;font-size:30px;font-weight:500;color:rgba(21,21,21,0.75);opacity:${l2}">No coding background needed</div>
+    </div>`;
+  },
+};
+
+// ---------- the cuts ----------
+const CUTS = {
+  tracks: {
+    dur: 35.5,
+    scenes: [
+      [0, 4.0, (t) => T.hero(t, 0, 4.0)],
+      [4.0, 9.5, (t) => T.verbs(t, 4.0, 9.5)],
+      [9.5, 13.0, (t) => T.twoTracks(t, 9.5, 13.0)],
+      [13.0, 22.0, (t) => T.fast(t, 13.0, 22.0)],
+      [22.0, 31.0, (t) => T.main(t, 22.0, 31.0)],
+      [31.0, 35.5, (t) => T.end(t, 31.0, 35.5)],
+    ],
+    sfx: [
+      [0, "air"], [0.2, "pop"], [0.55, "tick"], [0.8, "tick"], [1.65, "tick"], [2.15, "tick"], [2.85, "pop"], [3.85, "whoosh"],
+      [4.05, "tick"], [4.35, "pop"], [4.85, "pop"], [5.35, "pop"], [5.85, "pop"], [6.55, "shimmer"], [9.35, "whoosh"],
+      [9.6, "tick"], [10.05, "pop"], [10.35, "pop"], [11.15, "hit", 0.45], [12.85, "whoosh"],
+      [13.05, "pop"], ...Array.from({ length: 8 }, (_, i) => [14.25 + i * 0.75, "tick", 0.8]), [20.45, "shimmer"], [21.85, "whoosh"],
+      [22.05, "pop"], ...Array.from({ length: 7 }, (_, i) => [23.25 + i * 0.75, "pop"]), [28.8, "shimmer"], [30.85, "whoosh"],
+      [31.0, "hit"], [31.15, "shimmer", 1.5], [32.2, "pop"], [32.65, "tick"],
+    ],
+  },
+  trailer: {
+    dur: 38,
+    scenes: [
+      [0, 2.6, (t) => S.begin(t, 0, 2.6)],
+      [2.6, 4.6, (t) => S.ring(t, 2.6, 4.6)],
+      [4.6, 6.4, (t) => S.shape(t, 4.6, 6.4)],
+      [6.4, 8.2, (t) => S.spark(t, 6.4, 8.2)],
+      [8.2, 10.2, (t) => S.band(t, 8.2, 10.2)],
+      [10.2, 13.2, (t) => S.lessons(t, 10.2, 13.2)],
+      [13.2, 15.0, (t) => S.stems(t, 13.2, 15.0)],
+      [15.0, 16.0, (t) => S.orb(t, 15.0, 16.0)],
+      [16.0, 22.0, (t) => S.pills(t, 16.0, 22.0, ["Design it", "Build it", "Launch it", "Sell it"])],
+      [22.0, 24.8, (t) => S.connected(t, 22.0, 24.8)],
+      [24.8, 29.6, (t) => S.mainTrack(t, 24.8, 29.6)],
+      [29.6, 33.6, (t) => S.blobs(t, 29.6, 33.6)],
+      [33.6, 38, (t) => S.logo(t, 33.6, 38)],
+    ],
+    sfx: [
+      [0, "riser", 2.2], [1.25, "tick"], [2.1, "whoosh"], [2.6, "air"], [3.35, "pop"], [3.45, "pop"], [3.55, "pop"], [3.65, "pop"], [3.9, "shimmer"],
+      [4.6, "whoosh"], [5.5, "tick"], [5.9, "pop"], [6.4, "shimmer"], [8.2, "whoosh"], [8.85, "hit", 0.5], [10.2, "air"],
+      ...Array.from({ length: 14 }, (_, i) => [10.8 + i * (1.6 / 13), "tick", 0.5]), [13.2, "riser", 1.6], [13.3, "pop"], [13.45, "pop"], [13.6, "pop"],
+      [14.6, "whoosh"], [15.55, "hit"], [16.0, "air"],
+      ...[0, 1, 2, 3].map((i) => [16.25 + i * 1.35, "pop"]), [21.6, "whoosh"], [22.05, "tick"], [22.6, "shimmer"],
+      // Main Track: a breath on the cut, pops as the headline and cards land, a click and hit on Enroll Now.
+      [24.7, "whoosh"], [24.95, "pop"], [25.25, "tick"], [25.85, "pop"], [26.17, "pop"], [26.49, "pop"], [27.0, "shimmer"], [28.15, "tick"], [28.2, "hit", 0.45],
+      [29.6, "swell", 3.6], [33.45, "whoosh"], [33.6, "hit"], [33.75, "shimmer", 1.5],
+    ],
+  },
+  teaser: {
+    dur: 17.8,
+    scenes: [
+      [0, 2.4, (t) => S.begin(t, 0, 2.4, "Something is taking shape")],
+      [2.4, 4.4, (t) => S.ring(t, 2.4, 4.4, "An idea")],
+      [4.4, 6.4, (t) => S.shape(t, 4.4, 6.4, "A website")],
+      [6.4, 7.4, (t) => S.orb(t, 6.4, 7.4)],
+      [7.4, 9.9, (t) => S.pills(t, 7.4, 9.9, ["Built with AI", "By you"])],
+      [9.9, 14.7, (t) => S.mainTrack(t, 9.9, 14.7)],
+      [14.7, 17.8, (t) => S.logo(t, 14.7, 17.8, "stynark.com")],
+    ],
+    sfx: [
+      [0, "riser", 2.0], [1.2, "tick"], [2.0, "whoosh"], [2.4, "air"], [3.1, "pop"], [3.2, "pop"], [3.3, "pop"], [3.4, "pop"], [3.7, "shimmer"],
+      [4.4, "whoosh"], [5.3, "tick"], [5.7, "pop"], [6.4, "riser", 0.9], [6.95, "hit"], [7.4, "air"], [7.7, "pop"], [8.85, "pop"],
+      // Main Track scene (same cues as in the trailer).
+      [9.8, "whoosh"], [10.05, "pop"], [10.35, "tick"], [10.95, "pop"], [11.27, "pop"], [11.59, "pop"], [12.1, "shimmer"], [13.25, "tick"], [13.3, "hit", 0.45],
+      [14.55, "whoosh"], [14.7, "hit"], [14.85, "shimmer", 1.6],
+    ],
+  },
+};
+
+const stage = document.getElementById("stage");
+let cut = location.hash.replace("#", "").split("-")[0] || "trailer";
+if (!CUTS[cut]) cut = "trailer";
+function render(t) {
+  const c = CUTS[cut];
+  const s = c.scenes.find(([a, b]) => t >= a && t < b) ?? c.scenes[c.scenes.length - 1];
+  stage.innerHTML = s[2](Math.min(t, c.dur - 0.001));
+}
+window.__render = render;
+window.__dur = () => CUTS[cut].dur;
+window.__sfx = () => CUTS[cut].sfx;
+window.__setCut = (c) => { cut = c; };
+
+if (location.hash.includes("export")) document.body.classList.add("export");
+const scrub = document.getElementById("scrub"), time = document.getElementById("time"), sel = document.getElementById("cut");
+sel.value = cut;
+sel.onchange = () => { cut = sel.value; scrub.max = CUTS[cut].dur; render(0); };
+let playing = false, start = 0;
+function tick(now) { if (!playing) return; const d = CUTS[cut].dur; const t = ((now - start) / 1000) % d; scrub.value = t; time.textContent = t.toFixed(2) + "s"; render(t); requestAnimationFrame(tick); }
+document.getElementById("play").onclick = () => { playing = !playing; start = performance.now() - Number(scrub.value) * 1000; if (playing) requestAnimationFrame(tick); };
+scrub.oninput = () => { playing = false; render(Number(scrub.value)); time.textContent = Number(scrub.value).toFixed(2) + "s"; };
+document.fonts.ready.then(() => render(0));
+render(0);
+</script>
+</body>
+</html>

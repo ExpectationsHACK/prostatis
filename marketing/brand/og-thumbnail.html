@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Stynark share thumbnail</title>
+<!-- The link preview image (1200×630) in the website's design. Rendered to src/app/opengraph-image.jpg
+     by marketing/ads/render/og-thumb.mjs. Key content sits in the centre so square crops (WhatsApp's
+     small preview) still show the logo and the headline. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@500;600&family=Archivo:wdth,wght@62..125,100..900&display=block" rel="stylesheet">
+<style>
+  html, body { margin: 0; }
+  #og { position: relative; width: 1200px; height: 630px; overflow: hidden; background: #FAF8F4; font-family: Geist, sans-serif; color: #151515;
+    background-image: linear-gradient(#E6E1D8 1px, transparent 1px), linear-gradient(90deg, #E6E1D8 1px, transparent 1px); background-size: 36px 36px; background-position: center; }
+  .wm { font-family: Archivo, sans-serif; font-stretch: 108%; font-weight: 600; letter-spacing: -0.03em; }
+  .glow { position: absolute; border-radius: 50%; background: radial-gradient(closest-side, rgba(235,94,40,0.25), transparent); filter: blur(30px); }
+  .site { position: absolute; width: 300px; height: 210px; background: #fff; border: 3px solid #151515; border-radius: 20px; box-shadow: 8px 8px 0 #151515; overflow: hidden; }
+  .bar { height: 32px; border-bottom: 3px solid #151515; background: #F3F0EA; display: flex; align-items: center; gap: 7px; padding: 0 12px; }
+  .bar i { width: 10px; height: 10px; border-radius: 50%; border: 2px solid #151515; }
+  .hero { margin: 14px; height: 70px; border-radius: 12px; border: 2px solid #151515; display: flex; align-items: center; padding: 0 14px; font-size: 22px; }
+  .ln { margin: 0 14px 10px; height: 11px; border-radius: 6px; background: #ECE7DE; }
+  .cta { margin: 6px 14px; width: 92px; height: 30px; border-radius: 9px; background: #EB5E28; border: 2px solid #151515; }
+  .center { position: absolute; left: 0; right: 0; text-align: center; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 16px 30px; border-radius: 14px; border: 3px solid #151515; font-size: 26px; font-weight: 600; }
+</style>
+</head>
+<body>
+<div id="og">
+  <div class="glow" style="left:300px;top:40px;width:600px;height:520px"></div>
+
+  <!-- Website mock-ups at the edges (outside the square crop) -->
+  <div class="site" style="left:-70px;top:70px;transform:rotate(-8deg)"><div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div><div class="hero wm" style="background:#E3F5E9;color:#16794A">Salon</div><div class="ln" style="width:70%"></div><div class="ln" style="width:45%"></div><div class="cta"></div></div>
+  <div class="site" style="left:-60px;top:400px;transform:rotate(5deg)"><div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div><div class="hero wm" style="background:#FDF3D0;color:#8A6100">Store</div><div class="ln" style="width:65%"></div><div class="ln" style="width:40%"></div><div class="cta"></div></div>
+  <div class="site" style="right:-70px;top:60px;transform:rotate(7deg)"><div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div><div class="hero wm" style="background:#E8EEFC;color:#2F5BD3">Clinic</div><div class="ln" style="width:70%"></div><div class="ln" style="width:45%"></div><div class="cta"></div></div>
+  <div class="site" style="right:-60px;top:400px;transform:rotate(-5deg)"><div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div><div class="hero wm" style="background:#EFE8FC;color:#6B3FC4">Bookings</div><div class="ln" style="width:65%"></div><div class="ln" style="width:40%"></div><div class="cta"></div></div>
+
+  <!-- Logo lockup: the mark in ink, the wordmark in brand orange (as in the site header) -->
+  <div class="center" style="top:62px;display:flex;justify-content:center;align-items:center;gap:16px">
+    <svg width="64" height="64" viewBox="-36 -36 72 72"><path d="M13.15 -25.41L0 -33L-28.58 -16.5L0 0L28.58 -16.5L28.58 16.5L0 33L-28.58 16.5L-28.58 4.9" fill="none" stroke="#151515" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M-13.75 4.11L-2 10.9L-2 15.75L-13.75 8.96Z" fill="#151515"/><path d="M-10.75 14.35L-2 19.4L-2 24.25L-10.75 19.2Z" fill="#151515"/></svg>
+    <span class="wm" style="font-size:52px;color:#EB5E28;line-height:1">Stynark</span>
+  </div>
+
+  <div class="center wm" style="top:168px;font-size:78px;line-height:1.04">Learn to build<br><span style="color:#EB5E28">websites</span> with AI.</div>
+  <div class="center" style="top:358px;font-size:28px;font-weight:500;color:#5F5B53">Self-paced course · Two tracks · Lifetime access</div>
+  <div class="center" style="top:430px;display:flex;justify-content:center;gap:18px">
+    <span class="btn" style="background:#EB5E28;box-shadow:6px 6px 0 #151515">Enroll Now
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#151515" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    <span class="btn" style="background:#fff;box-shadow:6px 6px 0 #151515">stynark.com</span>
+  </div>
+  <div class="center" style="top:548px;font-size:22px;font-weight:600;color:#5F5B53;letter-spacing:0.04em">No coding background needed</div>
+</div>
+</body>
+</html>

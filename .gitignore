@@ -72,3 +72,8 @@ marketing/ads/render/sales/
 
 # Local screenshots (price checks etc.)
 screenshots/
+
+# Brand reel renders (large binaries; rebuild with marketing/ads/render/brand-reel.mjs)
+marketing/brand/*.mp4
+marketing/brand/work/
+marketing/brand/stills/

@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080">
+<title>Stynark brand reel</title>
+<!-- Archivo is the site's display face (wordmark); JetBrains Mono for the small design labels. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=JetBrains+Mono:wght@500;700&display=block" rel="stylesheet">
+<style>
+  html, body { margin: 0; background: #000; }
+  /* Frame-exact: everything is drawn by render(t) below, nothing uses CSS animations. */
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Archivo, sans-serif; }
+  .scene { position: absolute; inset: 0; overflow: hidden; }
+  .abs { position: absolute; }
+  .wm { font-family: Archivo, sans-serif; font-stretch: 108%; font-weight: 600; letter-spacing: -0.03em; white-space: nowrap; }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .center { left: 0; right: 0; display: flex; align-items: center; justify-content: center; }
+  /* Preview controls (hidden when rendering) */
+  #ui { position: fixed; left: 12px; bottom: 12px; display: flex; gap: 8px; align-items: center; font: 14px system-ui; color: #fff; }
+  #ui input { width: 520px; }
+  body.export #ui { display: none; }
+  body:not(.export) #stage { transform: scale(0.45); transform-origin: 0 0; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="ui"><button id="play">Play</button><input id="scrub" type="range" min="0" max="16.5" step="0.0333" value="0"><span id="time">0.00s</span></div>
+<script>
+/*
+ * Stynark brand reel, 16.5 s, 1080×1920. Structure studied from a fast-cut logo reveal:
+ * construction on a grid → reveal + light streak → 3D mark → wordmark → quick cuts →
+ * giant wordmark → palette → glossy mark → app icon → end card.
+ * The mark uses the exact geometry of src/lib/logo.ts.
+ */
+const W = 1080, H = 1920, DUR = 16.5;
+const C = { orange: "#EB5E28", rust: "#B8400F", paper: "#FAF8F4", ink: "#151515", white: "#FFFFFF", stone: "#E7E3DC" };
+const OUT = "M13.15 -25.41L0 -33L-28.58 -16.5L0 0L28.58 -16.5L28.58 16.5L0 33L-28.58 16.5L-28.58 4.9";
+const DASH = ["M-13.75 4.11L-2 10.9L-2 15.75L-13.75 8.96Z", "M-10.75 14.35L-2 19.4L-2 24.25L-10.75 19.2Z"];
+const PTS = [[13.15, -25.41], [0, -33], [-28.58, -16.5], [0, 0], [28.58, -16.5], [28.58, 16.5], [0, 33], [-28.58, 16.5], [-28.58, 4.9]];
+
+// ---------- easing ----------
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const lerp = (a, b, x) => a + (b - a) * x;
+const eo = (x) => 1 - Math.pow(1 - x, 3);
+const eo5 = (x) => 1 - Math.pow(1 - x, 5);
+const eio = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const eback = (x) => { const c1 = 1.70158, c3 = c1 + 1; return x <= 0 ? 0 : 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+const mix = (a, b, x) => { const p = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)); const A = p(a), B = p(b); return `rgb(${A.map((v, i) => Math.round(lerp(v, B[i], x))).join(",")})`; };
+
+// Lengths along the outline, to place the pen and the corner handles.
+const SEG = PTS.slice(1).map((p, i) => Math.hypot(p[0] - PTS[i][0], p[1] - PTS[i][1]));
+const TOTAL = SEG.reduce((a, b) => a + b, 0);
+const AT = PTS.map((_, i) => SEG.slice(0, i).reduce((a, b) => a + b, 0) / TOTAL);
+function headAt(f) {
+  let d = clamp(f) * TOTAL;
+  for (let i = 0; i < SEG.length; i++) {
+    if (d <= SEG[i] || i === SEG.length - 1) { const k = SEG[i] ? clamp(d / SEG[i]) : 0; return [lerp(PTS[i][0], PTS[i + 1][0], k), lerp(PTS[i][1], PTS[i + 1][1], k)]; }
+    d -= SEG[i];
+  }
+}
+
+/** The mark as SVG. size = px for 80 units (viewBox -40..40). draw: 0–1 of the outline. */
+function mark({ size = 400, x = 540, y = 960, stroke = C.white, dash, sw = 4.2, draw = 1, dashes = 1, extra = "", style = "", strokeAttr }) {
+  const d = dash ?? stroke;
+  const ds = clamp(dashes, 0, 1.2);
+  return `<svg class="abs" style="left:${x - size / 2}px;top:${y - size / 2}px;width:${size}px;height:${size}px;overflow:visible;${style}" viewBox="-40 -40 80 80">${extra}
+    <path d="${OUT}" fill="none" stroke="${strokeAttr ?? stroke}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="${1 - clamp(draw)}"/>
+    <g fill="${d}" opacity="${clamp(dashes)}" transform="translate(-8 14) scale(${ds}) translate(8 -14)">${DASH.map((p) => `<path d="${p}"/>`).join("")}</g></svg>`;
+}
+
+/** A mask (data URL) in the shape of the mark, for gradients that should only show on the logo. */
+const MASK = `url("data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='-40 -40 80 80'><path d='${OUT}' fill='none' stroke='#000' stroke-width='4.2' stroke-linecap='round' stroke-linejoin='round'/>${DASH.map((p) => `<path d='${p}'/>`).join("")}</svg>`)}")`;
+
+const grid = (step, color, extra = "") => `background-image:linear-gradient(${color} 1px,transparent 1px),linear-gradient(90deg,${color} 1px,transparent 1px);background-size:${step}px ${step}px;background-position:center center;${extra}`;
+
+/** Extruded 3D mark: stacked copies along Z, front face lit by a moving gradient. */
+function extruded({ size, x, y, rx, ry, rz = 0, s = 1, layers = 26, depth = 3, front, side0, side1, glow, sheen }) {
+  let out = "";
+  for (let i = layers; i >= 1; i--) out += `<div class="abs" style="inset:0;transform:translateZ(${-i * depth}px)">${mark({ size, x: size / 2, y: size / 2, stroke: mix(side0, side1, i / layers), sw: 4.6 })}</div>`;
+  const gid = "g" + Math.round(sheen * 1000);
+  const grad = `<defs><linearGradient id="${gid}" gradientUnits="userSpaceOnUse" x1="-40" y1="-40" x2="40" y2="40">${front.map(([o, c]) => `<stop offset="${clamp(o + sheen)}" stop-color="${c}"/>`).join("")}</linearGradient></defs>`;
+  out += `<div class="abs" style="inset:0;transform:translateZ(1px)">${mark({ size, x: size / 2, y: size / 2, strokeAttr: `url(#${gid})`, dash: `url(#${gid})`, sw: 4.6, extra: grad })}</div>`;
+  return `<div class="abs" style="left:${x - size / 2}px;top:${y - size / 2}px;width:${size}px;height:${size}px;perspective:1600px;filter:${glow}">
+    <div class="abs" style="inset:0;transform-style:preserve-3d;transform:scale(${s}) rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${rz}deg)">${out}</div></div>`;
+}
+
+const label = (txt, x, y, color, size = 24, extra = "") => `<div class="abs mono" style="left:${x}px;top:${y}px;font-size:${size}px;letter-spacing:0.12em;color:${color};${extra}">${txt}</div>`;
+const lockup = ({ y = 960, size = 120, color = C.ink, markColor = color, dashColor = markColor, spacing = -0.03, gap = 0.28, opacity = 1, letters = null }) => {
+  const word = "Stynark".split("").map((ch, i) => {
+    const lt = letters ? letters(i) : { o: 1, dy: 0 };
+    return `<span style="display:inline-block;opacity:${lt.o};transform:translateY(${lt.dy}px)">${ch}</span>`;
+  }).join("");
+  return `<div class="abs center" style="top:${y - size * 0.7}px;height:${size * 1.4}px;gap:${size * gap}px;opacity:${opacity}">
+    <svg style="width:${size * 1.25}px;height:${size * 1.25}px;overflow:visible" viewBox="-36 -36 72 72"><path d="${OUT}" fill="none" stroke="${markColor}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>${DASH.map((p) => `<path d="${p}" fill="${dashColor}"/>`).join("")}</svg>
+    <span class="wm" style="font-size:${size}px;color:${color};letter-spacing:${spacing}em;line-height:1">${word}</span></div>`;
+};
+
+// ---------- scenes ----------
+const scenes = [
+  // 1. Construction on orange: grid, isometric guides, the mark drawn line by line, handles, cursor.
+  { a: 0, b: 2.6, draw(t) {
+    const k = lerp(1, 1.08, eio(prog(t, 0, 2.6)));
+    const g = prog(t, 0, 0.45);
+    const dr = eio(prog(t, 0.12, 1.9));
+    const S = 8, cx = 540, cy = 900; // 8 px per logo unit
+    const P = (p) => [cx + p[0] * S, cy + p[1] * S];
+    let guides = "";
+    // Isometric guides (±30°) and verticals through the box's corners.
+    const gp = eo(prog(t, 0.15, 0.85));
+    for (const [px, py] of [[0, -33], [0, 33], [28.58, -16.5], [-28.58, 16.5], [0, 0]]) {
+      const [X, Y] = P([px, py]);
+      for (const ang of [30, -30]) {
+        const r = (ang * Math.PI) / 180, L = 1400 * gp;
+        guides += `<line x1="${X - Math.cos(r) * L}" y1="${Y - Math.sin(r) * L}" x2="${X + Math.cos(r) * L}" y2="${Y + Math.sin(r) * L}" stroke="rgba(255,255,255,0.32)" stroke-width="1.5" stroke-dasharray="6 8"/>`;
+      }
+    }
+    for (const px of [-28.58, 0, 28.58]) { const [X] = P([px, 0]); guides += `<line x1="${X}" y1="${cy - 900 * gp}" x2="${X}" y2="${cy + 900 * gp}" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>`; }
+    let handles = "";
+    PTS.forEach((p, i) => {
+      const on = eback(prog(dr, AT[i] - 0.001, AT[i] + 0.06));
+      if (on <= 0) return;
+      const [X, Y] = P(p), s2 = 18 * on;
+      handles += `<rect x="${X - s2 / 2}" y="${Y - s2 / 2}" width="${s2}" height="${s2}" fill="${C.white}" stroke="${C.ink}" stroke-width="3"/>`;
+    });
+    // Cursor: follows the pen, then taps where the dashes go.
+    const pen = P(headAt(dr));
+    const tap = P([-8, 14]);
+    const toTap = eio(prog(t, 1.95, 2.15));
+    const cur = [lerp(pen[0], tap[0], toTap), lerp(pen[1], tap[1], toTap)];
+    const press = t > 2.15 && t < 2.25 ? 0.85 : 1;
+    const cursor = t > 0.1 && t < 2.5 ? `<g transform="translate(${cur[0] + 6} ${cur[1] + 6}) scale(${1.5 * press})"><path d="M0 0 L0 24 L6.5 18 L11 28 L15 26.2 L10.6 16.5 L19 16.5 Z" fill="${C.ink}" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></g>` : "";
+    const dashPop = eback(prog(t, 2.15, 2.45));
+    return `<div class="scene" style="background:${C.orange}">
+      <div class="abs" style="inset:-200px;${grid(60, `rgba(255,255,255,${0.12 * g})`)}"></div>
+      <div class="abs" style="inset:0;transform:scale(${k});transform-origin:${cx}px ${cy}px">
+        <svg class="abs" style="inset:0" width="${W}" height="${H}">${guides}</svg>
+        ${mark({ size: 640, x: cx, y: cy, stroke: C.white, dash: C.ink, sw: 4.2, draw: dr, dashes: dashPop })}
+        <svg class="abs" style="inset:0" width="${W}" height="${H}">${handles}${cursor}</svg>
+      </div>
+      ${label("STYNARK / MARK", 64, 96, "rgba(255,255,255,0.85)")}${label("01 — CONSTRUCTION", 64, 1790, "rgba(255,255,255,0.85)")}${label("30° ISOMETRIC", 760, 1790, "rgba(255,255,255,0.6)")}
+    </div>`;
+  } },
+
+  // 2. Reveal on ink: grey → white flick, timeline, then a light streak turns it orange.
+  { a: 2.6, b: 4.2, draw(t) {
+    const white = t >= 2.95;
+    const pop = white ? lerp(0.94, 1, eo(prog(t, 2.95, 3.1))) : 1;
+    const ph = eio(prog(t, 2.62, 3.3));
+    const trackO = 1 - prog(t, 3.3, 3.5);
+    const sp = eio(prog(t, 3.35, 4.1)); // streak position
+    const pos = lerp(-20, 120, sp);
+    const base = mark({ size: 380, x: 540, y: 880, stroke: white ? C.white : "#5c5c5c", draw: 1, style: `transform:scale(${pop})` });
+    const orange = t > 3.35 ? `<div class="abs" style="inset:0;-webkit-mask-image:linear-gradient(150deg,#000 ${pos - 6}%,transparent ${pos}%);mask-image:linear-gradient(150deg,#000 ${pos - 6}%,transparent ${pos}%)">${mark({ size: 380, x: 540, y: 880, stroke: C.orange, style: `transform:scale(${pop})` })}</div>` : "";
+    const streak = t > 3.35 && t < 4.15 ? `<div class="abs" style="left:-600px;top:${lerp(-500, 2100, sp) - 160}px;width:2300px;height:320px;transform:rotate(-30deg);background:linear-gradient(180deg,transparent,rgba(235,94,40,0.25) 35%,rgba(255,238,228,0.9) 50%,rgba(235,94,40,0.25) 65%,transparent);mix-blend-mode:screen;filter:blur(6px)"></div>` : "";
+    return `<div class="scene" style="background:${C.ink}">
+      ${base}${orange}${streak}
+      <div class="abs" style="left:330px;top:1360px;width:420px;height:2px;background:rgba(255,255,255,0.25);opacity:${trackO}"></div>
+      <div class="abs" style="left:${330 + 420 * ph - 7}px;top:1354px;width:14px;height:14px;border-radius:50%;background:${C.orange};opacity:${trackO}"></div>
+      ${label("02 — REVEAL", 64, 1790, "rgba(255,255,255,0.55)")}
+    </div>`;
+  } },
+
+  // 3. The mark in 3D: extruded, turning under an orange glow.
+  { a: 4.2, b: 6.8, draw(t) {
+    const p = eio(prog(t, 4.2, 6.4));
+    const settle = eio(prog(t, 6.35, 6.8));
+    const ry = lerp(lerp(72, -18, p), 0, settle), rx = lerp(lerp(24, 10, p), 0, settle), rz = lerp(-8, 0, p);
+    const s = lerp(lerp(0.78, 1.04, p), 0.42, settle);
+    const glowO = prog(t, 4.3, 5.2) * (1 - settle);
+    return `<div class="scene" style="background:#0b0b0b">
+      <div class="abs" style="left:140px;top:560px;width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(235,94,40,${0.55 * glowO}) 0%,rgba(184,64,15,${0.25 * glowO}) 40%,transparent 70%);filter:blur(30px)"></div>
+      ${extruded({ size: 520, x: 540, y: 960, rx, ry, rz, s, layers: 26, depth: 3.2, front: [[0, "#ffffff"], [0.35, "#ffe2d4"], [0.5, "#ffffff"], [0.7, "#ffd0b9"], [1, "#ffffff"]], side0: C.orange, side1: "#3a1205", glow: `drop-shadow(0 0 ${30 * glowO}px rgba(235,94,40,0.6))`, sheen: lerp(-0.5, 0.5, p) })}
+      ${label("03 — DEPTH", 64, 1790, "rgba(255,255,255,0.55)")}
+    </div>`;
+  } },
+
+  // 4. Small flat mark on ink.
+  { a: 6.8, b: 7.5, draw(t) {
+    const pop = eback(prog(t, 6.8, 7.05));
+    return `<div class="scene" style="background:#0b0b0b">${mark({ size: 200, x: 540, y: 960, stroke: C.orange, style: `transform:scale(${pop})` })}</div>`;
+  } },
+
+  // 5. Wordmark on a paper grid: letters tighten into place, guides at cap height and baseline.
+  { a: 7.5, b: 8.7, draw(t) {
+    const p = eo5(prog(t, 7.5, 8.35));
+    const sp = lerp(0.5, -0.03, p);
+    const gl = eo(prog(t, 7.55, 8.0));
+    return `<div class="scene" style="background:${C.paper};${grid(26, "#ebe5da")}">
+      <div class="abs" style="left:0;top:${960 - 62}px;height:2px;width:${W * gl}px;background:${C.orange}"></div>
+      <div class="abs" style="right:0;top:${960 + 46}px;height:2px;width:${W * gl}px;background:${C.orange}"></div>
+      ${lockup({ y: 960, size: 116, color: C.ink, markColor: C.ink, dashColor: C.orange, spacing: sp })}
+      ${label("CAP HEIGHT", 64, 960 - 104, C.rust, 20)}${label("BASELINE", 64, 960 + 60, C.rust, 20)}${label("04 — WORDMARK · ARCHIVO SEMIBOLD", 64, 1790, "rgba(21,21,21,0.6)")}
+    </div>`;
+  } },
+
+  // 6. Quick cuts of the lockup.
+  { a: 8.7, b: 9.1, draw() { return `<div class="scene" style="background:${C.orange};${grid(30, "rgba(255,255,255,0.18)")}">${lockup({ size: 110, color: C.ink, markColor: C.ink, dashColor: C.white })}</div>`; } },
+  { a: 9.1, b: 9.5, draw() { return `<div class="scene" style="background:${C.ink}">${lockup({ size: 78, color: C.white, dashColor: C.orange })}</div>`; } },
+  { a: 9.5, b: 9.9, draw() { return `<div class="scene" style="background:${C.orange}">${lockup({ size: 78, color: C.white, dashColor: C.ink })}</div>`; } },
+
+  // 7. Giant wordmark: an outlined and a solid copy slide past each other.
+  { a: 9.9, b: 10.9, draw(t) {
+    const p = eio(prog(t, 9.9, 10.9));
+    return `<div class="scene" style="background:${C.orange}">
+      ${mark({ size: 1300, x: 540, y: 960, stroke: "rgba(255,255,255,0.12)", sw: 1.2 })}
+      <div class="abs wm" style="top:${960 - 230}px;left:${lerp(260, -700, p)}px;font-size:400px;line-height:1;color:transparent;-webkit-text-stroke:3px rgba(255,255,255,0.75)">Stynark</div>
+      <div class="abs wm" style="top:${960 - 50}px;left:${lerp(-1100, -160, p)}px;font-size:400px;line-height:1;color:${C.white}">Stynark</div>
+    </div>`;
+  } },
+
+  // 8. Palette: four bars rise with their hex codes, then fan out.
+  { a: 10.9, b: 12.4, draw(t) {
+    const bars = [["#EB5E28", "ORANGE", C.white], ["#B8400F", "RUST", C.white], ["#FAF8F4", "PAPER", C.ink], ["#151515", "INK", C.white]];
+    const fan = eio(prog(t, 11.75, 12.35));
+    const tilt = lerp(-22, 0, eio(prog(t, 10.9, 11.6)));
+    const out = bars.map(([hex, name, ink], i) => {
+      const r = eback(prog(t, 10.95 + i * 0.09, 11.5 + i * 0.09));
+      const x = 240 + i * 150 + (i - 1.5) * 34 * fan;
+      const y = 660 + (1 - r) * 1300 + (i % 2 ? -1 : 1) * 24 * fan;
+      return `<div class="abs" style="left:${x}px;top:${y}px;width:150px;height:600px;background:${hex};${hex === "#FAF8F4" ? "box-shadow:inset 0 0 0 2px #d8d2c7;" : ""}">
+        <div class="abs mono" style="left:0;right:0;bottom:28px;text-align:center;font-size:20px;letter-spacing:0.08em;color:${ink};writing-mode:vertical-rl;transform:rotate(180deg);height:330px;margin:0 auto;width:30px">${hex} · ${name}</div></div>`;
+    }).join("");
+    return `<div class="scene" style="background:${C.stone}"><div class="abs" style="inset:0;perspective:1800px"><div class="abs" style="inset:0;transform:rotateY(${tilt}deg) rotateZ(${lerp(-6, -3, fan)}deg);transform-origin:540px 960px">${out}</div></div>
+      ${label("05 — PALETTE", 64, 1790, "rgba(21,21,21,0.6)")}</div>`;
+  } },
+
+  // 9. Flat orange mark on stone.
+  { a: 12.4, b: 12.9, draw(t) {
+    const pop = eback(prog(t, 12.4, 12.65));
+    return `<div class="scene" style="background:${C.stone}">${mark({ size: 230, x: 540, y: 960, stroke: C.orange, dash: C.ink, style: `transform:scale(${pop})` })}</div>`;
+  } },
+
+  // 10. Glossy, iridescent mark on orange.
+  { a: 12.9, b: 14.2, draw(t) {
+    const p = eio(prog(t, 12.9, 14.2));
+    const hue = lerp(-0.4, 0.4, p);
+    return `<div class="scene" style="background:${C.orange}">
+      <div class="abs" style="left:240px;top:1080px;width:600px;height:260px;border-radius:50%;background:radial-gradient(ellipse,rgba(120,30,0,0.45),transparent 70%);filter:blur(24px)"></div>
+      ${extruded({ size: 560, x: 540, y: 930, rx: lerp(18, 8, p), ry: lerp(-28, 18, p), rz: -4, s: lerp(0.9, 1.02, p), layers: 22, depth: 3, front: [[0, "#ffffff"], [0.25, "#ffd6f2"], [0.4, "#c8f0ff"], [0.55, "#fff7cf"], [0.7, "#ffffff"], [0.85, "#d9d2ff"], [1, "#ffffff"]], side0: "#f4ede6", side1: "#9c3a12", glow: `drop-shadow(0 30px 40px rgba(110,30,0,0.35))`, sheen: hue })}
+    </div>`;
+  } },
+
+  // 11. App icon: dark, then mid grey.
+  { a: 14.2, b: 15.1, draw(t) {
+    const second = t >= 14.65;
+    const pop = eback(prog(t, second ? 14.65 : 14.2, (second ? 14.65 : 14.2) + 0.25));
+    const bg = second ? "#6d6a66" : "#2b2a29";
+    return `<div class="scene" style="background:${bg}">
+      <div class="abs" style="left:${540 - 150}px;top:${960 - 150}px;width:300px;height:300px;border-radius:50%;background:${C.ink};box-shadow:0 24px 60px rgba(0,0,0,0.45);transform:scale(${pop})">
+        ${mark({ size: 230, x: 150, y: 150, stroke: C.white, dash: C.orange })}</div>
+      ${label("06 — APP ICON", 64, 1790, "rgba(255,255,255,0.55)")}
+    </div>`;
+  } },
+
+  // 12. End card: the lockup assembles, then the line and the address.
+  { a: 15.1, b: 16.5, draw(t) {
+    const dr = eio(prog(t, 15.1, 15.55));
+    const tag = eo(prog(t, 15.75, 16.1));
+    const url = eo(prog(t, 15.95, 16.3));
+    const letters = (i) => { const q = eo(prog(t, 15.3 + i * 0.04, 15.65 + i * 0.04)); return { o: q, dy: (1 - q) * 60 }; };
+    return `<div class="scene" style="background:${C.orange}">
+      <div class="abs center" style="top:${900 - 84}px;height:168px;gap:34px">
+        <svg style="width:150px;height:150px;overflow:visible" viewBox="-36 -36 72 72"><path d="${OUT}" fill="none" stroke="${C.white}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="${1 - dr}"/>${DASH.map((p) => `<path d="${p}" fill="${C.ink}" opacity="${prog(t, 15.45, 15.6)}"/>`).join("")}</svg>
+        <span class="wm" style="font-size:120px;color:${C.white};line-height:1">${"Stynark".split("").map((ch, i) => { const l = letters(i); return `<span style="display:inline-block;opacity:${l.o};transform:translateY(${l.dy}px)">${ch}</span>`; }).join("")}</span>
+      </div>
+      <div class="abs center wm" style="top:1050px;font-size:46px;font-weight:500;letter-spacing:-0.01em;color:rgba(255,255,255,0.92);opacity:${tag};transform:translateY(${(1 - tag) * 24}px)">Learn to build websites with AI.</div>
+      <div class="abs center mono" style="top:1140px;font-size:32px;letter-spacing:0.08em;color:${C.ink};opacity:${url};transform:translateY(${(1 - url) * 20}px)">stynark.com</div>
+    </div>`;
+  } },
+];
+
+const stage = document.getElementById("stage");
+function render(t) {
+  const s = scenes.find((x) => t >= x.a && t < x.b) ?? scenes[scenes.length - 1];
+  stage.innerHTML = s.draw(Math.min(t, DUR - 0.001));
+}
+window.__render = render;
+window.__dur = DUR;
+
+// Preview: ?export renders frames from outside; otherwise play in the browser.
+if (location.hash === "#export") document.body.classList.add("export");
+const scrub = document.getElementById("scrub"), time = document.getElementById("time");
+let playing = false, start = 0;
+function tick(now) { if (!playing) return; const t = ((now - start) / 1000) % DUR; scrub.value = t; time.textContent = t.toFixed(2) + "s"; render(t); requestAnimationFrame(tick); }
+document.getElementById("play").onclick = () => { playing = !playing; start = performance.now() - Number(scrub.value) * 1000; if (playing) requestAnimationFrame(tick); };
+scrub.oninput = () => { playing = false; render(Number(scrub.value)); time.textContent = Number(scrub.value).toFixed(2) + "s"; };
+document.fonts.ready.then(() => render(0));
+render(0);
+</script>
+</body>
+</html>
