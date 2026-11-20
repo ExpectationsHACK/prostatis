@@ -11,7 +11,7 @@ const initial = {
   business: "Tolu Builds",
   what: "AI-powered websites & landing pages",
   who: "small businesses",
-  location: "Lagos",
+  location: "Austin",
   proof: "",
   hours: "Mon–Sat, 9am–7pm",
   delivery: "Delivered in 5 days",
@@ -20,8 +20,8 @@ const initial = {
 };
 const examples = [
   { label: "Web designer", values: initial },
-  { label: "Bakery", values: { business: "Ada's Bakery", what: "Cakes, pastries & small chops", who: "parties and offices", location: "Lagos Mainland", proof: "4.9★ on Google", hours: "Mon–Sat, 8am–6pm", delivery: "Order 24h ahead", cta: "Send 'MENU' for prices", tone: "friendly" } },
-  { label: "Law firm", values: { business: "Adeyemi & Co", what: "Property and business law", who: "families and SMEs", location: "Abuja", proof: "", hours: "Mon–Fri, 9am–5pm", delivery: "Consultations within 48h", cta: "Message us to book a consultation", tone: "professional" } },
+  { label: "Bakery", values: { business: "Ada's Bakery", what: "Cakes, pastries & party snacks", who: "parties and offices", location: "Leeds", proof: "4.9★ on Google", hours: "Mon–Sat, 8am–6pm", delivery: "Order 24h ahead", cta: "Send 'MENU' for prices", tone: "friendly" } },
+  { label: "Law firm", values: { business: "Adeyemi & Co", what: "Property and business law", who: "families and small businesses", location: "Toronto", proof: "", hours: "Mon–Fri, 9am–5pm", delivery: "Consultations within 48h", cta: "Message us to book a consultation", tone: "professional" } },
 ];
 
 export default function WhatsAppBusinessBio() {
@@ -58,7 +58,7 @@ We reply fastest on WhatsApp.`.trim();
     ["/hours", `We're open ${f.hours}.`],
     ["/location", `We're in ${f.location}. [Add your full address and a Google Maps link]`],
     ["/prices", `Here are our prices: [paste your price list or catalog link]`],
-    ["/pay", "You can pay by bank transfer or card with this secure link: [Paystack payment link]"],
+    ["/pay", "You can pay by bank transfer or card with this secure link: [payment link]"],
     ["/thanks", `Thank you for choosing ${f.business}!${emoji ? " 🙏" : ""} If you're happy, a quick Google review helps us a lot: [review link]`],
   ];
 

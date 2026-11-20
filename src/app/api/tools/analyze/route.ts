@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
 import { CRAWL_MAX, internalLinks, pickPages, sitemapUrls, type CrawlPage } from "@/lib/tool-defs/crawl";
 import { extractPage } from "@/lib/tool-defs/page-facts";
-import { suggestQueries, type SuggestMode } from "@/lib/tool-defs/suggest";
+import { isSearchCountry, suggestQueries, type SuggestMode } from "@/lib/tool-defs/suggest";
 import { clientIp, rateLimited } from "@/lib/server/rate-limit";
 import { FetchRejected, normaliseUrl, safeFetch } from "@/lib/server/safe-fetch";
 
@@ -150,13 +150,13 @@ async function speed(url: string) {
   };
 }
 
-// ---------- search suggestions: real phrases from Google's autocomplete for Nigeria ----------
-async function suggest(service: string, location: string, mode: SuggestMode) {
+// ---------- search suggestions: real phrases from Google's autocomplete for the chosen country ----------
+async function suggest(service: string, location: string, mode: SuggestMode, country: string) {
   const queries = suggestQueries(service, location, mode);
   if (!queries.length) throw new FetchRejected("Enter a service or product first.");
   const results = await pool(queries, 4, async (q) => {
     const api = new URL("https://suggestqueries.google.com/complete/search");
-    for (const [k, val] of Object.entries({ client: "firefox", hl: "en", gl: "ng", ie: "utf-8", oe: "utf-8", q })) api.searchParams.set(k, val);
+    for (const [k, val] of Object.entries({ client: "firefox", hl: "en", gl: country.toLowerCase(), ie: "utf-8", oe: "utf-8", q })) api.searchParams.set(k, val);
     try {
       const r = await fetch(api, { signal: AbortSignal.timeout(6000), headers: { "User-Agent": "Mozilla/5.0 (compatible; Stynark-Tools/1.0)" } });
       const j = await r.json();
@@ -166,7 +166,7 @@ async function suggest(service: string, location: string, mode: SuggestMode) {
     }
   });
   if (results.every((r) => !r.suggestions.length)) throw new FetchRejected("Google's suggestions didn't load. Try again in a minute.");
-  return { seed: service.trim(), location: location.trim(), mode, results };
+  return { seed: service.trim(), location: location.trim(), mode, country, results };
 }
 
 // ---------- crawl: up to 10 pages of a site, checked together ----------
@@ -307,7 +307,10 @@ export async function POST(req: Request) {
       case "uptime":
         return Response.json(await uptime(url));
       case "suggest":
-        return Response.json(await cached(`suggest:${body.mode}:${body.service}:${body.location}`.toLowerCase(), () => suggest(String(body.service ?? ""), String(body.location ?? ""), body.mode === "questions" ? "questions" : "all")));
+      {
+        const country = isSearchCountry(body.country) ? body.country : "US";
+        return Response.json(await cached(`suggest:${country}:${body.mode}:${body.service}:${body.location}`.toLowerCase(), () => suggest(String(body.service ?? ""), String(body.location ?? ""), body.mode === "questions" ? "questions" : "all", country)));
+      }
       case "crawl":
         return Response.json(await cached(`crawl:${url}`, () => crawl(url)));
       case "scrape":

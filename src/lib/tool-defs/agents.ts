@@ -6,18 +6,18 @@ const persona: ToolDef = {
   kind: "generator",
   intro: "Define who the assistant is, what it may do and the facts it may use. You get a complete system prompt and a pass/fail test script.",
   examples: [
-    { label: "Lash studio (WhatsApp)", values: { business: "Glow Beauty Studio, Lekki", name: "Ada", channel: "WhatsApp", tone: ["Warm", "Concise"], can: ["Answer FAQs", "Share prices", "Book appointments", "Send payment links"], never: "Give medical advice\nPromise discounts not in the price list\nShare other customers' details", facts: "Open Mon–Sat 9am–7pm\nClassic lashes ₦25,000; volume ₦35,000\n₦5,000 deposit to book, non-refundable within 24h\nAddress: 12 Admiralty Way, Lekki" } },
-    { label: "Clinic (website chat)", values: { business: "CarePoint Clinic, Wuse", name: "Nkechi", channel: "Website chat", tone: ["Professional", "Reassuring"], can: ["Answer FAQs", "Book appointments", "Collect leads"], never: "Give medical advice or diagnoses\nDiscuss test results\nPromise appointment times not in the calendar", facts: "Open Mon–Sat 8am–6pm; emergencies: call 0803 000 0000\nConsultation ₦10,000\nWe accept most HMOs, confirm at reception" } },
-    { label: "Online store (Instagram)", values: { business: "Adire Shop", name: "Tobi", channel: "Instagram DM", tone: ["Playful", "Concise"], can: ["Answer FAQs", "Share prices", "Track orders", "Send payment links"], never: "Promise delivery dates we can't meet\nOffer discounts not listed", facts: "Delivery: Lagos 1–2 days (₦3,000), other states 3–5 days (₦5,000)\nReturns within 7 days if unworn\nPay by card, transfer or USSD via Paystack" } },
+    { label: "Lash studio (WhatsApp)", values: { business: "Glow Beauty Studio, Manchester", name: "Ada", channel: "WhatsApp", tone: ["Warm", "Concise"], can: ["Answer FAQs", "Share prices", "Book appointments", "Send payment links"], never: "Give medical advice\nPromise discounts not in the price list\nShare other customers' details", facts: "Open Mon–Sat 9am–7pm\nClassic lashes £70; volume £95\n£15 deposit to book, non-refundable within 24h\nAddress: [street address], Manchester" } },
+    { label: "Clinic (website chat)", values: { business: "CarePoint Clinic, Toronto", name: "Nkechi", channel: "Website chat", tone: ["Professional", "Reassuring"], can: ["Answer FAQs", "Book appointments", "Collect leads"], never: "Give medical advice or diagnoses\nDiscuss test results\nPromise appointment times not in the calendar", facts: "Open Mon–Sat 8am–6pm; emergencies: call [phone number]\nConsultation CA$90\nWe accept most insurance plans, confirm at reception" } },
+    { label: "Online store (Instagram)", values: { business: "Linen & Co", name: "Tobi", channel: "Instagram DM", tone: ["Playful", "Concise"], can: ["Answer FAQs", "Share prices", "Track orders", "Send payment links"], never: "Promise delivery dates we can't meet\nOffer discounts not listed", facts: "Delivery: same city 1–2 days ($5), rest of the country 3–5 days ($9)\nReturns within 7 days if unworn\nPay by card or PayPal at checkout" } },
   ],
   fields: [
-    { key: "business", label: "Business", type: "text", default: "Glow Beauty Studio, Lekki" },
+    { key: "business", label: "Business", type: "text", default: "Glow Beauty Studio, Manchester" },
     { key: "name", label: "Bot name", type: "text", default: "Ada", half: true },
     { key: "channel", label: "Channel", type: "select", default: "WhatsApp", options: opts("WhatsApp", "Website chat", "Instagram DM", "Phone (voice)"), half: true },
     { key: "tone", label: "Tone", type: "multi", default: ["Warm", "Concise"], options: opts("Warm", "Concise", "Professional", "Playful", "Reassuring", "Uses light Pidgin") },
     { key: "can", label: "It can…", type: "multi", default: ["Answer FAQs", "Share prices", "Book appointments", "Send payment links"], options: opts("Answer FAQs", "Share prices", "Book appointments", "Send payment links", "Track orders", "Collect leads", "Recommend services") },
     { key: "never", label: "It must never… (one per line)", type: "textarea", rows: 3, default: "Give medical advice\nPromise discounts not in the price list\nShare other customers' details" },
-    { key: "facts", label: "Key facts (one per line)", type: "textarea", rows: 4, default: "Open Mon–Sat 9am–7pm\nLash extensions from ₦25,000\n₦5,000 deposit to book, non-refundable within 24h\nAddress: 12 Admiralty Way, Lekki" },
+    { key: "facts", label: "Key facts (one per line)", type: "textarea", rows: 4, default: "Open Mon–Sat 9am–7pm\nLash extensions from £70\n£15 deposit to book, non-refundable within 24h\nAddress: [street address], Manchester" },
   ],
   generate(v) {
     const name = or(s(v, "name"), "Assistant"), biz = or(s(v, "business"), "the business");
@@ -65,7 +65,7 @@ const csScripts: ToolDef = {
   intro: "Pick the situations your agent (or staff) handles. You get approved reply scripts, tone rules and clear handoff points.",
   examples: [
     { label: "Logistics", values: { business: "QuickShip Logistics", cases: ["Where is my order?", "Complaint", "Refund request", "After hours"], refund: "Refunds within 7 days for undelivered items", hours: "Mon–Sat 8am–8pm" } },
-    { label: "Fashion store", values: { business: "Adire Shop", cases: ["Price enquiry", "Wrong item received", "Change or cancel", "Refund request"], refund: "Returns within 7 days if unworn, refund in 3 working days", hours: "Mon–Sat 9am–6pm" } },
+    { label: "Fashion store", values: { business: "Linen & Co", cases: ["Price enquiry", "Wrong item received", "Change or cancel", "Refund request"], refund: "Returns within 7 days if unworn, refund in 3 working days", hours: "Mon–Sat 9am–6pm" } },
     { label: "Restaurant", values: { business: "Mama's Kitchen", cases: ["Where is my order?", "Complaint", "After hours"], refund: "Full refund or a free replacement for wrong or late orders", hours: "Daily 10am–9pm" } },
   ],
   fields: [
@@ -100,14 +100,14 @@ const waFlow: ToolDef = {
   kind: "generator",
   intro: "List the menu options customers pick from. You get the bot flow, the exact messages and a build spec, plus WhatsApp's rules so the number stays safe.",
   examples: [
-    { label: "Food orders", values: { business: "Mama's Kitchen", greeting: "Hi 👋 Welcome to Mama's Kitchen! What would you like to do?", options: "See today's menu | Send menu image + prices\nPlace an order | Ask items → address → send Paystack link\nTrack my order | Ask order number → send status\nTalk to a person | Hand over to staff", fallback: "Sorry, I didn't get that. Reply with a number from the menu 🙏" } },
+    { label: "Food orders", values: { business: "Mama's Kitchen", greeting: "Hi 👋 Welcome to Mama's Kitchen! What would you like to do?", options: "See today's menu | Send menu image + prices\nPlace an order | Ask items → address → send payment link\nTrack my order | Ask order number → send status\nTalk to a person | Hand over to staff", fallback: "Sorry, I didn't get that. Reply with a number from the menu 🙏" } },
     { label: "Salon bookings", values: { business: "Glow Beauty Studio", greeting: "Hi! 💖 Welcome to Glow Beauty. How can we help?", options: "Prices | Send the price list\nBook an appointment | Send the booking link\nOur location | Send address + map link\nTalk to a person | Hand over to staff", fallback: "Sorry, I didn't catch that: reply 1, 2, 3 or 4 🙏" } },
     { label: "School enquiries", values: { business: "Bright Stars Academy", greeting: "Hello! Welcome to Bright Stars Academy. What would you like to know?", options: "School fees | Send the fees for each class\nAdmissions | Send admission steps + form link\nBook a school visit | Send the booking link\nTalk to the office | Hand over to the admin officer", fallback: "Sorry, please reply with a number from the menu." } },
   ],
   fields: [
     { key: "business", label: "Business", type: "text", default: "Mama's Kitchen" },
     { key: "greeting", label: "Welcome message", type: "text", default: "Hi 👋 Welcome to Mama's Kitchen! What would you like to do?" },
-    { key: "options", label: "Menu options (one per line: label | what happens)", type: "textarea", rows: 5, default: "See today's menu | Send menu image + prices\nPlace an order | Ask items → address → send Paystack link\nTrack my order | Ask order number → send status\nTalk to a person | Hand over to staff" },
+    { key: "options", label: "Menu options (one per line: label | what happens)", type: "textarea", rows: 5, default: "See today's menu | Send menu image + prices\nPlace an order | Ask items → address → send payment link\nTrack my order | Ask order number → send status\nTalk to a person | Hand over to staff" },
     { key: "fallback", label: "If the message isn't understood", type: "text", default: "Sorry, I didn't get that. Reply with a number from the menu 🙏" },
   ],
   generate(v) {
@@ -156,12 +156,12 @@ const decomposer: ToolDef = {
   kind: "generator",
   intro: "Describe a job you want an AI agent to do. You get it broken into clear steps with tools, checks and human approval points, plus instructions to paste into the agent.",
   examples: [
-    { label: "Weekly prospecting", values: { goal: "Every Monday, find 20 new restaurants in Lagos without a website and draft outreach", tools: ["Web search", "Google Sheets", "Email drafts"], approval: "Sending anything" } },
+    { label: "Weekly prospecting", values: { goal: "Every Monday, find 20 new restaurants in your city without a website and draft outreach", tools: ["Web search", "Google Sheets", "Email drafts"], approval: "Sending anything" } },
     { label: "Daily sales report", values: { goal: "Every morning, summarise yesterday's orders from the Orders sheet and email the owner", tools: ["Google Sheets", "Email drafts"], approval: "Nothing (fully automatic)" } },
     { label: "Review replies", values: { goal: "Draft polite replies to new Google reviews for the owner to approve", tools: ["Web browser", "Files"], approval: "Sending anything" } },
   ],
   fields: [
-    { key: "goal", label: "Goal", type: "text", default: "Every Monday, find 20 new restaurants in Lagos without a website and draft outreach" },
+    { key: "goal", label: "Goal", type: "text", default: "Every Monday, find 20 new restaurants in your city without a website and draft outreach" },
     { key: "tools", label: "Tools the agent can use", type: "multi", default: ["Web search", "Google Sheets", "Email drafts"], options: opts("Web search", "Web browser", "Google Sheets", "Email drafts", "WhatsApp", "CRM", "Calendar", "Files") },
     { key: "approval", label: "Human approval before", type: "select", default: "Sending anything", options: opts("Sending anything", "Spending money", "Nothing (fully automatic)") },
   ],
@@ -194,12 +194,12 @@ const faqToKb: ToolDef = {
   kind: "generator",
   intro: "Paste questions and answers in any rough format (Q:/A:, numbered, or lines ending in “?”). You get a clean knowledge base, with missing answers, duplicates and gaps flagged.",
   examples: [
-    { label: "Lash studio", values: { business: "Glow Beauty Studio", raw: "Q: What are your opening hours?\nA: Monday to Saturday, 9am to 7pm.\n\nHow much are lash extensions?\nClassic sets start at ₦25,000, volume at ₦35,000.\n\nQ: Do I need to pay a deposit?\nA: Yes, ₦5,000 to confirm your booking. It's deducted from your bill." } },
-    { label: "Messy WhatsApp notes", values: { business: "Mama's Kitchen", raw: "do you deliver?\nyes within ikeja, 1000 naira\n\nwhat time do you open\n10am till 9pm everyday\n\nhow do I pay?\n\nDo you do party orders?\nyes, 3 days notice" } },
+    { label: "Lash studio", values: { business: "Glow Beauty Studio", raw: "Q: What are your opening hours?\nA: Monday to Saturday, 9am to 7pm.\n\nHow much are lash extensions?\nClassic sets start at £70, volume at £95.\n\nQ: Do I need to pay a deposit?\nA: Yes, £15 to confirm your booking. It's deducted from your bill." } },
+    { label: "Messy WhatsApp notes", values: { business: "Mama's Kitchen", raw: "do you deliver?\nyes within 5 miles, $4\n\nwhat time do you open\n10am till 9pm everyday\n\nhow do I pay?\n\nDo you do party orders?\nyes, 3 days notice" } },
   ],
   fields: [
     { key: "business", label: "Business", type: "text", default: "Glow Beauty Studio" },
-    { key: "raw", label: "FAQ text", type: "textarea", rows: 9, default: "Q: What are your opening hours?\nA: Monday to Saturday, 9am to 7pm.\n\nHow much are lash extensions?\nClassic sets start at ₦25,000, volume at ₦35,000.\n\nQ: Do I need to pay a deposit?\nA: Yes, ₦5,000 to confirm your booking. It's deducted from your bill." },
+    { key: "raw", label: "FAQ text", type: "textarea", rows: 9, default: "Q: What are your opening hours?\nA: Monday to Saturday, 9am to 7pm.\n\nHow much are lash extensions?\nClassic sets start at £70, volume at £95.\n\nQ: Do I need to pay a deposit?\nA: Yes, £15 to confirm your booking. It's deducted from your bill." },
   ],
   generate(v) {
     const raw = s(v, "raw");
@@ -231,7 +231,7 @@ const faqToKb: ToolDef = {
     const dupes = pairs.filter((p) => (seen.has(norm(p.q)) ? true : (seen.add(norm(p.q)), false))).length;
     if (dupes) out.push({ type: "notice", tone: "warn", text: `${dupes} duplicate question(s), keep one answer per question so the agent never gives two different answers.` });
     const all = pairs.map((p) => `${p.q} ${p.a}`).join(" ").toLowerCase();
-    const topics: [RegExp, string][] = [[/hour|open|close/, "Opening hours"], [/where|address|location|located/, "Location / directions"], [/pay|transfer|card|ussd/, "How to pay"], [/price|cost|how much|₦/, "Prices"], [/deliver|pickup|shipping/, "Delivery or pickup"], [/refund|return|cancel/, "Refunds and cancellations"], [/contact|phone|whatsapp|call/, "How to reach a person"]];
+    const topics: [RegExp, string][] = [[/hour|open|close/, "Opening hours"], [/where|address|location|located/, "Location / directions"], [/pay|transfer|card|paypal|ussd/, "How to pay"], [/price|cost|how much|[$€£₦₹]/, "Prices"], [/deliver|pickup|shipping/, "Delivery or pickup"], [/refund|return|cancel/, "Refunds and cancellations"], [/contact|phone|whatsapp|call/, "How to reach a person"]];
     const gaps = topics.filter(([re]) => !re.test(all)).map(([, t]) => t);
     if (gaps.length) out.push({ type: "list", title: "Common questions still missing: add them", items: gaps });
     return out;

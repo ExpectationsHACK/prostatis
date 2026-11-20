@@ -1,13 +1,13 @@
-import { arr, lines, n, naira, opts, or, s, type Block, type ToolDef } from "./types";
+import { arr, currencyOptions, lines, money, n, opts, or, s, type Block, type ToolDef } from "./types";
 
 const bizTypes = opts("Restaurant / food vendor", "Salon / spa", "Clinic", "Online store", "Real estate agency", "School / tutor", "Logistics / delivery", "Agency / freelancer", "Consultant / coach", "Hotel / shortlet");
 
 // ---------- Automation Workflow Idea Generator ----------
 const ideas: Record<string, [string, string, string][]> = {
-  "Restaurant / food vendor": [["WhatsApp order → kitchen sheet", "New WhatsApp order", "Log to Google Sheet + notify kitchen group"], ["Daily sales summary", "Every day 10pm", "Total Paystack payments → send owner a WhatsApp summary"], ["Review request", "Order delivered", "Wait 2h → send Google review link"]],
+  "Restaurant / food vendor": [["WhatsApp order → kitchen sheet", "New WhatsApp order", "Log to Google Sheet + notify kitchen group"], ["Daily sales summary", "Every day 10pm", "Total card payments (Stripe, Square or Paystack) → send owner a WhatsApp summary"], ["Review request", "Order delivered", "Wait 2h → send Google review link"]],
   "Salon / spa": [["Booking reminders", "Booking created", "Reminder 24h + 2h before via WhatsApp"], ["No-show follow-up", "Booking marked no-show", "Send rebook link + deposit policy"], ["Birthday offer", "Customer birthday (sheet)", "Send 10% off message"]],
   Clinic: [["Appointment confirmations", "Form submitted", "Create calendar event + confirm by SMS"], ["Lab result ready", "Status changed in sheet", "Notify patient to log in / collect"], ["Recall reminders", "6 months after last visit", "Send check-up reminder"]],
-  "Online store": [["Order confirmation", "Paystack charge.success", "Email receipt + WhatsApp message + add to sheet"], ["Abandoned cart", "Cart idle 1h", "Send reminder with cart link"], ["Low stock alert", "Stock below 5", "Notify owner"]],
+  "Online store": [["Order confirmation", "Payment succeeded (Stripe, PayPal or Paystack)", "Email receipt + WhatsApp message + add to sheet"], ["Abandoned cart", "Cart idle 1h", "Send reminder with cart link"], ["Low stock alert", "Stock below 5", "Notify owner"]],
   "Real estate agency": [["Lead capture", "Website enquiry", "Add to CRM + assign agent + WhatsApp intro"], ["Listing alerts", "New listing added", "Send to matching buyers list"], ["Inspection reminders", "Inspection booked", "Remind buyer + agent 1 day before"]],
   "School / tutor": [["Fee reminders", "3 days before due date", "Send parent payment link"], ["Attendance alert", "Student absent", "Notify parent"], ["Enrolment pipeline", "Form submitted", "Add to sheet + send welcome pack"]],
   "Logistics / delivery": [["Tracking updates", "Status change", "WhatsApp customer with ETA"], ["Proof of delivery", "Rider uploads photo", "Email to sender"], ["Rider daily report", "End of day", "Summarise deliveries per rider"]],
@@ -19,14 +19,14 @@ const automationIdeas: ToolDef = {
   kind: "generator",
   intro: "Pick the business type and the tools they use. You get proven automation ideas, trigger, action, typical time saved, and a prompt to plan the first one.",
   examples: [
-    { label: "Online store", values: { type: "Online store", tools: ["WhatsApp", "Google Sheets", "Paystack"] } },
+    { label: "Online store", values: { type: "Online store", tools: ["WhatsApp", "Google Sheets", "Stripe"] } },
     { label: "Salon", values: { type: "Salon / spa", tools: ["WhatsApp", "Google Calendar"] } },
-    { label: "Tutor", values: { type: "School / tutor", tools: ["Gmail", "Google Sheets", "Paystack"] } },
-    { label: "Freelancer", values: { type: "Agency / freelancer", tools: ["Gmail", "Notion", "Paystack"] } },
+    { label: "Tutor", values: { type: "School / tutor", tools: ["Gmail", "Google Sheets", "PayPal"] } },
+    { label: "Freelancer", values: { type: "Agency / freelancer", tools: ["Gmail", "Notion", "Stripe"] } },
   ],
   fields: [
     { key: "type", label: "Business type", type: "select", default: "Online store", options: bizTypes },
-    { key: "tools", label: "Tools they use", type: "multi", default: ["WhatsApp", "Google Sheets", "Paystack"], options: opts("WhatsApp", "Google Sheets", "Gmail", "Paystack", "Instagram", "Google Calendar", "Notion", "Airtable") },
+    { key: "tools", label: "Tools they use", type: "multi", default: ["WhatsApp", "Google Sheets", "Stripe"], options: opts("WhatsApp", "Google Sheets", "Gmail", "Stripe", "PayPal", "Paystack", "Instagram", "Google Calendar", "Notion", "Airtable") },
   ],
   generate(v) {
     const list = ideas[s(v, "type")] ?? ideas["Online store"];
@@ -45,7 +45,7 @@ const automationIdeas: ToolDef = {
       },
     ];
     if (wa) out.push({ type: "notice", tone: "warn", text: "Automated WhatsApp messages need the official WhatsApp Business Platform (Cloud API or a provider), approved templates outside the 24-hour window, and customers who opted in. To start simply, send the alert to the owner by email or use SMS." });
-    if (health) out.push({ type: "notice", tone: "warn", text: "Health information is sensitive personal data under Nigeria's Data Protection Act. Never put results or diagnoses in messages, send “your result is ready, please log in or visit us” instead." });
+    if (health) out.push({ type: "notice", tone: "warn", text: "Health information is sensitive personal data under data-protection laws almost everywhere (GDPR, HIPAA, NDPA and others). Never put results or diagnoses in messages, send “your result is ready, please log in or visit us” instead." });
     return out;
   },
 };
@@ -55,14 +55,14 @@ const scenarioPlanner: ToolDef = {
   kind: "generator",
   intro: "Describe the trigger and the steps. You get a module-by-module plan, the monthly usage (and whether a free plan covers it), and a go-live checklist.",
   examples: [
-    { label: "Orders → confirmations", values: { platform: "Make", trigger: "A new row is added to the 'Orders' Google Sheet", steps: "Look up the customer in the Customers sheet\nEmail the customer an order confirmation\nIf total > ₦50,000, email the owner\nMark the row as 'Confirmed'", volume: 600 } },
+    { label: "Orders → confirmations", values: { platform: "Make", trigger: "A new row is added to the 'Orders' Google Sheet", steps: "Look up the customer in the Customers sheet\nEmail the customer an order confirmation\nIf total > $500, email the owner\nMark the row as 'Confirmed'", volume: 600 } },
     { label: "Website form → CRM", values: { platform: "Make", trigger: "A website form is submitted (Custom webhook)", steps: "Normalise the phone number to +234…\nSearch the CRM sheet by phone\nUpdate the row if found, otherwise add a new row\nIf the need is 'quote', email the owner", volume: 200 } },
-    { label: "Daily summary (n8n)", values: { platform: "n8n", trigger: "Every day at 8am (Africa/Lagos)", steps: "Get yesterday's rows from the Sales sheet\nAdd up the totals\nEmail the owner a summary", volume: 30 } },
+    { label: "Daily summary (n8n)", values: { platform: "n8n", trigger: "Every day at 8am (the owner's time zone)", steps: "Get yesterday's rows from the Sales sheet\nAdd up the totals\nEmail the owner a summary", volume: 30 } },
   ],
   fields: [
     { key: "platform", label: "Platform", type: "select", default: "Make", options: opts("Make", "Zapier", "n8n") },
     { key: "trigger", label: "Trigger (when…)", type: "text", default: "A new row is added to the 'Orders' Google Sheet" },
-    { key: "steps", label: "Then… (one step per line)", type: "textarea", default: "Look up the customer in Airtable\nSend WhatsApp confirmation with order number\nIf total > ₦50,000, notify the owner on Slack\nMark the row as 'Confirmed'", rows: 5 },
+    { key: "steps", label: "Then… (one step per line)", type: "textarea", default: "Look up the customer in Airtable\nSend WhatsApp confirmation with order number\nIf total > $500, notify the owner on Slack\nMark the row as 'Confirmed'", rows: 5 },
     { key: "volume", label: "Runs per month", type: "number", default: 600, min: 1 },
   ],
   generate(v) {
@@ -77,7 +77,7 @@ const scenarioPlanner: ToolDef = {
     const warnings: string[] = [];
     if (/whatsapp/i.test(all)) warnings.push("WhatsApp steps need the official WhatsApp Business Platform (Cloud API or a provider) and approved templates outside the 24-hour window, not a normal WhatsApp account.");
     if (/webhook/i.test(all) && plat === "Zapier") warnings.push("Zapier's “Webhooks by Zapier” is a paid-plan feature. Make's custom webhooks work on its free plan.");
-    if (/paystack/i.test(all)) warnings.push("Paystack sends its webhook to one URL per mode (test and live). If your website already uses it, have the site forward verified payments instead.");
+    if (/paystack|stripe/i.test(all)) warnings.push("Payment providers (Stripe, Paystack) send each webhook event to the URLs you register, separately for test and live mode. If your website already handles them, have the site forward verified payments instead.");
     const blocks: Block[] = [
       { type: "flow", title: `${plat} scenario (${steps.length + 1} modules)`, steps: flow },
       ...(Number.isFinite(freeLimit)
@@ -102,16 +102,18 @@ const processAudit: ToolDef = {
   kind: "generator",
   intro: "List the business's recurring tasks: one per line: task | hours per week | how repetitive (1–5). You get a ranked shortlist, the yearly saving, and a message to pitch it.",
   examples: [
-    { label: "Food vendor", values: { tasks: "Replying to 'how much?' WhatsApp messages | 8 | 5\nTyping orders into Excel | 5 | 5\nSending payment reminders | 3 | 5\nPosting on Instagram | 4 | 3\nPreparing weekly sales report | 2 | 4\nHiring new staff | 2 | 1", rate: 1500, weeks: 50 } },
-    { label: "Clinic front desk", values: { tasks: "Confirming appointments by phone | 10 | 5\nReminding patients the day before | 5 | 5\nTyping patient forms into the system | 6 | 4\nAnswering 'are you open?' calls | 4 | 5\nChasing unpaid bills | 3 | 4", rate: 2000, weeks: 50 } },
-    { label: "Freelance designer", values: { tasks: "Writing proposals | 4 | 4\nChasing late payments | 2 | 5\nSending project updates | 2 | 4\nOnboarding new clients | 2 | 4\nDesign work | 25 | 1", rate: 5000, weeks: 46 } },
+    { label: "Food vendor", values: { tasks: "Replying to 'how much?' WhatsApp messages | 8 | 5\nTyping orders into Excel | 5 | 5\nSending payment reminders | 3 | 5\nPosting on Instagram | 4 | 3\nPreparing weekly sales report | 2 | 4\nHiring new staff | 2 | 1", rate: 15, weeks: 50 } },
+    { label: "Clinic front desk", values: { tasks: "Confirming appointments by phone | 10 | 5\nReminding patients the day before | 5 | 5\nTyping patient forms into the system | 6 | 4\nAnswering 'are you open?' calls | 4 | 5\nChasing unpaid bills | 3 | 4", rate: 20, weeks: 50 } },
+    { label: "Freelance designer", values: { tasks: "Writing proposals | 4 | 4\nChasing late payments | 2 | 5\nSending project updates | 2 | 4\nOnboarding new clients | 2 | 4\nDesign work | 25 | 1", rate: 45, weeks: 46 } },
   ],
   fields: [
     { key: "tasks", label: "Tasks", type: "textarea", rows: 7, default: "Replying to 'how much?' WhatsApp messages | 8 | 5\nTyping orders into Excel | 5 | 5\nSending payment reminders | 3 | 5\nPosting on Instagram | 4 | 3\nPreparing weekly sales report | 2 | 4\nHiring new staff | 2 | 1" },
-    { key: "rate", label: "Staff cost per hour", type: "number", default: 1500, suffix: "₦/hr", half: true },
+    { key: "rate", label: "Staff cost per hour", type: "number", default: 15, suffix: "/hr", half: true },
     { key: "weeks", label: "Working weeks / year", type: "number", default: 50, half: true },
+    { key: "currency", label: "Currency", type: "select", default: "USD", options: currencyOptions, half: true },
   ],
   generate(v) {
+    const cur = (x: number) => money(x, s(v, "currency") || "USD");
     const rows = lines(s(v, "tasks")).map((l) => {
       const [task, h, r] = l.split("|").map((x) => x.trim());
       const hours = Math.max(0, Number(h) || 0);
@@ -123,18 +125,18 @@ const processAudit: ToolDef = {
     const rate = n(v, "rate"), weeks = n(v, "weeks") || 50;
     const table = rows.map((r) => {
       const saveable = r.hours * (r.rep / 5) * 0.8;
-      return [r.task, `${r.hours}h`, `${r.rep}/5`, r.rep >= 4 ? "Automate" : r.rep === 3 ? "Assist with AI" : "Keep manual", `${saveable.toFixed(1)}h/wk · ${naira(saveable * rate * weeks)}/yr`];
+      return [r.task, `${r.hours}h`, `${r.rep}/5`, r.rep >= 4 ? "Automate" : r.rep === 3 ? "Assist with AI" : "Keep manual", `${saveable.toFixed(1)}h/wk · ${cur(saveable * rate * weeks)}/yr`];
     });
     const totalH = rows.reduce((x, r) => x + r.hours * (r.rep / 5) * 0.8, 0);
     const top = rows.filter((r) => r.rep >= 4).slice(0, 3);
     return [
-      { type: "stats", items: [{ label: "Hours that could be saved / week", value: totalH.toFixed(1), sub: "estimate: automation rarely removes 100%" }, { label: "Value / year", value: naira(totalH * rate * weeks) }] },
+      { type: "stats", items: [{ label: "Hours that could be saved / week", value: totalH.toFixed(1), sub: "estimate: automation rarely removes 100%" }, { label: "Value / year", value: cur(totalH * rate * weeks) }] },
       { type: "table", title: "Ranked: automate from the top", columns: ["Task", "Hours", "Repetitive", "Verdict", "Potential saving"], rows: table },
       {
         type: "text",
         title: "Pitch it to the owner",
         text: top.length
-          ? `From what you told me, about ${totalH.toFixed(0)} hours a week go to tasks a system could handle, worth roughly ${naira(totalH * rate * weeks)} a year. I'd start with: ${top.map((r) => r.task.toLowerCase()).join("; ")}. Shall I put together a plan and price?`
+          ? `From what you told me, about ${totalH.toFixed(0)} hours a week go to tasks a system could handle, worth roughly ${cur(totalH * rate * weeks)} a year. I'd start with: ${top.map((r) => r.task.toLowerCase()).join("; ")}. Shall I put together a plan and price?`
           : "None of these tasks are repetitive enough to automate well. Look for tasks that happen every day and follow the same steps.",
       },
       { type: "notice", tone: "info", text: "Next: plan the top task with the Scenario Planner, then price it with the Automation ROI Calculator." },
@@ -147,15 +149,15 @@ const autoresponder: ToolDef = {
   kind: "generator",
   intro: "Pick the situation. You get the auto-reply, a short follow-up plan, and exactly how to set it up in Gmail.",
   examples: [
-    { label: "Agency enquiry", values: { business: "PixelHouse Studio", type: "New enquiry", reply: "within 4 working hours", link: "https://pixelhouse.ng/portfolio", name: "Tunde, PixelHouse" } },
-    { label: "Store order", values: { business: "Adire Shop", type: "Order received", reply: "within 24 hours", link: "https://adireshop.ng/orders", name: "The Adire Shop team" } },
+    { label: "Agency enquiry", values: { business: "PixelHouse Studio", type: "New enquiry", reply: "within 4 working hours", link: "https://pixelhouse.dev/portfolio", name: "Tunde, PixelHouse" } },
+    { label: "Store order", values: { business: "Linen & Co", type: "Order received", reply: "within 24 hours", link: "https://linenco.com/orders", name: "The Linen & Co team" } },
     { label: "Out of office", values: { business: "Glow Beauty Studio", type: "Out of office", reply: "on Monday", link: "", name: "Kemi, Glow Beauty" } },
   ],
   fields: [
     { key: "business", label: "Business", type: "text", default: "PixelHouse Studio" },
     { key: "type", label: "Situation", type: "select", default: "New enquiry", options: opts("New enquiry", "New customer welcome", "Out of office", "Order received", "Abandoned quote") },
     { key: "reply", label: "Reply time", type: "text", default: "within 4 working hours" },
-    { key: "link", label: "Link to include", type: "text", default: "https://pixelhouse.ng/portfolio" },
+    { key: "link", label: "Link to include", type: "text", default: "https://pixelhouse.dev/portfolio" },
     { key: "name", label: "Signed by", type: "text", default: "Tunde, PixelHouse" },
   ],
   generate(v) {
@@ -186,21 +188,23 @@ const autoresponder: ToolDef = {
 // ---------- Automation ROI Calculator ----------
 const roiCalc: ToolDef = {
   kind: "generator",
-  intro: "Enter the time a task takes today and what the automation costs. You get the monthly saving, payback time and a pitch line, in naira.",
+  intro: "Enter the time a task takes today and what the automation costs. You get the monthly saving, payback time and a pitch line, in your currency.",
   examples: [
-    { label: "Order confirmations", values: { hours: 10, rate: 2000, cut: 80, errors: 20000, setup: 250000, monthly: 25000 } },
-    { label: "Appointment reminders", values: { hours: 5, rate: 2500, cut: 90, errors: 60000, setup: 150000, monthly: 15000 } },
-    { label: "Small task (check)", values: { hours: 1, rate: 1500, cut: 70, errors: 0, setup: 200000, monthly: 20000 } },
+    { label: "Order confirmations", values: { hours: 10, rate: 20, cut: 80, errors: 200, setup: 1500, monthly: 50 } },
+    { label: "Appointment reminders", values: { hours: 5, rate: 25, cut: 90, errors: 600, setup: 900, monthly: 30 } },
+    { label: "Small task (check)", values: { hours: 1, rate: 15, cut: 70, errors: 0, setup: 1200, monthly: 40 } },
   ],
   fields: [
     { key: "hours", label: "Hours spent per week on the task", type: "number", default: 10, min: 0, step: 0.5, half: true },
-    { key: "rate", label: "Cost of that time", type: "number", default: 2000, suffix: "₦/hr", half: true },
+    { key: "rate", label: "Cost of that time", type: "number", default: 20, suffix: "/hr", half: true },
     { key: "cut", label: "Share of work automated", type: "number", default: 80, min: 0, max: 100, suffix: "%", half: true },
-    { key: "errors", label: "Errors avoided / month (value)", type: "number", default: 20000, suffix: "₦", half: true },
-    { key: "setup", label: "Your setup fee", type: "number", default: 250000, suffix: "₦", half: true },
-    { key: "monthly", label: "Monthly tool + maintenance", type: "number", default: 25000, suffix: "₦", half: true },
+    { key: "errors", label: "Errors avoided / month (value)", type: "number", default: 200, half: true },
+    { key: "setup", label: "Your setup fee", type: "number", default: 1500, half: true },
+    { key: "monthly", label: "Monthly tool + maintenance", type: "number", default: 50, half: true },
+    { key: "currency", label: "Currency", type: "select", default: "USD", options: currencyOptions, half: true },
   ],
   generate(v) {
+    const cur = (x: number) => money(x, s(v, "currency") || "USD");
     const weekly = n(v, "hours") * n(v, "rate") * (Math.min(100, Math.max(0, n(v, "cut"))) / 100);
     const monthlyGain = weekly * 4.33 + n(v, "errors");
     const net = monthlyGain - n(v, "monthly");
@@ -209,12 +213,12 @@ const roiCalc: ToolDef = {
     const roi = n(v, "setup") > 0 ? (year1 / n(v, "setup")) * 100 : 0;
     const blocks: Block[] = [
       { type: "stats", items: [
-        { label: "Saved per month", value: naira(monthlyGain), sub: `${(n(v, "hours") * 4.33 * n(v, "cut") / 100).toFixed(0)} hours back` },
+        { label: "Saved per month", value: cur(monthlyGain), sub: `${(n(v, "hours") * 4.33 * n(v, "cut") / 100).toFixed(0)} hours back` },
         { label: "Payback", value: Number.isFinite(payback) ? `${payback < 1 ? "<1" : payback.toFixed(1)} months` : "Never", sub: "time to earn back the setup fee" },
-        { label: "Year-1 net gain", value: naira(year1) },
+        { label: "Year-1 net gain", value: cur(year1) },
         { label: "Year-1 ROI", value: `${roi.toFixed(0)}%` },
       ] },
-      { type: "text", title: "Client pitch line", text: net > 0 ? `This automation saves you about ${naira(monthlyGain)} a month. After tools, that's ${naira(net)} back every month: it pays for itself in ${Number.isFinite(payback) ? payback.toFixed(1) : "-"} months, then keeps saving.` : "At these numbers the automation costs more than it saves, automate a bigger task or lower the monthly cost." },
+      { type: "text", title: "Client pitch line", text: net > 0 ? `This automation saves you about ${cur(monthlyGain)} a month. After tools, that's ${cur(net)} back every month: it pays for itself in ${Number.isFinite(payback) ? payback.toFixed(1) : "-"} months, then keeps saving.` : "At these numbers the automation costs more than it saves, automate a bigger task or lower the monthly cost." },
     ];
     if (net <= 0) blocks.push({ type: "notice", tone: "warn", text: "Monthly costs exceed savings. Reduce tool costs or pick a task with more hours." });
     return blocks;

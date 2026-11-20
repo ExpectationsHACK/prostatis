@@ -2,7 +2,7 @@ import { renderCrawl, type CrawlData } from "./crawl";
 import { auditFromFacts, renderLocalCheck, renderMetaCheck, renderPageAudit, type PageData } from "./live";
 import { extractPage } from "./page-facts";
 import { SERP, textWidth, widthVerdict } from "./pixels";
-import { renderSuggestions, type SuggestData } from "./suggest";
+import { renderSuggestions, searchCountries, type SuggestData } from "./suggest";
 import { arr, lines, opts, or, s, slugify, type Block, type ToolDef } from "./types";
 
 const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
@@ -12,24 +12,25 @@ const clip = (x: string, max: number) => (x.length <= max ? x : x.slice(0, max).
 // ---------- Keyword Research Tool ----------
 const keywordResearch: ToolDef = {
   kind: "generator",
-  intro: "Enter a service and a location, then press “Get real searches” above: you get the phrases people in Nigeria actually type into Google, sorted by what they want. Below: a starter keyword map and quick checks.",
+  intro: "Enter a service and a location, then press “Get real searches” above: you get the phrases people in your chosen country actually type into Google, sorted by what they want. Below: a starter keyword map and quick checks.",
   live: {
     kind: "suggest",
-    title: "See what people in Nigeria actually type into Google",
+    title: "See what people actually type into Google",
     button: "Get real searches",
-    note: "Uses the service and location in the form below. Live from Google's search suggestions for Nigeria.",
-    payload: (v) => ({ service: s(v, "service"), location: s(v, "location"), mode: "all" }),
+    note: "Uses the service, location and country in the form below. Live from Google's search suggestions for that country.",
+    payload: (v) => ({ service: s(v, "service"), location: s(v, "location"), country: s(v, "country"), mode: "all" }),
     render: (d: SuggestData, v) => renderSuggestions(d, v),
   },
   examples: [
-    { label: "Web design, Lagos", values: { service: "web design", location: "Lagos", audience: "small businesses" } },
-    { label: "Lash extensions, Lekki", values: { service: "lash extensions", location: "Lekki", audience: "working women" } },
-    { label: "Solar, Abuja", values: { service: "solar installation", location: "Abuja", audience: "homeowners" } },
-    { label: "Catering, PH", values: { service: "event catering", location: "Port Harcourt", audience: "families and offices" } },
+    { label: "Web design, Austin", values: { service: "web design", location: "Austin", country: "US", audience: "small businesses" } },
+    { label: "Lash extensions, Manchester", values: { service: "lash extensions", location: "Manchester", country: "GB", audience: "working women" } },
+    { label: "Solar, Sydney", values: { service: "solar installation", location: "Sydney", country: "AU", audience: "homeowners" } },
+    { label: "Catering, Toronto", values: { service: "event catering", location: "Toronto", country: "CA", audience: "families and offices" } },
   ],
   fields: [
     { key: "service", label: "Service / product", type: "text", default: "web design" },
-    { key: "location", label: "Location", type: "text", default: "Lagos" },
+    { key: "location", label: "Location", type: "text", default: "Austin", half: true },
+    { key: "country", label: "Search in", type: "select", default: "US", options: searchCountries, half: true },
     { key: "audience", label: "Customer type", type: "text", default: "small businesses" },
   ],
   generate(v) {
@@ -80,14 +81,14 @@ const metaTags: ToolDef = {
     render: (d: PageData) => renderMetaCheck(d),
   },
   examples: [
-    { label: "Lash studio page", values: { brand: "Glow Beauty Studio", domain: "glowbeauty.ng", keyword: "lash extensions in Lekki", benefit: "natural-looking lashes that last 4 weeks", cta: "Book online today", path: "/lash-extensions" } },
-    { label: "Solar company", values: { brand: "SunPower NG", domain: "sunpower.ng", keyword: "solar installation in Abuja", benefit: "steady power without generator costs", cta: "Get a free quote", path: "/solar-installation-abuja" } },
-    { label: "Restaurant menu", values: { brand: "Mama's Kitchen", domain: "mamaskitchen.ng", keyword: "lunch delivery in Ikeja", benefit: "hot home-style meals in 30 minutes", cta: "Order on WhatsApp", path: "/menu" } },
+    { label: "Lash studio page", values: { brand: "Glow Beauty Studio", domain: "glowbeauty.com", keyword: "lash extensions in Manchester", benefit: "natural-looking lashes that last 4 weeks", cta: "Book online today", path: "/lash-extensions" } },
+    { label: "Solar company", values: { brand: "SunPower", domain: "sunpowersolar.com.au", keyword: "solar installation in Sydney", benefit: "lower power bills all year", cta: "Get a free quote", path: "/solar-installation-sydney" } },
+    { label: "Restaurant menu", values: { brand: "Mama's Kitchen", domain: "mamaskitchen.com", keyword: "lunch delivery in Austin", benefit: "hot home-style meals in 30 minutes", cta: "Order on WhatsApp", path: "/menu" } },
   ],
   fields: [
     { key: "brand", label: "Brand", type: "text", default: "Glow Beauty Studio", half: true },
-    { key: "domain", label: "Domain", type: "text", default: "glowbeauty.ng", half: true },
-    { key: "keyword", label: "Main keyword", type: "text", default: "lash extensions in Lekki" },
+    { key: "domain", label: "Domain", type: "text", default: "glowbeauty.com", half: true },
+    { key: "keyword", label: "Main keyword", type: "text", default: "lash extensions in Manchester" },
     { key: "benefit", label: "Main benefit", type: "text", default: "natural-looking lashes that last 4 weeks" },
     { key: "cta", label: "Call to action", type: "text", default: "Book online today" },
     { key: "path", label: "Page path", type: "text", default: "/lash-extensions" },
@@ -149,7 +150,7 @@ const localSeo: ToolDef = {
       { id: "localpage", weight: 3, text: "Website has a page per service (and per area if you serve several)", fix: "Create '/lash-extensions-lekki' style pages with unique content." },
       { id: "schema", weight: 2, text: "LocalBusiness schema on the website", fix: "Add JSON-LD with name, address, geo, hours, phone, sameAs links." },
       { id: "map", weight: 1, text: "Google Map embedded on the contact page", fix: "Embed the map from your GBP listing." },
-      { id: "directories", weight: 2, text: "Listed in local directories (e.g. VConnect, BusinessList.com.ng, Finelib)", fix: "Create listings with the exact same NAP." },
+      { id: "directories", weight: 2, text: "Listed in the main local directories for your country (e.g. Google Business Profile, Bing Places, Yelp or a national business directory)", fix: "Create listings with the exact same NAP." },
       { id: "social", weight: 1, text: "Social profiles link to the website and GBP", fix: "Update Instagram/Facebook/TikTok bios with the site link." },
     ] },
   ],
@@ -183,7 +184,7 @@ const onPageAudit: ToolDef = {
       label: "Or paste page HTML (for pages not online yet)",
       type: "textarea",
       rows: 8,
-      default: `<!doctype html><html lang="en"><head><title>Web Design Lagos | PixelHouse</title><meta name="description" content="Fast, mobile-first websites for Lagos businesses. WhatsApp and Paystack built in."><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><h1>Web design in Lagos that brings you customers</h1><h2>Our services</h2><p>We build websites for restaurants, salons and clinics across Lagos.</p><img src="hero.webp"><img src="team.webp" alt="PixelHouse team"><a href="/contact">Contact</a></body></html>`,
+      default: `<!doctype html><html lang="en"><head><title>Web Design Austin | PixelHouse</title><meta name="description" content="Fast, mobile-first websites for Austin businesses. Online booking and payments built in."><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><h1>Web design in Austin that brings you customers</h1><h2>Our services</h2><p>We build websites for restaurants, salons and clinics across Austin.</p><img src="hero.webp"><img src="team.webp" alt="PixelHouse team"><a href="/contact">Contact</a></body></html>`,
     },
   ],
   generate(v) {
@@ -201,24 +202,25 @@ const onPageAudit: ToolDef = {
 // ---------- Blog Topic Idea Generator ----------
 const blogTopics: ToolDef = {
   kind: "generator",
-  intro: "Enter the business and audience. Press “Get real questions” above for the questions people in Nigeria type into Google; below, article topics ordered by how close the reader is to buying.",
+  intro: "Enter the business and audience. Press “Get real questions” above for the questions people type into Google in your chosen country; below, article topics ordered by how close the reader is to buying.",
   live: {
     kind: "suggest",
     title: "Find the questions people actually ask Google",
     button: "Get real questions",
     note: "Uses the business / service and location below. Every question is a ready article or FAQ idea.",
-    payload: (v) => ({ service: s(v, "business"), location: s(v, "location"), mode: "questions" }),
+    payload: (v) => ({ service: s(v, "business"), location: s(v, "location"), country: s(v, "country"), mode: "questions" }),
     render: (d: SuggestData, v) => renderSuggestions(d, v),
   },
   examples: [
-    { label: "Solar, Abuja", values: { business: "solar installation", audience: "homeowners in Abuja", location: "Abuja", count: ["How-to", "Cost", "Comparison", "Local", "Mistakes", "Checklist"] } },
-    { label: "Wedding cakes", values: { business: "wedding cakes", audience: "couples planning a wedding", location: "Lagos", count: ["Cost", "Checklist", "Mistakes", "Myths"] } },
-    { label: "Dental clinic", values: { business: "teeth whitening", audience: "young professionals", location: "Port Harcourt", count: ["Cost", "How-to", "Myths", "Comparison"] } },
+    { label: "Solar, Sydney", values: { business: "solar installation", audience: "homeowners in Sydney", location: "Sydney", country: "AU", count: ["How-to", "Cost", "Comparison", "Local", "Mistakes", "Checklist"] } },
+    { label: "Wedding cakes", values: { business: "wedding cakes", audience: "couples planning a wedding", location: "London", country: "GB", count: ["Cost", "Checklist", "Mistakes", "Myths"] } },
+    { label: "Dental clinic", values: { business: "teeth whitening", audience: "young professionals", location: "Toronto", country: "CA", count: ["Cost", "How-to", "Myths", "Comparison"] } },
   ],
   fields: [
     { key: "business", label: "Business / service", type: "text", default: "solar installation" },
-    { key: "audience", label: "Audience", type: "text", default: "homeowners in Abuja" },
-    { key: "location", label: "Location", type: "text", default: "Abuja" },
+    { key: "audience", label: "Audience", type: "text", default: "homeowners in Sydney" },
+    { key: "location", label: "Location", type: "text", default: "Sydney", half: true },
+    { key: "country", label: "Search in", type: "select", default: "AU", options: searchCountries, half: true },
     { key: "count", label: "Include", type: "multi", default: ["How-to", "Cost", "Comparison", "Local", "Mistakes", "Checklist"], options: opts("How-to", "Cost", "Comparison", "Local", "Mistakes", "Checklist", "Case study", "Myths") },
   ],
   generate(v) {
@@ -251,21 +253,21 @@ const backlinkOutreach: ToolDef = {
   kind: "generator",
   intro: "Pick the outreach type. You get short, specific emails that earn links without sounding like spam, plus where to find good link opportunities.",
   examples: [
-    { label: "Guest post", values: { type: "Guest post", yourName: "Tunde", site: "pixelhouse.ng", target: "TechCabal", topic: "How Lagos SMEs can get their first 100 customers online" } },
-    { label: "Local partner", values: { type: "Local directory / partner", yourName: "Kemi", site: "glowbeauty.ng", target: "Lekki Bridal Hub", topic: "bridal beauty in Lekki" } },
-    { label: "Broken link", values: { type: "Broken link", yourName: "Ade", site: "sunpower.ng", target: "Abuja Home Owners blog", topic: "A 2026 guide to solar costs in Abuja" } },
+    { label: "Guest post", values: { type: "Guest post", yourName: "Tunde", site: "pixelhouse.dev", target: "Smashing Magazine", topic: "How small businesses can get their first 100 customers online" } },
+    { label: "Local partner", values: { type: "Local directory / partner", yourName: "Kemi", site: "glowbeauty.com", target: "Manchester Bridal Hub", topic: "bridal beauty in Manchester" } },
+    { label: "Broken link", values: { type: "Broken link", yourName: "Ade", site: "sunpowersolar.com.au", target: "Sydney Home Owners blog", topic: "A 2026 guide to solar costs in Sydney" } },
   ],
   fields: [
     { key: "type", label: "Outreach type", type: "select", default: "Guest post", options: opts("Guest post", "Resource page", "Broken link", "Local directory / partner", "Mention without link") },
     { key: "yourName", label: "Your name", type: "text", default: "Tunde", half: true },
-    { key: "site", label: "Your site", type: "text", default: "pixelhouse.ng", half: true },
+    { key: "site", label: "Your site", type: "text", default: "pixelhouse.dev", half: true },
     { key: "target", label: "Their site / blog", type: "text", default: "TechCabal" },
-    { key: "topic", label: "Topic / page to offer", type: "text", default: "How Lagos SMEs can get their first 100 customers online" },
+    { key: "topic", label: "Topic / page to offer", type: "text", default: "How small businesses can get their first 100 customers online" },
   ],
   generate(v) {
     const t = s(v, "type"), me = or(s(v, "yourName"), "[name]"), site = or(s(v, "site"), "[site]"), them = or(s(v, "target"), "[their site]"), topic = or(s(v, "topic"), "[topic]");
     const bodies: Record<string, string> = {
-      "Guest post": `Subject: Article idea for ${them}: ${topic}\n\nHi [Name],\n\nI read ${them} regularly: [specific article] was especially useful.\n\nI'd like to write a practical piece for your readers: “${topic}”. It would cover [3 bullet points], with real examples from Nigerian businesses. Original, no fluff, ~1,200 words.\n\nWould that be a fit? Happy to adapt the angle.\n\n${me}\n${site}`,
+      "Guest post": `Subject: Article idea for ${them}: ${topic}\n\nHi [Name],\n\nI read ${them} regularly: [specific article] was especially useful.\n\nI'd like to write a practical piece for your readers: “${topic}”. It would cover [3 bullet points], with real examples from small businesses. Original, no fluff, ~1,200 words.\n\nWould that be a fit? Happy to adapt the angle.\n\n${me}\n${site}`,
       "Resource page": `Subject: Resource for your ${topic} page\n\nHi [Name],\n\nI found your resources page on ${them}: great list. I recently published “${topic}” on ${site}, which covers [what it adds that the others don't].\n\nIf it's useful, it might make a good addition. Either way, thanks for putting the list together.\n\n${me}`,
       "Broken link": `Subject: Broken link on ${them}\n\nHi [Name],\n\nQuick heads-up: on [page URL], the link to [dead resource] returns a 404.\n\nIf you're looking for a replacement, I wrote “${topic}” on ${site}, which covers the same ground and is up to date.\n\nHope that helps!\n${me}`,
       "Local directory / partner": `Subject: Partnership: ${site} x ${them}\n\nHi [Name],\n\nWe both serve [shared audience] in [city]. We build websites; you [what they do]. We often get asked for [their service] and would happily recommend you.\n\nWould you be open to listing each other on our partners pages?\n\n${me}\n${site}`,
@@ -289,17 +291,18 @@ const contentBrief: ToolDef = {
     title: "Questions readers ask about this topic",
     button: "Get real questions",
     note: "Uses the primary keyword below (without the place name). Add the best ones to the brief's FAQ.",
-    payload: (v) => ({ service: s(v, "keyword").replace(/\s+(in|near|around)\s+.+$/i, ""), location: "", mode: "questions" }),
+    payload: (v) => ({ service: s(v, "keyword").replace(/\s+(in|near|around)\s+.+$/i, ""), location: "", country: s(v, "country"), mode: "questions" }),
     render: (d: SuggestData, v) => renderSuggestions(d, v),
   },
   examples: [
-    { label: "Solar cost article", values: { keyword: "cost of solar installation in Abuja", secondary: "solar panel price Abuja\ninverter and battery cost\nsolar installers Abuja", type: "Blog post", audience: "homeowners tired of generator costs", words: 1400, brand: "SunPower NG" } },
-    { label: "Salon service page", values: { keyword: "lash extensions in Lekki", secondary: "classic lashes\nvolume lashes\nlash refill Lekki", type: "Service page", audience: "working women in Lekki and VI", words: 800, brand: "Glow Beauty Studio" } },
-    { label: "Area page", values: { keyword: "phone repair in Yaba", secondary: "screen replacement Yaba\niPhone repair Yaba", type: "Location page", audience: "students and workers in Yaba", words: 700, brand: "SwiftFix" } },
+    { label: "Solar cost article", values: { keyword: "cost of solar installation in Sydney", secondary: "solar panel price Sydney\nhome battery cost\nsolar installers Sydney", type: "Blog post", audience: "homeowners tired of high power bills", words: 1400, brand: "SunPower" } },
+    { label: "Salon service page", values: { keyword: "lash extensions in Manchester", secondary: "classic lashes\nvolume lashes\nlash refill Manchester", type: "Service page", country: "GB", audience: "working women in Manchester", words: 800, brand: "Glow Beauty Studio" } },
+    { label: "Area page", values: { keyword: "phone repair in Brooklyn", secondary: "screen replacement Brooklyn\niPhone repair Brooklyn", type: "Location page", country: "US", audience: "students and workers in Brooklyn", words: 700, brand: "SwiftFix" } },
   ],
   fields: [
-    { key: "keyword", label: "Primary keyword", type: "text", default: "cost of solar installation in Abuja" },
-    { key: "secondary", label: "Secondary keywords (one per line)", type: "textarea", default: "solar panel price Abuja\ninverter and battery cost\nsolar installers Abuja", rows: 3 },
+    { key: "keyword", label: "Primary keyword", type: "text", default: "cost of solar installation in Sydney" },
+    { key: "country", label: "Questions from Google in", type: "select", default: "AU", options: searchCountries },
+    { key: "secondary", label: "Secondary keywords (one per line)", type: "textarea", default: "solar panel price Sydney\nhome battery cost\nsolar installers Sydney", rows: 3 },
     { key: "type", label: "Page type", type: "select", default: "Blog post", options: opts("Blog post", "Service page", "Location page", "Product page") },
     { key: "audience", label: "Reader", type: "text", default: "homeowners tired of generator costs" },
     { key: "words", label: "Target words", type: "number", default: 1400, min: 300, max: 5000, step: 100 },
@@ -336,8 +339,8 @@ MUST INCLUDE
 - Original photos with descriptive alt text
 - A short FAQ answering the real questions customers ask
 
-TONE: plain English, short paragraphs, local examples, prices in Naira.`;
-    const write = `Write a ${type.toLowerCase()} from this brief for a Nigerian reader. Plain, friendly English; short paragraphs; follow the outline exactly. Give specific, practical advice and real price ranges only where I provide them, otherwise write [CHECK: price]. Don't invent statistics, quotes or reviews. End with a clear invitation to contact ${or(s(v, "brand"), "us")}.\n\n${brief}`;
+TONE: plain English, short paragraphs, local examples, prices in the reader's currency.`;
+    const write = `Write a ${type.toLowerCase()} from this brief for a local reader. Plain, friendly English; short paragraphs; follow the outline exactly. Give specific, practical advice and real price ranges only where I provide them, otherwise write [CHECK: price]. Don't invent statistics, quotes or reviews. End with a clear invitation to contact ${or(s(v, "brand"), "us")}.\n\n${brief}`;
     return [
       { type: "text", title: "Content brief", text: brief, filename: `brief-${slugify(kw)}.txt` },
       { type: "text", title: "Prompt to write it with AI", text: write },
@@ -351,16 +354,16 @@ const gbpPost: ToolDef = {
   kind: "generator",
   intro: "Pick a post type. You get Google Business Profile updates within the 1,500-character limit, a button suggestion and a photo checklist.",
   examples: [
-    { label: "Caterer offer", values: { business: "Kora Foods", type: "Offer", headline: "20% off party trays this weekend", details: "Jollof, fried rice and small chops for 20–50 guests", area: "catering in Ikeja", dates: "Fri 3 – Sun 5 Oct" } },
-    { label: "Salon new service", values: { business: "Glow Beauty Studio", type: "New product", headline: "Now offering bridal lash packages", details: "Trial session, venue service and a touch-up kit", area: "bridal lashes in Lekki", dates: "" } },
+    { label: "Caterer offer", values: { business: "Kora Foods", type: "Offer", headline: "20% off party trays this weekend", details: "Rice dishes, wraps and small plates for 20–50 guests", area: "catering in Austin", dates: "Fri 3 – Sun 5 Oct" } },
+    { label: "Salon new service", values: { business: "Glow Beauty Studio", type: "New product", headline: "Now offering bridal lash packages", details: "Trial session, venue service and a touch-up kit", area: "bridal lashes in Manchester", dates: "" } },
     { label: "Clinic update", values: { business: "CarePoint Clinic", type: "Update", headline: "We're now open on Saturdays", details: "Walk-ins welcome from 9am to 2pm", area: "family clinic in Wuse", dates: "" } },
   ],
   fields: [
     { key: "business", label: "Business", type: "text", default: "Kora Foods" },
     { key: "type", label: "Post type", type: "select", default: "Offer", options: opts("Offer", "Update", "Event", "New product") },
     { key: "headline", label: "What's it about", type: "text", default: "20% off party trays this weekend" },
-    { key: "details", label: "Details", type: "text", default: "Jollof, fried rice and small chops for 20–50 guests" },
-    { key: "area", label: "Area / keyword", type: "text", default: "catering in Ikeja" },
+    { key: "details", label: "Details", type: "text", default: "Rice dishes, wraps and small plates for 20–50 guests" },
+    { key: "area", label: "Area / keyword", type: "text", default: "catering in Austin" },
     { key: "dates", label: "Dates", type: "text", default: "Fri 3 – Sun 5 Oct" },
   ],
   generate(v) {

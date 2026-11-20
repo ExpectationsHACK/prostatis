@@ -49,13 +49,8 @@ export type DomainData = { results: { domain: string; status: "available" | "tak
 export type UptimeData = { url: string; https: boolean; runs: { status: number; ms: number }[] };
 export type ScrapeData = { url: string; status: number; matched: number; rows: string[][]; columns: string[] };
 
-/**
- * What a page costs a visitor in mobile data. MTN's 2GB monthly bundle is ₦1,500 (checked
- * Oct 2026), about ₦750 per GB; bigger bundles are cheaper per GB, daily ones dearer.
- */
-export const NAIRA_PER_GB = 750;
-export const dataCost = (bytes: number) => (bytes / 1_000_000_000) * NAIRA_PER_GB;
-const nairaCost = (x: number) => (x < 10 ? `₦${x.toFixed(2)}` : `₦${Math.round(x).toLocaleString("en-NG")}`);
+/** Mobile data a number of visits uses, in plain units ("2.3 GB"). Data prices vary too much by country to quote one. */
+const dataUsed = (bytes: number) => (bytes >= 1_000_000_000 ? `${(bytes / 1_000_000_000).toFixed(1)} GB` : `${Math.round(bytes / 1_000_000)} MB`);
 const verdict = (c: string) => (c === "FAST" ? "good" : c === "AVERAGE" ? "needs work" : c === "SLOW" ? "poor" : "");
 
 export function fieldStats(f: FieldData): Block {
@@ -165,12 +160,12 @@ export function renderLandingCheck(d: PageData): LiveResult {
         title: `Auto-detected: ${shortUrl(d.url)}`,
         items: [
           { ok: d.https, text: "Served over HTTPS", fix: "Put the page on your own domain with HTTPS." },
-          { ok: f.prices, text: "A price is shown", fix: "Show a price or “from ₦…”." },
+          { ok: f.prices, text: "A price is shown", fix: "Show a price or a “from …” price." },
           { ok: f.faq, text: "FAQ section", fix: "Answer cost, timeline and risk questions." },
           { ok: f.testimonials, text: "Testimonials / reviews", fix: "Add 3 real testimonials with names." },
           { ok: contact, text: `Contact links (WhatsApp ${f.whatsappLinks}, phone ${f.telLinks}, email ${f.mailtoLinks})`, fix: "Add a WhatsApp link and a phone number." },
           { ok: f.whatsappLinks > 0, text: "Click-to-WhatsApp link", fix: "Use https://wa.me/234… with a pre-filled message." },
-          { ok: f.paymentBrands.length > 0, text: `Payment brands: ${f.paymentBrands.join(", ") || "none"}`, fix: "Show Paystack/Stripe logos near the buy button." },
+          { ok: f.paymentBrands.length > 0, text: `Payment brands: ${f.paymentBrands.join(", ") || "none"}`, fix: "Show card and payment-provider logos (Visa, Mastercard, PayPal, Stripe or your local provider) near the buy button." },
           { ok: f.analytics.length > 0, text: `Analytics: ${f.analytics.join(", ") || "none"}`, fix: "Install analytics and track the main button." },
         ],
       },
@@ -202,7 +197,7 @@ export function renderSpeed(d: SpeedData, mode: "speed" | "responsive" = "speed"
     blocks.push({
       type: "notice",
       tone: bytes > 3_000_000 ? "warn" : "info",
-      text: `Each visit costs a visitor about ${nairaCost(dataCost(bytes))} of mobile data (${kb(bytes)} at ₦${NAIRA_PER_GB} per GB, MTN's 2GB monthly bundle). 1,000 visits a month = ${nairaCost(dataCost(bytes) * 1000)} of your customers' data.`,
+      text: `Each visit downloads ${kb(bytes)}. 1,000 visits a month = ${dataUsed(bytes * 1000)} of your visitors' mobile data. On prepaid plans that\'s their money, so a lighter page keeps more of them.`,
     });
   }
   if (lh?.field) {

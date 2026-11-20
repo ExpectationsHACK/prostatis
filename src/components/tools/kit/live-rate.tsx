@@ -2,24 +2,25 @@
 
 import { RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
+import { fmtMoney } from "@/lib/money";
 
-export type LiveRate = { rate: number; updated: string; source: string; sourceUrl: string };
+export type LiveRates = { rates: Record<string, number>; updated: string; source: string; sourceUrl: string };
 
-const KEY = "prostatis:fx";
-let pending: Promise<LiveRate | null> | null = null;
+const KEY = "stynark:fx-rates";
+let pending: Promise<LiveRates | null> | null = null;
 
-/** Fetch today's USD→NGN rate once per browser session (it changes daily, not by the minute). */
-function load(): Promise<LiveRate | null> {
+/** Fetch today's US-dollar rates once per browser session (they change daily, not by the minute). */
+function load(): Promise<LiveRates | null> {
   try {
     const saved = sessionStorage.getItem(KEY);
-    if (saved) return Promise.resolve(JSON.parse(saved) as LiveRate);
+    if (saved) return Promise.resolve(JSON.parse(saved) as LiveRates);
   } catch {
     /* storage blocked: fetch instead */
   }
   pending ??= fetch("/api/tools/fx")
     .then((r) => (r.ok ? r.json() : null))
-    .then((j: LiveRate | null) => {
-      if (j && j.rate > 0) {
+    .then((j: LiveRates | null) => {
+      if (j && j.rates && Object.keys(j.rates).length) {
         try {
           sessionStorage.setItem(KEY, JSON.stringify(j));
         } catch {
@@ -33,32 +34,42 @@ function load(): Promise<LiveRate | null> {
   return pending;
 }
 
-export function useLiveRate() {
-  const [rate, setRate] = useState<LiveRate | null>(null);
+export function useLiveRates() {
+  const [rates, setRates] = useState<LiveRates | null>(null);
   useEffect(() => {
     let live = true;
-    load().then((r) => live && setRate(r));
+    load().then((r) => live && setRates(r));
     return () => {
       live = false;
     };
   }, []);
-  return rate;
+  return rates;
 }
+
+/** Today's market rate for one currency (units per $1), or null while loading / unavailable. */
+export function useLiveRate(currency: string) {
+  const live = useLiveRates();
+  const rate = live?.rates[currency];
+  return live && rate ? { rate, updated: live.updated, source: live.source, sourceUrl: live.sourceUrl } : null;
+}
+
+/** A rate as typed into the tool's field: whole units for big numbers (₦1,523), two decimals for small (€0.92). */
+export const rateText = (r: number) => String(r >= 20 ? Math.round(r) : r);
 
 const day = (x: string) => {
   const d = new Date(x);
-  return Number.isNaN(d.getTime()) ? "today" : d.toLocaleDateString("en-NG", { day: "numeric", month: "short" });
+  return Number.isNaN(d.getTime()) ? "today" : d.toLocaleDateString("en", { day: "numeric", month: "short" });
 };
 
-/** Under a "₦ per $1" box: today's market rate, one tap to use it, and an honest note about card rates. */
-export function RateHint({ current, onUse }: { current: number; onUse: (rate: number) => void }) {
-  const live = useLiveRate();
-  if (!live) return null;
-  const r = Math.round(live.rate);
-  const same = Math.abs(current - r) < 1;
+/** Under an "amount per $1" box: today's market rate, one tap to use it, and an honest note about card rates. */
+export function RateHint({ currency, current, onUse }: { currency: string; current: number; onUse: (rate: number) => void }) {
+  const live = useLiveRate(currency);
+  if (!live || currency === "USD") return null;
+  const r = live.rate >= 20 ? Math.round(live.rate) : live.rate;
+  const same = Math.abs(current - r) < (r >= 20 ? 1 : 0.01);
   return (
     <p className="mt-1.5 text-[12px] leading-snug text-muted">
-      Market rate {day(live.updated)}: <strong className="text-ink">₦{r.toLocaleString("en-NG")}</strong> per $1 (
+      Market rate {day(live.updated)}: <strong className="text-ink">{fmtMoney(r, currency, r >= 20 ? 0 : 2)}</strong> per $1 (
       <a href={live.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline">
         {live.source}
       </a>
@@ -68,7 +79,7 @@ export function RateHint({ current, onUse }: { current: number; onUse: (rate: nu
           <RefreshCw className="size-3" aria-hidden /> Use it
         </button>
       )}{" "}
-      Naira cards and dollar accounts usually charge a few percent more, so use your bank's rate if you know it.
+      Cards and payout services usually charge a few percent more, so use your bank&apos;s rate if you know it.
     </p>
   );
 }

@@ -114,7 +114,7 @@ export const guides: Record<string, ToolGuide> = {
     problem: "Every good name seems taken, and you waste an hour checking domains one by one.",
     get: "Short, sayable domain ideas, and a live check of which are actually available.",
     minutes: 3,
-    steps: ["Type the main word, an optional extra word and a location.", "Choose the ending (.com, .ng, .com.ng).", "Press “Check availability” and shortlist 3 that are free."],
+    steps: ["Type the main word, an optional extra word and a location.", "Choose the ending (.com, or your country's, like .co.uk or .com.au).", "Press “Check availability” and shortlist 3 that are free."],
     next: ["Say each shortlisted name out loud on a pretend phone call, keep the clearest.", "Buy it in the client's name at a registrar.", "Connect it to the site (Deploy lesson)."],
   },
 
@@ -172,9 +172,9 @@ export const guides: Record<string, ToolGuide> = {
   // ---------- SEO ----------
   "keyword-research-prompts": {
     problem: "You don't know what customers type into Google, so the site doesn't show up for the right searches.",
-    get: "The real phrases people in Nigeria type into Google, sorted by what they want (hire nearby, compare prices, ask questions), with the job-seekers filtered out and a keyword map for the site.",
+    get: "The real phrases people in your chosen country type into Google, sorted by what they want (hire nearby, compare prices, ask questions), with the job-seekers filtered out and a keyword map for the site.",
     minutes: 3,
-    steps: ["Enter the service in the words customers use, and the city or area.", "Press “Get real searches” to pull live suggestions from Google Nigeria.", "Give each page one main phrase from the keyword map; use the questions for the FAQ and articles."],
+    steps: ["Enter the service in the words customers use, the city or area, and the country.", "Press “Get real searches” to pull live suggestions from Google in that country.", "Give each page one main phrase from the keyword map; use the questions for the FAQ and articles."],
     next: ["Make a keyword map: one main keyword per page.", "Write titles and descriptions with the Meta Tag Generator.", "Plan articles for the “learn” keywords with the Blog Topic tool."],
   },
   "meta-tag-generator": {
@@ -233,7 +233,7 @@ export const guides: Record<string, ToolGuide> = {
     get: "Proven automation ideas for the business type, trigger, action and time saved.",
     minutes: 2,
     steps: ["Pick the business type.", "Tick the tools they already use.", "Start with the first idea. It usually pays back fastest."],
-    next: ["Put numbers on it with the Automation ROI Calculator.", "Plan the steps with the Scenario Planner.", "Pitch it to the owner with the saving in naira."],
+    next: ["Put numbers on it with the Automation ROI Calculator.", "Plan the steps with the Scenario Planner.", "Pitch it to the owner with the saving in their currency."],
   },
   "zapier-make-scenario-planner": {
     problem: "You open Make or Zapier and get lost in modules, or build something that breaks the first week.",
@@ -244,9 +244,9 @@ export const guides: Record<string, ToolGuide> = {
   },
   "business-process-audit": {
     problem: "The owner says “we're always busy” but can't say where the hours go, so nothing changes.",
-    get: "A ranked list of tasks to automate, with hours and naira saved per year.",
+    get: "A ranked list of tasks to automate, with hours and money saved per year.",
     minutes: 5,
-    steps: ["List each repeated task as: task | hours per week | how repetitive (1–5).", "Enter what an hour of their time is worth, in naira.", "Read the ranking: automate from the top."],
+    steps: ["List each repeated task as: task | hours per week | how repetitive (1–5).", "Enter what an hour of their time is worth, and pick the currency.", "Read the ranking: automate from the top."],
     next: ["Show the owner the yearly saving at the top.", "Pick the top 3 tasks and plan them.", "Price the project with the ROI calculator."],
   },
   "email-autoresponder-generator": {
@@ -258,16 +258,16 @@ export const guides: Record<string, ToolGuide> = {
   },
   "automation-roi-calculator": {
     problem: "The owner asks “is it worth it?” and you can only say “it'll save time”.",
-    get: "Monthly saving, payback time, first-year gain and a ready pitch line, in naira.",
+    get: "Monthly saving, payback time, first-year gain and a ready pitch line, in your currency.",
     minutes: 2,
     steps: ["Enter the hours the task takes each week and what an hour is worth.", "Enter how much the automation cuts it, and any money lost to errors.", "Enter your setup fee and the monthly tool cost."],
     next: ["Copy the pitch line into your proposal.", "Use the payback time to justify your price.", "Re-run it after launch with real numbers for a case study."],
   },
   "token-cost-calculator": {
     problem: "You're about to price an AI chatbot or feature but have no idea what the AI will cost each month.",
-    get: "A monthly AI cost estimate in dollars and naira, per model, for your use case.",
+    get: "A monthly AI cost estimate in dollars (or your currency), per model, for your use case.",
     minutes: 2,
-    steps: ["Pick the use case and how many times a day it runs.", "Set today's naira-to-dollar rate.", "Compare the models: pick the cheapest one that does the job well."],
+    steps: ["Pick the use case and how many times a day it runs.", "Pick your currency: today's rate fills in, or use your bank's.", "Compare the models: pick the cheapest one that does the job well."],
     next: ["Add a safety margin and put the cost in your proposal.", "Set a monthly spending limit with the AI provider.", "Re-check with real usage after the first week."],
   },
   "mcp-server-picker": {
@@ -390,14 +390,14 @@ export const guides: Record<string, ToolGuide> = {
   },
   "client-pricing-calculator": {
     problem: "You don't know what to charge, so you guess low, especially with clients abroad paying in dollars.",
-    get: "Your minimum hourly rate in dollars and naira, and a floor price for common projects, built from what you actually need to earn.",
+    get: "Your minimum hourly rate in dollars (and your currency), and a floor price for common projects, built from what you actually need to earn.",
     minutes: 3,
     steps: ["Enter your monthly take-home goal and the hours you work each week.", "Add your AI tool costs, other monthly costs, any platform fee and today's exchange rate.", "Read your floor rate and project floors, never quote below them."],
     next: ["Quote per project based on the value to the client, starting above the floor.", "Offer a smaller package instead of dropping your price.", "Re-run it whenever your costs or the exchange rate change."],
   },
   "invoice-generator": {
     problem: "The work is done but the payment is late, because the request was unclear or easy to ignore.",
-    get: "A clean payment request in naira or dollars, with a reference, due date and how to pay.",
+    get: "A clean payment request in any of 15 currencies, with a reference, due date and how to pay.",
     minutes: 3,
     steps: ["Enter your details and the client's.", "Add what it's for, the amount and a due date.", "Add how to pay (bank, Paystack link, or USD account), then print or save as PDF."],
     next: ["Send it the day the milestone is reached.", "Send a friendly reminder 3 days before it's due.", "Record it in your tracker until it's paid."],
@@ -411,10 +411,10 @@ export const guides: Record<string, ToolGuide> = {
   },
   "cron-schedule-generator": {
     problem: "Your automation should run “every weekday at 8am” but the tool wants a cryptic cron code, in UTC.",
-    get: "The cron expression, a plain-English check, and the next run times in Lagos time.",
+    get: "The cron expression, a plain-English check, and the next run times in your time zone.",
     minutes: 2,
-    steps: ["Pick how often it should run.", "Set the time in Lagos time.", "Check the next run times look right, then copy the expression."],
-    next: ["Paste it into your automation or scheduler.", "Set the tool's time zone to Africa/Lagos if it has one.", "Watch the first real run to confirm."],
+    steps: ["Pick how often it should run.", "Set the time in your time zone (detected for you).", "Check the next run times look right, then copy the expression."],
+    next: ["Paste it into your automation or scheduler.", "Set the tool's time zone to yours if it has one.", "Watch the first real run to confirm."],
   },
   "hook-line-generator": {
     problem: "People scroll past your posts before reading the second line.",

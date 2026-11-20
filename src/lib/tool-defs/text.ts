@@ -98,7 +98,7 @@ export function blocksToHtml(blocks: Block[], meta: { title: string; subtitle?: 
       }
     })
     .join("\n");
-  const date = meta.date ?? new Date().toLocaleDateString("en-NG", { day: "numeric", month: "long", year: "numeric" });
+  const date = meta.date ?? new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(meta.title)}</title><style>
 body{font:15px/1.55 Arial,Helvetica,sans-serif;color:#16120e;margin:40px auto;max-width:760px;padding:0 20px}
 header{border-bottom:3px solid #16120e;padding-bottom:12px;margin-bottom:20px}h1{font-size:26px;margin:0}header p{margin:4px 0 0;color:#5b544c}

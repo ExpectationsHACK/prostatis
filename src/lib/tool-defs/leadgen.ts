@@ -6,13 +6,13 @@ const leadMagnet: ToolDef = {
   kind: "generator",
   intro: "Tell us what you sell and to whom. You get lead magnets that attract buyers (not freebie hunters), how much work each takes, and a recipe for the best one.",
   examples: [
-    { label: "Websites for restaurants", values: { service: "websites + SEO for restaurants", audience: "restaurant owners in Lagos", pain: "not enough orders outside weekends" } },
-    { label: "Booking systems for salons", values: { service: "booking websites for salons", audience: "salon owners in Abuja", pain: "no-shows and endless 'are you free?' messages" } },
+    { label: "Websites for restaurants", values: { service: "websites + SEO for restaurants", audience: "restaurant owners in Austin", pain: "not enough orders outside weekends" } },
+    { label: "Booking systems for salons", values: { service: "booking websites for salons", audience: "salon owners in Manchester", pain: "no-shows and endless 'are you free?' messages" } },
     { label: "Automation for shops", values: { service: "WhatsApp and order automation", audience: "online sellers on Instagram", pain: "hours lost answering the same questions" } },
   ],
   fields: [
     { key: "service", label: "What you sell", type: "text", default: "websites + SEO for restaurants" },
-    { key: "audience", label: "Ideal client", type: "text", default: "restaurant owners in Lagos" },
+    { key: "audience", label: "Ideal client", type: "text", default: "restaurant owners in Austin" },
     { key: "pain", label: "Their biggest pain", type: "text", default: "not enough orders outside weekends" },
   ],
   generate(v) {
@@ -48,13 +48,13 @@ const prospectList: ToolDef = {
   kind: "generator",
   intro: "Describe your ideal client. You get ready searches for Google and Google Maps, a research prompt and the sheet to track everything.",
   examples: [
-    { label: "Dental clinics, Lagos", values: { niche: "dental clinic", city: "Lagos", signal: "No website or outdated site", count: 100 } },
-    { label: "Salons, Abuja", values: { niche: "hair salon", city: "Abuja", signal: "Active on Instagram, no website", count: 100 } },
-    { label: "Restaurants, PH", values: { niche: "restaurant", city: "Port Harcourt", signal: "Few Google reviews", count: 50 } },
+    { label: "Dental clinics, Austin", values: { niche: "dental clinic", city: "Austin", signal: "No website or outdated site", count: 100 } },
+    { label: "Salons, Manchester", values: { niche: "hair salon", city: "Manchester", signal: "Active on Instagram, no website", count: 100 } },
+    { label: "Restaurants, Toronto", values: { niche: "restaurant", city: "Toronto", signal: "Few Google reviews", count: 50 } },
   ],
   fields: [
     { key: "niche", label: "Business type", type: "text", default: "dental clinic" },
-    { key: "city", label: "City / area", type: "text", default: "Lagos" },
+    { key: "city", label: "City / area", type: "text", default: "Austin" },
     { key: "signal", label: "Buying signal to look for", type: "select", default: "No website or outdated site", options: opts("No website or outdated site", "Few Google reviews", "Not on Google Maps", "Running ads but weak landing page", "Active on Instagram, no website", "Hiring (growing)") },
     { key: "count", label: "How many prospects", type: "number", default: 100, min: 10, max: 1000 },
   ],
@@ -65,7 +65,7 @@ const prospectList: ToolDef = {
       `"${niche}" "${city}" site:instagram.com`,
       `"${niche}" "${city}" -site:facebook.com -site:instagram.com`,
       `"${niche}" "${city}" "contact us" "gmail.com"`,
-      `${niche} ${city} site:vconnect.com OR site:businesslist.com.ng`,
+      `${niche} ${city} site:yelp.com OR site:yellowpages.com`,
     ];
     const prompt = `I'm building a prospect list of ${n(v, "count")} ${niche}s in ${city} to offer websites, SEO and automation.
 Buying signal: ${sig}.
@@ -76,7 +76,7 @@ Score each 1–5 on how strongly they show the buying signal. Return a table I c
       { type: "text", title: "Open Google Maps for this search", text: `https://www.google.com/maps/search/${encodeURIComponent(`${niche} in ${city}`)}` },
       { type: "notice", tone: "warn", text: "Collect from Google Maps by hand, scraping Maps breaks Google's terms. 10–20 businesses a session is plenty." },
       { type: "text", title: "Research prompt", text: prompt },
-      { type: "table", title: "Sheet columns", columns: ["Column", "Example"], rows: [["Business", "SmileCare Dental"], ["Area", "Lekki Phase 1"], ["Phone / WhatsApp", "+234…"], ["Website", "none"], ["Instagram", "@smilecare"], ["Google rating", "4.2 (11)"], ["Observation", "No online booking; 11 reviews"], ["Score (1–5)", "5"], ["Status", "Not contacted"]] },
+      { type: "table", title: "Sheet columns", columns: ["Column", "Example"], rows: [["Business", "SmileCare Dental"], ["Area", "Downtown"], ["Phone / WhatsApp", "+1…"], ["Website", "none"], ["Instagram", "@smilecare"], ["Google rating", "4.2 (11)"], ["Observation", "No online booking; 11 reviews"], ["Score (1–5)", "5"], ["Status", "Not contacted"]] },
       { type: "notice", tone: "info", text: "Respect privacy: use publicly listed business contact details only, and stop contacting anyone who says no." },
     ];
   },
@@ -186,12 +186,12 @@ const qualify: ToolDef = {
   kind: "generator",
   intro: "Score a lead right after the first chat. You get a clear go / nurture / pass decision and the exact message to send next.",
   examples: [
-    { label: "Hot lead", values: { lead: "SmileCare Dental, Lekki", budget: "Has budget in range", authority: "Talking to the owner", need: "Clear, painful problem", timing: "Wants it this month", fit: "Exactly what I sell" } },
-    { label: "Maybe later", values: { lead: "Kora Foods, Ikeja", budget: "Budget unclear", authority: "Talking to the owner", need: "Nice to have", timing: "Next 3 months", fit: "Exactly what I sell" } },
+    { label: "Hot lead", values: { lead: "SmileCare Dental, Austin", budget: "Has budget in range", authority: "Talking to the owner", need: "Clear, painful problem", timing: "Wants it this month", fit: "Exactly what I sell" } },
+    { label: "Maybe later", values: { lead: "Kora Foods, Manchester", budget: "Budget unclear", authority: "Talking to the owner", need: "Nice to have", timing: "Next 3 months", fit: "Exactly what I sell" } },
     { label: "Not a fit", values: { lead: "Big Bank Plc", budget: "Budget unclear", authority: "No access to decision maker", need: "No real problem", timing: "Someday", fit: "Not really" } },
   ],
   fields: [
-    { key: "lead", label: "Lead", type: "text", default: "SmileCare Dental, Lekki" },
+    { key: "lead", label: "Lead", type: "text", default: "SmileCare Dental, Austin" },
     { key: "budget", label: "Budget", type: "select", default: "Has budget in range", options: opts("Has budget in range", "Budget unclear", "Budget too low") },
     { key: "authority", label: "Decision maker", type: "select", default: "Talking to the owner", options: opts("Talking to the owner", "Talking to staff who can influence", "No access to decision maker") },
     { key: "need", label: "Need", type: "select", default: "Clear, painful problem", options: opts("Clear, painful problem", "Nice to have", "No real problem") },
@@ -248,7 +248,7 @@ const landingChecklist: ToolDef = {
     ] },
     { title: "Offer & copy", checks: [
       { id: "benefits", weight: 2, text: "Benefits come before features", fix: "For each feature, lead with the “so that…”, what the customer gains." },
-      { id: "price", weight: 2, text: "Price or starting price is visible", fix: "Show a price or “from ₦…”, hiding it loses serious buyers." },
+      { id: "price", weight: 2, text: "Price or starting price is visible", fix: "Show a price or a “from …” price, hiding it loses serious buyers." },
       { id: "objections", weight: 2, text: "Top 3 objections are answered (FAQ)", fix: "Add an FAQ answering cost, timeline, and “what if it doesn't work for me?”." },
       { id: "guarantee", weight: 1, text: "Risk reversal: guarantee, refund, or trial", fix: "Offer a guarantee you can honour, revisions, a refund window, or pay-on-delivery for a first milestone." },
       { id: "scan", weight: 1, text: "Copy is scannable: short paragraphs, clear subheads", fix: "Break paragraphs over 3 lines; make every subhead readable on its own." },
@@ -258,7 +258,7 @@ const landingChecklist: ToolDef = {
       { id: "testimonials", weight: 3, text: "Real testimonials with name, photo or business", fix: "Ask 3 happy clients for a two-line testimonial plus permission to use their name." },
       { id: "contact", weight: 2, text: "Real contact details (WhatsApp, email, location)", fix: "Show a WhatsApp number and a business email. Buyers check for a real person." },
       { id: "https", weight: 2, text: "HTTPS padlock, own domain (not a free subdomain)", fix: "Put the page on your own domain with HTTPS. Cloudflare Pages does this for free." },
-      { id: "payment", weight: 1, text: "Trusted payment logos (Paystack, Flutterwave, Stripe)", fix: "Show the payment provider logos near the buy button." },
+      { id: "payment", weight: 1, text: "Trusted payment logos (Visa, Mastercard, PayPal, Stripe or your local provider)", fix: "Show the payment provider logos near the buy button." },
     ] },
     { title: "Mobile & speed", checks: [
       { id: "mobile", weight: 3, text: "Looks right on a 375px-wide phone", fix: "Test on a real phone, fix overflow, tiny text and cramped buttons first." },

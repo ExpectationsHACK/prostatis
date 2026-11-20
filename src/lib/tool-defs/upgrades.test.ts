@@ -41,8 +41,11 @@ describe("Google search suggestions", () => {
   it("sorts phrases by what the searcher wants", () => {
     expect(intentOf("web design jobs in lagos")).toBe("not-customer");
     expect(intentOf("web design course")).toBe("not-customer");
-    expect(intentOf("how much is web design in nigeria")).toBe("price");
-    expect(intentOf("web design company in lekki")).toBe("local");
+    expect(intentOf("how much is web design in nigeria", "", "NG")).toBe("price");
+    // "Local" follows the country being searched.
+    expect(intentOf("web design company in lekki", "", "NG")).toBe("local");
+    expect(intentOf("web design company in houston", "", "US")).toBe("local");
+    expect(intentOf("web design company in lekki", "", "US")).toBe("buy");
     expect(intentOf("lash extensions near me")).toBe("local");
     expect(intentOf("what is seo")).toBe("question");
     expect(intentOf("best web design agency")).toBe("buy");
@@ -52,6 +55,7 @@ describe("Google search suggestions", () => {
       seed: "web design",
       location: "Lagos",
       mode: "all",
+      country: "NG",
       results: [
         { query: "how much is web design", suggestions: ["how much is web design in nigeria", "how much is website design cost in philippines", "How much is web design in Nigeria"] },
         { query: "web design lagos", suggestions: ["web design lagos", "web design jobs in lagos"] },
@@ -64,6 +68,11 @@ describe("Google search suggestions", () => {
     expect(text).toContain("keywords.csv");
     expect(text).not.toContain("philippines");
     expect(text).toContain("Keyword Planner"); // honest about volumes
+  });
+  it("keeps the chosen country's searches and drops other countries'", () => {
+    const data: SuggestData = { seed: "web design", location: "", mode: "all", country: "US", results: [{ query: "x", suggestions: ["web design houston", "web design lagos", "web design company in london", "web design near me"] }] };
+    expect(cleanSuggestions(data)).toEqual(["web design houston", "web design near me"]);
+    expect(JSON.stringify(renderSuggestions(data).blocks)).toContain("Google United States");
   });
   it("says so plainly when Google has nothing", () => {
     const out = renderSuggestions({ seed: "zzqx", location: "", mode: "all", results: [{ query: "zzqx", suggestions: [] }] });
@@ -207,7 +216,7 @@ describe("colour palette upgrades", () => {
 
 describe("suggestion filters seen on live Google data", () => {
   it("drops foreign cities and languages", () => {
-    const data: SuggestData = { seed: "web design", location: "Lagos", mode: "all", results: [{ query: "x", suggestions: ["web design company in chennai", "affordable web design perth", "what is web designing in hindi", "web design fort worth", "web design company in lagos"] }] };
+    const data: SuggestData = { seed: "web design", location: "Lagos", mode: "all", country: "NG", results: [{ query: "x", suggestions: ["web design company in chennai", "affordable web design perth", "what is web designing in hindi", "web design fort worth", "web design company in lagos"] }] };
     expect(cleanSuggestions(data)).toEqual(["web design company in lagos"]);
   });
   it("treats students and tool learners as not customers", () => {

@@ -117,7 +117,7 @@ ${words <= (email ? 120 : 70) ? "✓" : "✗"} Version A is ${words} words: aim 
           <Field label="The result for them">
             <TextInput value={f.result} onChange={set("result")} />
           </Field>
-          <Field label="Real proof (optional)" hint="Only something that really happened, e.g. “I built a booking page for a salon in Yaba last month”. Leave empty if none yet.">
+          <Field label="Real proof (optional)" hint="Only something that really happened, e.g. “I built a booking page for a salon in my area last month”. Leave empty if none yet.">
             <TextInput value={f.proof} onChange={set("proof")} />
           </Field>
           <Field label="Channel">

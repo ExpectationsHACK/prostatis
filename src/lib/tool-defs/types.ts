@@ -1,3 +1,7 @@
+import { currencies, fmtMoney } from "@/lib/money";
+
+/** Currency choices for tools that price things. */
+export const currencyOptions = [...currencies];
 /**
  * Declarative tool definitions. Logic is pure (no DOM, no network) so every tool can be
  * unit-tested and runs instantly on a phone. The UI kit renders fields and output blocks.
@@ -91,7 +95,8 @@ export const slugify = (x: string) =>
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
-export const naira = (x: number) => "₦" + Math.round(x).toLocaleString("en-NG");
+/** An amount in the tool's chosen currency ("$1,250", "€90", "₦45,000"). */
+export const money = (x: number, currency = "USD") => fmtMoney(x, currency);
 export const usd = (x: number) => "$" + Math.round(x).toLocaleString("en-US");
 
 export function defaults(fields: Field[]): Values {

@@ -201,7 +201,7 @@ export function BlockView({ b }: { b: Block }) {
                   Build your business online
                 </p>
                 <p className="mt-1.5 text-[15px] leading-relaxed text-muted" style={{ fontFamily: `'${p.body}', sans-serif` }}>
-                  Fast, mobile-first websites for Nigerian businesses, booking, WhatsApp orders and payments built in.
+                  Fast, mobile-first websites for small businesses, booking, WhatsApp orders and payments built in.
                 </p>
                 <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
                   <p className="font-mono text-[12px] text-ink">

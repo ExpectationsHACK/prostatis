@@ -69,3 +69,6 @@ marketing/ads/render/vo/trim/
 marketing/ads/render/*.png
 marketing/ads/sales/*.mp4
 marketing/ads/render/sales/
+
+# Local screenshots (price checks etc.)
+screenshots/

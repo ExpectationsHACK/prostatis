@@ -58,9 +58,9 @@ function shuffled<T>(arr: T[], seed: number) {
 
 const initial = {
   topic: "building websites with AI",
-  audience: "Nigerian freelancers",
+  audience: "new freelancers",
   result: "earning in dollars",
-  mistake: "charging clients in naira",
+  mistake: "charging by the hour",
   time: "30 days",
   num: "5",
   platform: "TikTok",
@@ -69,8 +69,8 @@ const initial = {
 };
 const examples = [
   { label: "Freelancer (TikTok)", values: initial },
-  { label: "Salon owner (Reels)", values: { ...initial, topic: "lash extensions", audience: "Lagos brides", result: "photo-ready lashes that last", mistake: "booking the cheapest lash tech", time: "4 weeks", num: "3", platform: "Instagram Reels" } },
-  { label: "Solar business (LinkedIn)", values: { ...initial, topic: "solar for small businesses", audience: "Abuja shop owners", result: "cutting diesel costs", mistake: "running the generator all day", time: "3 months", num: "4", platform: "LinkedIn" } },
+  { label: "Salon owner (Reels)", values: { ...initial, topic: "lash extensions", audience: "brides-to-be", result: "photo-ready lashes that last", mistake: "booking the cheapest lash tech", time: "4 weeks", num: "3", platform: "Instagram Reels" } },
+  { label: "Solar business (LinkedIn)", values: { ...initial, topic: "solar for small businesses", audience: "small shop owners", result: "cutting power bills", mistake: "leaving everything switched on all day", time: "3 months", num: "4", platform: "LinkedIn" } },
 ];
 
 export default function HookLineGenerator() {

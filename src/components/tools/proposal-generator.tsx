@@ -1,5 +1,6 @@
 "use client";
 
+import { currencies, fmtMoney } from "@/lib/money";
 import { AiWriter } from "./kit/ai-writer";
 import { AppToolLayout, useToolState } from "./kit/app-tool";
 import { Field, Output, Select, TextArea, TextInput } from "../tool-ui";
@@ -25,19 +26,18 @@ const initial = {
     validity: "14 days",
 };
 const examples = [
-  { label: "Lagos salon (₦)", values: { ...initial, client: "Kemi Adebayo", company: "Glow Beauty Studio, Lekki", problem: "Customers book by WhatsApp only, so the owner answers “are you free?” all day and loses two afternoons a week to no-shows.", outcome: "A mobile booking website with deposits, so customers book themselves and no-shows drop.", deliverables: "4-page website (Home, Services & prices, Gallery, Contact)\nOnline booking with a ₦5,000 Paystack deposit\nWhatsApp button and Google Maps\nGoogle Business Profile setup\n30 days of support after launch", timeline: "10 days", currency: "NGN", price: "450,000", split: "50/50" } },
+  { label: "UK salon (£)", values: { ...initial, client: "Kemi Adebayo", company: "Glow Beauty Studio, Manchester", problem: "Customers book by WhatsApp and Instagram messages only, so the owner answers “are you free?” all day and loses two afternoons a week to no-shows.", outcome: "A mobile booking website with deposits, so customers book themselves and no-shows drop.", deliverables: "4-page website (Home, Services & prices, Gallery, Contact)\nOnline booking with a card deposit\nWhatsApp button and Google Maps\nGoogle Business Profile setup\n30 days of support after launch", timeline: "10 days", currency: "GBP", price: "900", split: "50/50" } },
   { label: "US dental clinic ($)", values: initial },
-  { label: "Restaurant care plan (₦)", values: { ...initial, client: "Mama Nkechi", company: "Mama Nkechi's Kitchen, Ikeja", problem: "The website exists but nobody updates it, the menu and prices are months out of date.", outcome: "An always-up-to-date website: weekly menu updates, monthly SEO checks and a short report.", deliverables: "Weekly menu and price updates\nUptime monitoring\nMonthly Google Business Profile posts (4)\nA one-page monthly report", timeline: "Monthly, starting next week", currency: "NGN", price: "60,000", split: "100", validity: "7 days" } },
+  { label: "Restaurant care plan (€)", values: { ...initial, client: "Maria Schmidt", company: "Mama's Kitchen, Berlin", problem: "The website exists but nobody updates it, the menu and prices are months out of date.", outcome: "An always-up-to-date website: weekly menu updates, monthly SEO checks and a short report.", deliverables: "Weekly menu and price updates\nUptime monitoring\nMonthly Google Business Profile posts (4)\nA one-page monthly report", timeline: "Monthly, starting next week", currency: "EUR", price: "150", split: "100", validity: "7 days" } },
 ];
 
 export default function ProposalGenerator() {
   const { f, patch, load, source, shareUrl } = useToolState("proposal-generator", initial);
   const set = (k: keyof typeof initial) => (e: { target: { value: string } }) => patch({ [k]: e.target.value });
 
-  const sym = f.currency === "USD" ? "$" : f.currency === "GBP" ? "£" : f.currency === "EUR" ? "€" : "₦";
   const total = Number(f.price.replace(/,/g, "")) || 0;
   const [a, b] = f.split === "100" ? [100, 0] : f.split === "40/30/30" ? [40, 60] : [50, 50];
-  const money = (n: number) => sym + Math.round(n).toLocaleString(f.currency === "NGN" ? "en-NG" : "en-US");
+  const money = (n: number) => fmtMoney(n, f.currency);
   const deliverables = lines(f.deliverables);
 
   const payment =
@@ -75,7 +75,7 @@ Total: ${money(total)} ${f.currency}
 Payment schedule:
 ${payment}
 
-${f.currency === "NGN" ? "Payment by bank transfer or card/USSD via a Paystack payment link (details provided)." : "Payment by bank transfer, Payoneer, Grey or card (payment details provided)."}
+Payment by bank transfer or card via a payment link (details provided).
 
 6. WHAT I NEED FROM YOU
 - Logo, photos and any existing text
@@ -133,7 +133,7 @@ ${f.studio}`;
               <TextInput value={f.timeline} onChange={set("timeline")} />
             </Field>
             <Field label="Currency">
-              <Select value={f.currency} onChange={set("currency")} options={["USD", "GBP", "EUR", "NGN"]} />
+              <Select value={f.currency} onChange={set("currency")} options={[...currencies]} />
             </Field>
             <Field label="Price">
               <TextInput inputMode="numeric" value={f.price} onChange={set("price")} />

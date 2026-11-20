@@ -363,7 +363,7 @@ const T: Record<string, () => ReactNode> = {
   "keyword-research-prompts": () => (
     <Stage d={8}>
       <Box className="w-[252px] p-2.5">
-        {[["web design lagos", "Buy", 90], ["website cost nigeria", "Compare", 70], ["how to choose a web designer", "Learn", 45], ["web designer near me", "Buy", 80]].map(([k, intent, w], i) => (
+        {[["web design austin", "Buy", 90], ["website cost texas", "Compare", 70], ["how to choose a web designer", "Learn", 45], ["web designer near me", "Buy", 80]].map(([k, intent, w], i) => (
           <div key={k as string} className="mb-1.5">
             <div className="flex justify-between">
               <span className={t.sm}>{k}</span>
@@ -550,7 +550,7 @@ const T: Record<string, () => ReactNode> = {
     <Stage d={8} className="gap-3">
       <div className="space-y-2">
         <Box className={"px-2.5 py-1.5 " + m("pop")} style={at(1.4)}><p className={`${t.xs} text-[#8a857b]`}>Pays for itself in</p><p className="text-[17px] font-bold">2.5 months</p></Box>
-        <Box className={"bg-[#151515] px-2.5 py-1.5 text-white " + m("pop")} style={at(1.8)}><p className={`${t.xs} text-white/60`}>Saved per year</p><p className="text-[17px] font-bold">₦2,100,000</p></Box>
+        <Box className={"bg-[#151515] px-2.5 py-1.5 text-white " + m("pop")} style={at(1.8)}><p className={`${t.xs} text-white/60`}>Saved per year</p><p className="text-[17px] font-bold">$5,200</p></Box>
       </div>
       <Box className="flex h-[118px] items-end gap-1.5 px-2.5 pb-2 pt-3">
         {[22, 36, 52, 72, 96].map((h, i) => <span key={i} className={`w-[16px] rounded-t-[3px] ${i === 4 ? "bg-[#eb5e28]" : "bg-[#dcd6c8]"} ` + m("grow-y")} style={{ ...at(0.2 + i * 0.2), height: h }} />)}
@@ -561,7 +561,7 @@ const T: Record<string, () => ReactNode> = {
     <Stage d={8}>
       <Box className="w-[252px] p-2.5">
         <p className={`${t.xs} mb-1.5 text-[#8a857b]`}>6,000 chatbot replies a month</p>
-        {[["Haiku 4.5", "₦27,900"], ["Sonnet 5.5", "₦55,800"], ["Opus 5.5", "₦111,600"]].map(([x, p], i) => (
+        {[["Haiku 4.5", "$19"], ["Sonnet 5.5", "$37"], ["Opus 5.5", "$74"]].map(([x, p], i) => (
           <div key={x} className={`mb-1 flex justify-between rounded-[5px] px-1.5 py-1 ` + (i === 1 ? m("mark") : m("in") + " border-b border-[#efece6]")} style={i === 1 ? at(1.6, { off: "#fff", on: "#fdeee6" }) : at(0.3 + i * 0.3)}>
             <span className={`${t.sm} font-semibold`}>{x}</span>
             <span className={t.sm}>{p}/mo</span>
@@ -803,12 +803,12 @@ const T: Record<string, () => ReactNode> = {
   ),
   "client-pricing-calculator": () => (
     <Stage d={8} className="gap-3">
-      <Box className={"p-2.5 " + m("in")} style={at(0.2)}><p className={`${t.xs} text-[#8a857b]`}>Monthly goal</p><p className="text-[16px] font-bold">₦1.5m</p></Box>
+      <Box className={"p-2.5 " + m("in")} style={at(0.2)}><p className={`${t.xs} text-[#8a857b]`}>Monthly goal</p><p className="text-[16px] font-bold">$2,500</p></Box>
       <ArrowRight className="size-4" strokeWidth={2.5} />
       <Box className="w-[112px] bg-[#fdeee6] p-2.5 text-center">
         <p className={`${t.xs} text-[#6b675f]`}>Your minimum rate</p>
-        <p className={"text-[22px] font-bold " + m("pop")} style={at(1)}>₦28,000<span className="text-[10px] font-normal">/hr</span></p>
-        <p className={`${t.xs} font-semibold ` + m("in")} style={at(1.8)}>Landing page from ₦280,000</p>
+        <p className={"text-[22px] font-bold " + m("pop")} style={at(1)}>$25<span className="text-[10px] font-normal">/hr</span></p>
+        <p className={`${t.xs} font-semibold ` + m("in")} style={at(1.8)}>Landing page from $200</p>
       </Box>
     </Stage>
   ),
@@ -847,7 +847,7 @@ const T: Record<string, () => ReactNode> = {
             <span className={"absolute left-1/2 top-[3px] h-[7px] w-[1.5px] origin-bottom -translate-x-1/2 bg-[#f0946b] " + loop("spin")} />
           </span>
         </div>
-        <p className={`${t.sm} text-[#f0946b] ` + m("in")} style={at(1.2)}>Every day at 08:00 Lagos time</p>
+        <p className={`${t.sm} text-[#f0946b] ` + m("in")} style={at(1.2)}>Every day at 08:00 your time</p>
         {["Mon 5 Oct, 08:00", "Tue 6 Oct, 08:00"].map((d, i) => <p key={d} className={`${t.xs} mt-0.5 flex items-center gap-1 text-white/60 ` + m("left")} style={at(1.8 + i * 0.35)}><Clock className="size-3" />{d}</p>)}
       </Win>
     </Stage>

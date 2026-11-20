@@ -175,13 +175,13 @@ function Business() {
 function Store() {
   const items = [
     { n: "Linen dress", p: "$60", bg: "bg-[repeating-radial-gradient(circle_at_30%_30%,#2b3a8c_0_3px,#3f50b5_3px_6px)]" },
-    { n: "Ankara top", p: "$42", bg: "bg-[repeating-linear-gradient(45deg,#e0a82e_0_4px,#c2410c_4px_8px,#1f7a4d_8px_12px)]" },
+    { n: "Printed top", p: "$42", bg: "bg-[repeating-linear-gradient(45deg,#e0a82e_0_4px,#c2410c_4px_8px,#1f7a4d_8px_12px)]" },
     { n: "Tote bag", p: "$20", bg: "bg-[repeating-linear-gradient(90deg,#1f2a44_0_5px,#f3efe6_5px_7px)]" },
   ];
   return (
     <Window url="linenshop.com">
       <div className="flex h-[20px] items-center justify-between border-b border-[#f0eee9] px-3">
-        <span className="text-[8px] font-bold tracking-[0.04em]">ADIRE SHOP</span>
+        <span className="text-[8px] font-bold tracking-[0.04em]">LINEN &amp; CO</span>
         <span className="flex h-[11px] w-[90px] items-center gap-1 rounded-full bg-[#f4f3ef] px-1.5 text-[5.5px] text-[#8a867e]">
           <Search className="size-[6px]" /> Search products
         </span>
@@ -193,7 +193,7 @@ function Store() {
           </span>
         </span>
       </div>
-      <p className="px-3 pt-1.5 text-[7px] font-semibold">New in · Handmade in Abeokuta</p>
+      <p className="px-3 pt-1.5 text-[7px] font-semibold">New in · Handmade in small batches</p>
       <div className="grid grid-cols-3 gap-2 px-3 pt-1.5">
         {items.map((it, i) => (
           <div key={it.n} className="rounded-[6px] border border-[#eeece7] p-1">
@@ -207,7 +207,7 @@ function Store() {
       <span className={"absolute left-[131px] top-[59px] z-20 h-[26px] w-[34px] rounded-[4px] bg-[repeating-linear-gradient(45deg,#e0a82e_0_4px,#c2410c_4px_8px,#1f7a4d_8px_12px)] " + a("lk-st-fly")} />
       <div className={"absolute inset-y-0 right-0 z-20 flex w-[124px] flex-col border-l border-[#eeece7] bg-white p-2 shadow-[-10px_0_24px_-12px_rgba(0,0,0,0.25)] " + a("lk-st-drawer")}>
         <p className="text-[7.5px] font-bold">Your cart (2)</p>
-        {[["Linen dress", "$60"], ["Ankara top", "$42"]].map(([n, p]) => (
+        {[["Linen dress", "$60"], ["Printed top", "$42"]].map(([n, p]) => (
           <p key={n} className="mt-1 flex justify-between border-b border-[#f0eee9] pb-1 text-[6.5px]">
             <span>{n}</span>
             <span>{p}</span>

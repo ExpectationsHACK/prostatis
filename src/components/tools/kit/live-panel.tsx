@@ -14,7 +14,7 @@ const PREPARED_BY = "prostatis:prepared-by";
 const waiting: Partial<Record<LiveSpec["kind"], string>> = {
   speed: "Loading the page and weighing every image, script and stylesheet, and asking Google for its test and real-visitor data. This can take up to a minute.",
   crawl: "Reading the sitemap, checking up to 10 pages and testing their links. This can take up to a minute.",
-  suggest: "Asking Google what people in Nigeria type…",
+  suggest: "Asking Google what people type…",
 };
 
 function readName() {

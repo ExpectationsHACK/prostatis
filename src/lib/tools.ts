@@ -44,7 +44,7 @@ export const tools: ToolMeta[] = [
   t("web_solutions", "faq-generator", "FAQ Section Generator", "FAQ answers built from the business's real facts, for the website, the chatbot and quick replies.", "Answering the doubts that stop customers from buying.", "sand"),
   t("web_solutions", "testimonial-formatter", "Testimonial Formatter", "Turn raw WhatsApp praise into clean testimonials, with a permission request and website code.", "Turning happy-customer messages into social proof.", "peach"),
   // SEO
-  t("seo", "keyword-research-prompts", "Keyword Research Tool", "The real phrases people in Nigeria type into Google, live, sorted by what they want.", "Deciding which searches a business should rank for.", "indigo"),
+  t("seo", "keyword-research-prompts", "Keyword Research Tool", "The real phrases people type into Google in your country, live, sorted by what they want.", "Deciding which searches a business should rank for.", "indigo"),
   t("seo", "meta-tag-generator", "Meta Title / Description Generator", "Titles and descriptions measured in pixels like Google does, with desktop and phone previews.", "Every page you publish: it's the ad for your page in Google.", "sand"),
   t("seo", "local-seo-checklist", "Local SEO Checklist (GBP)", "Score a business's local SEO and Google Business Profile.", "Getting a local business into the map pack.", "forest"),
   t("seo", "on-page-seo-audit", "On-Page SEO Audit", "A 16-point audit of any page plus a 10-page whole-site check, with a printable client report.", "Checking a client's page, or your own before launch.", "ink"),
@@ -57,8 +57,8 @@ export const tools: ToolMeta[] = [
   t("automation", "zapier-make-scenario-planner", "Zapier / Make Scenario Planner", "A step-by-step scenario plan with field mapping and error handling.", "Planning an automation before building it in Make or Zapier.", "indigo"),
   t("automation", "business-process-audit", "Business Process Audit", "Rank a business's tasks by how much automating them would save.", "The discovery call: show the client where their hours go.", "sand"),
   t("automation", "email-autoresponder-generator", "Email Autoresponder Script Generator", "Auto-replies plus follow-up sequences for common situations.", "Never leaving an enquiry unanswered.", "peach"),
-  t("automation", "automation-roi-calculator", "Automation ROI Calculator", "Payback time and yearly savings of an automation, in Naira.", "Pricing and pitching an automation project.", "forest"),
-  t("automation", "token-cost-calculator", "Token Cost Calculator (₦)", "Estimate a Claude API bill in dollars and naira, model by model.", "Pricing AI features and chatbots for clients.", "ink"),
+  t("automation", "automation-roi-calculator", "Automation ROI Calculator", "Payback time and yearly savings of an automation, in your currency.", "Pricing and pitching an automation project.", "forest"),
+  t("automation", "token-cost-calculator", "Token Cost Calculator", "Estimate a Claude API bill in dollars or your own currency, model by model.", "Pricing AI features and chatbots for clients.", "ink"),
   t("automation", "mcp-server-picker", "MCP Server Picker (business use cases)", "The MCP servers to connect so an AI can reach a business's tools.", "Giving an AI assistant access to files, payments or data.", "indigo"),
   // Lead Generation
   t("lead_gen", "cold-dm-script-generator", "Cold DM / Email Script Generator", "Short, specific cold messages and follow-ups that get replies.", "Reaching out to businesses that need what you sell.", "orange"),
@@ -78,10 +78,10 @@ export const tools: ToolMeta[] = [
   t("agents", "handoff-script-generator", "Agent Handoff-to-Human Script Generator", "Rules and messages for passing a chat from AI to a person.", "Keeping customers happy when the bot can't help.", "orange"),
   // Bonus: getting paid
   t("lead_gen", "proposal-generator", "Proposal Template Generator", "A client-ready proposal with scope, timeline, pricing and terms.", "Sending a proposal right after a good call.", "ink", true),
-  t("lead_gen", "client-pricing-calculator", "Client Pricing Calculator (₦→$)", "Work out what to charge foreign clients in dollars from your naira goal.", "Setting your rates for dollar clients.", "forest", true),
-  t("lead_gen", "invoice-generator", "Invoice Generator", "A clean USD or NGN invoice with your payment details, print or save as PDF.", "Getting paid once the project is delivered.", "sand", true),
+  t("lead_gen", "client-pricing-calculator", "Client Pricing Calculator", "Work out what to charge clients in dollars from your monthly goal, in your own currency.", "Setting your rates for dollar clients.", "forest", true),
+  t("lead_gen", "invoice-generator", "Invoice Generator", "A clean invoice in your client's currency with your payment details, print or save as PDF.", "Getting paid once the project is delivered.", "sand", true),
   t("web_solutions", "whatsapp-business-bio", "WhatsApp Business Bio Generator", "A WhatsApp Business bio inside the 139-character limit.", "Setting up a client's WhatsApp Business profile.", "peach", true),
-  t("automation", "cron-schedule-generator", "Cron Schedule Generator", "Cron expressions in plain English, with Lagos-time conversion.", "Scheduling agents and automations to run on time.", "ink", true),
+  t("automation", "cron-schedule-generator", "Cron Schedule Generator", "Cron expressions in plain English, converted from your time zone.", "Scheduling agents and automations to run on time.", "ink", true),
   t("lead_gen", "hook-line-generator", "Hook Line Generator", "Scroll-stopping first lines for TikTok, Reels, X and LinkedIn.", "Promoting your services on social media.", "orange", true),
 ];
 

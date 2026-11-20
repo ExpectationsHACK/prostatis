@@ -6,17 +6,17 @@ const techStack: ToolDef = {
   kind: "generator",
   intro: "Answer six questions about the project. You get the stack (free tools first, the same ones the course teaches), what it costs each month and who pays, and a kick-off prompt for your AI builder.",
   examples: [
-    { label: "Salon website (client)", values: { type: "Booking site", who: "A paying client", skill: "Beginner (AI writes the code)", edits: "Sometimes", payments: "Paystack", traffic: "Under 10k" } },
+    { label: "Salon website (client)", values: { type: "Booking site", who: "A paying client", skill: "Beginner (AI writes the code)", edits: "Sometimes", payments: "Stripe", traffic: "Under 10k" } },
     { label: "My portfolio", values: { type: "Business website", who: "Me (practice / portfolio)", skill: "Beginner (AI writes the code)", edits: "No", payments: "None", traffic: "Under 10k" } },
-    { label: "School portal (client)", values: { type: "Web app with logins", who: "A paying client", skill: "Some code", edits: "Yes, often", payments: "Paystack", traffic: "10k–100k" } },
-    { label: "Fashion store (client)", values: { type: "Online store", who: "A paying client", skill: "Beginner (AI writes the code)", edits: "Yes, often", payments: "Both", traffic: "10k–100k" } },
+    { label: "School portal (client)", values: { type: "Web app with logins", who: "A paying client", skill: "Some code", edits: "Yes, often", payments: "Stripe", traffic: "10k–100k" } },
+    { label: "Fashion store (client)", values: { type: "Online store", who: "A paying client", skill: "Beginner (AI writes the code)", edits: "Yes, often", payments: "Stripe + Paystack", traffic: "10k–100k" } },
   ],
   fields: [
     { key: "type", label: "What are you building?", type: "select", default: "Business website", options: opts("Business website", "Landing page", "Online store", "Booking site", "Blog / content site", "Web app with logins", "Client dashboard / portal") },
     { key: "who", label: "Who is it for?", type: "select", default: "A paying client", options: opts("A paying client", "Me (practice / portfolio)"), hint: "Paid client work is “commercial”. It changes which hosting plans you may use." },
     { key: "skill", label: "Your coding level", type: "select", default: "Beginner (AI writes the code)", options: opts("Beginner (AI writes the code)", "Some code", "Comfortable coding") },
     { key: "edits", label: "Will the client edit content?", type: "select", default: "Sometimes", options: opts("No", "Sometimes", "Yes, often") },
-    { key: "payments", label: "Payments", type: "select", default: "Paystack", options: opts("None", "Paystack", "Stripe", "Both") },
+    { key: "payments", label: "Payments", type: "select", default: "Stripe", options: opts("None", "Stripe", "PayPal", "Paystack (Africa)", "Stripe + Paystack") },
     { key: "traffic", label: "Expected monthly visitors", type: "select", default: "Under 10k", options: opts("Under 10k", "10k–100k", "100k+") },
   ],
   generate(v) {
@@ -34,18 +34,27 @@ const techStack: ToolDef = {
     if (app && !next) rows.push(["Server code", "Cloudflare Pages Functions", "Small server files beside the site for the jobs that must stay secret (keys, payment checks)"]);
     if (edits === "Yes, often") rows.push(["Content editing", app ? "A simple admin page backed by Supabase" : "A Google Sheet the site reads, or a small Supabase admin page", "The client updates prices and photos without calling you"]);
     if (edits === "Sometimes") rows.push(["Content editing", "You make the changes on a monthly care plan", "Cheapest and safest when changes are rare, and it's steady income for you"]);
-    if (booking) rows.push(["Bookings", "Cal.com (free plan) embed + a Paystack deposit link", "Reliable in an hour; a custom booking system only if the business outgrows it"]);
-    if (store) rows.push(["Store", "A few products: product pages with Paystack Payment Page links. Many products: Paystack Storefront", "Both are free to set up; Paystack only takes a fee per sale"]);
-    if (pay !== "None") rows.push(["Payments", pay === "Both" ? "Paystack (naira) + Stripe (dollars)" : pay, pay === "Stripe" ? "Cards in USD and other currencies (needs a supported business entity)" : "Card, bank transfer and USSD in naira. Use Payment Pages first; verify payments on the server once you build your own checkout"]);
+    if (booking) rows.push(["Bookings", "Cal.com (free plan) embed + a deposit payment link (Stripe, PayPal or Paystack)", "Reliable in an hour; a custom booking system only if the business outgrows it"]);
+    if (store) rows.push(["Store", "A few products: product pages with payment links (Stripe Payment Links, or Paystack Payment Pages in Africa). Many products: a hosted store such as Shopify or Paystack Storefront", "Payment links are free to set up; the provider takes a fee per sale"]);
+    if (pay !== "None")
+      rows.push([
+        "Payments",
+        pay === "Stripe + Paystack" ? "Stripe (international cards) + Paystack (local payments in Africa)" : pay,
+        pay === "PayPal"
+          ? "Cards and PayPal balances in most countries. Start with PayPal buttons or invoices; verify payments on the server once you build your own checkout"
+          : pay === "Paystack (Africa)"
+            ? "Cards, bank transfer and mobile money for businesses in the African countries Paystack supports. Start with Payment Pages; verify payments on the server once you build your own checkout"
+            : "Cards and wallets in many currencies. Check Stripe supports the business's country; start with Payment Links and verify payments on the server once you build your own checkout",
+      ]);
     rows.push(["Forms", "Web3Forms (free plan)", "Contact and quote forms that land in the owner's email, with no server to run"]);
-    rows.push(["Hosting", "Cloudflare Pages (free plan)", "Free for business sites too, fast across Nigeria, HTTPS included"]);
-    rows.push(["Domain", "In the client's name: .com.ng / .ng from a NiRA-accredited registrar, .com from any registrar", "The domain is the client's asset"]);
+    rows.push(["Hosting", "Cloudflare Pages (free plan)", "Free for business sites too, fast worldwide, HTTPS included"]);
+    rows.push(["Domain", "In the client's name: their country's extension (.co.uk, .ca, .com.au, .com.ng…) from an accredited registrar, or .com from any registrar", "The domain is the client's asset"]);
     rows.push(["Analytics", "Cloudflare Web Analytics (free)", "Visitor counts for your monthly report without cookie banners"]);
 
-    const costs: string[][] = [["Domain", "₦5,000–₦25,000 / year", "Client"]];
+    const costs: string[][] = [["Domain", "Roughly $10–$40 / year for most extensions (check the renewal price)", "Client"]];
     costs.push(["Hosting", "$0 on Cloudflare Pages' free plan", client ? "Client's account (free)" : "You (free)"]);
     if (app) costs.push(["Supabase", "Free to start. Free projects pause after a week with no activity, so move to Pro (about $25 / month) once the business depends on it", client ? "Client" : "You"]);
-    if (pay !== "None") costs.push(["Payments", "No monthly fee; Paystack takes a fee per transaction (paystack.com/pricing)", "Client"]);
+    if (pay !== "None") costs.push(["Payments", "No monthly fee on the standard plans; the provider takes a fee per transaction (check its pricing page)", "Client"]);
     if (booking) costs.push(["Bookings", "$0 on Cal.com's free plan", "Client"]);
     costs.push(["Forms", "$0 on Web3Forms' free plan (check its monthly limit)", "Client"]);
     if (client) costs.push(["Your care plan", "Your monthly fee for updates and monitoring", "Client"]);
@@ -83,8 +92,8 @@ const components: Record<string, { name: string; spec: string }[]> = {
     { name: "Pricing table", spec: "a pricing table with 3 tiers, the middle one highlighted as most popular, feature checklist, monthly/annual toggle" },
   ],
   Commerce: [
-    { name: "Product card + grid", spec: "a product card with an image, name, price in Naira formatted like ₦12,500, add-to-cart button; responsive grid with category filter" },
-    { name: "Paystack checkout button", spec: "a “Pay now” button that calls a server route to initialise a Paystack transaction and redirects to the authorization_url; verify the reference server-side on return" },
+    { name: "Product card + grid", spec: "a product card with an image, name, price formatted in the store's currency (e.g. $125.00), add-to-cart button; responsive grid with category filter" },
+    { name: "Checkout button (Stripe or Paystack)", spec: "a “Pay now” button that calls a server route to start a payment with the provider (a Stripe Checkout Session or a Paystack transaction) and redirects to its payment page; verify the payment server-side on return" },
   ],
   Forms: [
     { name: "Contact form with validation", spec: "a contact form (name, email, phone, message) with client + server validation, honeypot spam field, success and error states, sends via a server action" },
@@ -109,7 +118,7 @@ const componentLib: ToolDef = {
     const list = components[s(v, "group")] ?? components.Content;
     const items = list.map(
       (c) =>
-        `${c.name.toUpperCase()}\nBuild ${c.spec}. Stack: ${s(v, "stack")}. Style: ${or(s(v, "brand"), "clean and modern")}. Requirements: mobile-first (works at 360px), accessible (labels, visible focus, 4.5:1 contrast, keyboard usable), no extra libraries unless needed${/Next|React/.test(s(v, "stack")) ? ", typed props" : ""}, realistic example data in naira where prices appear. Explain how to use it when done.`,
+        `${c.name.toUpperCase()}\nBuild ${c.spec}. Stack: ${s(v, "stack")}. Style: ${or(s(v, "brand"), "clean and modern")}. Requirements: mobile-first (works at 360px), accessible (labels, visible focus, 4.5:1 contrast, keyboard usable), no extra libraries unless needed${/Next|React/.test(s(v, "stack")) ? ", typed props" : ""}, realistic example data, with prices in the business's currency. Explain how to use it when done.`,
     );
     return [
       { type: "list", title: `${s(v, "group")} components (${items.length})`, items },
@@ -197,7 +206,7 @@ Please:
 // ---------- Website Speed Checklist ----------
 const speedChecklist: ToolDef = {
   kind: "checklist",
-  intro: "Paste a link to test the site live, or tick items by hand. Most visitors in Nigeria are on mobile data, speed is conversion.",
+  intro: "Paste a link to test the site live, or tick items by hand. Most visitors are on phones, often on mobile data, so speed is conversion.",
   live: {
     kind: "speed",
     title: "Test a website's speed",
@@ -277,7 +286,7 @@ export function domainIdeas(v: Values): string[] {
   add(k);
   if (e) { add(k + e); add(e + k); }
   if (loc) { add(k + loc); if (e) add(k + e + loc); add(loc + k); }
-  ["hq", "hub", "ly", "co", "lab", "studio", "now", "place", "club", "ng"].forEach((sf) => add(k + sf));
+  ["hq", "hub", "ly", "co", "lab", "studio", "now", "place", "club"].forEach((sf) => add(k + sf));
   ["get", "try", "the", "my", "go", "hello"].forEach((p) => add(p + k));
   if (e) { add(k + e.slice(0, 4)); add(k + "and" + e); }
   const max = Math.max(5, n(v, "max") || 14);
@@ -289,14 +298,14 @@ const domainGen: ToolDef = {
   intro: "Enter a keyword. You get short, brandable domain ideas with a quality check on each, then see which are actually free, live.",
   examples: [
     { label: "Beauty studio", values: { keyword: "glow", extra: "beauty", location: "lagos", tld: ".com", max: 14 } },
-    { label: "Food (.ng)", values: { keyword: "mama", extra: "kitchen", location: "ikeja", tld: ".com.ng", max: 16 } },
-    { label: "Solar", values: { keyword: "sun", extra: "power", location: "abuja", tld: ".ng", max: 14 } },
+    { label: "Food (.co.uk)", values: { keyword: "mama", extra: "kitchen", location: "leeds", tld: ".co.uk", max: 16 } },
+    { label: "Solar (.com.au)", values: { keyword: "sun", extra: "power", location: "sydney", tld: ".com.au", max: 14 } },
   ],
   fields: [
     { key: "keyword", label: "Main keyword", type: "text", default: "glow", half: true },
     { key: "extra", label: "Second word (optional)", type: "text", default: "beauty", half: true },
     { key: "location", label: "Location word (optional)", type: "text", default: "lagos", half: true },
-    { key: "tld", label: "Extension", type: "select", default: ".com", options: opts(".com", ".ng", ".com.ng", ".co", ".africa", ".store", ".studio"), half: true },
+    { key: "tld", label: "Extension", type: "select", default: ".com", options: opts(".com", ".co", ".io", ".store", ".studio", ".co.uk", ".ca", ".com.au", ".in", ".ae", ".ng", ".com.ng", ".co.za", ".africa"), half: true },
     { key: "max", label: "Max length (letters)", type: "number", default: 14, min: 5, max: 30 },
   ],
   live: {
@@ -309,7 +318,9 @@ const domainGen: ToolDef = {
   generate(v) {
     const names = domainIdeas(v);
     if (!names.length) return [{ type: "notice", tone: "warn", text: "Enter a keyword to get ideas." }];
+    // Country extensions (.co.uk, .com.ng…) are sold by registrars accredited for that country.
     const ng = /\.ng$/.test(s(v, "tld"));
+    const local = /\.(co\.uk|ca|com\.au|in|ae|co\.za|africa)$/.test(s(v, "tld"));
     const verdict = (d: string) => {
       const name = d.split(".")[0];
       const flags: string[] = [];
@@ -319,9 +330,9 @@ const domainGen: ToolDef = {
       if (/\d|-/.test(name)) flags.push("avoid numbers and hyphens");
       return flags.length ? `Check: ${flags.join(", ")}` : name.length <= 8 ? "Excellent: short and sayable" : "Good";
     };
-    const rows = names.map((x) => [x, String(x.split(".")[0].length), verdict(x), ng ? "Buy from a NiRA-accredited registrar (list at nira.org.ng)" : `https://www.namecheap.com/domains/registration/results/?domain=${x}`]);
+    const rows = names.map((x) => [x, String(x.split(".")[0].length), verdict(x), ng ? "Buy from a NiRA-accredited registrar (list at nira.org.ng)" : local ? "Buy from a registrar accredited for this country's domains" : `https://www.namecheap.com/domains/registration/results/?domain=${x}`]);
     return [
-      { type: "table", title: `${rows.length} ideas`, columns: ["Domain", "Letters", "Quality", ng ? "Where to buy" : "Search link"], rows },
+      { type: "table", title: `${rows.length} ideas`, columns: ["Domain", "Letters", "Quality", ng || local ? "Where to buy" : "Search link"], rows },
       { type: "list", title: "Pick the winner", items: ["Tap “Check availability” above and shortlist 3 that are free.", "Say each one out loud as if on a phone call, can the listener type it without asking “how do you spell that?”", "Buy it in the client's name, and check the renewal price, not just the first-year price."] },
     ];
   },

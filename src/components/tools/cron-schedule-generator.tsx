@@ -4,9 +4,6 @@ import { useMemo } from "react";
 import { AppToolLayout, useToolState } from "./kit/app-tool";
 import { CopyButton, Field, Select, TextInput } from "../tool-ui";
 
-// Lagos is UTC+1 all year (no daylight saving).
-const LAGOS_OFFSET = 1;
-
 const freqs = [
   { value: "minutes", label: "Every N minutes" },
   { value: "hourly", label: "Every hour" },
@@ -17,6 +14,32 @@ const freqs = [
 ];
 const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
+// Common time zones; the visitor's own (from their device) is added to the top of the list.
+const zones = [
+  "UTC", "America/Los_Angeles", "America/Denver", "America/Chicago", "America/New_York", "America/Toronto", "America/Mexico_City", "America/Sao_Paulo",
+  "Europe/London", "Europe/Berlin", "Europe/Paris", "Africa/Lagos", "Africa/Cairo", "Africa/Johannesburg", "Africa/Nairobi",
+  "Asia/Dubai", "Asia/Kolkata", "Asia/Singapore", "Asia/Manila", "Asia/Tokyo", "Australia/Sydney",
+];
+
+/** Minutes a time zone is ahead of UTC at a given moment (handles daylight saving and half-hour zones). */
+function offsetMinutes(zone: string, at = new Date()): number {
+  try {
+    const p = Object.fromEntries(new Intl.DateTimeFormat("en-US", { timeZone: zone, hourCycle: "h23", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }).formatToParts(at).map((x) => [x.type, x.value]));
+    const asUtc = Date.UTC(Number(p.year), Number(p.month) - 1, Number(p.day), Number(p.hour), Number(p.minute));
+    return Math.round((asUtc - Math.floor(at.getTime() / 60000) * 60000) / 60000);
+  } catch {
+    return 0;
+  }
+}
+
+const deviceZone = () => {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+  } catch {
+    return "UTC";
+  }
+};
+
 type Spec = { min: number[]; hour: number[]; dom: number[] | null; dow: number[] | null };
 
 function range(a: number, b: number, step = 1) {
@@ -25,7 +48,8 @@ function range(a: number, b: number, step = 1) {
   return r;
 }
 
-const initial = { freq: "weekdays", every: "15", time: "08:00", dow: "1", dom: "1", tz: "utc" };
+// zone "" = the visitor's own time zone. server: "utc" (most hosts) or "local" (server set to that zone).
+const initial = { freq: "weekdays", every: "15", time: "08:00", dow: "1", dom: "1", zone: "", server: "utc" };
 const examples = [
   { label: "8am weekday report", values: initial },
   { label: "Check every 15 min", values: { ...initial, freq: "minutes", every: "15" } },
@@ -36,32 +60,42 @@ const examples = [
 export default function CronScheduleGenerator() {
   const { f, patch, load, source, shareUrl } = useToolState("cron-schedule-generator", initial);
   const { freq, every, time, dow, dom } = f;
-  const tz = f.tz === "lagos" ? "lagos" : "utc";
+  const mine = useMemo(() => deviceZone(), []);
   const setFreq = (v: string) => patch({ freq: v });
   const setEvery = (v: string) => patch({ every: v });
   const setTime = (v: string) => patch({ time: v });
   const setDow = (v: string) => patch({ dow: v });
   const setDom = (v: string) => patch({ dom: v });
-  const setTz = (v: "lagos" | "utc") => patch({ tz: v });
+  const zone = f.zone || mine;
+  const utc = f.server !== "local";
+  const zoneLabel = zone.replace(/_/g, " ");
+  const offset = useMemo(() => offsetMinutes(zone), [zone]);
+  // Daylight saving: the offset differs between January and July.
+  const dst = useMemo(() => {
+    const y = new Date().getUTCFullYear();
+    return offsetMinutes(zone, new Date(Date.UTC(y, 0, 15))) !== offsetMinutes(zone, new Date(Date.UTC(y, 6, 15)));
+  }, [zone]);
 
   const [hh, mm] = time.split(":").map((x) => Number(x) || 0);
-  // Convert the Lagos time the user typed into the server's UTC if needed.
-  const shift = tz === "utc" ? -LAGOS_OFFSET : 0;
-  let h = hh + shift;
+  // Convert the local time the user typed into the server's UTC if needed.
+  const shift = utc ? -offset : 0;
+  let total = hh * 60 + mm + shift;
   let dayShift = 0;
-  if (h < 0) {
-    h += 24;
+  if (total < 0) {
+    total += 1440;
     dayShift = -1;
   }
-  if (h > 23) {
-    h -= 24;
+  if (total >= 1440) {
+    total -= 1440;
     dayShift = 1;
   }
+  const h = Math.floor(total / 60);
+  const m = total % 60;
   const n = Math.min(59, Math.max(1, Number(every) || 15));
   const wd = (Number(dow) + dayShift + 7) % 7;
 
   const { expr, spec, human } = useMemo(() => {
-    const lagosTime = `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")} Lagos time`;
+    const localTime = `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")} ${zoneLabel} time`;
     switch (freq) {
       case "minutes":
         return {
@@ -71,48 +105,48 @@ export default function CronScheduleGenerator() {
         };
       case "hourly":
         return {
-          expr: `${mm} * * * *`,
-          spec: { min: [mm], hour: range(0, 23), dom: null, dow: null } as Spec,
-          human: `Every hour at :${String(mm).padStart(2, "0")}`,
+          expr: `${m} * * * *`,
+          spec: { min: [m], hour: range(0, 23), dom: null, dow: null } as Spec,
+          human: `Every hour at :${String(mm).padStart(2, "0")} ${zoneLabel} time`,
         };
       case "weekdays": {
         const days = dayShift === -1 ? "0-4" : dayShift === 1 ? "2-6" : "1-5";
         const dset = dayShift === -1 ? [0, 1, 2, 3, 4] : dayShift === 1 ? [2, 3, 4, 5, 6] : [1, 2, 3, 4, 5];
-        return { expr: `${mm} ${h} * * ${days}`, spec: { min: [mm], hour: [h], dom: null, dow: dset } as Spec, human: `Monday to Friday at ${lagosTime}` };
+        return { expr: `${m} ${h} * * ${days}`, spec: { min: [m], hour: [h], dom: null, dow: dset } as Spec, human: `Monday to Friday at ${localTime}` };
       }
       case "weekly":
-        return { expr: `${mm} ${h} * * ${wd}`, spec: { min: [mm], hour: [h], dom: null, dow: [wd] } as Spec, human: `Every ${dayNames[Number(dow)]} at ${lagosTime}` };
+        return { expr: `${m} ${h} * * ${wd}`, spec: { min: [m], hour: [h], dom: null, dow: [wd] } as Spec, human: `Every ${dayNames[Number(dow)]} at ${localTime}` };
       case "monthly": {
         const d = Math.min(28, Math.max(1, Number(dom) || 1));
-        return { expr: `${mm} ${h} ${d} * *`, spec: { min: [mm], hour: [h], dom: [d], dow: null } as Spec, human: `On day ${d} of every month at ${lagosTime}${dayShift ? " (server date may differ by a day)" : ""}` };
+        return { expr: `${m} ${h} ${d} * *`, spec: { min: [m], hour: [h], dom: [d], dow: null } as Spec, human: `On day ${d} of every month at ${localTime}${dayShift ? " (server date may differ by a day)" : ""}` };
       }
       default:
-        return { expr: `${mm} ${h} * * *`, spec: { min: [mm], hour: [h], dom: null, dow: null } as Spec, human: `Every day at ${lagosTime}` };
+        return { expr: `${m} ${h} * * *`, spec: { min: [m], hour: [h], dom: null, dow: null } as Spec, human: `Every day at ${localTime}` };
     }
-  }, [freq, n, mm, h, hh, wd, dow, dom, dayShift]);
+  }, [freq, n, mm, m, h, hh, wd, dow, dom, dayShift, zoneLabel]);
 
-  // Next 5 runs, computed in the schedule's own timezone, displayed in Lagos time.
+  // Next 5 runs, computed in the server's clock, shown in the user's time zone.
   const next = useMemo(() => {
     const out: Date[] = [];
-    const offsetH = tz === "utc" ? 0 : LAGOS_OFFSET;
+    const serverOffset = utc ? 0 : offset;
     const t = new Date();
     t.setUTCSeconds(0, 0);
     t.setUTCMinutes(t.getUTCMinutes() + 1);
     for (let i = 0; i < 60 * 24 * 40 && out.length < 5; i++) {
-      const local = new Date(t.getTime() + offsetH * 3600_000);
+      const server = new Date(t.getTime() + serverOffset * 60_000);
       const ok =
-        spec.min.includes(local.getUTCMinutes()) &&
-        spec.hour.includes(local.getUTCHours()) &&
-        (!spec.dom || spec.dom.includes(local.getUTCDate())) &&
-        (!spec.dow || spec.dow.includes(local.getUTCDay()));
+        spec.min.includes(server.getUTCMinutes()) &&
+        spec.hour.includes(server.getUTCHours()) &&
+        (!spec.dom || spec.dom.includes(server.getUTCDate())) &&
+        (!spec.dow || spec.dow.includes(server.getUTCDay()));
       if (ok) out.push(new Date(t));
       t.setUTCMinutes(t.getUTCMinutes() + 1);
     }
     return out;
-  }, [spec, tz]);
+  }, [spec, utc, offset]);
 
-  const fmt = (d: Date) =>
-    d.toLocaleString("en-NG", { timeZone: "Africa/Lagos", weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  const fmt = (d: Date) => d.toLocaleString("en", { timeZone: zone, weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  const offsetText = `UTC${offset >= 0 ? "+" : "−"}${Math.floor(Math.abs(offset) / 60)}${Math.abs(offset) % 60 ? ":" + String(Math.abs(offset) % 60).padStart(2, "0") : ""}`;
 
   const snippets = {
     "Cloudflare Worker (wrangler.toml, free plan)": `[triggers]\ncrons = ["${expr}"]`,
@@ -127,8 +161,9 @@ export default function CronScheduleGenerator() {
     "GitHub Actions schedules can't run more often than every 5 minutes and may start late when GitHub is busy.",
     "Make's free plan runs scheduled scenarios at most every 15 minutes (set the schedule in the scenario, not with cron).",
     ...(frequent ? ["Every run of a frequent job uses your free allowance: check the monthly limits before choosing every few minutes."] : []),
+    ...(dst && utc && !frequent ? [`${zoneLabel} uses daylight saving, so a UTC schedule runs an hour earlier or later in your time for part of the year. Update it when the clocks change, or set the server to your time zone.`] : []),
   ];
-  const text = `CRON: ${expr}\n${human}\n\nNext runs (Lagos time):\n${next.map((d) => "- " + fmt(d)).join("\n")}\n\n${Object.entries(snippets)
+  const text = `CRON: ${expr}\n${human}\n\nNext runs (${zoneLabel} time):\n${next.map((d) => "- " + fmt(d)).join("\n")}\n\n${Object.entries(snippets)
     .map(([k, v]) => `${k.toUpperCase()}\n${v}`)
     .join("\n\n")}\n\nNOTES\n- ${limits.join("\n- ")}`;
 
@@ -152,7 +187,7 @@ export default function CronScheduleGenerator() {
             </Field>
           )}
           {freq !== "minutes" && (
-            <Field label={freq === "hourly" ? "At which minute past the hour?" : "At what time? (Lagos time, WAT)"}>
+            <Field label={freq === "hourly" ? "At which minute past the hour?" : `At what time? (${zoneLabel} time)`}>
               <TextInput type="time" value={time} onChange={(e) => setTime(e.target.value)} />
             </Field>
           )}
@@ -166,13 +201,20 @@ export default function CronScheduleGenerator() {
               <TextInput inputMode="numeric" value={dom} onChange={(e) => setDom(e.target.value)} />
             </Field>
           )}
-          <Field label="Where will it run?" hint="Cloudflare, GitHub Actions and most servers run cron in UTC, one hour behind Lagos.">
+          <Field label="Your time zone" hint={`Right now ${offsetText}. Detected from your device; change it if the schedule is for somewhere else.`}>
             <Select
-              value={tz}
-              onChange={(e) => setTz(e.target.value as "lagos" | "utc")}
+              value={zone}
+              onChange={(e) => patch({ zone: e.target.value === mine ? "" : e.target.value })}
+              options={[...new Set([mine, ...zones])].map((z) => ({ value: z, label: z === mine ? `${z.replace(/_/g, " ")} (yours)` : z.replace(/_/g, " ") }))}
+            />
+          </Field>
+          <Field label="Where will it run?" hint="Cloudflare, GitHub Actions and most servers run cron in UTC.">
+            <Select
+              value={utc ? "utc" : "local"}
+              onChange={(e) => patch({ server: e.target.value })}
               options={[
                 { value: "utc", label: "Server in UTC (Cloudflare, GitHub, most VPS)" },
-                { value: "lagos", label: "Server set to Africa/Lagos" },
+                { value: "local", label: `Server set to ${zoneLabel} time` },
               ]}
             />
           </Field>
@@ -194,7 +236,7 @@ export default function CronScheduleGenerator() {
                 </div>
               ))}
             </div>
-            <p className="mt-4 text-sm font-semibold text-muted">Next runs (Lagos time)</p>
+            <p className="mt-4 text-sm font-semibold text-muted">Next runs ({zoneLabel} time)</p>
             <ul className="mt-1 space-y-0.5 text-sm text-ink">
               {next.map((d) => (
                 <li key={d.toISOString()}>{fmt(d)}</li>
@@ -219,7 +261,7 @@ export default function CronScheduleGenerator() {
             </div>
           ))}
           <p className="text-sm text-muted">
-            GitHub Actions schedules can run a few minutes late when GitHub is busy, don't use them for anything that must happen at an exact minute. Automation tools (Make, Zapier, n8n) have their own schedule settings: set their time zone to Africa/Lagos.
+            GitHub Actions schedules can run a few minutes late when GitHub is busy, don't use them for anything that must happen at an exact minute. Automation tools (Make, Zapier, n8n) have their own schedule settings: set their time zone to yours ({zone}).
           </p>
         </>
       }

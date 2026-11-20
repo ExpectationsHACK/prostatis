@@ -18,13 +18,13 @@ const stacks = [
 
 const initial = {
   name: "Mama Nkechi's Kitchen site",
-  purpose: "A website for a Lagos food vendor that takes orders via WhatsApp and Paystack.",
-  audience: "Customers in Lekki and VI ordering lunch on their phones",
+  purpose: "A website for a local food vendor that takes orders via WhatsApp and online payments.",
+  audience: "Office workers ordering lunch on their phones",
   builder: "antigravity",
   stack: stacks[0],
   brand: "Colours: primary #d9480f, background #fff4e6, text #1b1714. Fonts: Fredoka (headings), Nunito (body).",
   commands: "Preview: open site/index.html in Chrome\nPublish: push to GitHub (Cloudflare Pages updates the site)",
-  style: "Mobile-first; test at 360px wide\nKeep pages under 1MB, many users are on 3G/4G data\nPrices in naira, formatted like ₦4,500",
+  style: "Mobile-first; test at 360px wide\nKeep pages under 1MB, many users are on mobile data\nPrices in the local currency, formatted like $12.50",
   rules: "Never put API keys or passwords in the code\nAsk before adding new tools or packages\nAsk before deleting files",
   skill: "beginner",
 };
@@ -35,8 +35,8 @@ const examples = [
     label: "Salon booking site",
     values: {
       name: "Glow Beauty Studio website",
-      purpose: "A booking website for a lash studio in Lekki, with a Cal.com booking page and a Paystack deposit link.",
-      audience: "Working women in Lekki and VI booking on their phones",
+      purpose: "A booking website for a lash studio in Manchester, with a Cal.com booking page and a deposit payment link.",
+      audience: "Working women in Manchester booking on their phones",
       builder: "antigravity",
       stack: stacks[0],
       brand: "Colours: primary #b8336a, background #f5e6d3, text #111111. Fonts: Playfair Display (headings), Lato (body).",

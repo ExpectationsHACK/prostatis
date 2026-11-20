@@ -90,12 +90,12 @@ describe("live renderers", () => {
     const out = renderSpeed({ ...speed, lighthouseEnabled: true, lighthouse: { field: { scope: "site", lcp: { p75: 2300, category: "FAST" }, inp: { p75: 180, category: "FAST" }, cls: { p75: 0.04, category: "FAST" }, overall: "FAST" }, totalBytes: 2_000_000, scores: { performance: 91, seo: 100, accessibility: 95, bestPractices: 100 }, metrics: { fcp: "1.1 s", lcp: "2.1 s", tbt: "80 ms", cls: "0.02", si: "1.9 s" }, mobile: { viewport: true, fontSize: true, tapTargets: false }, opportunities: [{ title: "Properly size images", saving: "0.6 s" }], screenshot: "data:image/jpeg;base64,xx" } }, "speed");
     expect(out.checks).toMatchObject({ psi: true, lcp: true, cls: true });
     expect(out.blocks.some((b) => b.type === "image")).toBe(true);
-    // Real-visitor data comes first, in plain words, and the data cost uses Lighthouse's true page weight.
+    // Real-visitor data comes first, in plain words, and the data used comes from Lighthouse's true page weight.
     const text = JSON.stringify(out.blocks);
     expect(text).toContain("Real visitors");
     expect(text).toContain("2.3s");
     expect(text).toContain("180ms");
-    expect(text).toContain("₦1.50"); // 2MB at ₦750/GB
+    expect(text).toContain("2.0 GB"); // 1,000 visits of a 2MB page
     const mobile = renderSpeed({ ...speed, lighthouse: { field: null, totalBytes: null, scores: { performance: 91, seo: 100, accessibility: 95, bestPractices: 100 }, metrics: { fcp: "", lcp: "", tbt: "", cls: "", si: "" }, mobile: { viewport: true, fontSize: true, tapTargets: false }, opportunities: [], screenshot: null } }, "responsive");
     expect(mobile.checks).toMatchObject({ "16px": true, tap: false });
   });

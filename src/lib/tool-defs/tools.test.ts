@@ -209,9 +209,12 @@ describe("parsers and calculators", () => {
     const table = find(run("domain-name-generator", { max: 8 }), "table");
     for (const r of table.rows) expect(Number(r[1])).toBeLessThanOrEqual(8);
   });
-  it("WhatsApp catalog formats naira prices", () => {
-    const list = find(run("whatsapp-catalog-guide"), "list");
-    expect(list.items[0]).toContain("₦18,000");
+  it("WhatsApp catalog formats prices in the chosen currency", () => {
+    expect(find(run("whatsapp-catalog-guide"), "list").items[0]).toContain("$45");
+    const naira = find(run("whatsapp-catalog-guide", { currency: "NGN", items: "Chocolate cake | 18000 | Serves 12" }), "list");
+    expect(naira.items[0]).toContain("₦18,000");
+    const euro = find(run("whatsapp-catalog-guide", { currency: "EUR", items: "Lash set | 70 | Lasts 4 weeks" }), "list");
+    expect(euro.items[0]).toContain("€70");
   });
   it("FAQ schema is valid JSON-LD", () => {
     const schema = run("faq-generator").find((b) => b.type === "text" && /schema/i.test(b.title));

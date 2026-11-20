@@ -3,12 +3,11 @@
 import { Printer, X } from "lucide-react";
 import { btn, size } from "../ui";
 import { AppToolLayout, useToolState } from "./kit/app-tool";
-import { useLiveRate } from "./kit/live-rate";
+import { currencies, currencySymbol, fmtMoney } from "@/lib/money";
 import { Field, Select, TextArea, TextInput } from "../tool-ui";
 
 type Item = { desc: string; qty: string; price: string };
 
-const symbols: Record<string, string> = { USD: "$", GBP: "£", EUR: "€", NGN: "₦" };
 const num = (s: string) => Number(String(s).replace(/,/g, "")) || 0;
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -20,7 +19,7 @@ const initial = {
     due: new Date(Date.now() + 7 * 86400_000).toISOString().slice(0, 10),
     currency: "USD",
     fromName: "Ada Builds",
-    fromDetails: "Ada Okafor\nLagos, Nigeria\nada@adabuilds.com",
+    fromDetails: "Ada Okafor\n[Your city, country]\nada@adabuilds.com",
     toName: "Brightside Dental",
     toDetails: "Attn: Sarah Mitchell\nAustin, Texas, USA",
     payment: "Wise (USD): Account 0000000000 · Routing 000000000\nOr pay by card: [payment link]",
@@ -32,9 +31,9 @@ const initial = {
     ] as Item[],
 };
 const examples = [
-  { label: "Lagos client (₦ deposit)", values: { ...initial, number: "GBS-001", currency: "NGN", toName: "Glow Beauty Studio", toDetails: "Attn: Kemi Adebayo\nLekki Phase 1, Lagos", payment: "Bank transfer: [Bank name] · [Account number] · [Account name]\nOr pay by card/transfer/USSD: [Paystack payment link]", notes: "50% deposit as agreed in the proposal. Work starts once this is received. Thank you!", items: [{ desc: "Booking website: 50% deposit", qty: "1", price: "225000" }] } },
+  { label: "UK client (£ deposit)", values: { ...initial, number: "GBS-001", currency: "GBP", toName: "Glow Beauty Studio", toDetails: "Attn: Kemi Adebayo\nManchester, UK", payment: "Bank transfer: [Bank name] · [Sort code] · [Account number] · [Account name]\nOr pay by card: [payment link]", notes: "50% deposit as agreed in the proposal. Work starts once this is received. Thank you!", items: [{ desc: "Booking website: 50% deposit", qty: "1", price: "450" }] } },
   { label: "US client ($ balance)", values: { ...initial, items: [{ desc: "Website design & build (5 pages), 50% balance", qty: "1", price: "600" }], notes: "Final 50% before launch, as agreed. Thank you for your business!" } },
-  { label: "Monthly care plan (₦)", values: { ...initial, number: "MNK-CARE-07", currency: "NGN", toName: "Mama Nkechi's Kitchen", toDetails: "Ikeja, Lagos", payment: "Bank transfer: [Bank name] · [Account number] · [Account name]", notes: "Care plan for this month: menu updates, monitoring and report.", items: [{ desc: "Website care plan: monthly", qty: "1", price: "60000" }] } },
+  { label: "Monthly care plan (€)", values: { ...initial, number: "MNK-CARE-07", currency: "EUR", toName: "Mama's Kitchen", toDetails: "Berlin, Germany", payment: "Bank transfer (SEPA): [IBAN] · [BIC] · [Account name]", notes: "Care plan for this month: menu updates, monitoring and report.", items: [{ desc: "Website care plan: monthly", qty: "1", price: "150" }] } },
 ];
 
 export default function InvoiceGenerator() {
@@ -44,13 +43,12 @@ export default function InvoiceGenerator() {
   const set = (k: Exclude<keyof typeof initial, "items">) => (e: { target: { value: string } }) => patch({ [k]: e.target.value });
   const setItem = (i: number, k: keyof Item, v: string) => setItems(items.map((it, j) => (j === i ? { ...it, [k]: v } : it)));
 
-  const sym = symbols[f.currency];
-  const money = (n: number) => sym + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const sym = currencySymbol(f.currency);
+  const money = (n: number) => fmtMoney(n, f.currency, 2);
   const subtotal = items.reduce((n, it) => n + num(it.qty) * num(it.price), 0);
   const discount = num(f.discount);
   const tax = ((subtotal - discount) * num(f.tax)) / 100;
   const total = subtotal - discount + tax;
-  const live = useLiveRate();
 
   const plain = `PAYMENT REQUEST ${f.number}
 From: ${f.fromName}
@@ -92,12 +90,7 @@ ${f.notes}`;
             <TextInput value={f.number} onChange={set("number")} />
           </Field>
           <Field label="Currency">
-            <Select value={f.currency} onChange={set("currency")} options={Object.keys(symbols)} />
-            {f.currency === "USD" && live && total > 0 && (
-              <p className="mt-1.5 text-[12px] leading-snug text-muted">
-                ≈ <strong className="text-ink">₦{Math.round(total * live.rate).toLocaleString("en-NG")}</strong> at today&apos;s market rate (for you; not printed).
-              </p>
-            )}
+            <Select value={f.currency} onChange={set("currency")} options={[...currencies]} />
           </Field>
           <Field label="Issue date">
             <TextInput type="date" value={f.date} onChange={set("date")} />
@@ -136,11 +129,11 @@ ${f.notes}`;
           <Field label={`Discount (${sym})`}>
             <TextInput inputMode="decimal" value={f.discount} onChange={set("discount")} />
           </Field>
-          <Field label="Tax / VAT %" hint="Nigerian VAT is 7.5% if you're registered.">
+          <Field label="Tax / VAT %" hint="Your country's VAT or sales tax rate, if you're registered.">
             <TextInput inputMode="decimal" value={f.tax} onChange={set("tax")} />
           </Field>
         </div>
-        <Field label="Payment details" hint="Bank details, a Paystack payment link (card, transfer, USSD), or a USD account for clients abroad.">
+        <Field label="Payment details" hint="Bank details, a payment link (Stripe, PayPal or Paystack), or a USD account for clients abroad.">
           <TextArea value={f.payment} onChange={set("payment")} />
         </Field>
         <Field label="Notes">
