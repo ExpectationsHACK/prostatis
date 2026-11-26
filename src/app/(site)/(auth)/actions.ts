@@ -4,6 +4,7 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { brandedAuthEmails, sendAuthEmail } from "@/lib/auth-email";
 import { oauthProviders, PREFILL_COOKIE, type SocialProvider } from "@/lib/auth-providers";
+import { GOOGLE_CALLBACK_PATH, GOOGLE_COOKIE, googleAuthUrl, googleDirectConfigured, googleRedirectUri, newFlow } from "@/lib/google-signin";
 import { safeNext as safePath } from "@/lib/safe-next";
 import { clientIp, rateLimited } from "@/lib/server/rate-limit";
 import { site } from "@/lib/site";
@@ -157,6 +158,18 @@ export async function signInWithProvider(form: FormData) {
   const next = safeNext(form.get("next"));
   const back = String(form.get("from")) === "signup" ? "/signup" : "/login";
   if (!supabaseConfigured || !(await oauthProviders()).includes(provider)) redirect(`${back}?error=oauth`);
+  if (provider === "google" && googleDirectConfigured()) {
+    // Our own Google flow, so Google's screen names stynark.com, not the Supabase project.
+    const flow = newFlow(next, back === "/signup" ? "signup" : "login");
+    (await cookies()).set(GOOGLE_COOKIE, JSON.stringify(flow), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax", // sent on Google's top-level redirect back to us
+      path: GOOGLE_CALLBACK_PATH,
+      maxAge: 600,
+    });
+    redirect(googleAuthUrl(flow, process.env.GOOGLE_CLIENT_ID!, googleRedirectUri()));
+  }
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signInWithOAuth({ provider, options: { redirectTo: callbackUrl(next) } });
   if (error || !data.url) redirect(`${back}?error=oauth`);
