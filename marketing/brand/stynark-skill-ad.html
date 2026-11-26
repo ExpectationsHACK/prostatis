@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080">
+<title>Stynark skill ad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&family=Archivo:wdth,wght@62..125,100..900&display=block" rel="stylesheet">
+<style>
+  html, body { margin: 0; background: #222; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Geist, sans-serif; color: #151515; }
+  .scene { position: absolute; inset: 0; overflow: hidden; }
+  .abs { position: absolute; }
+  .t { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; }
+  .wm { font-family: Archivo, sans-serif; font-stretch: 108%; font-weight: 600; letter-spacing: -0.035em; }
+  .mono { font-family: "Geist Mono", monospace; }
+  #ui { position: fixed; left: 12px; bottom: 12px; display: flex; gap: 8px; align-items: center; font: 14px system-ui; color: #fff; }
+  #ui input { width: 520px; }
+  body.export #ui { display: none; }
+  body:not(.export) #stage { transform: scale(0.45); transform-origin: 0 0; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="ui"><button id="play">Play</button><input id="scrub" type="range" min="0" max="80" step="0.0333" value="0"><span id="time">0.00s</span></div>
+<script>
+/*
+ * Stynark "learn a skill" ad (1080×1920, 30 fps), voiceover-led. Motion language studied from a
+ * kinetic-type brand film: one huge word at a time blurring into focus over a soft gradient bloom,
+ * a typing pill, labels orbiting a glowing sphere, cards floating around a phrase, toggles, a
+ * domain bar being typed, a list whose active item moves, a logo reveal and a URL end card.
+ * Rebuilt in the website's design: paper and grid, ink outlines with hard shadows, the orange
+ * accent and the course hues, Archivo + Geist. Captions are burned in (most people watch muted).
+ * Every frame is drawn by render(t); no CSS animation, so the export is frame-exact.
+ * Scene times follow the voiceover: `node skill-ad.mjs plan` rewrites TIMINGS below.
+ */
+const W = 1080, H = 1920;
+const K = { paper: "#FAF8F4", card: "#FFFFFF", sunk: "#F3F0EA", wash: "#ECE7DE", line: "#E6E1D8", ink: "#151515", muted: "#5F5B53", faint: "#C9C3B8", brand: "#EB5E28", brandWash: "#FDE7DC", brandText: "#B8400F" };
+const HUE = { blue: ["#2F5BD3", "#E8EEFC"], green: ["#16794A", "#E3F5E9"], purple: ["#6B3FC4", "#EFE8FC"], yellow: ["#8A6100", "#FDF3D0"], teal: ["#0F766E", "#DDF3F0"], pink: ["#BE185D", "#FCE7F3"] };
+const CYCLE = ["blue", "green", "purple", "yellow", "teal", "pink"];
+const OUT = "M13.15 -25.41L0 -33L-28.58 -16.5L0 0L28.58 -16.5L28.58 16.5L0 33L-28.58 16.5L-28.58 4.9";
+const DASH = ["M-13.75 4.11L-2 10.9L-2 15.75L-13.75 8.96Z", "M-10.75 14.35L-2 19.4L-2 24.25L-10.75 19.2Z"];
+const paperBg = `background:${K.paper};background-image:linear-gradient(${K.line} 1px,transparent 1px),linear-gradient(90deg,${K.line} 1px,transparent 1px);background-size:44px 44px;background-position:center`;
+// The warm Stynark gradient, edged with the course purple so it reads as ours, not generic.
+const GRAD = "linear-gradient(100deg,#6B3FC4 0%,#D9467F 28%,#EB5E28 58%,#FF9A3C 82%,#F2B530 100%)";
+
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const lerp = (a, b, x) => a + (b - a) * x;
+const eo = (x) => 1 - Math.pow(1 - x, 3);
+const eio = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const eback = (x) => { const c1 = 1.6, c3 = c1 + 1; return x <= 0 ? 0 : 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+const inkBlock = (r = 28, off = 10, bg = K.card) => `background:${bg};border:3px solid ${K.ink};border-radius:${r}px;box-shadow:${off}px ${off}px 0 ${K.ink}`;
+const typed = (s, x) => s.slice(0, Math.round(s.length * clamp(x)));
+
+// ---------- building blocks ----------
+/** Soft gradient bloom (the reference's light), turning slowly. */
+function bloom(t, x, y, w, h, o = 1, spin = 0) {
+  if (o <= 0) return "";
+  return `<div class="abs" style="left:${x - w / 2}px;top:${y - h / 2}px;width:${w}px;height:${h}px;border-radius:50%;opacity:${o};filter:blur(${Math.round(Math.min(w, h) * 0.16)}px);background:conic-gradient(from ${spin + t * 40}deg,#EB5E28,#FF6F8E,#8C5BE0,#FF9A3C,#F2B530,#EB5E28)"></div>`;
+}
+/** One huge word that blurs into focus (gradient-filled or ink). */
+function word(text, t, a, { y = 960, size = 240, grad = false, color = K.ink, delay = 0, dur = 0.5, from = 1.2 } = {}) {
+  const v = eo(prog(t, a + delay, a + delay + dur));
+  if (v <= 0) return "";
+  const fill = grad ? `background:${GRAD};-webkit-background-clip:text;background-clip:text;color:transparent;` : `color:${color};`;
+  return `<div class="t wm" style="top:${y - size * 0.62}px;font-size:${size}px;line-height:1.08;opacity:${clamp(v * 1.5)};filter:blur(${(1 - v) * 28}px);transform:scale(${lerp(from, 1, v)});${fill}padding:0 0 ${size * 0.08}px">${text}</div>`;
+}
+/** A small caps label in a coloured wash (the site's eyebrow). */
+function eyebrow(text, t, a, y, [c, w] = [K.brandText, K.brandWash]) {
+  const v = eo(prog(t, a, a + 0.35));
+  if (v <= 0) return "";
+  return `<div class="abs" style="left:0;right:0;top:${y + (1 - v) * 18}px;display:flex;justify-content:center;opacity:${v}"><span style="padding:14px 30px;border-radius:999px;background:${w};color:${c};font-size:30px;font-weight:600;letter-spacing:0.14em">${text}</span></div>`;
+}
+function markSvg(size, x, y, draw = 1, stroke = K.ink, dash = K.brand) {
+  return `<svg class="abs" style="left:${x - size / 2}px;top:${y - size / 2}px;width:${size}px;height:${size}px;overflow:visible" viewBox="-40 -40 80 80">
+    <path d="${OUT}" fill="none" stroke="${stroke}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="${1 - clamp(draw)}"/>
+    <g fill="${dash}" opacity="${clamp((draw - 0.7) * 3.3)}">${DASH.map((p) => `<path d="${p}"/>`).join("")}</g></svg>`;
+}
+/** A mini website in the hero's style. */
+function siteCard(x, y, w, rot, hue, v, title, extra = "") {
+  if (v <= 0) return "";
+  const [c, wsh] = HUE[hue], h = w * 0.7;
+  return `<div class="abs" style="left:${x - w / 2}px;top:${y - h / 2}px;width:${w}px;height:${h}px;transform:rotate(${rot}deg) scale(${lerp(0.6, 1, eback(v))});opacity:${clamp(v * 2)};${inkBlock(Math.round(w * 0.07), Math.round(w * 0.028))};overflow:hidden;${extra}">
+    <div style="height:${w * 0.13}px;border-bottom:3px solid ${K.ink};display:flex;align-items:center;gap:${w * 0.028}px;padding:0 ${w * 0.05}px;background:${K.sunk}">${["#ff5f57", "#febc2e", "#28c840"].map((b) => `<i style="width:${w * 0.04}px;height:${w * 0.04}px;border-radius:50%;background:${b};border:2px solid ${K.ink}"></i>`).join("")}</div>
+    <div style="margin:${w * 0.06}px;height:${h * 0.3}px;border-radius:${w * 0.04}px;background:${wsh};border:2px solid ${K.ink};display:flex;align-items:center;padding:0 ${w * 0.06}px"><span class="wm" style="font-size:${w * 0.085}px;color:${c};white-space:nowrap">${title}</span></div>
+    <div style="margin:0 ${w * 0.06}px;height:${w * 0.045}px;width:68%;border-radius:8px;background:${K.wash}"></div><div style="margin:${w * 0.035}px ${w * 0.06}px 0;height:${w * 0.045}px;width:44%;border-radius:8px;background:${K.wash}"></div>
+    <div style="margin:${w * 0.05}px ${w * 0.06}px 0;height:${w * 0.11}px;width:${w * 0.3}px;border-radius:${w * 0.03}px;background:${K.brand};border:2px solid ${K.ink}"></div></div>`;
+}
+/** An iOS-style toggle in the site's ink style. on = 0..1 */
+function toggle(x, y, s, on, color = "#16794A") {
+  const w = s * 1.8, k = s - 12;
+  const bg = on > 0.5 ? color : K.wash;
+  return `<div class="abs" style="left:${x}px;top:${y}px;width:${w}px;height:${s}px;border-radius:${s}px;background:${bg};border:3px solid ${K.ink};box-sizing:border-box"><div style="position:absolute;top:3px;left:${lerp(3, w - k - 9, eio(on))}px;width:${k}px;height:${k}px;border-radius:50%;background:#fff;border:3px solid ${K.ink};box-sizing:border-box"></div></div>`;
+}
+const pop = (t, a, d = 0.4) => eback(prog(t, a, a + d));
+
+// ---------- scenes: one per voiceover line. Each gets (t, a, b) in seconds. ----------
+const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday"];
+const BIZ = ["Salon", "Bakery", "Clinic", "Tailor", "Gym", "Café", "School", "Store", "Studio", "Hotel"];
+const SCENES = {
+  broke(t, a) {
+    return bloom(t, 540, 900, 980, 760, eo(prog(t, a, a + 0.8)) * 0.75) + eyebrow("IF YOU'RE", t, a + 0.05, 640) + word("Broke?", t, a + 0.15, { size: 260, grad: true });
+  },
+  when(t, a) {
+    let tiles = "";
+    [[200, 560, -8], [880, 610, 7], [170, 1260, 6], [900, 1230, -6], [540, 470, 0]].forEach(([x, y, r], i) => {
+      const v = pop(t, a + 0.15 + i * 0.12);
+      if (v > 0) tiles += `<div class="abs" style="left:${x - 85}px;top:${y - 85}px;width:170px;height:170px;transform:rotate(${r}deg) scale(${v});${inkBlock(26, 8)};overflow:hidden;text-align:center">
+        <div style="background:${K.brand};border-bottom:3px solid ${K.ink};color:#fff;font-weight:600;font-size:24px;padding:8px 0;letter-spacing:.1em">${DAYS[i].slice(0, 3).toUpperCase()}</div><div class="wm" style="font-size:84px;line-height:110px">?</div></div>`;
+    });
+    return tiles + eyebrow("YOUR NEXT MONEY", t, a, 720) + word("When?", t, a + 0.05, { y: 960, size: 230 });
+  },
+  watch(t, a) {
+    const g = eio(prog(t, a, a + 0.55)), w = lerp(120, 860, g);
+    return bloom(t, 540, 960, 1100, 420, 0.85) + `<div class="abs" style="left:${540 - w / 2}px;top:880px;width:${w}px;height:160px;border-radius:999px;background:${GRAD};border:3px solid ${K.ink};box-shadow:10px 10px 0 ${K.ink};display:flex;align-items:center;justify-content:center;gap:26px;overflow:hidden">
+      <svg width="64" height="64" viewBox="0 0 24 24" style="flex:none"><circle cx="12" cy="12" r="11" fill="#fff" stroke="${K.ink}" stroke-width="1.6"/><path d="M10 8l6 4-6 4z" fill="${K.ink}"/></svg>
+      <span class="wm" style="font-size:66px;color:#fff;white-space:nowrap;opacity:${prog(t, a + 0.35, a + 0.6)}">Watch to the end</span></div>`;
+  },
+  everyday(t, a, b) {
+    // A list scrolling past one row at a time, the centre row in focus (the reference's task list).
+    const s = clamp((t - a) / Math.max(0.1, b - a)) * 4.2, ROW = 120;
+    let rows = "";
+    DAYS.forEach((d, i) => {
+      const off = i - s, y = 1000 + off * ROW, f = Math.abs(off);
+      if (f > 4) return;
+      const on = f < 0.5;
+      rows += `<div class="abs" style="left:150px;top:${y - 50}px;display:flex;align-items:center;gap:26px;opacity:${clamp(1 - f * 0.24)};font-size:${on ? 76 : 62}px">
+        <i style="width:22px;height:22px;border-radius:50%;background:${on ? K.brand : "transparent"}"></i><span class="wm" style="color:${on ? K.ink : K.faint}">${d}</span>
+        ${on ? `<span style="font-size:40px;font-weight:600;padding:10px 24px;border-radius:999px;background:${K.brandWash};color:${K.brandText}">next cash: ?</span>` : ""}</div>`;
+    });
+    return rows + `<div class="abs" style="left:0;right:0;top:0;height:560px;background:linear-gradient(${K.paper} 55%,transparent)"></div><div class="abs" style="left:0;right:0;top:1380px;height:200px;background:linear-gradient(transparent,${K.paper})"></div>` + eyebrow("EVERY DAY", t, a, 380);
+  },
+  effort(t, a) {
+    const s = eio(prog(t, a + 0.55, a + 0.9));
+    return eyebrow("NOT A LACK OF", t, a, 700) + word("effort", t, a + 0.05, { size: 240 }) +
+      `<div class="abs" style="left:150px;top:960px;height:22px;width:${780 * s}px;background:${K.brand};border-radius:11px;transform:rotate(-4deg);transform-origin:left"></div>`;
+  },
+  skill(t, a) {
+    return bloom(t, 540, 960, 1000, 800, eo(prog(t, a, a + 0.5)) * 0.8, 120) + eyebrow("IT'S A LACK OF", t, a, 650) + word("skill.", t, a + 0.08, { size: 300, grad: true });
+  },
+  whatif(t, a, b) {
+    const q = "a skill people pay for", tp = prog(t, a + 0.55, a + 0.55 + Math.min(1.4, (b - a) * 0.55));
+    const v = eo(prog(t, a + 0.35, a + 0.7)), cur = Math.floor(t * 2.2) % 2 === 0 || tp < 1;
+    return bloom(t, 540, 1050, 1000, 520, 0.55) + word("What if…", t, a, { y: 760, size: 150 }) +
+      (v > 0 ? `<div class="abs" style="left:60px;right:60px;top:${960 + (1 - v) * 30}px;height:150px;opacity:${v};${inkBlock(999, 9)};display:flex;align-items:center;padding:0 22px 0 48px;gap:20px">
+        <span style="flex:1;font-size:50px;font-weight:500;white-space:nowrap">${typed(q, tp)}<span style="display:inline-block;width:4px;height:54px;background:${K.brand};vertical-align:-8px;margin-left:4px;opacity:${cur ? 1 : 0}"></span></span>
+        <span style="width:104px;height:104px;border-radius:50%;background:${K.brand};border:3px solid ${K.ink};display:grid;place-items:center;flex:none"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div>` : "");
+  },
+  globe(t, a) {
+    const v = eo(prog(t, a, a + 0.6)), cx = 540, cy = 960, R = 300;
+    let back = "", front = "";
+    BIZ.forEach((name, i) => {
+      const th = (i / BIZ.length) * Math.PI * 2 + (t - a) * 0.7, x = cx + Math.cos(th) * 430, y = cy + Math.sin(th) * 260 + (i % 2 ? 60 : -60) * Math.cos(th);
+      const z = Math.sin(th), sc = lerp(0.72, 1.06, (z + 1) / 2) * pop(t, a + 0.2 + i * 0.05), [c, w] = HUE[CYCLE[i % 6]];
+      const html = sc <= 0 ? "" : `<div class="abs" style="left:${x}px;top:${y}px;transform:translate(-50%,-50%) scale(${sc});opacity:${lerp(0.55, 1, (z + 1) / 2)};display:flex;align-items:center;gap:14px;padding:12px 28px 12px 14px;${inkBlock(999, 5)}"><i style="width:40px;height:40px;border-radius:50%;background:${w};border:2px solid ${c}"></i><span style="font-size:36px;font-weight:600;white-space:nowrap">${name}</span></div>`;
+      if (z < 0) back += html; else front += html;
+    });
+    const sphere = `<div class="abs" style="left:${cx - R}px;top:${cy - R}px;width:${2 * R}px;height:${2 * R}px;border-radius:50%;transform:scale(${lerp(0.4, 1, eback(v))});opacity:${v};overflow:hidden;box-shadow:inset -30px -40px 90px rgba(107,63,196,.35)">
+      <div style="position:absolute;inset:-20%;filter:blur(36px);background:conic-gradient(from ${t * 50}deg,#EB5E28,#FF6F8E,#8C5BE0,#FFD2B8,#FF9A3C,#EB5E28)"></div>
+      <div style="position:absolute;left:12%;top:8%;width:46%;height:40%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.85),transparent);filter:blur(10px)"></div></div>`;
+    return eyebrow("BUSINESSES EVERYWHERE", t, a, 380) + back + sphere + front + word("need websites", t, a + 0.25, { y: 1450, size: 96 });
+  },
+  nowebsite(t, a) {
+    let tiles = "";
+    BIZ.slice(0, 6).forEach((name, i) => {
+      const col = i % 2, row = Math.floor(i / 2), x = 300 + col * 480, y = 720 + row * 250, [c, w] = HUE[CYCLE[i]];
+      const v = pop(t, a + i * 0.08), st = pop(t, a + 0.5 + i * 0.12, 0.3);
+      if (v <= 0) return;
+      tiles += `<div class="abs" style="left:${x - 210}px;top:${y - 95}px;width:420px;height:190px;transform:scale(${v});${inkBlock(26, 8)};display:flex;align-items:center;gap:22px;padding:0 26px;box-sizing:border-box">
+        <span style="width:84px;height:84px;border-radius:20px;background:${w};border:2px solid ${K.ink};display:grid;place-items:center" class="wm"><span style="font-size:44px;color:${c}">${name[0]}</span></span>
+        <span><div class="wm" style="font-size:44px">${name}</div>${st > 0 ? `<div style="margin-top:8px;display:inline-block;font-size:26px;font-weight:600;padding:6px 16px;border-radius:999px;background:${K.brandWash};color:${K.brandText};transform:scale(${st})">No website yet</div>` : ""}</span></div>`;
+    });
+    return word("Most can't build one", t, a, { y: 450, size: 76, from: 1.05 }) + tiles;
+  },
+  gap(t, a) {
+    const s = eio(prog(t, a + 0.35, a + 0.8));
+    return bloom(t, 540, 860, 760, 600, s * 0.7) +
+      `<div class="t wm" style="top:${750}px;font-size:170px;transform:translateX(${-lerp(0, 300, s)}px);opacity:${eo(prog(t, a, a + 0.3))}">That</div>` +
+      `<div class="t wm" style="top:${750}px;font-size:170px;transform:translateX(${lerp(0, 300, s)}px);opacity:${eo(prog(t, a, a + 0.3))};background:${GRAD};-webkit-background-clip:text;background-clip:text;color:transparent">gap</div>` +
+      siteCard(540, 850, 220, -4, "green", eo(prog(t, a + 0.75, a + 1.15)), "Your site") +
+      word("is your opportunity.", t, a + 0.9, { y: 1230, size: 76, from: 1.05 }) + word("You can fill it.", t, a + 1.5, { y: 1340, size: 60, color: K.muted, from: 1.05 });
+  },
+  meet(t, a, b) {
+    const split = Math.min(a + 0.7, (a + b) / 2), v = eo(prog(t, split, split + 0.6));
+    return bloom(t, 540, 960, 900, 700, 0.6 + v * 0.3, 200) + word("Meet", t, a, { y: lerp(960, 760, eio(prog(t, split - 0.1, split + 0.4))), size: lerp(200, 110, eio(prog(t, split - 0.1, split + 0.4))) }) +
+      (v > 0 ? markSvg(170, 540, 960, prog(t, split, split + 0.7)) + `<div class="t wm" style="top:${1060 + (1 - v) * 30}px;font-size:150px;color:${K.brand};opacity:${v};filter:blur(${(1 - v) * 16}px)">Stynark</div>` : "");
+  },
+  real(t, a) {
+    const C = [[200, 560, 300, -8, "blue", "Salon"], [880, 520, 280, 7, "green", "Bakery"], [170, 1380, 300, 6, "purple", "Clinic"], [900, 1400, 290, -7, "yellow", "Store"], [540, 400, 230, 2, "pink", "Studio"], [560, 1560, 250, -3, "teal", "Portfolio"]];
+    return C.map(([x, y, w, r, h, n], i) => siteCard(x, y + Math.sin(t * 1.4 + i) * 10, w, r, h, eo(prog(t, a + 0.2 + i * 0.1, a + 0.7 + i * 0.1)), n)).join("") +
+      word("Real websites,", t, a, { y: 900, size: 104 }) + word("built with AI.", t, a + 0.35, { y: 1030, size: 104, grad: true });
+  },
+  noneed(t, a) {
+    const rows = [["Coding experience", 0.15], ["Expensive tools", 0.45]];
+    return eyebrow("YOU DON'T NEED", t, a, 600) + rows.map(([label, d], i) => {
+      const v = eo(prog(t, a + d, a + d + 0.4)), off = prog(t, a + d + 0.45, a + d + 0.75);
+      return v <= 0 ? "" : `<div class="abs" style="left:90px;right:90px;top:${770 + i * 230 + (1 - v) * 40}px;height:180px;opacity:${v};${inkBlock(30, 9)};display:flex;align-items:center;padding:0 40px"><span class="wm" style="font-size:60px;flex:1;${off > 0.5 ? `text-decoration:line-through;text-decoration-color:${K.brand};text-decoration-thickness:6px;color:${K.muted}` : ""}">${label}</span></div>${toggle(800, 815 + i * 230 + (1 - v) * 40, 92, 1 - off, K.brand)}`;
+    }).join("");
+  },
+  aicode(t, a, b) {
+    const v = eo(prog(t, a, a + 0.4)), p = "Build a website for my bakery";
+    const code = [["&lt;header&gt;", K.muted], ["  &lt;h1&gt;Fresh bread daily&lt;/h1&gt;", "#2F5BD3"], ["  &lt;a href=\"#order\"&gt;Order now&lt;/a&gt;", "#16794A"], ["&lt;/header&gt;", K.muted], ["&lt;section id=\"menu\"&gt;…", "#6B3FC4"], ["&lt;footer&gt;Open 7am–6pm", "#B8400F"]];
+    const span = Math.max(1, b - a), tp = prog(t, a + 0.3, a + 0.3 + span * 0.3), gen = prog(t, a + 0.3 + span * 0.28, a + span * 0.72);
+    const shown = Math.floor(gen * code.length * 1.05);
+    return bloom(t, 540, 980, 1000, 900, 0.45) + (v <= 0 ? "" : `<div class="abs" style="left:90px;right:90px;top:${470 + (1 - v) * 40}px;height:960px;opacity:${v};${inkBlock(34, 12)};overflow:hidden">
+      <div style="height:84px;border-bottom:3px solid ${K.ink};background:${K.sunk};display:flex;align-items:center;gap:16px;padding:0 30px"><span style="width:44px;height:44px;border-radius:12px;background:${HUE.purple[1]};border:2px solid ${K.ink};display:grid;place-items:center;font-weight:600;color:${HUE.purple[0]};font-size:22px">AI</span><span style="font-size:34px;font-weight:600">Free AI</span><span style="margin-left:auto;font-size:26px;font-weight:600;padding:6px 16px;border-radius:999px;background:${HUE.green[1]};color:${HUE.green[0]}">Free</span></div>
+      <div style="margin:34px 34px 0 auto;width:fit-content;max-width:760px;padding:22px 30px;border-radius:26px 26px 6px 26px;background:${K.brand};color:#fff;font-size:38px;font-weight:500;min-height:46px">${typed(p, tp)}</div>
+      ${gen > 0 ? `<div style="margin:30px 34px 0;font-size:30px;font-weight:600;color:${K.muted}">${gen < 1 ? "Generating the code…" : "Done ✓"}</div>
+      <div class="mono" style="margin:18px 34px 0;padding:26px 30px;border-radius:20px;background:${K.sunk};border:2px solid ${K.ink};font-size:31px;line-height:1.6;white-space:pre">${code.slice(0, shown).map(([c, col]) => `<div style="color:${col}">${c}</div>`).join("")}</div>` : ""}</div>`);
+  },
+  host(t, a) {
+    const v = eo(prog(t, a, a + 0.35)), on = prog(t, a + 0.45, a + 0.7);
+    const cards = [[190, 560, -9, "blue"], [890, 600, 8, "purple"], [200, 1360, 7, "yellow"], [880, 1330, -6, "teal"]].map(([x, y, r, h], i) => siteCard(x, y, 260, r, h, eo(prog(t, a + 0.75 + i * 0.08, a + 1.15 + i * 0.08)), "Online")).join("");
+    return bloom(t, 540, 960, 1100, 440, on * 0.8) + cards + (v <= 0 ? "" : `<div class="abs" style="left:150px;right:150px;top:${880 + (1 - v) * 30}px;height:170px;opacity:${v};${inkBlock(999, 9)};display:flex;align-items:center;padding:0 40px 0 56px"><span class="wm" style="font-size:72px;flex:1">Host it</span></div>${toggle(690, 913 + (1 - v) * 30, 104, on)}`) +
+      (on > 0.6 ? `<div class="t" style="top:1110px;font-size:40px;font-weight:600;color:${HUE.green[0]}">● Your site is online</div>` : "");
+  },
+  ship(t, a, b) {
+    const dom = "yourbusiness.com", tp = prog(t, a + 0.1, a + 0.75), up = eio(prog(t, a + 0.85, a + 1.5));
+    const y = lerp(1700, 1050, up), live = pop(t, a + 1.45);
+    const trail = up > 0 && up < 1 ? `<div class="abs" style="left:420px;top:${y + 180}px;width:240px;height:${300 * (1 - up) + 80}px;border-radius:120px;background:radial-gradient(closest-side,rgba(255,154,60,.7),transparent);filter:blur(18px)"></div>` : "";
+    return bloom(t, 540, 620, 1080, 380, 0.75) + `<div class="abs" style="left:80px;right:80px;top:540px;height:150px;${inkBlock(999, 9)};display:flex;align-items:center;gap:22px;padding:0 44px">
+      <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="${K.ink}" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+      <span style="font-size:58px;font-weight:500">${typed(dom, tp)}<span style="display:inline-block;width:4px;height:58px;background:${K.brand};vertical-align:-8px;margin-left:4px;opacity:${tp < 1 || Math.floor(t * 2.2) % 2 ? 1 : 0}"></span></span></div>` +
+      trail + (up > 0 ? siteCard(540, y, 560, lerp(-8, -2, up), "green", 1, "Your business") : "") +
+      (live > 0 ? `<div class="abs" style="left:540px;top:1320px;transform:translateX(-50%) scale(${live});display:flex;align-items:center;gap:14px;padding:16px 36px;border-radius:999px;background:${HUE.green[0]};border:3px solid ${K.ink};box-shadow:6px 6px 0 ${K.ink};color:#fff;font-size:46px;font-weight:600"><i style="width:20px;height:20px;border-radius:50%;background:#fff"></i>Live on the internet</div>` : "");
+  },
+  bytheend(t, a) {
+    return bloom(t, 540, 940, 900, 600, 0.55, 60) + word("By the end,", t, a, { y: 900, size: 150 }) + word("you'll know how to", t, a + 0.3, { y: 1060, size: 70, color: K.muted, from: 1.05 });
+  },
+};
+
+// The closing list: four promises, the active one in focus with a preview on the right.
+const LIST = ["Build", "Free tools", "Go live", "Sell"];
+function preview(i, t, a) {
+  const v = eo(prog(t, a, a + 0.4)), box = (inner) => `<div class="abs" style="left:520px;top:${560 + (1 - v) * 40}px;width:480px;height:600px;opacity:${v};${inkBlock(30, 10)};overflow:hidden">${inner}</div>`;
+  if (i === 0) {
+    const g = prog(t, a + 0.2, a + 1.6);
+    return box(`<div style="padding:28px"><div style="display:flex;gap:10px;align-items:center;font-size:26px;font-weight:600;color:${HUE.purple[0]}"><span style="padding:6px 14px;border-radius:999px;background:${HUE.purple[1]}">AI</span>building…</div>
+      ${["#2F5BD3", "#16794A", "#6B3FC4", "#B8400F", "#0F766E"].map((c, k) => `<div style="margin-top:22px;height:22px;border-radius:11px;background:${c};opacity:.75;width:${clamp(g * 5 - k) * [80, 62, 74, 50, 66][k]}%"></div>`).join("")}
+      <div style="margin-top:34px;font-size:28px;color:${K.muted};font-weight:500">No code written by hand</div></div>` + siteCard(240, 470, 280, -4, "blue", eo(prog(t, a + 1.0, a + 1.4)), "Any website"));
+  }
+  if (i === 1) {
+    const tools = [["AI chat", "purple"], ["Code editor", "blue"], ["Hosting", "green"], ["Domain help", "yellow"]];
+    return box(`<div style="padding:30px"><div class="wm" style="font-size:40px;margin-bottom:12px">Your toolkit</div>${tools.map(([n, h], k) => { const p = pop(t, a + 0.15 + k * 0.12); return `<div style="margin-top:20px;display:flex;align-items:center;gap:16px;transform:scale(${p});padding:16px 20px;border-radius:20px;border:2px solid ${K.ink};background:${HUE[h][1]}"><span style="font-size:34px;font-weight:600;flex:1">${n}</span><span style="font-size:26px;font-weight:600;padding:6px 14px;border-radius:999px;background:#fff;border:2px solid ${K.ink};color:${HUE.green[0]}">Free</span></div>`; }).join("")}</div>`);
+  }
+  if (i === 2) {
+    const g = prog(t, a + 0.2, a + 1.0);
+    return box(`<div style="height:72px;border-bottom:3px solid ${K.ink};background:${K.sunk};display:flex;align-items:center;padding:0 24px;font-size:30px;font-weight:500">🔒 ${typed("yourname.com", g)}</div>
+      <div style="display:grid;place-items:center;height:440px"><div style="text-align:center"><svg width="190" height="190" viewBox="0 0 24 24" fill="none" stroke="${K.ink}" stroke-width="1.3" style="transform:rotate(${t * 30}deg)"><circle cx="12" cy="12" r="10" fill="${HUE.blue[1]}"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+      <div style="margin-top:20px;font-size:36px;font-weight:600;color:${HUE.green[0]};opacity:${prog(t, a + 1.0, a + 1.3)}">● Online for the world</div></div></div>`);
+  }
+  return box(`<div style="padding:30px"><div class="wm" style="font-size:40px">Two ways</div></div>`) +
+    siteCard(760, 860, 360, -5, "pink", eo(prog(t, a + 0.25, a + 0.6)), "For a client") + siteCard(780, 1080, 300, 6, "teal", eo(prog(t, a + 0.6, a + 0.95)), "Your own");
+}
+function listScene(i) {
+  return (t, a) => {
+    const first = TIMINGS.beats[BEATS.findIndex((x) => x.scene === "list0")][0];
+    const mv = eio(prog(t, a, a + 0.35));
+    const rows = LIST.map((txt, k) => {
+      const on = k === i ? mv : k === i - 1 ? 1 - mv : 0, v = eo(prog(t, first + k * 0.08, first + 0.4 + k * 0.08));
+      return `<div class="abs" style="left:70px;top:${600 + k * 150 + (1 - v) * 30}px;display:flex;align-items:center;gap:22px;opacity:${v}"><i style="width:26px;height:26px;border-radius:50%;background:${K.brand};transform:scale(${on})"></i><span class="wm" style="font-size:${lerp(64, 76, on)}px;color:${on > 0.5 ? K.ink : K.faint}">${txt}</span></div>`;
+    }).join("");
+    return bloom(t, 760, 860, 700, 760, 0.45, 30 + i * 60) + eyebrow("YOU'LL KNOW HOW TO", t, first, 400) + rows + preview(i, t, a);
+  };
+}
+["list0", "list1", "list2", "list3"].forEach((n, i) => (SCENES[n] = listScene(i)));
+
+SCENES.end = (t, a) => {
+  const v = (d, l = 0.5) => eo(prog(t, a + d, a + d + l));
+  const plan = (y, d, name, n, hue) => { const p = pop(t, a + d); return p <= 0 ? "" : `<div class="abs" style="left:540px;top:${y}px;transform:translate(-50%,-50%) scale(${p});display:flex;align-items:center;gap:20px;padding:20px 36px 20px 20px;${inkBlock(999, 7)}"><span style="width:58px;height:58px;border-radius:50%;background:${HUE[hue][1]};border:2px solid ${K.ink}"></span><span class="wm" style="font-size:46px;white-space:nowrap">${name}</span><span style="font-size:34px;font-weight:600;color:${K.muted};white-space:nowrap">${n} lessons</span></div>`; };
+  return bloom(t, 540, 760, 1000, 800, 0.55) + markSvg(150, 540, 380, prog(t, a, a + 0.7)) +
+    `<div class="t wm" style="top:${470 + (1 - v(0.3)) * 20}px;font-size:96px;color:${K.brand};opacity:${v(0.3)}">Stynark</div>` +
+    `<div class="t wm" style="top:${650 + (1 - v(0.5)) * 24}px;font-size:84px;line-height:1.05;opacity:${v(0.5)}">Learn to build<br><span style="color:${K.brand}">websites</span> with AI.</div>` +
+    plan(960, 0.85, "Fast Track", 14, "blue") + plan(1100, 1.0, "Main Track", 26, "purple") +
+    (v(1.2) > 0 ? `<div class="abs" style="left:0;right:0;top:${1210 + (1 - v(1.2)) * 20}px;display:flex;justify-content:center;gap:22px;opacity:${v(1.2)}"><span style="padding:24px 44px;border-radius:18px;background:${K.brand};border:3px solid ${K.ink};box-shadow:8px 8px 0 ${K.ink};font-size:46px;font-weight:600">Enroll Now →</span><span style="padding:24px 44px;border-radius:18px;background:#fff;border:3px solid ${K.ink};box-shadow:8px 8px 0 ${K.ink};font-size:46px;font-weight:600">stynark.com</span></div>` : "") +
+    `<div class="t" style="top:1385px;font-size:32px;font-weight:500;color:${K.muted};opacity:${v(1.5)}">Self-paced · Lifetime access · Build on a laptop or desktop</div>`;
+};
+
+// ---------- the script: one entry per voiceover line ----------
+const BEATS = [
+  { scene: "broke", vo: "If you're broke,", sfx: [[0, "air"], [0.15, "hit", 0.5]] },
+  { scene: "when", vo: "and you can't tell when your next money is coming in,", sfx: [[0, "whoosh"], [0.15, "pop"], [0.27, "pop"], [0.39, "pop"], [0.51, "pop"], [0.63, "pop"]] },
+  { scene: "watch", vo: "watch this to the end.", sfx: [[0, "whoosh"], [0.4, "pop"]] },
+  { scene: "everyday", vo: "You wake up every day, and don't know when the next cash will drop.", sfx: [[0, "whoosh"], [0.6, "tick"], [1.5, "tick"], [2.4, "tick"], [3.3, "tick"]] },
+  { scene: "effort", vo: "That's not a lack of effort.", sfx: [[0, "whoosh"], [0.6, "hit", 0.4]] },
+  { scene: "skill", vo: "That's a lack of skill.", sfx: [[0, "hit"], [0.1, "shimmer", 1.2]] },
+  { scene: "whatif", vo: "What if you could learn a skill people actually pay for?", sfx: [[0, "whoosh"], [0.4, "pop"], ...Array.from({ length: 8 }, (_, i) => [0.6 + i * 0.15, "tick", 0.5])] },
+  { scene: "globe", vo: "Businesses everywhere need websites,", sfx: [[0, "swell", 1.4], [0.2, "pop"]] },
+  { scene: "nowebsite", vo: "and most of them can't build one themselves.", sfx: [[0, "whoosh"], ...Array.from({ length: 6 }, (_, i) => [0.5 + i * 0.12, "tick", 0.7])] },
+  { scene: "gap", vo: "That gap is your opportunity, and you can fill it.", sfx: [[0.35, "whoosh"], [0.8, "pop"], [1.5, "shimmer", 1]] },
+  { scene: "meet", vo: "Meet Stynark.", sfx: [[0, "riser", 0.7], [0.7, "hit"], [0.75, "shimmer", 1.5]] },
+  { scene: "real", vo: "Stynark teaches you to build real websites with AI,", sfx: [[0, "whoosh"], [0.2, "pop"], [0.3, "pop"], [0.4, "pop"], [0.5, "pop"], [0.6, "pop"], [0.7, "pop"]] },
+  { scene: "noneed", vo: "with no coding experience, and no expensive tools.", sfx: [[0, "whoosh"], [0.6, "tick"], [0.9, "tick"]] },
+  { scene: "aicode", vo: "You'll use free AI to write and generate the code,", sfx: [[0, "whoosh"], ...Array.from({ length: 6 }, (_, i) => [0.4 + i * 0.12, "tick", 0.5])] },
+  { scene: "host", vo: "host your site,", sfx: [[0, "whoosh"], [0.55, "pop"], [0.8, "pop"]] },
+  { scene: "ship", vo: "and ship it live to the internet.", sfx: [[0, "whoosh"], ...Array.from({ length: 5 }, (_, i) => [0.15 + i * 0.13, "tick", 0.5]), [0.85, "riser", 0.6], [1.45, "hit", 0.6]] },
+  { scene: "bytheend", vo: "By the end, you'll know how to:", sfx: [[0, "whoosh"], [0.1, "swell", 1.2]] },
+  { scene: "list0", vo: "Build any kind of website with AI, even if you've never written a line of code.", sfx: [[0, "whoosh"], [0.1, "pop"]] },
+  { scene: "list1", vo: "Use free tools, so you don't need capital to start.", sfx: [[0, "tick"], [0.2, "pop"], [0.32, "pop"], [0.44, "pop"]] },
+  { scene: "list2", vo: "Put your website online, for the world to see.", sfx: [[0, "tick"], [1.0, "shimmer", 0.8]] },
+  { scene: "list3", vo: "And turn that skill into income, by selling websites to businesses, or building your own.", sfx: [[0, "tick"], [0.3, "pop"], [0.65, "pop"]] },
+  { scene: "end", vo: "Start learning today, at stynark dot com.", cap: "Start learning today at stynark.com", sfx: [[0, "hit"], [0.1, "shimmer", 1.8], [0.9, "pop"], [1.05, "pop"], [1.25, "pop"]] },
+];
+/*TIMINGS*/const TIMINGS = {"beats":[[0,1.35],[1.35,4.18],[4.18,5.84],[5.84,9.488],[9.488,11.133],[11.133,13.016],[13.016,15.965],[15.965,18.172],[18.172,20.784],[20.784,23.879],[23.879,25.848],[25.848,28.875],[28.875,32.461],[32.461,35.361],[35.361,36.711],[36.711,39.073],[39.073,41.078],[41.078,45.429],[45.429,48.905],[48.905,51.838],[51.838,57.355],[57.355,62.747]],"voiceAt":[0.12,1.47,4.3,5.96,9.608,11.253,13.136,16.085,18.292,20.904,23.999,25.968,28.995,32.581,35.481,36.831,39.193,41.198,45.549,49.025,51.958,57.475],"total":62.747};/*END*/
+
+function caption(text, t, a) {
+  const v = eo(prog(t, a, a + 0.2));
+  return `<div class="abs" style="left:70px;right:70px;top:1590px;display:flex;justify-content:center;opacity:${v}"><span style="max-width:900px;text-align:center;padding:20px 32px;border-radius:24px;background:rgba(255,255,255,.94);border:3px solid ${K.ink};font-size:44px;font-weight:600;line-height:1.25">${text}</span></div>`;
+}
+const stage = document.getElementById("stage");
+function render(t) {
+  const i = Math.max(0, TIMINGS.beats.findIndex(([a, b]) => t >= a && t < b) === -1 ? TIMINGS.beats.length - 1 : TIMINGS.beats.findIndex(([a, b]) => t >= a && t < b));
+  const [a, b] = TIMINGS.beats[i], B = BEATS[i];
+  stage.innerHTML = `<div class="scene" style="${paperBg}">${SCENES[B.scene](t, a, b)}${caption(B.cap || B.vo, t, a)}<div class="t" style="top:1810px;font-size:30px;font-weight:600;color:${K.muted}">stynark.com</div></div>`;
+}
+window.__render = (t) => { render(t); return new Promise((r) => requestAnimationFrame(() => r())); };
+window.__dur = () => TIMINGS.total;
+window.__lines = () => BEATS.map((b, i) => ({ i, vo: b.vo }));
+window.__sfx = () => BEATS.flatMap((b, i) => b.sfx.map(([d, type, p]) => [+(TIMINGS.beats[i][0] + d).toFixed(3), type, p]));
+window.__drop = () => TIMINGS.beats[BEATS.findIndex((b) => b.scene === "meet")][0];
+
+if (location.hash.includes("export")) document.body.classList.add("export");
+const scrub = document.getElementById("scrub"), time = document.getElementById("time");
+scrub.max = TIMINGS.total;
+let playing = false, t0 = 0;
+const show = (t) => { render(t); time.textContent = t.toFixed(2) + "s"; scrub.value = t; };
+scrub.oninput = () => show(+scrub.value);
+document.getElementById("play").onclick = () => { playing = !playing; t0 = performance.now() - scrub.value * 1000; const loop = () => { if (!playing) return; const t = ((performance.now() - t0) / 1000) % TIMINGS.total; show(t); requestAnimationFrame(loop); }; loop(); };
+document.fonts.ready.then(() => show(0));
+</script>
+</body>
+</html>
